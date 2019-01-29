@@ -54,10 +54,9 @@ class FileController extends Controller
 
 
                 $client = new \GuzzleHttp\Client();
-               
-
+                            
                 //$res = $client->request('POST','https://us-central1-mcknight-ccrp.cloudfunctions.net/weatherStation', [
-                $res = $client->request('POST','http://localhost:8010/soil/us-central1/uploadFile', [
+                $res = $client->request('POST',env('POST_URL'), [
                     'multipart' => [
                         [
                             'name' => 'FileContents',
