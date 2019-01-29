@@ -1,10 +1,11 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use \GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use DB;
+use Excel;
 
 
 class FileController extends Controller
@@ -14,10 +15,7 @@ class FileController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        //
-    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -39,27 +37,44 @@ class FileController extends Controller
     {
         // Retrieve file from POST request
         //
+        $station = $_POST['weatherstation'];
         //dd($request);
+     
+
+        //dd($station);
 
             if($request->hasFile('data-file')){
 
                 // handle file and store it for prosperity
                 $file = $request->file('data-file');
+             
 
                 $name = time() . '_' . $file->getClientOriginalName();
                 $path = $file->storeAs('rawfiles',$name);
 
-                $client = new \GuzzleHttp\Client();
 
-                $res = $client->request('POST','https://us-central1-mcknight-ccrp.cloudfunctions.net/receive-file-test', [
+                $client = new \GuzzleHttp\Client();
+               
+
+                //$res = $client->request('POST','https://us-central1-mcknight-ccrp.cloudfunctions.net/weatherStation', [
+                $res = $client->request('POST','http://localhost:8010/soil/us-central1/uploadFile', [
                     'multipart' => [
                         [
                             'name' => 'FileContents',
                             'contents' => Storage::get($path),
                             'filename' => $name
-                        ]
+
+                        ],
+
+                        [   'name' => 'station',
+                            'contents' => $station
+
+                    ]
                     ]
                 ]);
+                //dd($res);
+
+               
 
                 if($res->getStatusCode() != 200) exit("File transfer failed, see logs");
 
@@ -68,6 +83,7 @@ class FileController extends Controller
             }
 
             return "no file";
+        
 
 
         // Send file onto cloud function

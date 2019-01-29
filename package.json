@@ -12,12 +12,15 @@
     "devDependencies": {
         "admin-lte": "^3.0.0-alpha.2",
         "axios": "^0.18",
-        "bootstrap": "^4.0.0",
+        "bootstrap": "^4.2.1",
         "cross-env": "^5.1",
         "jquery": "^3.2",
         "laravel-mix": "^2.0",
         "lodash": "^4.17.5",
         "popper.js": "^1.12",
         "vue": "^2.5.17"
+    },
+    "dependencies": {
+        "bootstrap-sass": "^3.4.0"
     }
 }

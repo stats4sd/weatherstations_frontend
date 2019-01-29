@@ -1,0 +1,88 @@
+<?php
+
+namespace App\Exports;
+
+use App\Data;
+use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\FromQuery;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+
+class DataExport implements WithHeadings, FromQuery
+{
+
+    use Exportable;
+
+    public function __construct(Array $id_stations)
+    {
+    	$this->id_stations = $id_stations;
+    }
+
+    public function headings() : array{
+    	return [
+    		'Id',
+    		'Fecha/Hora',
+    		'Intervalo',
+    		'Temperatura Interna',
+            'Humedad Interna(%)',
+            'Temperatura Externa(°C)',
+            'Humedad Externa(%)',
+            'Presion Relativa(hpa)',
+            'Presion Absoluta(hpa)',
+            'Velocidad del viento(m/s)',
+            'Sensacion Termica(°C)',
+            'Rafaga(m/s)',
+            'Direccion del viento',
+            'Punto de Rocio(°C)',
+            'Lluvia hora(mm)',
+            'Lluvia 24 horas(mm)',
+            'Lluvia semana(mm)',
+            'Lluvia mes(mm)',
+            'Lluvia Total(mm)',
+
+            'Hi_Temp',
+            'Low_Temp',
+            'Wind_Cod',
+            'Wind_Run',
+            'Hi_Speed',
+            'Hi_Dir',
+            'Wind_Cod_Dom',
+            'Wind_Chill',
+            'Heat_Index',
+            'THW_Index',
+            'THSW_Index',
+            'Rain',
+            'Solar_Rad.',
+            'Solar_Energy',
+            'Hi_Solar_Rad.',
+            'UV_Index', 
+            'UV_Dose',
+            'Hi_UV',
+            'Heat_D-D',
+            'Cool_D-D',
+            'In_Dew',
+            'In_Heat',
+            'In_EMC',
+            'In_Air_Density',
+            'ET',
+            'Soil_1_Moist.',
+            'Soil_2_Moist.',
+            'Leaf_Wet_1',
+            'Wind_Samp',
+            'Wind_Tx',
+            'ISS_Recept',
+            'id_station',
+            'Type Station'
+               
+
+    	];
+    }
+
+    public function query()
+    
+    {
+    	return Data::whereIn('id_station',$this->id_stations)->join('stations','id_station','=','stations.id');
+    }
+
+
+}
