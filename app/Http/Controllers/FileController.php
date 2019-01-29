@@ -1,11 +1,12 @@
 <?php
 namespace App\Http\Controllers;
 
-use \GuzzleHttp\Client;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use App\File;
 use DB;
 use Excel;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use \GuzzleHttp\Client;
 
 
 class FileController extends Controller
@@ -52,32 +53,13 @@ class FileController extends Controller
                 $name = time() . '_' . $file->getClientOriginalName();
                 $path = $file->storeAs('rawfiles',$name);
 
+                $newFile = new File;
+                $newFile->path = $path;
+                $newFile->name = $name;
+                $newFile->station_id = $station;
 
-                $client = new \GuzzleHttp\Client();
-                            
-                //$res = $client->request('POST','https://us-central1-mcknight-ccrp.cloudfunctions.net/weatherStation', [
-                $res = $client->request('POST',env('POST_URL'), [
-                    'multipart' => [
-                        [
-                            'name' => 'FileContents',
-                            'contents' => Storage::get($path),
-                            'filename' => $name
-
-                        ],
-
-                        [   'name' => 'station',
-                            'contents' => $station
-
-                    ]
-                    ]
-                ]);
-                //dd($res);
-
-               
-
-                if($res->getStatusCode() != 200) exit("File transfer failed, see logs");
-
-                return $res;
+                $newFile->save();
+                return view('file-uploaded');
 
             }
 
