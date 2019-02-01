@@ -20,7 +20,7 @@ class DataExport implements WithHeadings, FromQuery
 
     public function headings() : array{
     	return [
-    		'Id',
+    		
     		'Fecha/Hora',
     		'Intervalo',
     		'Temperatura Interna',
@@ -72,7 +72,9 @@ class DataExport implements WithHeadings, FromQuery
             'Wind_Tx',
             'ISS_Recept',
             'id_station',
+            'Id Type Station',
             'Type Station'
+
                
 
     	];
@@ -81,7 +83,7 @@ class DataExport implements WithHeadings, FromQuery
     public function query()
     
     {
-    	return Data::whereIn('id_station',$this->id_stations)->join('stations','id_station','=','stations.id');
+    	return Data::whereIn('id_station',$this->id_stations)->orderBy('fecha_hora')->join('stations','id_station','=','stations.id');
     }
 
 
