@@ -14,7 +14,7 @@ class CreateDataTable extends Migration
     public function up()
     {
         Schema::create('data', function (Blueprint $table) {
-            $table->increments('id');
+         
             $table->timestamp('fecha_hora')->nullable();
             $table->integer('intervalo')->nullable();
             $table->decimal('temperatura_interna')->nullable();
@@ -65,6 +65,7 @@ class CreateDataTable extends Migration
             $table->decimal('wind_tx')->nullable();
             $table->decimal('iss_recept')->nullable();     
             $table->integer('id_station')->nullable();
+            $table->primary(['fecha_hora', 'id_station']);
         });
     }
 
