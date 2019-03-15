@@ -11,9 +11,9 @@ class FileObserver
 	{
 		//dd($file);
 		$client = new \GuzzleHttp\Client();
-        
+
         //$res = $client->request('POST','https://us-central1-mcknight-ccrp.cloudfunctions.net/weatherStation', [
-        $res = $client->request('POST',env('POST_URL'), [
+        $res = $client->request('POST',config('app.post_url'), [
             'multipart' => [
                 [
                     'name' => 'FileContents',
@@ -28,7 +28,7 @@ class FileObserver
             ]
             ]
         ]);
-        //dd($res);
+       
 
        
 

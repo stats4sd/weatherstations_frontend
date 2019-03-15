@@ -1,79 +1,105 @@
 @extends('layouts.app')
 
+
 @section('content')
 
 
+
+<div class="container">
+     <div class="row justify-content-center">
+        <div class="col-md-8">
+
+        
+            <div class="card">
+                <div class="card-header">Data preview</div>
+           
+
+                    <!-- jQuery -->
+                    <script src="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"></script>
+                    <!-- DataTables -->
+                    <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+                    <!-- Bootstrap JavaScript -->
+                    <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+                    <!-- App scripts -->
+       
+                <body>
+                    
+                   
+                    <table class="table table-bordered" id="daily-table">
+                    <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>fecha</th>
+                            <th>max_humedad_externa</th>
+                           
+                        </tr>
+                    </thead>
+                    </table>
+                 </body>
+                  @section('javascript')
+                   
+                    <script>
+                    $(document).ready(function() {
+                        $('#daily-table').DataTable({
+                            processing: true,
+                            serverSide: true,
+                            select:true,
+                            "scrollY" : "380px",
+                            "scrollCollapse": true,
+                            "paging": true,
+                            "bProccessing": true
+                            ajax: '{!! route('getDaily') !!}',
+                            columns: [
+                                { data: 'id', name: 'id' },
+                                { data: 'fecha', name: 'fecha' },
+                                { data: 'max_humedad_externa', name: 'max_humedad_externa' }
+                               
+                            ]
+                        });
+                    });
+                    </script>
+                @endsection                   
+
+                
+
+
+               
+
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Data Uploader</div>
 
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    <form action="{{ route('files.store') }} " method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <div class="form-group row">
-                            <label for="file" class="control-label col-sm-3">Choose one data file to upload. This should be the un-edited file retrieved from the weather station system</label>
-                            <div class="col-sm-9">
-                                <input name="data-file" type="file" class="form-control-file">
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="file" class="control-label col-sm-3">Select the weather station type this dataset came from</label>
-                            <div class="col-sm-9">
-                                <select name="weatherstation" class="form-control">
-                                    <option id='1' value='1'>Chojñapata-Davis</option>
-                                    <option id='2' value='2'>Chinchaya-Davis</option>
-                                    <option id='3' value='3'>Chinchaya-Chinas</option>
-                                    <option id='4' value='4'>Calahuancane-Davis</option>
-                                    <option id='5' value='5'>Cutusuma-Davis</option>
-                                    <option id='6' value='6'>Iñacamaya-Davis</option>
-                                    <option id='7' value='7'>Incamya-Chinas</option>
-
-                                </select>
-                            </div>
-                        </div>
-
-
-                        <button class="submit">Submit File</button>
-       
-                    </form>
-                </div>
-            </div>
 
 
             <link href ="{{asset('css/style.css')}}" rel="stylesheet"/>
-
             <script src = "{{asset('js/buttonTable.js')}}"></script>
-
             <div class ="card mt-4">
                 <div class="card-header">Data</div>
-
-            
-        </head>
-        <body>
-
-
+            <body>
+                @if(!empty(Data::class))
+                <div id="temps_div"></div>
+                    <?= $lava->render('LineChart', 'Temperature', 'temps_div') ?> 
+                @endif
+            </body>
 
             <div class="tab">
-              <button class="tablinks" onclick="openTable(event, 'Daily')" id="defaultOpen">Daily</button>
-              <button class="tablinks" onclick="openTable(event, 'Tendays')">Ten Days</button>
-              <button class="tablinks" onclick="openTable(event, 'Monthly')">Monthly</button>
-              <button class="tablinks" onclick="openTable(event, 'Yearly')">Yearly</button>
+                <button class="tablinks" onclick="openTable(event, 'Daily')" id="defaultOpen">Daily</button>
+                <button class="tablinks" onclick="openTable(event, 'Tendays')">Ten Days</button>
+                <button class="tablinks" onclick="openTable(event, 'Monthly')">Monthly</button>
+                <button class="tablinks" onclick="openTable(event, 'Yearly')">Yearly</button>
             </div>
+              
 
             <div id="Daily" class="tabcontent">
               <h3>Daily Data</h3>
               <p>Daily data summeries from weather station</p>
+
               <div class="card-body">
          
                    <div style="width:100%; max-height:500px; overflow:auto">
@@ -112,18 +138,18 @@
                             <td>{{$data->lluvia_24_horas_total}}</td>
                             <td>{{$data->max_humedad_externa}}</td>
                             <td>{{$data->min_humedad_externa}}</td>
-                            <td>{{$data->max_humidad_interna}}</td>
-                            <td>{{$data->min_humidad_interna}}</td>
+                            <td>{{$data->max_humedad_interna}}</td>
+                            <td>{{$data->min_humedad_interna}}</td>
                             <td>{{$data->max_presion_absoluta}}</td>
                             <td>{{$data->min_presion_absoluta}}</td>
                             <td>{{$data->max_presion_relativa}}</td>
                             <td>{{$data->min_presion_relativa}}</td>
                             <td>{{$data->max_sensacion_termica}}</td>
                             <td>{{$data->min_sensacion_termica}}</td>
-                            <td>{{$data->max_temperatura_externa}}</td>
-                            <td>{{$data->min_temperatura_externa}}</td>
-                            <td>{{$data->max_temperatura_interna}}</td>
-                            <td>{{$data->min_temperatura_interna}}</td>
+                            <td>{{$data->max_temperature_externa}}</td>
+                            <td>{{$data->min_temperature_externa}}</td>
+                            <td>{{$data->max_temperature_interna}}</td>
+                            <td>{{$data->min_temperature_interna}}</td>
                             <td>{{$data->max_velocidad_viento}}</td>
                             <td>{{$data->min_velocidad_viento}}</td>
 
@@ -186,18 +212,18 @@
                                     <td>{{$data->max_fecha}}</td>          
                                     <td>{{$data->max_humedad_externa}}</td>
                                     <td>{{$data->min_humedad_externa}}</td>
-                                    <td>{{$data->max_humidad_interna}}</td>
-                                    <td>{{$data->min_humidad_interna}}</td>
+                                    <td>{{$data->max_humedad_interna}}</td>
+                                    <td>{{$data->min_humedad_interna}}</td>
                                     <td>{{$data->max_presion_absoluta}}</td>
                                     <td>{{$data->min_presion_absoluta}}</td>
                                     <td>{{$data->max_presion_relativa}}</td>
                                     <td>{{$data->min_presion_relativa}}</td>
                                     <td>{{$data->max_sensacion_termica}}</td>
                                     <td>{{$data->min_sensacion_termica}}</td>
-                                    <td>{{$data->max_temperatura_externa}}</td>
-                                    <td>{{$data->min_temperatura_externa}}</td>
-                                    <td>{{$data->max_temperatura_interna}}</td>
-                                    <td>{{$data->min_temperatura_interna}}</td>
+                                    <td>{{$data->max_temperature_externa}}</td>
+                                    <td>{{$data->min_temperature_externa}}</td>
+                                    <td>{{$data->max_temperature_interna}}</td>
+                                    <td>{{$data->min_temperature_interna}}</td>
                                     <td>{{$data->max_velocidad_viento}}</td>
                                     <td>{{$data->min_velocidad_viento}}</td>
                                     <td>{{$data->lluvia_24_horas_total}}</td>
@@ -259,18 +285,18 @@
                                     <td>{{$data->lluvia_24_horas_total}}</td>
                                     <td>{{$data->max_humedad_externa}}</td>
                                     <td>{{$data->min_humedad_externa}}</td>
-                                    <td>{{$data->max_humidad_interna}}</td>
-                                    <td>{{$data->min_humidad_interna}}</td>
+                                    <td>{{$data->max_humedad_interna}}</td>
+                                    <td>{{$data->min_humedad_interna}}</td>
                                     <td>{{$data->max_presion_absoluta}}</td>
                                     <td>{{$data->min_presion_absoluta}}</td>
                                     <td>{{$data->max_presion_relativa}}</td>
                                     <td>{{$data->min_presion_relativa}}</td>
                                     <td>{{$data->max_sensacion_termica}}</td>
                                     <td>{{$data->min_sensacion_termica}}</td>
-                                    <td>{{$data->max_temperatura_externa}}</td>
-                                    <td>{{$data->min_temperatura_externa}}</td>
-                                    <td>{{$data->max_temperatura_interna}}</td>
-                                    <td>{{$data->min_temperatura_interna}}</td>
+                                    <td>{{$data->max_temperature_externa}}</td>
+                                    <td>{{$data->min_temperature_externa}}</td>
+                                    <td>{{$data->max_temperature_interna}}</td>
+                                    <td>{{$data->min_temperature_interna}}</td>
                                     <td>{{$data->max_velocidad_viento}}</td>
                                     <td>{{$data->min_velocidad_viento}}</td>
                                   
@@ -330,8 +356,8 @@
                                     <td>{{$data->lluvia_24_horas_total}}</td>
                                     <td>{{$data->max_humedad_externa}}</td>
                                     <td>{{$data->min_humedad_externa}}</td>
-                                    <td>{{$data->max_humidad_interna}}</td>
-                                    <td>{{$data->min_humidad_interna}}</td>
+                                    <td>{{$data->max_humedad_interna}}</td>
+                                    <td>{{$data->min_humedad_interna}}</td>
                                     <td>{{$data->max_presion_absoluta}}</td>
                                     <td>{{$data->min_presion_absoluta}}</td>
                                     <td>{{$data->max_presion_relativa}}</td>
@@ -361,72 +387,112 @@
                         </div>
                         </div>
 
-
-                    
-
-
-                        
-                        
-
                         
                     </div>
 
 
-
-
-
-
-
-
-
             <div class='card mt-4'>
                 <div class="card-header">Data Download</div>
-                <div class="card-body">
+                    <div class="card-body">
+                        <form action="{{ route('export_excel.excel') }} " method="POST">
+                        @csrf
 
+                            <div class="form-group">
+                                <label for="stations-content">Select Station</label>
+                                    <select name="stationSelected[]" class="form-control">
+                                      
+                                            <option id='1' value='1'>Chojñapata-Davis</option>
+                                            <option id='2' value='2'>Chinchaya-Davis</option>
+                                            <option id='3' value='3'>Chinchaya-Chinas</option>
+                                            <option id='4' value='4'>Calahuancane-Davis</option>
+                                            <option id='5' value='5'>Cutusuma-Davis</option>
+                                            <option id='6' value='6'>Iñacamaya-Davis</option>
+                                            <option id='7' value='7'>Incamya-Chinas</option>
+                             
+                                    </select>
+                            </div>
 
-                    <form action="{{ route('export_excel.excel') }} " method="POST">
-                    @csrf
-
-
-                    
-
-
-
-                       
-
-
-                        <div class="form-group">
-                            <label for="stations-content">Select Station</label>
-                            <select name="stationSelected[]" class="form-control">
-                            @foreach($stations as $station)
-                                <option value ="{{$station->id}}">{{$station->stations}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="stations-content">Select Period</label>
-                            <select name="periodSelected" class="form-control">
-                            
-                            <option value="1">Daily</option>
-                            <option value="2">Ten Days</option>
-                            <option value="3">Monthly</option>
-                            <option value="4">Yearly</option>
-                            
-                            </select>
-                        </div>
-                         <hr>
-                        <button class="submit">Export Data</button>
-
-
-
-
-
-
-                    </form>
-                </div>
+                            <div class="form-group">
+                                <label for="stations-content">Select Period</label>
+                                <select name="periodSelected" class="form-control">
+                                
+                                    <option value="1">Daily</option>
+                                    <option value="2">Ten Days</option>
+                                    <option value="3">Monthly</option>
+                                    <option value="4">Yearly</option>
+                                
+                                </select>
+                            </div>
+                            <hr>
+                                <button class="submit">Export Data</button>
+                        </form>
+                    </div>
             </div>
         </div>
-    </div>
+         <div class="col-md-4">
+            <div class="card mt-4">
+                <div class="card-header">Panel de Control</div>
+                    <div class="card-body">
+                        <form action="{{ route('filterData') }} " method="POST">
+                        @csrf
+
+                        <div class="container">
+                          <h2>Weather Station Filter</h2>
+                          <div class="form-group">
+                                <label for="stations-content">Select Weather Station</label>
+                                <select name="filter_station" class="form-control">
+                                
+                                    <option id='1' value='1'>Chojñapata-Davis</option>
+                                    <option id='2' value='2'>Chinchaya-Davis</option>
+                                    <option id='3' value='3'>Chinchaya-Chinas</option>
+                                    <option id='4' value='4'>Calahuancane-Davis</option>
+                                    <option id='5' value='5'>Cutusuma-Davis</option>
+                                    <option id='6' value='6'>Iñacamaya-Davis</option>
+                                    <option id='7' value='7'>Incamya-Chinas</option>
+                                
+                                </select>
+                            </div>
+                             <hr>
+                                <button class="submit">Submit Filter</button>
+
+                            <hr>
+                        </form>
+
+                         <h2>Graphics</h2>
+
+                        <form action="{{ route('graphicsData') }} " method="POST">
+                        @csrf
+
+                        
+                          <div class="form-group">
+                                <label for="stations-content">Select Value to Display</label>
+                                <select name="graphics_id" class="form-control">
+                                
+                                    <option id='1' value='1'>Temperatura Interna</option>
+                                    <option id='2' value='2'>Humedad Interna</option>
+                                    <option id='3' value='3'>Temperatura Externa</option>
+                                    <option id='4' value='4'>Humedad Externa</option>
+                                    <option id='5' value='5'>Presion Relativa</option>
+                                    <option id='6' value='6'>Presion Absoluta</option>
+                                    <option id='7' value='7'>Velocidad Viento</option>
+                                    <option id='8' value='8'>Sensacion Termica</option>
+                                    <option id='9' value='9'>Lluvia 24 horas</option>
+                                
+                                </select>
+                            </div>
+                             <hr>
+                                <button class="submit">Submit Graphic</button>
+                        </form>
+
+                     
+                            
+           
+                    </div>
+                </div>
+            </div>
+            </div>
+
+        </div>
 </div>
+
 @endsection

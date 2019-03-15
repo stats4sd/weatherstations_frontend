@@ -17,12 +17,18 @@ use App\Yearly;
 use DB;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Khill\Lavacharts\Lavacharts;
 use Maatwebsite\Excel\Facades\Excel;
+use Yajra\DataTables\DataTables;
+
+
 
 
 
 class HomeController extends Controller
 {
+
     /**
      * Create a new controller instance.
      *
@@ -40,7 +46,8 @@ class HomeController extends Controller
      */
 
 
-    public function index()
+    public function index ()
+
     {
         $station_data = DB::table('data')->get();
         $stations = DB::table('stations')->get();
@@ -49,16 +56,47 @@ class HomeController extends Controller
         $tendays = Tendays::all();
         $yearly = Yearly::all();
 
-        return view('home')->with(compact('station_data','stations','daily','monthly','yearly','tendays'));
 
+        $lava= new Lavacharts;
+        if(!empty($station_data)){
+            $data=Daily::select("fecha as 0","max_temperatura_interna as 1", "avg_temperatura_interna as 2","min_temperatura_interna as 3")->get()->toArray();
+            $datatable = $lava->DataTable();
+
+            $datatable -> addDateColumn('Date')
+                        -> addNumberColumn('Max Temp Int')
+                        -> addNumberColumn('Mean Temp Int')
+                        -> addNumberColumn('Min Temp Int')
+                        -> addRows($data);
+
+            
+            $lava->LineChart('Temperature', $datatable,[
+                    'title' => 'DailyTemperatures'
+                    
+            ]);
+        }
+        
+
+        return view('home')->with(compact('station_data','stations','daily','monthly','yearly','tendays','lava'));
+       
 
     }
 
-    public function excel(Request $request){
+
+    public function graphicsData(Request $request)
+    {
+        $graphics_id = $request->input('graphics_id');
+        $station_data = DB::table('data')->get();
+         
+        return $graphics_id;
+        
+    }
+
+    public function excel(Request $request)
+    {
     
         $stationSelected = $request->input('stationSelected');
         $periodSelected = $request->input('periodSelected');
-        //dd($periodSelected);
+   
         if($periodSelected =='1'){    
             return Excel::download(new DailyExport($stationSelected), 'DailyData.csv');
 
@@ -72,6 +110,43 @@ class HomeController extends Controller
             return Excel::download(new YearlyExport($stationSelected), 'YearlyData.csv');
         }
     
+    }
+
+    public function excelData(Request $request)
+    {
+        $stationSelected = $request->input('stationSelected');
+
+        if($stationSelected==["1"]){
+            return Excel::download(new DataExport($stationSelected), 'Chojñapata-Davis.csv');
+        }else if($stationSelected==["2"]){
+            return Excel::download(new DataExport($stationSelected), 'Chinchaya-Davis.csv');
+        }else if($stationSelected==["3"]){
+            return Excel::download(new DataExport($stationSelected), 'Chinchaya-Chinas.csv');
+        }else if($stationSelected==["4"]){
+            return Excel::download(new DataExport($stationSelected), 'Calahuancane-Davis.csv');
+        }else if($stationSelected==["5"]){
+            return Excel::download(new DataExport($stationSelected), 'Cutusuma-Davis.csv');
+        }else if($stationSelected==["6"]){
+            return Excel::download(new DataExport($stationSelected), 'Iñacamaya-Davis.csv');
+        }else if($stationSelected==["7"]){
+            return Excel::download(new DataExport($stationSelected), 'Incamya-Chinas.csv');
+        }
+    }
+
+
+
+    public function getDaily()
+    {
+        //pass filter
+        return DataTables::of(Daily::query())->make(true);
+    }
+
+    public function filterData(Request $request)
+    {
+        $station_id = $request->input('filter_station');
+        //$data_filter = DB::table('data')->whereIn('station_id', $station_id);
+       
+        return $station_id;
     }
 }
 

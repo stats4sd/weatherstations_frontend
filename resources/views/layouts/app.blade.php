@@ -32,7 +32,13 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto">
+                    <ul class="navbar-nav mr-auto">    
+
+                        <div class="topnav">
+                          <a class="active" href="home">Home</a>
+                          <a href="admin">Manager Data</a>
+                          <a href="#contact">Contact</a>
+                        </div>
 
                     </ul>
 

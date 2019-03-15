@@ -19,7 +19,7 @@ class YearlyDataView extends Migration
             SELECT
 
                 -- ######### START WITH THE GROUP-BY FIELDS
-                -- ## We want 'daily'
+                -- ## We want 'yearly'
                 -- ## Grouped by weather-station
 
                 LEFT(fecha_hora,4) as fecha,
@@ -29,41 +29,49 @@ class YearlyDataView extends Migration
                 -- #########################################
 
                 -- ################# Temperature and Humidity
-                -- ## Min and Max
+                -- ## Min, Max and Avg
+                
+                MAX(temperatura_interna) as max_temperatura_interna,
+                MIN(temperatura_interna) as min_temperatura_interna,
+                AVG(temperatura_interna) as avg_temperatura_interna,
 
-                MAX(temperatura_interna) as max_temperature_interna,
-                MIN(temperatura_interna) as min_temperature_interna,
-
-                MAX(humedad_interna) as max_humidad_interna,
-                MIN(humedad_interna) as min_humidad_interna,
+                MAX(humedad_interna) as max_humedad_interna,
+                MIN(humedad_interna) as min_humedad_interna,
+                AVG(humedad_interna) AS avg_humedad_interna,
 
                 MAX(temperatura_externa) as max_temperatura_externa,
                 MIN(temperatura_externa) as min_temperatura_externa,
+                AVG(temperatura_externa) as avg_temperatura_externa,
 
                 MAX(humedad_externa) as max_humedad_externa,
                 MIN(humedad_externa) as min_humedad_externa,
+                AVG(humedad_externa) as avg_humedad_externa,
 
                 -- ################# Pressure
-                -- ## Min and Max
+                -- ## Min, Max and Avg
 
                 MAX(presion_relativa) as max_presion_relativa,
                 MIN(presion_relativa) as min_presion_relativa,
+                AVG(presion_relativa) as avg_presion_relativa,
 
                 MAX(presion_absoluta) as max_presion_absoluta,
                 MIN(presion_absoluta) as min_presion_absoluta,
+                AVG(presion_absoluta) as avg_presion_absoluta,
 
                 -- ################# Wind Speed
-                -- ## Min and Max
+                -- ## Min, Max and Avg
 
                 MAX(velocidad_viento) as max_velocidad_viento,
                 MIN(velocidad_viento) as min_velocidad_viento,
+                AVG(velocidad_viento) as avg_velocidad_viento,
 
 
                 -- ################# Heat Sensation?
-                -- ## Min and Max
+                -- ## Min, Max and Avg
 
                 MAX(sensacion_termica) as max_sensacion_termica,
                 MIN(sensacion_termica) as min_sensacion_termica,
+                AVG(sensacion_termica) as avg_sensacion_termica,
 
                 -- ################# Rainfall
                 -- ## Rainfall is already totalled per hour, day and week.

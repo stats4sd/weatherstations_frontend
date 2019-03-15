@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Khill\Lavacharts\Lavacharts;
+use App\Daily;
 
 class DailyController extends Controller
 {
@@ -13,8 +15,10 @@ class DailyController extends Controller
      */
     public function index()
     {
-        $daily = Daily::all();
-        return view('home', compact('daily'));
+        
+        
+        //$daily = Daily::all();
+        //return view('home', compact('daily'));
     }
 
     /**
