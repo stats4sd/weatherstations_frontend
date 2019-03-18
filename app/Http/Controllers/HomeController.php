@@ -68,10 +68,8 @@ class HomeController extends Controller
                         -> addNumberColumn('Min Temp Int')
                         -> addRows($data);
 
-            
             $lava->LineChart('Temperature', $datatable,[
-                    'title' => 'DailyTemperatures'
-                    
+                    'title' => 'DailyTemperatures'                 
             ]);
         }
         
@@ -137,17 +135,51 @@ class HomeController extends Controller
 
     public function getDaily()
     {
-        //pass filter
         return DataTables::of(Daily::query())->make(true);
     }
 
-    public function filterData(Request $request)
+    public function getTenDays()
     {
-        $station_id = $request->input('filter_station');
-        //$data_filter = DB::table('data')->whereIn('station_id', $station_id);
-       
-        return $station_id;
+        return DataTables::of(Tendays::query())->make(true);
     }
+
+    public function getMonthly()
+    {
+        return DataTables::of(Monthly::query())->make(true);
+    }
+
+     public function getYearly()
+    {
+        return DataTables::of(Yearly::query())->make(true);
+    }
+
+    public function getGraphic(Request $request)
+    {
+        $graphics_id = $request->input('graphics_id');
+
+        if($graphics_id=='1'){
+        $lava= new Lavacharts;
+            
+                $data=Daily::select("fecha as 0","max_temperatura_interna as 1", "avg_temperatura_interna as 2","min_temperatura_interna as 3")->get()->toArray();
+                $datatable = $lava->DataTable();
+
+                $datatable -> addDateColumn('Date')
+                            -> addNumberColumn('Max Temp Int')
+                            -> addNumberColumn('Mean Temp Int')
+                            -> addNumberColumn('Min Temp Int')
+                            -> addRows($data);
+
+                
+                $lava->LineChart('Temperature', $datatable,[
+                        'title' => 'DailyTemperatures'
+                        
+                ]);
+            
+        }
+        return $datatable->toJson();
+
+    }
+
 }
 
 

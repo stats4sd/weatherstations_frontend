@@ -178,7 +178,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         Khill\Lavacharts\Laravel\LavachartsServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
-        Yajra\DataTables\ButtonsServiceProvider::class,
+ 
 
         
 

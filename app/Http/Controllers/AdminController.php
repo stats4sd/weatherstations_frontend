@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Daily;
+use App\Data;
 use App\Monthly;
 use App\Tendays;
 use App\Yearly;
@@ -28,9 +29,12 @@ class AdminController extends Controller
     {
         $station_data = DB::table('data')->get();
         $stations = DB::table('stations')->get();
-        
-
+    
         return view('admin')->with(compact('station_data','stations'));
+    }
+    public function getData()
+    {
+        return DataTables::of(Data::query())->make(true);
     }
 
     
