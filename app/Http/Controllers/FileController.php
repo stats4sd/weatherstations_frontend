@@ -39,10 +39,7 @@ class FileController extends Controller
         // Retrieve file from POST request
         //
         $station = $_POST['weatherstation'];
-        //dd($request);
-     
-
-        //dd($station);
+        
 
             if($request->hasFile('data-file')){
 

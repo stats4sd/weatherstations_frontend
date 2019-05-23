@@ -178,6 +178,8 @@ return [
         App\Providers\RouteServiceProvider::class,
         Khill\Lavacharts\Laravel\LavachartsServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
+        'Prologue\Alerts\AlertsServiceProvider',
+
  
 
         
@@ -234,6 +236,7 @@ return [
         //'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'Lava' => Khill\Lavacharts\Laravel\LavachartsFacade::class,
         'Datatables' => Yajra\Datatables\Facades\Datatables::class,
+        'Alert' => 'Prologue\Alerts\Facades\Alert',
 
     ],
 

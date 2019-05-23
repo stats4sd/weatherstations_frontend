@@ -3,17 +3,20 @@
 namespace App;
 
 use App\Station;
-use \LaravelTreats\Model\Traits\HasCompositePrimaryKey;
+use Backpack\CRUD\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
+use \LaravelTreats\Model\Traits\HasCompositePrimaryKey;
 
 
 class Data extends Model
 
 {
+	use CrudTrait;
 	use HasCompositePrimaryKey;
     protected $primaryKey = array('fecha_hora','id_station');
     protected $table = 'data';
-
+    //protected $guarded = ['id'];
+    //protected $fillable = [];
     public function station ()
     {
 

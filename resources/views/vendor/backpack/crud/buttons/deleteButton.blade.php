@@ -1,0 +1,1 @@
+<a href="{{ url('admin/dataTemplate/checkvalue') }} " class="btn btn-danger"><i class="fa fa-trash"></i> Controller</a>

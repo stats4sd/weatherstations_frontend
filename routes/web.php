@@ -10,7 +10,8 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-use App\DataTables\DataDataTable;
+
+// use App\DataTables\DataDataTable;
 
 Route::get('/', function () {
     return redirect('home');
@@ -30,27 +31,27 @@ Route::post('/export_excel/excel','HomeController@excel')->name('export_excel.ex
 Route::post('/excelData', 'HomeController@excelData')->name('excelData');
 
 
-Route::post('/getGraphic', 'HomeController@getGraphic')->name('getGraphic');
+// Route::post('/getGraphic', 'HomeController@getGraphic')->name('getGraphic');
 
 
-//Datatables
+// //Datatables
 Route::get('getDaily', 'HomeController@getDaily')->name('getDaily');
 Route::get('getTenDays', 'HomeController@getTenDays')->name('getTenDays');
 Route::get('getMonthly', 'HomeController@getMonthly')->name('getMonthly');
 Route::get('getYearly', 'HomeController@getYearly')->name('getYearly');
 Route::get('getData', 'AdminController@getData')->name('getData');
 
-//Datatables Buttons
+// //Datatables Buttons
 
 
 
 
-//LavaCharts
-//Route::get('/charts','ChartsController@charts');
-//Route::get('/daily','DailyController@index');
+// // //LavaCharts
+Route::get('/charts','ChartsController@charts');
+Route::get('/daily','DailyController@index');
 
 
+//NEW Upload page
 
-
-
-
+Route::get('admin/upload', 'UploadController@index');
+Route::get('admin/dataTemplate/checkvalue', 'DataTemplateController@checkvalue');
