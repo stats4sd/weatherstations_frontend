@@ -1,10 +1,12 @@
 <?php
 namespace App\Http\Controllers;
 
+use Alert;
 use App\File;
 use DB;
 use Excel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use \GuzzleHttp\Client;
 
@@ -56,11 +58,13 @@ class FileController extends Controller
                 $newFile->station_id = $station;
 
                 $newFile->save();
-                return view('file-uploaded');
+                \Alert::success('<h4>El archivo ha sido subido exitosamente</h4>')->flash();
+                return Redirect::back();
 
             }
+            \Alert::error("<h4>El archivo no fue seleccionado</h4>")->flash();
 
-            return "no file";
+            return Redirect::back();;
         
 
 

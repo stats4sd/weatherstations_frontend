@@ -15,8 +15,8 @@ class Data extends Model
 	use HasCompositePrimaryKey;
     protected $primaryKey = array('fecha_hora','id_station');
     protected $table = 'data';
-    //protected $guarded = ['id'];
-    //protected $fillable = [];
+   // protected $guarded = ['id'];
+    protected $fillable = ['id_station'];
     public function station ()
     {
 

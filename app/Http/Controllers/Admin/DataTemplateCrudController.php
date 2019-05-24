@@ -42,7 +42,8 @@ class DataTemplateCrudController extends CrudController
         $this->crud->setRequiredFields(UpdateRequest::class, 'edit');
         $this->crud->enableExportButtons();
         $this->crud->removeAllButtons();
-        $this->crud->addButtonFromView('top','deleteButton', 'deleteButton', 'end');
+        $this->crud->addButtonFromView('top','checkvalueButton', 'checkvalueButton', 'end');
+        $this->crud->addButtonFromView('top','storeFileButton', 'storeFileButton', 'end');
 
         //Filter
         $this->crud->addFilter([

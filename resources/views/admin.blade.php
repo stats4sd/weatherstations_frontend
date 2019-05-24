@@ -39,14 +39,14 @@
                         <form action="{{ route('files.store') }} " method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group row">
-                                <label for="file" class="control-label col-sm-3"><h4><b>Choose one data file to upload. This should be the un-edited file retrieved from the weather station system</b></h4></label>
+                                <label for="file" class="control-label col-sm-3"><h4><b>Elija un archivo de datos para subir. Este debe ser el archivo sin editar recuperado del sistema de la estación meteorológica</b></h4></label>
                                 <div class="col-sm-9">
                                     <input name="data-file" type="file" class="form-control-file btn btn-outline-info">
                                 </div>
                             </div>
 
                             <div class="form-group row">
-                                <label for="file" class="control-label col-sm-3"><h4><b>Select the weather station type this dataset came from</b></h4></label>
+                                <label for="file" class="control-label col-sm-3"><h4><b>Seleccione el tipo de estación meteorológica de la que proviene este conjunto de datos.</b></h4></label>
                                 <div class="col-sm-9">
                                     <select name="weatherstation" class="form-control btn btn-outline-info">
                                         @foreach($stations as $station)
@@ -56,16 +56,18 @@
                                     </select>
                                 </div>
                             </div>
+                            <button class="submit btn btn-info mb-5" >Submit File</button>
+                          </form>
+                          <div class="form-group row">
+                            <label for="file" class="control-label col-sm-3"><h4><b>Vaya a la página Data Template para verificar los valores de los datos y cargar los datos en la base de datos</b></h4></label>
+                          </div>
+                          <a href="/admin/dataTemplate" class="btn btn-info" role="button">Data Template</a>
 
-
-                            <button class="submit btn btn-info" >Submit File</button>
-           
-                        </form>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    
  
 
 @endsection
