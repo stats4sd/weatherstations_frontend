@@ -7,6 +7,7 @@ use DB;
 use Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use \GuzzleHttp\Client;
 
@@ -39,16 +40,16 @@ class FileController extends Controller
     public function store(Request $request)
     {
         // Retrieve file from POST request
-        //
-        $station = $_POST['weatherstation'];
-        
+        //sends units type to DataTemplate
+        Session::put('temp_unit', $_POST['temp_unit']);
+        Session::put('pression_unit', $_POST['pression_unit']);
 
+        $station = $_POST['weatherstation'];
             if($request->hasFile('data-file')){
 
                 // handle file and store it for prosperity
                 $file = $request->file('data-file');
              
-
                 $name = time() . '_' . $file->getClientOriginalName();
                 $path = $file->storeAs('rawfiles',$name);
 
@@ -64,9 +65,7 @@ class FileController extends Controller
             }
             \Alert::error("<h4>El archivo no fue seleccionado</h4>")->flash();
 
-            return Redirect::back();;
-        
-
+            return Redirect::back();
 
         // Send file onto cloud function
     }
@@ -115,4 +114,5 @@ class FileController extends Controller
     {
         //
     }
+
 }

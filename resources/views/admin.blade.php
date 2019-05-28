@@ -56,6 +56,49 @@
                                     </select>
                                 </div>
                             </div>
+
+                            <div class="form-group row">
+                              <label for="file" class="control-label col-sm-3"><h4><b>Temperatura</b></h4></label>
+                              <div class="col-sm-9">
+                                <select name="temp_unit" class="form-control btn btn-outline-info">
+                                  <option id="1" value="C">Celsius ( º C )</option>
+                                  <option id="2" value="F">Farhenheit ( º F )</option>
+                                </select>
+                              </div>
+                            </div>
+
+                            <div class="form-group row">
+                              <label for="file" class="control-label col-sm-3"><h4><b>Pression</b></h4></label>
+                              <div class="col-sm-9">
+                                <select name="pression_unit" class="form-control btn btn-outline-info">
+                                  <option id="1" value="hpa" >hpa</option>
+                                  <option id="2" value="inhg">inhg</option>
+                                  <option id="3" value="mmhg">mmhg</option>
+                                </select>
+                              </div>
+                            </div>
+
+                            <div class="form-group row">
+                              <label for="file" class="control-label col-sm-3"><h4><b>Velocidad del viento</b></h4></label>
+                              <div class="col-sm-9">
+                                <select name="veloc_viento_unit" class="form-control btn btn-outline-info">
+                                  <option id="1" value="m/s" >m/s</option>
+                                  <option id="2" value="km/h">km/h</option>
+                                  <option id="3" value="mph">mph</option>
+                                </select>
+                              </div>
+                            </div>
+
+                            <div class="form-group row">
+                              <label for="file" class="control-label col-sm-3"><h4><b>Precipitación</b></h4></label>
+                              <div class="col-sm-9">
+                                <select name="precip_unit" class="form-control btn btn-outline-info">
+                                  <option id="1" value="mm">mm</option>
+                                  <option id="2" value="inch">inch</option>
+                                </select>
+                              </div>
+                            </div>
+
                             <button class="submit btn btn-info mb-5" >Submit File</button>
                           </form>
                           <div class="form-group row">

@@ -35,6 +35,10 @@ class DataTemplateCrudController extends CrudController
 
         // TODO: remove setFromDb() and manually define Fields and Columns
         $this->crud->addColumn('fecha_hora')->makeFirstColumn();
+        $this->crud->addColumn('temperatura_externa')->afterColumn('fecha_hora');
+        $this->crud->addColumn('temperatura_interna')->afterColumn('temperatura_externa');
+        $this->crud->addColumn('punto_rocio')->afterColumn('temperatura_interna');
+        $this->crud->addColumn('sensacion_termica')->afterColumn('punto_rocio');
         $this->crud->setFromDb();
 
         // add asterisk for fields that are required in DataTemplateRequest
@@ -43,6 +47,9 @@ class DataTemplateCrudController extends CrudController
         $this->crud->enableExportButtons();
         $this->crud->removeAllButtons();
         $this->crud->addButtonFromView('top','checkvalueButton', 'checkvalueButton', 'end');
+        $this->crud->addButtonFromView('top','inhgToHpaButton', 'inhgToHpaButton', 'end');
+
+
         $this->crud->addButtonFromView('top','storeFileButton', 'storeFileButton', 'end');
 
         //Filter

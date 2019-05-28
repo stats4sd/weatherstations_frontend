@@ -1,0 +1,1 @@
+<a href="{{ url('dataTemplate/convertInhgToHpa') }} " class="btn btn-info"><i class="	fas fa-smog"></i>  Convert inhg to hpa</a>
