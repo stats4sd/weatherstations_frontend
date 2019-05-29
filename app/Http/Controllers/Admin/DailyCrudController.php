@@ -24,7 +24,7 @@ class DailyCrudController extends CrudController
         */
         $this->crud->setModel('App\Models\Daily');
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/daily');
-        $this->crud->setEntityNameStrings('daily', 'dailies');
+        $this->crud->setEntityNameStrings('daily', 'daily');
 
         /*
         |--------------------------------------------------------------------------

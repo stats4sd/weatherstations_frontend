@@ -54,7 +54,9 @@ Route::get('/daily','DailyController@index');
 //NEW Upload page
 
 Route::get('admin/upload', 'UploadController@index');
-Route::get('dataTemplate/checkvalue', 'DataTemplateController@checkvalue');
+Route::get('dataTemplate/convertDataFtoC', 'DataTemplateController@convertDataFtoC');
 Route::get('dataTemplate/convertDataInhgOrMmhgToHpa', 'DataTemplateController@convertDataInhgOrMmhgToHpa');
+Route::get('dataTemplate/convertDatakmOrMToMs', 'DataTemplateController@convertDatakmOrMToMs');
+Route::get('dataTemplate/convertDataInchToMm', 'DataTemplateController@convertDataInchToMm');
 Route::get('dataTemplate/storeFile', 'DataTemplateController@storeFile');
 Route::get('dataTemplate/cleanTable', 'DataTemplateController@cleanTable');

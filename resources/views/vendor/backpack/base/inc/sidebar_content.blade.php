@@ -12,6 +12,8 @@
 		<li><a href="{{ backpack_url('station') }}"><i class='fas fa-broadcast-tower'></i> <span>Stations</span></a></li>
 		<li><a href="{{ backpack_url('data') }}"><i class='fas fa-list'></i><span>     Data</span></a></li>
 		<li><a href="{{ backpack_url('upload') }}"><i class='fa fa-cloud-upload'></i> <span>Data Uploader</span></a></li>
+		<li><a href="{{ backpack_url('dataTemplate') }}"><i class='far fa-window-maximize'></i> <span>Data Preview</span></a></li>
+		<li><a href='{{ backpack_url('meteobridge') }}'><i class='fa fa-tag'></i> <span>Meteobridge</span></a></li>
 	</ul>
 </li>
 @endif
@@ -22,4 +24,4 @@
 
 <!-- <li><a href="{{ backpack_url('elfinder') }}"><i class="fa fa-files-o"></i> <span>{{ trans('backpack::crud.file_manager') }}</span></a></li> -->
 
-<li><a href="{{ backpack_url('dataTemplate') }}"><i class='fa fa-tag'></i> <span>Data Template</span></a></li>
+

@@ -43,6 +43,8 @@ class FileController extends Controller
         //sends units type to DataTemplate
         Session::put('temp_unit', $_POST['temp_unit']);
         Session::put('pression_unit', $_POST['pression_unit']);
+        Session::put('veloc_viento_unit', $_POST['veloc_viento_unit']);
+        Session::put('precip_unit', $_POST['precip_unit']);
 
         $station = $_POST['weatherstation'];
             if($request->hasFile('data-file')){

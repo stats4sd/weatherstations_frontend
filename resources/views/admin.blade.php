@@ -56,9 +56,15 @@
                                     </select>
                                 </div>
                             </div>
+                            <div>
+                            <h3><b>Seleccione los tipos de unidades para los siguientes tipos de datos.</b></h3>
+                            <p><h5>Los valores se almacenan en la base de datos con las siguientes unidades: º C, hPa, m/s, mm.</h5></p>
+                            <p><h5>Si los datos tienen un tipo de unidad diferente, convierta los valores después de cargar el archivo en la página Data Preview.</h5></p>
+                              <br>
+                            </div>
 
                             <div class="form-group row">
-                              <label for="file" class="control-label col-sm-3"><h4><b>Temperatura</b></h4></label>
+                              <label for="file" class="control-label col-sm-3"><h4>Temperatura</h4></label>
                               <div class="col-sm-9">
                                 <select name="temp_unit" class="form-control btn btn-outline-info">
                                   <option id="1" value="C">Celsius ( º C )</option>
@@ -68,10 +74,10 @@
                             </div>
 
                             <div class="form-group row">
-                              <label for="file" class="control-label col-sm-3"><h4><b>Pression</b></h4></label>
+                              <label for="file" class="control-label col-sm-3"><h4>Presión</h4></label>
                               <div class="col-sm-9">
                                 <select name="pression_unit" class="form-control btn btn-outline-info">
-                                  <option id="1" value="hpa" >hpa</option>
+                                  <option id="1" value="hpa" >hPa</option>
                                   <option id="2" value="inhg">inhg</option>
                                   <option id="3" value="mmhg">mmhg</option>
                                 </select>
@@ -79,7 +85,7 @@
                             </div>
 
                             <div class="form-group row">
-                              <label for="file" class="control-label col-sm-3"><h4><b>Velocidad del viento</b></h4></label>
+                              <label for="file" class="control-label col-sm-3"><h4>Velocidad del viento</h4></label>
                               <div class="col-sm-9">
                                 <select name="veloc_viento_unit" class="form-control btn btn-outline-info">
                                   <option id="1" value="m/s" >m/s</option>
@@ -90,7 +96,7 @@
                             </div>
 
                             <div class="form-group row">
-                              <label for="file" class="control-label col-sm-3"><h4><b>Precipitación</b></h4></label>
+                              <label for="file" class="control-label col-sm-3"><h4>Precipitación</h4></label>
                               <div class="col-sm-9">
                                 <select name="precip_unit" class="form-control btn btn-outline-info">
                                   <option id="1" value="mm">mm</option>
@@ -101,10 +107,11 @@
 
                             <button class="submit btn btn-info mb-5" >Submit File</button>
                           </form>
-                          <div class="form-group row">
-                            <label for="file" class="control-label col-sm-3"><h4><b>Vaya a la página Data Template para verificar los valores de los datos y cargar los datos en la base de datos</b></h4></label>
+                          <div>
+                            <h3><b>Vaya a la página Data Preview para convertir los valores de datos y cargar datos en la base de datos</b></h3>
+                            <br>
                           </div>
-                          <a href="/admin/dataTemplate" class="btn btn-info" role="button">Data Template</a>
+                          <a href="/admin/dataTemplate" class="btn btn-info" role="button">Data Preview</a>
 
                     </div>
                 </div>

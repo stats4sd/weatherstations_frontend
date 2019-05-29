@@ -1,0 +1,1 @@
+<a href="{{ url('dataTemplate/convertDataInchToMm') }} " class="btn btn-info"><i class="fas fa-cloud-showers-heavy"></i>  Convert inch to mm</a>

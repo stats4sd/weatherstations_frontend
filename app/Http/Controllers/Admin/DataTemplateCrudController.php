@@ -25,7 +25,7 @@ class DataTemplateCrudController extends CrudController
         */
         $this->crud->setModel('App\Models\DataTemplate');
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/dataTemplate');
-        $this->crud->setEntityNameStrings('datatemplate', 'data template');
+        $this->crud->setEntityNameStrings('datatemplate', 'data preview');
 
         /*
         |--------------------------------------------------------------------------
@@ -40,7 +40,9 @@ class DataTemplateCrudController extends CrudController
         
         
         $this->crud->addColumn('presion_relativa')->afterColumn('temperatura_interna');
-        $this->crud->addColumn('presion_absoluta') ->afterColumn('presion_relativa');
+        $this->crud->addColumn('velocidad_viento')->afterColumn('presion_absoluta');
+        $this->crud->addColumn('lluvia_hora')->afterColumn('velocidad_viento');
+        $this->crud->addColumn('rain')->afterColumn('lluvia_hora');
         $this->crud->setFromDb();
 
         // add asterisk for fields that are required in DataTemplateRequest
@@ -48,12 +50,12 @@ class DataTemplateCrudController extends CrudController
         $this->crud->setRequiredFields(UpdateRequest::class, 'edit');
         $this->crud->enableExportButtons();
         $this->crud->removeAllButtons();
-        $this->crud->addButtonFromView('top','checkvalueButton', 'checkvalueButton', 'end');
+        $this->crud->addButtonFromView('top','convertDataFtoCButton', 'convertDataFtoCButton', 'end');
         $this->crud->addButtonFromView('top','convertDataInhgOrMmhgToHpaButton', 'convertDataInhgOrMmhgToHpaButton', 'end');
-        $this->crud->addButtonFromView('top', 'cleanTableButton', 'cleanTableButton', 'end' );
-
-
+        $this->crud->addButtonFromView('top','convertDatakmOrMToMsButton', 'convertDatakmOrMToMsButton', 'end');
+        $this->crud->addButtonFromView('top','convertDataInchToMmButton', 'convertDataInchToMmButton', 'end');
         $this->crud->addButtonFromView('top','storeFileButton', 'storeFileButton', 'end');
+        $this->crud->addButtonFromView('top', 'cleanTableButton', 'cleanTableButton', 'end' );
 
         //Filter
         $this->crud->addFilter([
