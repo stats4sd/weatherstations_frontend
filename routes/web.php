@@ -55,5 +55,6 @@ Route::get('/daily','DailyController@index');
 
 Route::get('admin/upload', 'UploadController@index');
 Route::get('dataTemplate/checkvalue', 'DataTemplateController@checkvalue');
-Route::get('dataTemplate/convertInhgToHpa', 'DataTemplateController@convertInhgToHpa');
+Route::get('dataTemplate/convertDataInhgOrMmhgToHpa', 'DataTemplateController@convertDataInhgOrMmhgToHpa');
 Route::get('dataTemplate/storeFile', 'DataTemplateController@storeFile');
+Route::get('dataTemplate/cleanTable', 'DataTemplateController@cleanTable');

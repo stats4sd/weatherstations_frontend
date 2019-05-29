@@ -1,0 +1,1 @@
+<a href="{{ url('dataTemplate/convertDataInhgOrMmhgToHpa') }} " class="btn btn-info"><i class="	fas fa-smog"></i>  Convert inhg or mmhg to hpa</a>

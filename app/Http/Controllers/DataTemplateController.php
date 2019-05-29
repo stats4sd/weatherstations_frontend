@@ -12,20 +12,74 @@ use Illuminate\Support\Facades\Session;
 
 class DataTemplateController extends Controller
 {
-	public function convertFahrenheitToCelsius()
+	public function convertFahrenheitToCelsius($value)
+	{
+		$temp_celsius = (($value-32)*5/9);
+		return round($temp_celsius, 2);
+	}
+
+	public function convertInhgOrMmhgToHpa($value)
+	{
+		$pression_unit = Session::get('pression_unit');
+		if($pression_unit=="inhg")
+		{
+			$press_hpa = $value*33.863886666667;
+			return round($value*33.863886666667, 2);
+
+		}elseif($pression_unit=="mmhg")
+		{
+			$press_hpa = $value*1.3332239;
+			return round($value*1.3332239);
+		}
+		
+	}
+	public function convertDataInhgOrMmhgToHpa()
+	{
+		set_time_limit(0);
+		$pression_unit = Session::get('pression_unit');
+		$data_template = DB::select('select fecha_hora, id_station, presion_relativa, presion_absoluta from data_template');
+		//dd($pression_unit);
+			if($pression_unit!="hpa")
+			{
+				foreach ($data_template as $value) 
+				{
+					$pression_relativa_round = $this->convertInhgOrMmhgToHpa($value->presion_relativa);
+
+					$pression_absoluta_round = $this->convertInhgOrMmhgToHpa($value->presion_absoluta);
+
+						DB::table('data_template')
+								->where('fecha_hora','=', $value->fecha_hora)
+								->where('id_station', '=',$value->id_station)
+								->update(
+							[
+								'presion_relativa' => $pression_relativa_round, 
+								'presion_absoluta' => $pression_absoluta_round,
+						]);
+					\Alert::success('La temperatura interna y externa se ha convertido a grados Celsius.')->flash();
+				}
+			}
+		return Redirect::back();
+
+	}
+
+
+	public function convertDataFtoC()
 	{
 		set_time_limit(0);
 		$temp_unit = Session::get('temp_unit');
+		
 		if($temp_unit=='F')
 		{
-			$data_template = DB::select('select fecha_hora, id_station, temperatura_interna, temperatura_externa from data_template');
+			$data_template = DB::select('select fecha_hora, id_station, temperatura_interna, temperatura_externa, sensacion_termica, punto_rocio from data_template');
 			foreach ($data_template as $value) 
 			{
-				$temp_interna_celsius = (($value->temperatura_interna-32)*5/9);
-				$temp_interna_round = round($temp_interna_celsius, 2);
+				$temp_interna_round = $this->convertFahrenheitToCelsius($value->temperatura_interna);
 
-				$temp_externa_celsius = (($value->temperatura_externa-32)*5/9);
-				$temp_externa_round = round($temp_externa_celsius, 2);
+				$temp_externa_round = $this->convertFahrenheitToCelsius($value->temperatura_externa);
+
+				$sensacion_term_round = $this->convertFahrenheitToCelsius($value->sensacion_termica);
+
+				$punto_rocio_round = $this->convertFahrenheitToCelsius($value->punto_rocio);
 
 					DB::table('data_template')
 							->where('fecha_hora','=', $value->fecha_hora)
@@ -33,7 +87,9 @@ class DataTemplateController extends Controller
 							->update(
 						[
 							'temperatura_interna' => $temp_interna_round, 
-							'temperatura_externa' => $temp_externa_round
+							'temperatura_externa' => $temp_externa_round,
+							'sensacion_termica' => $sensacion_term_round,
+							'punto_rocio' => $punto_rocio_round
 					]);
 				\Alert::success('La temperatura interna y externa se ha convertido a grados Celsius.')->flash();
 
@@ -41,30 +97,21 @@ class DataTemplateController extends Controller
 			}
 			return true;
 		} else {
-			\Alert::error('Las temperaturas interiores y exteriores están en grados Celsius.')->flash();
+			\Alert::error('La temperatura interna y externa están en grados centígrados según el usuario que cargó los datos.')->flash();
 		}
 
 		return false;
 		
 	}
 
-	public function convertInhgToHpa()
-	{
-		set_time_limit(0);
-		$pression_unit = Session::get('pression_unit');
-		dd($pression_unit);
-	}
+
+	
 
 
     public function checkvalue()
     {
-    	$this->convertFahrenheitToCelsius();
-    	if($this->convertFahrenheitToCelsius()){
-    		\Alert::success('The temperatura externa is in Celsius')->flash();
-		} else {
-			\Alert::error('<h4>Error Message</h4><p>The following version is still in use.</p><p>Please edit the status in Versions and in Datasets before to delete.</p>')->flash();
-      		// return Redirect::to('admin/dataset');
-		}
+    	
+    	$this->convertDataFtoC();
     	
     	return Redirect::back();
     }
@@ -135,12 +182,13 @@ class DataTemplateController extends Controller
     			 	'id_station' => $value->id_station
     		]);
     	}
-    
-
-    	DB::table('data_template')->delete();
-
-    	
+       	
     	return Redirect::back();
 
+    }
+    public function cleanTable()
+    {
+    	DB::table('data_template')->delete();
+    	return Redirect::back();
     }
 }
