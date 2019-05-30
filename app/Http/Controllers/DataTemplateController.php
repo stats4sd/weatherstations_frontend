@@ -6,7 +6,6 @@ use Alert;
 use App\Data;
 use App\Models\DataTemplate;
 use DB;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;

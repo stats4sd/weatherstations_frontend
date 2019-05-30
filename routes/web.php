@@ -47,13 +47,13 @@ Route::post('/excelData', 'HomeController@excelData')->name('excelData');
 
 
 // // //LavaCharts
-Route::get('/charts','ChartsController@charts');
-Route::get('/daily','DailyController@index');
+// Route::get('/charts','ChartsController@charts');
+// Route::get('/daily','DailyController@index');
 
 
 //NEW Upload page
 
-Route::get('admin/upload', 'UploadController@index');
+Route::get('upload', 'UploadController@index');
 Route::get('dataTemplate/convertDataFtoC', 'DataTemplateController@convertDataFtoC');
 Route::get('dataTemplate/convertDataInhgOrMmhgToHpa', 'DataTemplateController@convertDataInhgOrMmhgToHpa');
 Route::get('dataTemplate/convertDatakmOrMToMs', 'DataTemplateController@convertDatakmOrMToMs');
