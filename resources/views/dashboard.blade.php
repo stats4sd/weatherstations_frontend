@@ -21,12 +21,40 @@
                     <div class="box-title">{{ trans('backpack::base.login_status') }}</div>
                 </div>
 
-                <div class="box-body">{{ trans('backpack::base.logged_in') }}</div>
-                <div id="temps_div"></div>
-                <!-- <?= $lava->render('LineChart', 'Temperature', 'temps_div') ?>  -->
-  
+                <div class="box-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="card-body">
+                                    <div id="temps_div_in"></div>
+                                    <?= $lava_temp_in->render('LineChart', 'TemperatureIn', 'temps_div_in') ?>  
 
+                        
+                                </div>
+                            </div>
+                       
+               
+                            <div id="temps_div_out"></div>
+                                <?= $lava_temp_out->render('LineChart', 'TemperatureOut', 'temps_div_out') ?> 
+                        
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+    
+
+
+
+
+
+
+                      
+                  
+                    
+
+        
+
+
 @endsection
