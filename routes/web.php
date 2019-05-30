@@ -53,7 +53,7 @@ Route::post('/excelData', 'HomeController@excelData')->name('excelData');
 
 //NEW Upload page
 
-Route::get('upload', 'UploadController@index');
+Route::get('admin/upload', 'UploadController@index');
 Route::get('dataTemplate/convertDataFtoC', 'DataTemplateController@convertDataFtoC');
 Route::get('dataTemplate/convertDataInhgOrMmhgToHpa', 'DataTemplateController@convertDataInhgOrMmhgToHpa');
 Route::get('dataTemplate/convertDatakmOrMToMs', 'DataTemplateController@convertDatakmOrMToMs');
