@@ -13,9 +13,10 @@
 
 // use App\DataTables\DataDataTable;
 
-Route::get('weatherstations-ccrp.stats4sd.org', function () {
-    return redirect('weatherstations-ccrp.stats4sd.org/admin');
-});//->middleware('verified');
+Route::get('', function () {
+    return redirect('/admin');
+}); //->middleware('verified');
+
 
 // Route::get('/home', 'HomeController@index')->name('home')->middleware('verified');
 
@@ -46,8 +47,8 @@ Route::post('/excelData', 'HomeController@excelData')->name('excelData');
 
 
 
-// // //LavaCharts
-// Route::get('/charts','ChartsController@charts');
+//LavaCharts
+//Route::get('/charts','ChartsController@charts');
 // Route::get('/daily','DailyController@index');
 
 
@@ -60,3 +61,8 @@ Route::get('dataTemplate/convertDatakmOrMToMs', 'DataTemplateController@convertD
 Route::get('dataTemplate/convertDataInchToMm', 'DataTemplateController@convertDataInchToMm');
 Route::get('dataTemplate/storeFile', 'DataTemplateController@storeFile');
 Route::get('dataTemplate/cleanTable', 'DataTemplateController@cleanTable');
+
+
+//Dashboard
+Route::get('admin/dashboard', 'DashboardController@index');
+
