@@ -13,8 +13,8 @@
 
 // use App\DataTables\DataDataTable;
 
-Route::get('/weatherstations-ccrp.stats4sd.org', function () {
-    return redirect('/weatherstations-ccrp.stats4sd.org/admin');
+Route::get('weatherstations-ccrp.stats4sd.org', function () {
+    return redirect('weatherstations-ccrp.stats4sd.org/admin');
 });//->middleware('verified');
 
 // Route::get('/home', 'HomeController@index')->name('home')->middleware('verified');
