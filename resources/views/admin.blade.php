@@ -111,7 +111,7 @@
                             <h3><b>Vaya a la página Data Preview para convertir los valores de datos y cargar datos en la base de datos</b></h3>
                             <br>
                           </div>
-                          <a href="/dataTemplate" class="btn btn-info" role="button">Data Preview</a>
+                          <a href="dataTemplate" class="btn btn-info" role="button">Data Preview</a>
 
                     </div>
                 </div>
