@@ -34,8 +34,9 @@ class TenDaysCrudController extends CrudController
 
         // TODO: remove setFromDb() and manually define Fields and Columns
         $this->crud->addColumn('max_fecha')->makeFirstColumn();
-        $this->crud->removeColumn('group_by');
         $this->crud->setFromDb();
+        $this->crud->removeColumn('group_by');
+        
 
         // add asterisk for fields that are required in TenDaysRequest
         $this->crud->setRequiredFields(StoreRequest::class, 'create');
