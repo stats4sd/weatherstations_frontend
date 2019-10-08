@@ -7,6 +7,7 @@ use App\Http\Requests\Monthly_dataRequest as UpdateRequest;
 use App\Models\Station;
 use Backpack\CRUD\CrudPanel;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 
 /**
  * Class Monthly_dataCrudController
@@ -15,6 +16,10 @@ use Backpack\CRUD\app\Http\Controllers\CrudController;
  */
 class MonthlyCrudController extends CrudController
 {
+    use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     public function setup()
     {
         /*

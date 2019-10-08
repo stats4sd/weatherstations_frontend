@@ -7,6 +7,7 @@ use App\Http\Requests\DailyRequest as UpdateRequest;
 use App\Models\Station;
 use Backpack\CRUD\CrudPanel;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 
 /**
  * Class DailyCrudController
@@ -15,6 +16,9 @@ use Backpack\CRUD\app\Http\Controllers\CrudController;
  */
 class DailyCrudController extends CrudController
 {
+    use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
+    
+
     public function setup()
     {
         /*
@@ -25,6 +29,7 @@ class DailyCrudController extends CrudController
         $this->crud->setModel('App\Models\Daily');
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/daily');
         $this->crud->setEntityNameStrings('daily', 'daily');
+        $this->crud->orderBy('fecha');
 
         /*
         |--------------------------------------------------------------------------
@@ -40,7 +45,7 @@ class DailyCrudController extends CrudController
         // add asterisk for fields that are required in DailyRequest
         $this->crud->setRequiredFields(StoreRequest::class, 'create');
         $this->crud->setRequiredFields(UpdateRequest::class, 'edit');
-        $this->crud->removeAllButtons();
+       
         $this->crud->enableExportButtons();
         // Filter
         $this->crud->addFilter([

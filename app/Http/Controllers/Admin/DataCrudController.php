@@ -7,6 +7,9 @@ use App\Http\Requests\DataRequest as UpdateRequest;
 use App\Models\Station;
 use Backpack\CRUD\CrudPanel;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
+use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Backpack\CRUD\app\Library\CrudPanel\Traits\hasAccessOrFail;
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 
 /**
  * Class DataCrudController
@@ -15,16 +18,24 @@ use Backpack\CRUD\app\Http\Controllers\CrudController;
  */
 class DataCrudController extends CrudController
 {
+    use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
+ 
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation { update as traitUpdate; }
+    use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation { destroy as traitDestroy; }
+
+
     public function setup()
     {
+
         /*
         |--------------------------------------------------------------------------
         | CrudPanel Basic Information
         |--------------------------------------------------------------------------
         */
-        $this->crud->setModel('App\Models\Data');
-        $this->crud->setRoute(config('backpack.base.route_prefix') . '/data');
-        $this->crud->setEntityNameStrings('data', 'data');
+       
+        CRUD::setModel("App\Models\Data");
+        CRUD::setRoute(config('backpack.base.route_prefix').'/data');
+        CRUD::setEntityNameStrings('data', 'data');
 
         /*
         |--------------------------------------------------------------------------
@@ -33,15 +44,14 @@ class DataCrudController extends CrudController
         */
 
         // TODO: remove setFromDb() and manually define Fields and Columns
-        
+        $this->crud->enableExportButtons();
         $this->crud->addColumn('fecha_hora')->makeFirstColumn();
         $this->crud->setFromDb();
 
         // add asterisk for fields that are required in DataRequest
         $this->crud->setRequiredFields(StoreRequest::class, 'create');
         $this->crud->setRequiredFields(UpdateRequest::class, 'edit');
-        $this->crud->enableExportButtons();
-        $this->crud->removeButton('create');
+ 
 
         //Filter
         $this->crud->addFilter([
@@ -78,22 +88,25 @@ class DataCrudController extends CrudController
            $this->crud->addClause('where', 'fecha_hora', '<=', $dates->to . ' 23:59:59');
         });
     }
-
-    public function store(StoreRequest $request)
+    protected function setupCreateOperation()
     {
-        // your additional operations before save here
-        $redirect_location = parent::storeCrud($request);
-        // your additional operations after save here
-        // use $this->data['entry'] or $this->crud->entry
-        return $redirect_location;
+        $this->crud->setValidation(StoreRequest::class);
     }
 
-    public function update(UpdateRequest $request)
+    protected function setupUpdateOperation()
     {
-        // your additional operations before save here
-        $redirect_location = parent::updateCrud($request);
-        // your additional operations after save here
-        // use $this->data['entry'] or $this->crud->entry
-        return $redirect_location;
+        $this->crud->setValidation(UpdateRequest::class);
     }
+    public function destroy($id)
+    {
+        dd($id);
+        $this->crud->hasAccessOrFail('delete');
+
+        return $this->crud->delete($id);
+    }
+
+
+   
+
+    
 }

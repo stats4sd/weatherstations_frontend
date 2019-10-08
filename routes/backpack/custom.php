@@ -11,14 +11,18 @@ Route::group([
     'middleware' => ['web', config('backpack.base.middleware_key', 'admin')],
     'namespace'  => 'App\Http\Controllers\Admin',
 ], function () { // custom admin routes
-    CRUD::resource('user','UserCrudController');
-    CRUD::resource('data', 'DataCrudController');
-    CRUD::resource('monthly', 'MonthlyCrudController');
-    CRUD::resource('station', 'StationCrudController');
-    CRUD::resource('yearly', 'YearlyCrudController');
-    CRUD::resource('daily', 'DailyCrudController');
-    CRUD::resource('tenDays', 'TenDaysCrudController');
-    CRUD::resource('upload', 'UploadCrudController');
-    CRUD::resource('dataTemplate', 'DataTemplateCrudController');
-    CRUD::resource('meteobridge', 'MeteobridgeCrudController');
+    Route::crud('user','UserCrudController');
+    Route::crud('data', 'DataCrudController');
+    Route::crud('monthly', 'MonthlyCrudController');
+    Route::crud('station', 'StationCrudController');
+    Route::crud('yearly', 'YearlyCrudController');
+    Route::crud('daily', 'DailyCrudController');
+    Route::crud('tenDays', 'TenDaysCrudController');
+    Route::crud('upload', 'UploadCrudController');
+    Route::crud('dataTemplate', 'DataTemplateCrudController');
+    Route::crud('meteobridge', 'MeteobridgeCrudController');
+
+
+
+
 }); // this should be the absolute last line of this file

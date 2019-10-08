@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
-use Backpack\CRUD\CrudTrait;
+use LaravelTreats\Model\Traits\HasCompositePrimaryKey;
 
 class Daily extends Model
 {
     use CrudTrait;
+    use HasCompositePrimaryKey;
 
     /*
     |--------------------------------------------------------------------------
@@ -16,7 +18,7 @@ class Daily extends Model
     */
 
     protected $table = 'daily_data';
-    // protected $primaryKey = 'id';
+    
     // public $timestamps = false;
     // protected $guarded = ['id'];
     protected $fillable = [];

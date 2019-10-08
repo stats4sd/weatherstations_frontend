@@ -8,6 +8,7 @@ use Backpack\CRUD\app\Http\Controllers\CrudController;
 use App\Http\Requests\UserRequest as StoreRequest;
 use App\Http\Requests\UserRequest as UpdateRequest;
 use Backpack\CRUD\CrudPanel;
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 
 
 /**
@@ -17,6 +18,10 @@ use Backpack\CRUD\CrudPanel;
  */
 class UserCrudController extends CrudController
 {
+    use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     public function setup()
     {
         /*

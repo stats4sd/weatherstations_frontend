@@ -3,7 +3,7 @@
 namespace App;
 
 use App\Station;
-use Backpack\CRUD\CrudTrait;
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use \LaravelTreats\Model\Traits\HasCompositePrimaryKey;
 
