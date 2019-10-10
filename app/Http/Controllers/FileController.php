@@ -62,7 +62,7 @@ class FileController extends Controller
 
                 $newFile->save();
                 \Alert::success('<h4>El archivo ha sido subido exitosamente</h4>')->flash();
-                return Redirect::back();
+                return Redirect::to('admin/dataTemplate');
 
             }
             \Alert::error("<h4>El archivo no fue seleccionado</h4>")->flash();

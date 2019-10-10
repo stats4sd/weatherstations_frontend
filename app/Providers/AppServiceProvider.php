@@ -18,6 +18,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
         File::observe(FileObserver::class);
+        $this->overrideConfigValues();
     }
 
     /**
@@ -28,5 +29,15 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         //
+    }
+
+    protected function overrideConfigValues()
+    {
+        $config = [];
+        if (config('settings.skin'))
+            $config['backpack.base.skin'] = config('settings.skin');
+        if (config('settings.show_powered_by'))
+            $config['backpack.base.show_powered_by'] = config('settings.show_powered_by') == '1';
+        config($config);
     }
 }

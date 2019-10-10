@@ -13,13 +13,14 @@ class Data extends Model
 {
 	use CrudTrait;
 	use HasCompositePrimaryKey;
-    protected $primaryKey = array('fecha_hora','id_station');
+    protected $primaryKey = array('id','fecha_hora','id_station');
     protected $table = 'data';
-   // protected $guarded = ['id'];
-    protected $fillable = ['id_station'];
+    protected $guarded = ['id'];
+
+    //protected $fillable = ['id_station'];
+
     public function station ()
     {
-
     	return $this->belongsTo(Station::class,'id_station');
     }
 }

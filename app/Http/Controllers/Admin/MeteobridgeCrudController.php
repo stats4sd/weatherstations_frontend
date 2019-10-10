@@ -16,6 +16,10 @@ use Backpack\CRUD\CrudPanel;
  */
 class MeteobridgeCrudController extends CrudController
 {
+    use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation { update as traitUpdate; }
+    use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation { destroy as traitDestroy; }
+    use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
     public function setup()
     {
         /*

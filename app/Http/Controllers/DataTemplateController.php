@@ -291,19 +291,23 @@ class DataTemplateController extends Controller
     		]);
     	}
     	} catch(Exception $e) {
+
            $message = $e->getMessage();
      
-        \Alert::error("".substr($message, 0, 112)."")->flash();
+        	\Alert::error("".substr($message, 0, 112)."")->flash();
 
-    	}
+    	}	finally {
+
+  			DB::table('data_template')->delete();
+  			\Alert::success('Los datos han sido ingresados ​​exitosamente.')->flash();
+
+   
+		}	
+
 
        	
     	return Redirect::back();
 
     }
-    public function cleanTable()
-    {
-    	DB::table('data_template')->delete();
-    	return Redirect::back();
-    }
+    
 }

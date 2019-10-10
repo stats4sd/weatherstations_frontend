@@ -1,4 +1,7 @@
-@extends('backpack::layout')
+
+@extends(backpack_view('blank'))
+
+
 
 @section('header')
     <section class="content-header">
@@ -27,50 +30,9 @@
                     <div class="container-fluid">
                         <div class="row">
 
-                            <div class="col-sm-12">
-                                <div id="temps_div_in"></div>
-                                    <?= Lava::render('LineChart', 'TemperatureIn', 'temps_div_in') ?>  
-                            </div>
-
-                            <div class="col-sm-12">
-                                <div id="temps_div_out"></div>
-                                <?= Lava::render('LineChart', 'TemperatureOut', 'temps_div_out') ?>  
-                            </div>
-
-                            <div class="col-sm-12">
-                                <div id="lava_hum_in"></div>
-                                <?= Lava::render('LineChart', 'HumedadIn', 'lava_hum_in') ?>  
-                            </div>
-
-                            <div class="col-sm-12">
-                                <div id="lava_hum_out"></div>
-                                <?= Lava::render('LineChart', 'HumedadOut', 'lava_hum_out') ?>  
-                            </div>
-
-                             <div class="col-sm-12">
-                                <div id="pres_rel"></div>
-                                <?= Lava::render('LineChart', 'PressionR', 'pres_rel') ?>  
-                            </div>
-
-                            <div class="col-sm-12">
-                                <div id="pres_abs"></div>
-                                <?= Lava::render('LineChart', 'PressionA', 'pres_abs') ?>  
-                            </div>
-
-                            <div class="col-sm-12">
-                                <div id="veloc_viento"></div>
-                                <?= Lava::render('LineChart', 'VelocidadViento', 'veloc_viento') ?>  
-                            </div>
-
-                            <div class="col-sm-12">
-                                <div id="sens_termica"></div>
-                                <?= Lava::render('LineChart', 'SensTermica', 'sens_termica') ?>  
-                            </div>
 
 
                             
-
-
                         
                         </div>
                     </div>
@@ -79,17 +41,6 @@
         </div>
     </div>
 
-
-
-
-
-
-
-                      
-                  
-                    
-
-        
 
 
 @endsection

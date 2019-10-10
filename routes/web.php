@@ -41,6 +41,9 @@ Route::get('dataTemplate/convertDataInchToMm', 'DataTemplateController@convertDa
 Route::get('dataTemplate/storeFile', 'DataTemplateController@storeFile');
 Route::get('dataTemplate/cleanTable', 'DataTemplateController@cleanTable');
 
+Route::get('data/{id}/delete', 'DataCrudController@destroy');
+
+
 
 
 

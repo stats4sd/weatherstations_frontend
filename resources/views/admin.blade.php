@@ -1,4 +1,4 @@
-@extends('backpack::layout')
+@extends(backpack_view('blank'))
 @section('header')
     <section class="content-header">
       <h1>
@@ -6,7 +6,7 @@
       </h1>
       <ol class="breadcrumb">
         <li><a href="{{ backpack_url() }}">{{ config('backpack.base.upload') }}</a></li>
-       <!--  <li class="active">{{ trans('backpack::base.uploads') }}</li> -->
+        <li class="active">{{ trans('backpack::base.uploads') }}</li>
       </ol>
     </section>
 @endsection
@@ -107,11 +107,11 @@
 
                             <button class="submit btn btn-info mb-5" >Submit File</button>
                           </form>
-                          <div>
+                          <!-- <div>
                             <h3><b>Vaya a la página Data Preview para convertir los valores de datos y cargar datos en la base de datos</b></h3>
                             <br>
                           </div>
-                          <a href="dataTemplate" class="btn btn-info" role="button">Data Preview</a>
+                          <a href="dataTemplate" class="btn btn-info" role="button">Data Preview</a> -->
 
                     </div>
                 </div>

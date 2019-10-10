@@ -16,8 +16,10 @@ class DashboardController extends Controller
     public function index ()
 
     {
-        $station_data = DB::table('yearly_data')->get();
-        $stations = DB::table('stations')->get();
+       // $station_data = DB::table('yearly_data')->get();
+       //  $stations = DB::table('stations')->get();
+        $station_data = null;
+        $staions =null;
        
 
 
@@ -148,9 +150,6 @@ class DashboardController extends Controller
                     'title' => 'Yearly Sensacion Termica °C'                 
             ]);
         }
-
-
-
 
         return view('dashboard');
     }

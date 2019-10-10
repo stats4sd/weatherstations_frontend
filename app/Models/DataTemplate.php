@@ -16,14 +16,14 @@ class DataTemplate extends Model
     | GLOBAL VARIABLES
     |--------------------------------------------------------------------------
     */
-    //protected $primaryKey = array('fecha_hora','id_station');
+
     protected $table = 'data_template';
-    // protected $primaryKey = 'id';
     // public $timestamps = false;
-    // protected $guarded = ['id'];
-    protected $fillable = [];
+    protected $guarded = ['id'];
+    //protected $fillable = [];
     // protected $hidden = [];
     // protected $dates = [];
+    protected $primaryKey = 'id';
 
     /*
     |--------------------------------------------------------------------------

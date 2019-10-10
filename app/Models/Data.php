@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Station;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Illuminate\Database\Eloquent\Model;
+use LaravelTreats\Model\Traits\HasCompositePrimaryKey;
 
 class Data extends Model
 {
@@ -15,13 +17,18 @@ class Data extends Model
     |--------------------------------------------------------------------------
     */
 
+    use CrudTrait;
+    use HasCompositePrimaryKey;
+    protected $primaryKey = 'id';
     protected $table = 'data';
-    // protected $primaryKey = 'id';
-    // public $timestamps = false;
-    // protected $guarded = ['id'];
-    protected $fillable = [];
-    // protected $hidden = [];
-    // protected $dates = [];
+    protected $guarded = ['id'];
+
+    //protected $fillable = ['id_station'];
+
+    public function station ()
+    {
+        return $this->belongsTo(Station::class,'id_station');
+    }
 
     /*
     |--------------------------------------------------------------------------

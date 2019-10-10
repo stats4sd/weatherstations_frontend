@@ -1,6 +1,7 @@
 <!-- This file is used to store sidebar items, starting with Backpack\Base 0.9.0 -->
 <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css' integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 <li class='nav-item'><a class='nav-link' href="{{ backpack_url('dashboard') }}"><i class="nav-icon fa fa-dashboard"></i> {{ trans('backpack::base.dashboard') }}</a></li>
 @if(backpack_user()->type=='admin')
 
@@ -19,12 +20,14 @@
 
 
 @endif
-<li class='nav-item'><a class='nav-link' href="{{ backpack_url('daily') }}"><i class="nav-icon far fa-calendar-times"></i></a>Daily</li>
-<li class='nav-item'><a class='nav-link' href="{{ backpack_url('tenDays') }}"><i class="nav-icon far fa-calendar-minus"></i></a>Ten Days</li>
-<li class='nav-item'><a class='nav-link' href="{{ backpack_url('monthly') }}"><i class="nav-icon far fa-calendar-alt"></i></a>Monthly</li>
-<li class='nav-item'><a class='nav-link' href="{{ backpack_url('yearly') }}"><i class="nav-icon far fa-calendar"></i></a>Yearly</li>
+<li class='nav-item'><a class='nav-link' href="{{ backpack_url('daily') }}"><i class="nav-icon far fa-calendar-times"></i>Daily</a></li>
+<li class='nav-item'><a class='nav-link' href="{{ backpack_url('tenDays') }}"><i class="nav-icon far fa-calendar-minus"></i>Ten Days</a></li>
+<li class='nav-item'><a class='nav-link' href="{{ backpack_url('monthly') }}"><i class="nav-icon far fa-calendar-alt"></i>Monthly</a></li>
+<li class='nav-item'><a class='nav-link' href="{{ backpack_url('yearly') }}"><i class="nav-icon far fa-calendar"></i>Yearly</a></li>
 
 
 
 
 
+
+<li class='nav-item'><a class='nav-link' href='{{ backpack_url('setting') }}'><i class='nav-icon fa fa-cog'></i> <span>Settings</span></a></li>
