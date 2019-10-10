@@ -30,7 +30,6 @@ Route::post('/excelData', 'HomeController@excelData')->name('excelData');
 
 
 
-
 //NEW Upload page
 
 Route::get('admin/upload', 'UploadController@index');
