@@ -1,6 +1,6 @@
 
 @if ($crud->hasAccess('delete'))
-<a href="javascript:void(0)" onclick="getFilter(event)" class="btn btn-sm btn-secondary" data-toggle="popover" id='deletebyfilter'><i class="fa fa-ban"></i> delete by filters</a>
+<a href="javascript:void(0)" onclick="getFilter(event)" class="btn btn-sm btn-secondary" data-toggle="popover" id='deletebyfilter'><i class="fa fa-trash-o"></i> delete by filters</a>
 @endif
 
 
@@ -33,7 +33,8 @@
 				"success": function(result) {
 			
 					console.log("success");
-					// window.open(result,'_blank');
+					location.reload();
+
 				},
 				"error": function(result){
 				

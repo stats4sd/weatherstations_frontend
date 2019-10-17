@@ -7,6 +7,7 @@ use App\Http\Requests\TenDaysRequest as UpdateRequest;
 use App\Models\Station;
 use Backpack\CRUD\CrudPanel;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
+use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
  * Class TenDaysCrudController
@@ -16,10 +17,8 @@ use Backpack\CRUD\app\Http\Controllers\CrudController;
 class TenDaysCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation { store as traitStore; }
-    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation { update as traitUpdate; }
-    use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\ReorderOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    
     public function setup()
     {
         /*
@@ -27,9 +26,9 @@ class TenDaysCrudController extends CrudController
         | CrudPanel Basic Information
         |--------------------------------------------------------------------------
         */
-        $this->crud->setModel('App\Models\TenDays');
-        $this->crud->setRoute(config('backpack.base.route_prefix') . '/tenDays');
-        $this->crud->setEntityNameStrings('tendays', 'tendays');
+        CRUD::setModel('App\Models\TenDays');
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/tenDays');
+        CRUD::setEntityNameStrings('tendays', 'tendays');
 
         /*
         |--------------------------------------------------------------------------
@@ -38,15 +37,16 @@ class TenDaysCrudController extends CrudController
         */
 
         // TODO: remove setFromDb() and manually define Fields and Columns
-        $this->crud->addColumn('max_fecha')->makeFirstColumn();
-        $this->crud->setFromDb();
-        $this->crud->removeColumn('group_by');
-        
+        $this->crud->operation('list', function() {
+            $this->crud->addColumn('max_fecha')->makeFirstColumn();
+            $this->crud->setFromDb();
+            $this->crud->removeColumn('group_by');
 
+        });
+        
         // add asterisk for fields that are required in TenDaysRequest
-        $this->crud->setRequiredFields(StoreRequest::class, 'create');
-        $this->crud->setRequiredFields(UpdateRequest::class, 'edit');
-        $this->crud->removeAllButtons();
+    
+       
         $this->crud->enableExportButtons();
 
         // Filter
@@ -86,21 +86,5 @@ class TenDaysCrudController extends CrudController
         });
     }
 
-    public function store(StoreRequest $request)
-    {
-        // your additional operations before save here
-        $redirect_location = parent::storeCrud($request);
-        // your additional operations after save here
-        // use $this->data['entry'] or $this->crud->entry
-        return $redirect_location;
-    }
-
-    public function update(UpdateRequest $request)
-    {
-        // your additional operations before save here
-        $redirect_location = parent::updateCrud($request);
-        // your additional operations after save here
-        // use $this->data['entry'] or $this->crud->entry
-        return $redirect_location;
-    }
+   
 }

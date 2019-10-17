@@ -4,31 +4,26 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class TenDaysDataView extends Migration
+class DailyDataView extends Migration
 {
-     /**
+    /**
      * Run the migrations.
      *
      * @return void
      */
     public function up()
     {
-        DB::statement("DROP VIEW IF EXISTS tendays_data");
-        //DB::statement("SELECT DATEADD(LEFT(fecha_hora, 10), 10 day)");
+        DB::statement("DROP VIEW IF EXISTS daily_data");
         DB::statement("
-            CREATE VIEW tendays_data AS
+            CREATE VIEW daily_data AS
             SELECT
 
                 -- ######### START WITH THE GROUP-BY FIELDS
-                -- ## We want '10 days'
+                -- ## We want 'daily'
                 -- ## Grouped by weather-station
-                id as id,
-                min(LEFT(fecha_hora, 10)) as min_fecha,
-                max(LEFT(fecha_hora,10)) as max_fecha,
-
-                
-
-              
+                max(`data`.`id`) as `id`,
+                LEFT(fecha_hora,10) as fecha,
+                id_station as id_station,
 
                 -- #########################################
                 -- #########################################
@@ -82,13 +77,11 @@ class TenDaysDataView extends Migration
                 -- ## Rainfall is already totalled per hour, day and week.
                 -- ## So, for days we can just use the 24_horas column.
 
-                MAX(lluvia_24_horas) as lluvia_24_horas_total,
-
-                floor((to_days(`data`.`fecha_hora`) / 10))  as group_by,
-                id_station as id_station
+                MAX(lluvia_24_horas) as lluvia_24_horas_total
+                
 
                 FROM data
-                GROUP BY group_by, id_station, id;
+                GROUP BY fecha, id_station;
         ");
     }
 
@@ -99,6 +92,6 @@ class TenDaysDataView extends Migration
      */
     public function down()
     {
-        DB::statement("DROP VIEW IF EXISTS tendays_data");
+        DB::statement("DROP VIEW IF EXISTS daily_data");
     }
 }

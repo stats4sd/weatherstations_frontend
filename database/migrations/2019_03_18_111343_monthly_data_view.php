@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class YearlyDataView extends Migration
+class MonthlyDataView extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,16 @@ class YearlyDataView extends Migration
      */
     public function up()
     {
-        DB::statement("DROP VIEW IF EXISTS yearly_data");
+        DB::statement("DROP VIEW IF EXISTS monthly_data");
         DB::statement("
-            CREATE VIEW yearly_data AS
+            CREATE VIEW monthly_data AS
             SELECT
 
                 -- ######### START WITH THE GROUP-BY FIELDS
-                -- ## We want 'yearly'
+                -- ## We want 'daily'
                 -- ## Grouped by weather-station
-                id as id,
-                LEFT(fecha_hora,4) as fecha,
+                max(`data`.`id`) as `id`,
+                LEFT(fecha_hora,7) as fecha,
                 id_station as id_station,
 
                 -- #########################################
@@ -30,7 +30,7 @@ class YearlyDataView extends Migration
 
                 -- ################# Temperature and Humidity
                 -- ## Min, Max and Avg
-                
+
                 MAX(temperatura_interna) as max_temperatura_interna,
                 MIN(temperatura_interna) as min_temperatura_interna,
                 AVG(temperatura_interna) as avg_temperatura_interna,
@@ -80,7 +80,7 @@ class YearlyDataView extends Migration
                 MAX(lluvia_24_horas) as lluvia_24_horas_total
 
                 FROM data
-                GROUP BY fecha, id_station, id;
+                GROUP BY fecha, id_station;
         ");
     }
 
@@ -91,6 +91,7 @@ class YearlyDataView extends Migration
      */
     public function down()
     {
-        DB::statement("DROP VIEW IF EXISTS yearly_data");
+        DB::statement("DROP VIEW IF EXISTS monthply_data");
     }
 }
+

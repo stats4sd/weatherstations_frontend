@@ -8,6 +8,7 @@ use App\Models\Station;
 use Backpack\CRUD\CrudPanel;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
  * Class Monthly_dataCrudController
@@ -17,9 +18,8 @@ use Backpack\CRUD\app\Models\Traits\CrudTrait;
 class MonthlyCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+
     public function setup()
     {
         /*
@@ -27,9 +27,9 @@ class MonthlyCrudController extends CrudController
         | CrudPanel Basic Information
         |--------------------------------------------------------------------------
         */
-        $this->crud->setModel('App\Models\Monthly');
-        $this->crud->setRoute(config('backpack.base.route_prefix') . '/monthly');
-        $this->crud->setEntityNameStrings('monthly', 'monthly');
+        CRUD::setModel('App\Models\Monthly');
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/monthly');
+        CRUD::setEntityNameStrings('monthly', 'monthly');
 
         /*
         |--------------------------------------------------------------------------
@@ -38,14 +38,19 @@ class MonthlyCrudController extends CrudController
         */
 
         // TODO: remove setFromDb() and manually define Fields and Columns
-        $this->crud->addColumn('fecha')->makeFirstColumn();
-        $this->crud->setFromDb();
+        $this->crud->operation('list', function(){
+            $this->crud->addColumn('fecha')->makeFirstColumn();
+            $this->crud->setColumns([
+                [
+                    'name' => 'fecha',
+                    'label' => 'Fecha',
+                    'type' => 'datetime',
+                    'format' => 'YYYY-MM',
+                ]
+            ]);
+            $this->crud->setFromDb();
+        });
 
-
-        // add asterisk for fields that are required in Monthly_dataRequest
-        $this->crud->setRequiredFields(StoreRequest::class, 'create');
-        $this->crud->setRequiredFields(UpdateRequest::class, 'edit');
-        $this->crud->removeAllButtons();
         $this->crud->enableExportButtons();
 
         // Filter
@@ -69,7 +74,8 @@ class MonthlyCrudController extends CrudController
         ],
         false,
         function($value) { // if the filter is active, apply these constraints
-          $this->crud->addClause('where', 'fecha', $value);
+            $year_month = substr($value, 0, 7);
+            $this->crud->addClause('where', 'fecha', $year_month);
         });
 
         $this->crud->addFilter([ // daterange filter
@@ -86,21 +92,5 @@ class MonthlyCrudController extends CrudController
 
     }
 
-    public function store(StoreRequest $request)
-    {
-        // your additional operations before save here
-        $redirect_location = parent::storeCrud($request);
-        // your additional operations after save here
-        // use $this->data['entry'] or $this->crud->entry
-        return $redirect_location;
-    }
-
-    public function update(UpdateRequest $request)
-    {
-        // your additional operations before save here
-        $redirect_location = parent::updateCrud($request);
-        // your additional operations after save here
-        // use $this->data['entry'] or $this->crud->entry
-        return $redirect_location;
-    }
+   
 }

@@ -1,1 +1,1 @@
-<a href="{{ url('dataTemplate/cleanTable') }} " class="btn btn-danger"><i class="fas fa-trash-alt"></i> Clean Table</a>
+<a href="{{ url('dataTemplate/cleanTable') }} "style="width:250px" class="btn btn-danger mt-1"><i class="fas fa-trash-alt"></i> Clean Table</a>

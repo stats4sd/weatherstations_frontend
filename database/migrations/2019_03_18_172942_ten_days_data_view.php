@@ -4,26 +4,31 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class MonthlyDataView extends Migration
+class TenDaysDataView extends Migration
 {
-    /**
+     /**
      * Run the migrations.
      *
      * @return void
      */
     public function up()
     {
-        DB::statement("DROP VIEW IF EXISTS monthly_data");
+        DB::statement("DROP VIEW IF EXISTS tendays_data");
+        //DB::statement("SELECT DATEADD(LEFT(fecha_hora, 10), 10 day)");
         DB::statement("
-            CREATE VIEW monthly_data AS
+            CREATE VIEW tendays_data AS
             SELECT
 
                 -- ######### START WITH THE GROUP-BY FIELDS
-                -- ## We want 'daily'
+                -- ## We want '10 days'
                 -- ## Grouped by weather-station
-                id as id,
-                LEFT(fecha_hora,7) as fecha,
-                id_station as id_station,
+                max(`data`.`id`) as `id`,
+                min(LEFT(fecha_hora, 10)) as min_fecha,
+                max(LEFT(fecha_hora,10)) as max_fecha,
+
+                
+
+              
 
                 -- #########################################
                 -- #########################################
@@ -77,10 +82,13 @@ class MonthlyDataView extends Migration
                 -- ## Rainfall is already totalled per hour, day and week.
                 -- ## So, for days we can just use the 24_horas column.
 
-                MAX(lluvia_24_horas) as lluvia_24_horas_total
+                MAX(lluvia_24_horas) as lluvia_24_horas_total,
+
+                floor((to_days(`data`.`fecha_hora`) / 10))  as group_by,
+                id_station as id_station
 
                 FROM data
-                GROUP BY fecha, id_station, id;
+                GROUP BY group_by, id_station;
         ");
     }
 
@@ -91,7 +99,6 @@ class MonthlyDataView extends Migration
      */
     public function down()
     {
-        DB::statement("DROP VIEW IF EXISTS monthply_data");
+        DB::statement("DROP VIEW IF EXISTS tendays_data");
     }
 }
-

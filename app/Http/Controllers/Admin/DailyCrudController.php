@@ -8,6 +8,7 @@ use App\Models\Station;
 use Backpack\CRUD\CrudPanel;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
  * Class DailyCrudController
@@ -17,6 +18,7 @@ use Backpack\CRUD\app\Models\Traits\CrudTrait;
 class DailyCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
     
 
     public function setup()
@@ -26,11 +28,10 @@ class DailyCrudController extends CrudController
         | CrudPanel Basic Information
         |--------------------------------------------------------------------------
         */
-        $this->crud->setModel('App\Models\Daily');
-        $this->crud->setRoute(config('backpack.base.route_prefix') . '/daily');
-        $this->crud->setEntityNameStrings('daily', 'daily');
-        $this->crud->orderBy('fecha');
-
+        CRUD::setModel('App\Models\Daily');
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/daily');
+        CRUD::setEntityNameStrings('daily', 'daily');
+    
         /*
         |--------------------------------------------------------------------------
         | CrudPanel Configuration
@@ -38,8 +39,11 @@ class DailyCrudController extends CrudController
         */
 
         // TODO: remove setFromDb() and manually define Fields and Columns
-        $this->crud->addColumn('fecha')->makeFirstColumn();
-        $this->crud->setFromDb();
+        $this->crud->operation('list', function(){
+            $this->crud->orderBy('fecha');
+            $this->crud->addColumn('fecha')->makeFirstColumn();
+            $this->crud->setFromDb();
+        });
         
 
         // add asterisk for fields that are required in DailyRequest
@@ -84,21 +88,5 @@ class DailyCrudController extends CrudController
         });
     }
 
-    public function store(StoreRequest $request)
-    {
-        // your additional operations before save here
-        $redirect_location = parent::storeCrud($request);
-        // your additional operations after save here
-        // use $this->data['entry'] or $this->crud->entry
-        return $redirect_location;
-    }
-
-    public function update(UpdateRequest $request)
-    {
-        // your additional operations before save here
-        $redirect_location = parent::updateCrud($request);
-        // your additional operations after save here
-        // use $this->data['entry'] or $this->crud->entry
-        return $redirect_location;
-    }
+    
 }

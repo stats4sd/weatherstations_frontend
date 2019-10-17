@@ -29,14 +29,10 @@ class DataCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation { destroy as traitDestroy; }
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
    
-
-    public $station_id_value=0;
    
 
     public function setup()
     {
-       
-        
 
         /*
         |--------------------------------------------------------------------------
@@ -69,14 +65,15 @@ class DataCrudController extends CrudController
                 'name' => 'fecha_hora',
                 'label' => 'Fecha hora',
                 'type' => 'datetime',
-                'format' => 'DD-MM-YYYY H:mm:s',
+                'format' => 'MM-DD-YYYY H:mm:s',
             ]
         ]);
              $this->crud->setFromDb();
         });
 
           $this->crud->operation(['create', 'update'], function() {
-        
+
+            $this->crud->setFromDb();
      
         });
         //Filter
@@ -131,8 +128,8 @@ class DataCrudController extends CrudController
 
         }
 
-
     }
+
     protected function setupCreateOperation()
     {
         $this->crud->setValidation(StoreRequest::class);
@@ -144,14 +141,8 @@ class DataCrudController extends CrudController
     }
 
 
-    private function setupShowOperation()
-    {
-        $this->setupListOperation();
-    }
-
     public function deleteByFilters (Request $request) 
     {
-    
         $query = Session('query');
         $bindings = Session('params');
       
@@ -168,21 +159,22 @@ class DataCrudController extends CrudController
             {
                 $response = Data::where('id_station', $bindings[2])->whereBetween('fecha_hora', [$bindings[0], $bindings[1]])->delete();
             }
+            \Alert::success('<h4>El archivo ha sido subido exitosamente</h4>')->flash();
+
         }else if (!empty($id_station_pos) and empty($date_pos))
         {
             $response = Data::where('id_station', $bindings[0])->delete();
+            \Alert::success('<h4>El archivo ha sido subido exitosamente</h4>')->flash();
         } else if (!empty($date_pos) and empty($id_station_pos))
         {
             $response = Data::whereBetween('fecha_hora', [$bindings[0], $bindings[1]])->delete();
+            \Alert::success('<h4>El archivo ha sido subido exitosamente</h4>')->flash();
         } else 
         {
-             \Alert::success('<h4>El archivo ha sido subido exitosamente</h4>')->flash();
+             \Alert::error('<h4>Para eliminar por filtro uno de los filtros debe estar activo</h4>')->flash();
 
         }
 
-        \Alert::success('Success Message', 'Optional Title')->flash();
-
-        return Redirect::back();
         
     }
 

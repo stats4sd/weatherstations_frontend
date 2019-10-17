@@ -17,21 +17,24 @@ class AddUniqueKeyTable extends Migration
             ALTER TABLE `data`
             DROP PRIMARY KEY,
             ADD COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT AFTER `fecha_hora`,
-            ADD PRIMARY KEY (`id`, `fecha_hora`, `id_station`);
+            ADD PRIMARY KEY (`id`),
+            ADD UNIQUE INDEX `fecha_hora` (`fecha_hora`, `id_station`);
          
         ");
         DB::statement("
             ALTER TABLE `data_template`
             DROP PRIMARY KEY,
             ADD COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT AFTER `fecha_hora`,
-            ADD PRIMARY KEY (`id`, `fecha_hora`, `id_station`);
+            ADD PRIMARY KEY (`id`),
+            ADD UNIQUE INDEX `fecha_hora` (`fecha_hora`, `id_station`);
          
         ");
         DB::statement("
             ALTER TABLE `meteobridge`
             DROP PRIMARY KEY,
             ADD COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT AFTER `fecha_hora`,
-            ADD PRIMARY KEY (`id`, `fecha_hora`, `id_station`);
+            ADD PRIMARY KEY (`id`),
+            ADD UNIQUE INDEX `fecha_hora` (`fecha_hora`, `id_station`);
          
         ");
 

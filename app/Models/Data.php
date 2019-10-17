@@ -18,7 +18,7 @@ class Data extends Model
     */
 
     use CrudTrait;
-    use HasCompositePrimaryKey;
+   # use HasCompositePrimaryKey;
     protected $primaryKey = 'id';
     protected $table = 'data';
     protected $guarded = ['id'];

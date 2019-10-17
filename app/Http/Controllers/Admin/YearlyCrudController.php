@@ -7,6 +7,7 @@ use App\Http\Requests\YearlyRequest as UpdateRequest;
 use App\Models\Station;
 use Backpack\CRUD\CrudPanel;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
+use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
  * Class YearlyCrudController
@@ -16,9 +17,8 @@ use Backpack\CRUD\app\Http\Controllers\CrudController;
 class YearlyCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    
     public function setup()
     {
         /*
@@ -26,9 +26,9 @@ class YearlyCrudController extends CrudController
         | CrudPanel Basic Information
         |--------------------------------------------------------------------------
         */
-        $this->crud->setModel('App\Models\Yearly');
-        $this->crud->setRoute(config('backpack.base.route_prefix') . '/yearly');
-        $this->crud->setEntityNameStrings('yearly', 'yearlies');
+        CRUD::setModel('App\Models\Yearly');
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/yearly');
+        CRUD::setEntityNameStrings('yearly', 'yearlies');
 
         /*
         |--------------------------------------------------------------------------
@@ -37,13 +37,13 @@ class YearlyCrudController extends CrudController
         */
 
         // TODO: remove setFromDb() and manually define Fields and Columns
-        $this->crud->addColumn('fecha')->makeFirstColumn();
-        $this->crud->setFromDb();
+        $this->crud->operation('list', function(){
+            $this->crud->addColumn('fecha')->makeFirstColumn();
+            $this->crud->setFromDb();
+        });
 
         // add asterisk for fields that are required in YearlyRequest
-        $this->crud->setRequiredFields(StoreRequest::class, 'create');
-        $this->crud->setRequiredFields(UpdateRequest::class, 'edit');
-        $this->crud->removeAllButtons();
+       
         $this->crud->enableExportButtons();
 
         // Filter
@@ -83,21 +83,5 @@ class YearlyCrudController extends CrudController
         });
     }
 
-    public function store(StoreRequest $request)
-    {
-        // your additional operations before save here
-        $redirect_location = parent::storeCrud($request);
-        // your additional operations after save here
-        // use $this->data['entry'] or $this->crud->entry
-        return $redirect_location;
-    }
-
-    public function update(UpdateRequest $request)
-    {
-        // your additional operations before save here
-        $redirect_location = parent::updateCrud($request);
-        // your additional operations after save here
-        // use $this->data['entry'] or $this->crud->entry
-        return $redirect_location;
-    }
+  
 }
