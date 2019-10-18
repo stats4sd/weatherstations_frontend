@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
 use Prologue\Alerts\Facades\Alert;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\DataExport;
+use App\Jobs\ProcessDataExport;
 
 /**
  * Class DataCrudController
@@ -60,7 +63,7 @@ class DataCrudController extends CrudController
  
          $this->crud->operation('list', function() {
        // your addColumn, addFilter, addButton calls here, for the List operation
-             $this->crud->setColumns([
+            $this->crud->setColumns([
             [
                 'name' => 'fecha_hora',
                 'label' => 'Fecha hora',
@@ -110,6 +113,7 @@ class DataCrudController extends CrudController
 
         
         $this->crud->addButtonFromView('top', 'deleteByFilters', 'deleteByFilters', 'end');
+        $this->crud->addButtonFromView('top', 'download', 'download', 'end');
 
           /**
          * Get the SQL definition of the query being run:
@@ -128,6 +132,7 @@ class DataCrudController extends CrudController
 
         }
 
+       
     }
 
     protected function setupCreateOperation()
@@ -175,6 +180,12 @@ class DataCrudController extends CrudController
 
         }
 
+        
+    }
+
+    public function download(Request $request)
+    {
+        ProcessDataExport::dispatch();
         
     }
 

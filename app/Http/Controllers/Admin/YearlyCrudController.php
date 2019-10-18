@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\YearlyRequest as StoreRequest;
 use App\Http\Requests\YearlyRequest as UpdateRequest;
 use App\Models\Station;
+use App\Models\Yearly;
 use Backpack\CRUD\CrudPanel;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
@@ -60,27 +61,23 @@ class YearlyCrudController extends CrudController
 
         });
 
-        $this->crud->addFilter([ // date filter
-          'type' => 'date',
-          'name' => 'date',
-          'label'=> 'Date'
-        ],
-        false,
-        function($value) { // if the filter is active, apply these constraints
-          $this->crud->addClause('where', 'fecha', $value);
+        $this->crud->addFilter([
+            'name' => 'fecha',
+            'type' => 'select2_multiple',
+            'label' => 'Year',
+        ],function(){
+           
+            return Yearly::all()->pluck('fecha', 'id')->toArray();
+
+        },function($values){
+
+           foreach(json_decode($values) as $key => $value) {
+
+               $this->crud->addClause('orWhere', 'id', $value);
+            }
+
         });
 
-        $this->crud->addFilter([ // daterange filter
-           'type' => 'date_range',
-           'name' => 'from_to',
-           'label'=> 'Date range'
-        ],
-        false,
-        function($value) { // if the filter is active, apply these constraints
-           $dates = json_decode($value);
-           $this->crud->addClause('where', 'fecha', '>=', $dates->from);
-           $this->crud->addClause('where', 'fecha', '<=', $dates->to . ' 23:59:59');
-        });
     }
 
   

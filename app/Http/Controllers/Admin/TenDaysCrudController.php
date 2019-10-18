@@ -38,9 +38,11 @@ class TenDaysCrudController extends CrudController
 
         // TODO: remove setFromDb() and manually define Fields and Columns
         $this->crud->operation('list', function() {
-            $this->crud->addColumn('max_fecha')->makeFirstColumn();
-            $this->crud->setFromDb();
+
             $this->crud->removeColumn('group_by');
+            $this->crud->addColumn('max_fecha')->makeFirstColumn();
+            $this->crud->addColumn('min_fecha')->afterColumn('max_fecha');
+            $this->crud->setFromDb();
 
         });
         

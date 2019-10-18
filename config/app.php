@@ -175,10 +175,12 @@ return [
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
+        App\Providers\TelescopeServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Khill\Lavacharts\Laravel\LavachartsServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
         'Prologue\Alerts\AlertsServiceProvider',
+        Maatwebsite\Excel\ExcelServiceProvider::class,
 
  
 
@@ -233,7 +235,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        //'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'Lava' => Khill\Lavacharts\Laravel\LavachartsFacade::class,
         'Datatables' => Yajra\Datatables\Facades\Datatables::class,
         'Alert' => 'Prologue\Alerts\Facades\Alert',

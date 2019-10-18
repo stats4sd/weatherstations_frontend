@@ -17,12 +17,10 @@ class Data extends Model
     |--------------------------------------------------------------------------
     */
 
-    use CrudTrait;
    # use HasCompositePrimaryKey;
     protected $primaryKey = 'id';
     protected $table = 'data';
     protected $guarded = ['id'];
-
     //protected $fillable = ['id_station'];
 
     public function station ()

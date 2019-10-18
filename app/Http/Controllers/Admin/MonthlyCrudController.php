@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\Monthly_dataRequest as StoreRequest;
 use App\Http\Requests\Monthly_dataRequest as UpdateRequest;
 use App\Models\Station;
+use App\Models\Monthly;
+use App\Models\Yearly;
 use Backpack\CRUD\CrudPanel;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
@@ -39,15 +41,9 @@ class MonthlyCrudController extends CrudController
 
         // TODO: remove setFromDb() and manually define Fields and Columns
         $this->crud->operation('list', function(){
-            $this->crud->addColumn('fecha')->makeFirstColumn();
-            $this->crud->setColumns([
-                [
-                    'name' => 'fecha',
-                    'label' => 'Fecha',
-                    'type' => 'datetime',
-                    'format' => 'YYYY-MM',
-                ]
-            ]);
+            $this->crud->addColumn('year')->makeFirstColumn();
+            $this->crud->addColumn('month')->afterColumn('year');
+            
             $this->crud->setFromDb();
         });
 
@@ -67,28 +63,56 @@ class MonthlyCrudController extends CrudController
 
         });
 
-        $this->crud->addFilter([ // date filter
-          'type' => 'date',
-          'name' => 'date',
-          'label'=> 'Date'
-        ],
-        false,
-        function($value) { // if the filter is active, apply these constraints
-            $year_month = substr($value, 0, 7);
-            $this->crud->addClause('where', 'fecha', $year_month);
+         $this->crud->addFilter([
+            'name' => 'year',
+            'type' => 'select2_multiple',
+            'label' => 'Years',
+        ],function(){
+
+           return Yearly::all()->pluck('fecha', 'fecha')->toArray();
+
+        },function($values){
+
+
+           foreach(json_decode($values) as $key => $value) {
+
+               $this->crud->addClause('OrWhere', 'year', $value);
+            }
+
         });
 
-        $this->crud->addFilter([ // daterange filter
-           'type' => 'date_range',
-           'name' => 'from_to',
-           'label'=> 'Date range'
-        ],
-        false,
-        function($value) { // if the filter is active, apply these constraints
-           $dates = json_decode($value);
-           $this->crud->addClause('where', 'fecha', '>=', $dates->from);
-           $this->crud->addClause('where', 'fecha', '<=', $dates->to . ' 23:59:59');
+        $this->crud->addFilter([
+            'name' => 'month',
+            'type' => 'select2_multiple',
+            'label' => 'Months',
+        ],function(){
+           
+            return [
+
+                '01' => 'Enero',
+                '02' => 'Febrero',
+                '03' => 'Marzo',
+                '04' => 'Abril',
+                '05' => 'Mayo',
+                '06' => 'Junio',
+                '07' => 'Julio',
+                '08' => 'Agosto',
+                '09' => 'Septiembre',
+                '10' => 'Octubre',
+                '11' => 'Noviembre',
+                '12' => 'Diciembre'
+            ];
+
+        },function($values){
+
+           foreach(json_decode($values) as $key => $value) {
+
+               $this->crud->addClause('OrWhere', 'month', $value);
+            }
+
         });
+
+        
 
     }
 

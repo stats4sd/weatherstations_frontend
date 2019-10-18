@@ -19,6 +19,7 @@ Route::group([
     Route::crud('data', 'DataCrudController');
 
     Route::post('data/deleteByFilters', 'DataCrudController@deleteByFilters');
+    Route::post('data/download', 'DataCrudController@download');
     
     Route::crud('monthly', 'MonthlyCrudController');
     Route::crud('station', 'StationCrudController');
