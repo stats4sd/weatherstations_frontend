@@ -2,21 +2,23 @@
 from mysql.connector import MySQLConnection, Error
 import sys
 import csv
-
-# This creates a symbolic link on python in tmp directory
-os.symlink(src, dst)
+import requests
 
 user = sys.argv[1] # your username
 passwd = sys.argv[2] # your password
 host = '127.0.0.1' # your host
 db = sys.argv[3] # database where your table is stored
-table = 'data' # table you want to save
 path = sys.argv[4] + '/storage/app/public/data/'
+table = sys.argv[5]
+#params = sys.argv[6]
+
+
 
 try:
 	con = MySQLConnection(user=user, passwd=passwd, host=host, db=db)
 	cursor = con.cursor()
-	query = "SELECT * FROM %s;" % table
+	query = 'SELECT * FROM %s WHERE `id_station` = %s AND `fecha_hora` BETWEEN %s AND %s;' % (table, '2', '2019-09-01', '2019-09-02')
+	print(query)
 	cursor.execute(query)
 	with open(path +'data.csv','w', newline='') as csv_file:
 	    column_names = [i[0] for i in cursor.description]
@@ -26,6 +28,7 @@ try:
 	    for row in cursor.fetchall():
 	    	writer.writerow(row)
 	con.commit()
+
 	
 except Error as e:
 
@@ -35,7 +38,7 @@ finally:
 
 	print('Done!')
 	cursor.close()
-con.close()
+	con.close()
 
 
 

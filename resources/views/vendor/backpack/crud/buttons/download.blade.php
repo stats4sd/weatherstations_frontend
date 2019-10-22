@@ -1,6 +1,6 @@
 
 
-<a href="javascript:void(0)" onclick="getDownload(event)" class="btn btn-sm btn-secondary" data-toggle="popover"><i class="fa fa-trash-o"></i> Download</a>
+<a href="javascript:void(0)" onclick="getDownload(event)" class="btn btn-sm btn-secondary" data-toggle="popover"><i class="fa fa-download"></i> Download</a>
 
 
 
@@ -46,7 +46,7 @@
 				},
 				"complete": function() {
 					target.disabled = false;
-					target.innerHTML = "<i class='fa fa-ban'></i> Download";
+					target.innerHTML = "<i class='fa fa-download'></i> Download";
 				}
 			})
 		}

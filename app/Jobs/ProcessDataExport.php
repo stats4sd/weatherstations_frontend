@@ -15,14 +15,18 @@ class ProcessDataExport implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    protected $table;
+    protected $params;
+
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($table, $params)
     {
-      
+        $this->table = $table;
+        $this->params = $params;
     }
 
     /**
@@ -33,15 +37,19 @@ class ProcessDataExport implements ShouldQueue
     public function handle()
     {
         
-
         $scriptName = 'save_data_csv.py';
         $scriptPath = base_path() . '/scripts/' . $scriptName;
         $db_user = config('database.connections.mysql.username');
         $db_password = config('database.connections.mysql.password');
         $db_name = config('database.connections.mysql.database');
         $base_path = base_path();
+        $table = $this->table;
+        $params = $this->params;
+
+        
+
         //python script accepts 4 arguments in this order: db_user db_password db_name base_path()
-        $process = new Process("python3 {$scriptPath} {$db_user} {$db_password} {$db_name} {$base_path}");
+        $process = new Process("python {$scriptPath} {$db_user} {$db_password} {$db_name} {$base_path} {$table} {$params}");
 
         $process->run();
         if(!$process->isSuccessful()) {

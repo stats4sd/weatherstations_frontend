@@ -85,7 +85,7 @@ return [
     // Developer or company name. Shown in footer.
     'developer_name' => 'Stats4SD',
     // Developer website. Link in footer. Type false if you want to hide it.
-    'developer_link' => 'www.stats4sd.org',
+    'developer_link' => 'stats4sd.org',
     // Show powered by Laravel Backpack in the footer? true/false
     'show_powered_by' => false,
     // -------

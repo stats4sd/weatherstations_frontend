@@ -36,6 +36,7 @@ Route::group([
 // Dashboard
 
 Route::get('admin/dashboard', 'DashboardController@index');
+Route::get('admin/dashboard/{id}', 'DashboardController@charts');
 
 
 

@@ -16,16 +16,14 @@ class DashboardController extends Controller
     public function index ()
 
     {
-       // $station_data = DB::table('yearly_data')->get();
-       //  $stations = DB::table('stations')->get();
-        $station_data = null;
-        $staions =null;
+        $station_data = DB::table('yearly_data')->get();
+        $stations = DB::table('stations')->get();
+        #$station_data = null;
+        #$staions =null;
        
-
-
         $lava_temp_in= new Lavacharts;
         if(!empty($station_data)){
-            $data=Yearly::select("fecha as 0","max_temperatura_interna as 1", "avg_temperatura_interna as 2","min_temperatura_interna as 3")->get()->toArray();
+            $data=Yearly::select("fecha as 0","max_temperatura_interna as 1", "avg_temperatura_interna as 2","min_temperatura_interna as 3")->where('id_station', '=', 2)->get()->toArray();
             $datatable = Lava::DataTable();
 
             $datatable -> addDateColumn('Date')
@@ -152,6 +150,11 @@ class DashboardController extends Controller
         }
 
         return view('dashboard');
+    }
+
+    public function charts($id)
+    {
+        dd($id);
     }
 
 

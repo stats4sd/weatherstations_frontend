@@ -3,22 +3,24 @@
 namespace App\Http\Controllers\Admin;
 
 
+use App\Exports\DataExport;
 use App\Http\Requests\DataRequest as StoreRequest;
 use App\Http\Requests\DataRequest as UpdateRequest;
+use App\Jobs\ProcessDataExport;
 use App\Models\Data;
 use App\Models\Station;
 use Backpack\CRUD\CrudPanel;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Backpack\CRUD\app\Library\CrudPanel\Traits\hasAccessOrFail;
+use Backpack\CRUD\app\Library\CrudPanel\Traits\setDefaultPageLength;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
-use Prologue\Alerts\Facades\Alert;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\DataExport;
-use App\Jobs\ProcessDataExport;
+use Prologue\Alerts\Facades\Alert;
 
 /**
  * Class DataCrudController
@@ -55,6 +57,7 @@ class DataCrudController extends CrudController
 
 
         $this->crud->enableExportButtons();
+
          
 
         // add asterisk for fields that are required in DataRequest
@@ -114,6 +117,7 @@ class DataCrudController extends CrudController
         
         $this->crud->addButtonFromView('top', 'deleteByFilters', 'deleteByFilters', 'end');
         $this->crud->addButtonFromView('top', 'download', 'download', 'end');
+        $this->crud->setDefaultPageLength(50);
 
           /**
          * Get the SQL definition of the query being run:
@@ -185,8 +189,16 @@ class DataCrudController extends CrudController
 
     public function download(Request $request)
     {
-        ProcessDataExport::dispatch();
+        $query = Session('query');
+        $params = Session('params');
         
+       # $params = "({$params[0]}, {$params[1]}, {$params[2]})";
+       # dd($params);
+
+        #ProcessDataExport::dispatch('data' , $params);
+   
+
+        return Storage::download(storage_path("app/public/data"), 'data.csv');
     }
 
 }
