@@ -173,7 +173,7 @@ return [
          */
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
+        App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\TelescopeServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
@@ -181,11 +181,6 @@ return [
         Yajra\DataTables\DataTablesServiceProvider::class,
         'Prologue\Alerts\AlertsServiceProvider',
         Maatwebsite\Excel\ExcelServiceProvider::class,
-
- 
-
-        
-
 
     ],
 

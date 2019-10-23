@@ -191,14 +191,10 @@ class DataCrudController extends CrudController
     {
         $query = Session('query');
         $params = Session('params');
-        
-       # $params = "({$params[0]}, {$params[1]}, {$params[2]})";
-       # dd($params);
+       
+        #ProcessDataExport::dispatch($query , $params);
 
-        #ProcessDataExport::dispatch('data' , $params);
-   
-
-        return Storage::download(storage_path("app/public/data"), 'data.csv');
+        return Storage::url("data/data.csv");
     }
 
 }

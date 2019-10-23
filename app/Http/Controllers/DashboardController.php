@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Daily;
-use App\Yearly;
 use App\Dashboard;
+use App\Tendays;
+use App\Yearly;
 use DB;
 use Illuminate\Http\Request;
 use Khill\Lavacharts\Laravel\LavachartsFacade as Lava;
@@ -16,17 +17,16 @@ class DashboardController extends Controller
     public function index ()
 
     {
+
         $station_data = DB::table('yearly_data')->get();
         $stations = DB::table('stations')->get();
-        #$station_data = null;
-        #$staions =null;
        
         $lava_temp_in= new Lavacharts;
         if(!empty($station_data)){
             $data=Yearly::select("fecha as 0","max_temperatura_interna as 1", "avg_temperatura_interna as 2","min_temperatura_interna as 3")->where('id_station', '=', 2)->get()->toArray();
             $datatable = Lava::DataTable();
 
-            $datatable -> addDateColumn('Date')
+            $datatable -> addStringColumn('Date')
                         -> addNumberColumn('Max Temp Int °C')
                         -> addNumberColumn('Mean Temp Int °C')
                         -> addNumberColumn('Min Temp Int °C')
@@ -152,9 +152,34 @@ class DashboardController extends Controller
         return view('dashboard');
     }
 
-    public function charts($id)
-    {
-        dd($id);
+    public function charts($id, $aggr)
+    {   
+        $station_data = DB::table('yearly_data')->get();
+       
+        $lava_temp_in= new Lavacharts;
+        if(($aggr == 'daily')){
+            $data=Daily::select("fecha as 0","max_temperatura_interna as 1", "avg_temperatura_interna as 2","min_temperatura_interna as 3")->where('id_station', '=', $id)->where('fecha', '>=', '2018-09-01')->get()->toArray();
+        }else if(($aggr == 'ten_days')){
+            $data=Tendays::select("max_fecha as 0","max_temperatura_interna as 1", "avg_temperatura_interna as 2","min_temperatura_interna as 3")->where('id_station', '=', $id)->get()->toArray();
+        }
+
+
+            $datatable = Lava::DataTable();
+
+            $datatable -> addStringColumn('Date')
+                        -> addNumberColumn('Max Temp Int °C')
+                        -> addNumberColumn('Mean Temp Int °C')
+                        -> addNumberColumn('Min Temp Int °C')
+                        -> addRows($data);
+
+            Lava::LineChart('TemperatureIn', $datatable,[
+                    'title' => 'Temperatures Interna °C'                 
+            ]);
+       
+
+
+        return view('dashboard');
+
     }
 
 

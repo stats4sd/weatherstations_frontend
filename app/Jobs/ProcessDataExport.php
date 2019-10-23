@@ -15,7 +15,7 @@ class ProcessDataExport implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $table;
+    protected $query;
     protected $params;
 
     /**
@@ -23,9 +23,9 @@ class ProcessDataExport implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($table, $params)
+    public function __construct($query, $params)
     {
-        $this->table = $table;
+        $this->query = $query;
         $this->params = $params;
     }
 
@@ -35,21 +35,20 @@ class ProcessDataExport implements ShouldQueue
      * @return void
      */
     public function handle()
-    {
-        
+    {   
         $scriptName = 'save_data_csv.py';
         $scriptPath = base_path() . '/scripts/' . $scriptName;
         $db_user = config('database.connections.mysql.username');
         $db_password = config('database.connections.mysql.password');
         $db_name = config('database.connections.mysql.database');
         $base_path = base_path();
-        $table = $this->table;
-        $params = $this->params;
-
+        $query = $this->query;
+        $params = join(",",$this->params);
+        $query = '"'.$query.'"';
+        $params = '"'.$params.'"';
         
-
-        //python script accepts 4 arguments in this order: db_user db_password db_name base_path()
-        $process = new Process("python {$scriptPath} {$db_user} {$db_password} {$db_name} {$base_path} {$table} {$params}");
+        //python script accepts 7 arguments in this order: db_user db_password db_name base_path() query params
+        $process = new Process("python {$scriptPath} {$db_user} {$db_password} {$db_name} {$base_path} {$query} {$params}");
 
         $process->run();
         if(!$process->isSuccessful()) {
