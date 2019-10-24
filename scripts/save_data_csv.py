@@ -4,6 +4,7 @@ import sys
 import csv
 import requests
 import json
+from datetime import datetime
 
 user = sys.argv[1] # your username
 passwd = sys.argv[2] # your password
@@ -15,18 +16,18 @@ params = (sys.argv[6]).split(',')
 for x in params:
 	x = '"'+x+'"'
 	
-
 query = query.replace("?", "%s")
-print(query)
-print(params)
+params = tuple(params)
+ctime = datetime.now()
+name_file = str(ctime.strftime('%Y%m%d'))+'data.csv'
 
 try:
 	con = MySQLConnection(user=user, passwd=passwd, host=host, db=db)
 	cursor = con.cursor()
-	query = query % ('2', '2019-09-01', '"2019-09-02 23:59:59"')
+	query = query % params
 	print(query)
 	cursor.execute(query)
-	with open(path +'data.csv','w', newline='') as csv_file:
+	with open(path + name_file,'w', newline='') as csv_file:
 	    column_names = [i[0] for i in cursor.description]
 	    writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
 	    writer.writerow(column_names)

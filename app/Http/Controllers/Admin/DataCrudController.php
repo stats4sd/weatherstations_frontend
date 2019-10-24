@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+use League\Flysystem\Exception;
 use Maatwebsite\Excel\Facades\Excel;
 use Prologue\Alerts\Facades\Alert;
 
@@ -191,9 +192,9 @@ class DataCrudController extends CrudController
     {
         $query = Session('query');
         $params = Session('params');
-       
-        #ProcessDataExport::dispatch($query , $params);
-
+      
+        ProcessDataExport::dispatch($query , $params);
+            
         return Storage::url("data/data.csv");
     }
 

@@ -1,5 +1,7 @@
 <?php
 
+use App\Events\GenerateFileCompleted;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -47,3 +49,4 @@ Route::get('data/{id}/delete', 'DataCrudController@destroy');
 //Dashboard
 Route::get('admin/dashboard', 'DashboardController@index');
 Route::get('admin/dashboard/{id}/{aggr}', 'DashboardController@charts');
+

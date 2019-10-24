@@ -1,5 +1,7 @@
 <?php
 
+use App\Events\GenerateFileCompleted;
+
 // --------------------------
 // Custom Backpack Routes
 // --------------------------
@@ -20,6 +22,8 @@ Route::group([
 
     Route::post('data/deleteByFilters', 'DataCrudController@deleteByFilters');
     Route::post('data/download', 'DataCrudController@download');
+    Route::post('daily/download', 'DailyCrudController@download');
+
     
     Route::crud('monthly', 'MonthlyCrudController');
     Route::crud('station', 'StationCrudController');

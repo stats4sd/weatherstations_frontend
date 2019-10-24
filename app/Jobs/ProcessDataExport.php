@@ -3,13 +3,17 @@
 namespace App\Jobs;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Symfony\Component\Process\Process;
-use Symfony\Component\Process\Exception\ProcessFailedException;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
+use League\Flysystem\Exception;
+use Prologue\Alerts\Facades\Alert;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
 class ProcessDataExport implements ShouldQueue
 {
@@ -48,14 +52,25 @@ class ProcessDataExport implements ShouldQueue
         $params = '"'.$params.'"';
         
         //python script accepts 7 arguments in this order: db_user db_password db_name base_path() query params
+      
         $process = new Process("python {$scriptPath} {$db_user} {$db_password} {$db_name} {$base_path} {$query} {$params}");
 
         $process->run();
+        
+        
         if(!$process->isSuccessful()) {
-            throw new ProcessFailedException($process);
-        }
+            
+           throw new ProcessFailedException($process);
+        
+        } 
         Log::info("python done.");
         Log::info($process->getOutput());
        
+    }
+
+    public function failed(ProcessFailedException $exception)
+    {
+        return response()->$exception->getMessage();
+
     }
 }
