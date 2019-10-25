@@ -1,9 +1,9 @@
 
 dbConfig = {
-            'user': 'weatherstations',
-            'password': 'stations26443',
-            'host': 'staging-weatherstations-ccrp.stats4sd.org',
-            'db': 'staging_weatherstations'
+            'user': 'root',
+            'password': 'Logoslogos88',
+            'host': '127.0.0.1',
+            'db': 'umsa'
             }
 
 list_columns_davis = ['hi_temp', 'low_temp', 'wind_cod',
