@@ -67,7 +67,7 @@ try:
     conn.commit()
 
 except mysql.Error as err:
-    print(f'Failed to upload data: {err}')
+    print('Failed to upload data: {err}')
 
 else:
     print('data uploaded')
