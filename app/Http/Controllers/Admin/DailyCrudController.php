@@ -4,11 +4,15 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\DailyRequest as StoreRequest;
 use App\Http\Requests\DailyRequest as UpdateRequest;
+use App\Jobs\ProcessDataExport;
 use App\Models\Station;
 use Backpack\CRUD\CrudPanel;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
-use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Illuminate\Support\Facades\Request;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
 /**
  * Class DailyCrudController
@@ -46,8 +50,7 @@ class DailyCrudController extends CrudController
         });
         
 
-       
-       
+        $this->crud->addButtonFromView('top', 'download', 'download', 'end');
         $this->crud->enableExportButtons();
         // Filter
         $this->crud->addFilter([
@@ -84,6 +87,43 @@ class DailyCrudController extends CrudController
            $this->crud->addClause('where', 'fecha', '>=', $dates->from);
            $this->crud->addClause('where', 'fecha', '<=', $dates->to . ' 23:59:59');
         });
+
+        if($this->crud->actionIs('list') || $this->crud->actionIs('search') ){
+            $daily_query = $this->crud->query->getQuery()->toSql();
+            $daily_params = $this->crud->query->getQuery()->getBindings();
+            Session(['daily_query' => $daily_query ]);
+            Session(['daily_params' => $daily_params ]);
+
+        }
+    }
+
+    public function download(Request $request)
+    {
+        $scriptName = 'save_data_csv.py';
+        $scriptPath = base_path() . '/scripts/' . $scriptName;
+        $db_user = config('database.connections.mysql.username');
+        $db_password = config('database.connections.mysql.password');
+        $db_name = config('database.connections.mysql.database');
+        $base_path = base_path();
+        $query = Session('daily_query');
+        $params = join(",",Session('daily_params'));
+        $query = '"'.$query.'"';
+        $params = '"'.$params.'"';
+        $file_name = "daily.csv";
+        
+        //python script accepts 7 arguments in this order: db_user db_password db_name base_path() query params
+      
+        $process = new Process("python {$scriptPath} {$db_user} {$db_password} {$db_name} {$base_path} {$query} {$params} {$file_name}");
+
+        $process->run();
+        
+        if(!$process->isSuccessful()) {
+            
+           throw new ProcessFailedException($process);
+        
+        } 
+        Log::info("python done.");
+        Log::info($process->getOutput());
     }
 
     

@@ -4,13 +4,17 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\Monthly_dataRequest as StoreRequest;
 use App\Http\Requests\Monthly_dataRequest as UpdateRequest;
-use App\Models\Station;
+use App\Jobs\ProcessDataExport;
 use App\Models\Monthly;
+use App\Models\Station;
 use App\Models\Yearly;
 use Backpack\CRUD\CrudPanel;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
-use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Illuminate\Support\Facades\Request;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
 /**
  * Class Monthly_dataCrudController
@@ -40,6 +44,8 @@ class MonthlyCrudController extends CrudController
         */
 
         // TODO: remove setFromDb() and manually define Fields and Columns
+        $this->crud->addButtonFromView('top', 'download', 'download', 'end');
+
         $this->crud->operation('list', function(){
             $this->crud->addColumn('year')->makeFirstColumn();
             $this->crud->addColumn('month')->afterColumn('year');
@@ -72,7 +78,6 @@ class MonthlyCrudController extends CrudController
            return Yearly::all()->pluck('fecha', 'fecha')->toArray();
 
         },function($values){
-
 
            foreach(json_decode($values) as $key => $value) {
 
@@ -112,8 +117,52 @@ class MonthlyCrudController extends CrudController
 
         });
 
-        
+          /**
+         * Get the SQL definition of the query being run:
+         * This includes all the active filters;
+         * Save it to the session to pass to the download function.
+         * $query = string - escaped SQL statement;
+         * $params = array - parameters to insert into the escaped SQL query.
+         */
 
+
+        if($this->crud->actionIs('list') || $this->crud->actionIs('search') ){
+            $monthly_query = $this->crud->query->getQuery()->toSql();
+            $monthly_params = $this->crud->query->getQuery()->getBindings();
+            Session(['monthly_query' => $monthly_query ]);
+            Session(['monthly_params' => $monthly_params ]);
+
+        }
+
+    }
+
+    public function download(Request $request)
+    {
+        $scriptName = 'save_data_csv.py';
+        $scriptPath = base_path() . '/scripts/' . $scriptName;
+        $db_user = config('database.connections.mysql.username');
+        $db_password = config('database.connections.mysql.password');
+        $db_name = config('database.connections.mysql.database');
+        $base_path = base_path();
+        $query = Session('monthly_query');
+        $params = join(",",Session('monthly_params'));
+        $query = '"'.$query.'"';
+        $params = '"'.$params.'"';
+        $file_name = "monthly.csv";
+        
+        //python script accepts 7 arguments in this order: db_user db_password db_name base_path() query params
+      
+        $process = new Process("python {$scriptPath} {$db_user} {$db_password} {$db_name} {$base_path} {$query} {$params} {$file_name}");
+
+        $process->run();
+        
+        if(!$process->isSuccessful()) {
+            
+           throw new ProcessFailedException($process);
+        
+        } 
+        Log::info("python done.");
+        Log::info($process->getOutput());
     }
 
    

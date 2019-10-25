@@ -16,6 +16,7 @@
 		 * @return {null}   Result of function is not returned - but the user is redirected to the download url once the file has been generated.
 		 */
       	function getDownload(e) {
+
       
       		var target = e.target;
 
@@ -27,14 +28,15 @@
 				"method":"POST",
 				"success": function(result) {
 					console.log("success");
-
-					window.location.replace('https://weatherstations-ccrp.stats4sd.org/storage/data/data.csv');
+					original = window.location.origin;
+					filename = "data.csv";
+					window.location.replace(original+'/storage/data/'+filename);
 					//location.reload();
-
 				},
 				"error": function(result){
+					
 	        		jQuery("#error").prop('hidden' , false)
-	        		jQuery("#error").html(result.responseJSON.message.substr(0, 200));
+	        		jQuery("#error").html(result.responseJSON.message.substr(0, 100));
 
 				},
 				"complete": function() {

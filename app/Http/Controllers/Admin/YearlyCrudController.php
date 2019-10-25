@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\YearlyRequest as StoreRequest;
 use App\Http\Requests\YearlyRequest as UpdateRequest;
+use App\Jobs\ProcessDataExport;
 use App\Models\Station;
 use App\Models\Yearly;
 use Backpack\CRUD\CrudPanel;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Illuminate\Support\Facades\Request;
 
 /**
  * Class YearlyCrudController
@@ -29,7 +31,7 @@ class YearlyCrudController extends CrudController
         */
         CRUD::setModel('App\Models\Yearly');
         CRUD::setRoute(config('backpack.base.route_prefix') . '/yearly');
-        CRUD::setEntityNameStrings('yearly', 'yearlies');
+        CRUD::setEntityNameStrings('yearly', 'yearly');
 
         /*
         |--------------------------------------------------------------------------
@@ -46,6 +48,7 @@ class YearlyCrudController extends CrudController
         // add asterisk for fields that are required in YearlyRequest
        
         $this->crud->enableExportButtons();
+        $this->crud->addButtonFromView('top', 'download', 'download', 'end');
 
         // Filter
         $this->crud->addFilter([
@@ -78,6 +81,24 @@ class YearlyCrudController extends CrudController
 
         });
 
+        if($this->crud->actionIs('list') || $this->crud->actionIs('search') ){
+            $yearly_query = $this->crud->query->getQuery()->toSql();
+            $yearly_params = $this->crud->query->getQuery()->getBindings();
+            Session(['yearly_query' => $yearly_query ]);
+            Session(['yearly_params' => $yearly_params ]);
+
+        }
+
+    }
+
+    public function download(Request $request)
+    {
+        $query = Session('yearly_query');
+        $params = Session('yearly_params');
+      
+        ProcessDataExport::dispatch($query , $params);
+            
+        return Storage::url("data/data.csv");
     }
 
   
