@@ -2,9 +2,9 @@
 
 <a href="javascript:void(0)" onclick="getDownload(event)" class="btn btn-sm btn-secondary" data-toggle="popover"><i class="fa fa-download"></i> Download</a>
 
-<div class="alert alert-danger alert-block " id="error"></div>
+<div hidden class="alert alert-danger alert-block" id="error"></div>
 
-@section('after_scripts')
+
 <script>
 	if(typeof getDownload != 'function') {
 
@@ -16,7 +16,7 @@
 		 * @return {null}   Result of function is not returned - but the user is redirected to the download url once the file has been generated.
 		 */
       	function getDownload(e) {
-      		jQuery("#error").hide();
+      
       		var target = e.target;
 
       		target.disabled = true;
@@ -27,13 +27,15 @@
 				"method":"POST",
 				"success": function(result) {
 					console.log("success");
+
 					window.location.replace('https://weatherstations-ccrp.stats4sd.org/storage/data/data.csv');
 					//location.reload();
 
 				},
 				"error": function(result){
-	        		jQuery('#error').show();
+	        		jQuery("#error").prop('hidden' , false)
 	        		jQuery("#error").html(result.responseJSON.message.substr(0, 200));
+
 				},
 				"complete": function() {
 					target.disabled = false;
@@ -44,8 +46,8 @@
 	 
 	}
 
-jQuery(document).ready(function(){
-	jQuery("#error").hide();
-});
+
+
 </script>
-@endsection
+
+
