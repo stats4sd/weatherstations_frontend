@@ -57,7 +57,7 @@ try:
 
     cols = openFile().columns.tolist()
     cols = '`,`'.join(cols)
-    print(cols);
+    print(cols)
 
     for i, row in openFile().iterrows():
         sql = f"INSERT INTO `data_template` (`{cols}`) VALUES (" + "%s,"*(len(row)-1) + "%s)"
