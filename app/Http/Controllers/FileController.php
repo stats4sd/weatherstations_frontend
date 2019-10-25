@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 use \GuzzleHttp\Client;
 
 
@@ -39,6 +41,7 @@ class FileController extends Controller
      */
     public function store(Request $request)
     {
+
         // Retrieve file from POST request
         //sends units type to DataTemplate
         Session::put('temp_unit', $_POST['temp_unit']);
@@ -47,8 +50,9 @@ class FileController extends Controller
         Session::put('precip_unit', $_POST['precip_unit']);
 
         $station = $_POST['weatherstation'];
+        
             if($request->hasFile('data-file')){
-
+            
                 // handle file and store it for prosperity
                 $file = $request->file('data-file');
              
@@ -59,8 +63,32 @@ class FileController extends Controller
                 $newFile->path = $path;
                 $newFile->name = $name;
                 $newFile->station_id = $station;
+                #$newFile->save();
+      
 
-                $newFile->save();
+                $scriptName = 'uploadDatapreview.py';
+                $scriptPath = base_path() . '/scripts/' . $scriptName;
+                $path_name = Storage::url("/").$path;
+            
+            
+        
+        //python script accepts 3 arguments in this order: scriptPath, path_name, station_id
+
+        $process = new Process("python {$scriptPath} {$path_name} {$station}");
+
+        $process->run();
+        
+        if(!$process->isSuccessful()) {
+            
+           throw new ProcessFailedException($process);
+           \Alert::success('<h4>'.$process->getMessage().'</h4>')->flash();
+        
+        } 
+        Log::info("python done.");
+        Log::info($process->getOutput());
+
+
+                 
                 \Alert::success('<h4>El archivo ha sido subido exitosamente</h4>')->flash();
                 return Redirect::to('admin/dataTemplate');
 
@@ -117,4 +145,5 @@ class FileController extends Controller
         //
     }
 
+    
 }

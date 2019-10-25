@@ -12,6 +12,7 @@ host = '127.0.0.1' # your host
 db = sys.argv[3] # database where your table is stored
 path = sys.argv[4] + '/storage/app/public/data/'
 query = sys.argv[5]
+name_file = sys.argv[7]
 params = (sys.argv[6]).split(',')
 for x in params:
 	x = '"'+x+'"'
@@ -19,7 +20,7 @@ for x in params:
 query = query.replace("?", "%s")
 params = tuple(params)
 ctime = datetime.now()
-name_file = str(ctime.strftime('%Y%m%d'))+'data.csv'
+name_file = str(ctime.strftime('%Y%m%d'))+name_file
 
 try:
 	con = MySQLConnection(user=user, passwd=passwd, host=host, db=db)

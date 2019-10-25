@@ -22,6 +22,8 @@ use Illuminate\Support\Facades\Storage;
 use League\Flysystem\Exception;
 use Maatwebsite\Excel\Facades\Excel;
 use Prologue\Alerts\Facades\Alert;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
 /**
  * Class DataCrudController
@@ -188,14 +190,44 @@ class DataCrudController extends CrudController
         
     }
 
-    public function download(Request $request)
-    {
-        $query = Session('query');
-        $params = Session('params');
+    // public function download(Request $request)
+    // {
+    //     $query = Session('query');
+    //     $params = Session('params');
       
-        ProcessDataExport::dispatch($query , $params);
+    //     ProcessDataExport::dispatch($query , $params);
             
-        return Storage::url("data/data.csv");
+    //     return Storage::url("data/data.csv");
+    // }
+
+    public function download()
+    {
+        $scriptName = 'save_data_csv.py';
+        $scriptPath = base_path() . '/scripts/' . $scriptName;
+        $db_user = config('database.connections.mysql.username');
+        $db_password = config('database.connections.mysql.password');
+        $db_name = config('database.connections.mysql.database');
+        $base_path = base_path();
+        $query = Session('query');
+        $params = join(",",Session('params'));
+        $query = '"'.$query.'"';
+        $params = '"'.$params.'"';
+        $file_name = "data.csv";
+        
+        //python script accepts 7 arguments in this order: db_user db_password db_name base_path() query params
+      
+        $process = new Process("python {$scriptPath} {$db_user} {$db_password} {$db_name} {$base_path} {$query} {$params} {$file_name}");
+
+        $process->run();
+        
+        if(!$process->isSuccessful()) {
+            
+           throw new ProcessFailedException($process);
+        
+        } 
+        Log::info("python done.");
+        Log::info($process->getOutput());
+       
     }
 
 }

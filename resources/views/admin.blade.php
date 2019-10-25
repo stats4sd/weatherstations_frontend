@@ -4,10 +4,6 @@
       <h1>
         Data Uploader
       </h1>
-      <ol class="breadcrumb">
-        <li><a href="{{ backpack_url() }}">{{ config('backpack.base.upload') }}</a></li>
-        <li class="active">{{ trans('backpack::base.uploads') }}</li>
-      </ol>
     </section>
 @endsection
 
@@ -39,15 +35,15 @@
                         <form action="{{ route('files.store') }} " method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group row">
-                                <label for="file" class="control-label col-sm-3"><h4><b>Elija un archivo de datos para subir. Este debe ser el archivo sin editar recuperado del sistema de la estación meteorológica</b></h4></label>
-                                <div class="col-sm-9">
+                                <label for="file" class="control-label col-sm-6"><h4><b>Elija un archivo de datos para subir. Este debe ser el archivo sin editar recuperado del sistema de la estación meteorológica</b></h4></label>
+                                <div class="col-sm-6">
                                     <input name="data-file" type="file" class="form-control-file btn btn-outline-info">
                                 </div>
                             </div>
 
                             <div class="form-group row">
-                                <label for="file" class="control-label col-sm-3"><h4><b>Seleccione el tipo de estación meteorológica de la que proviene este conjunto de datos.</b></h4></label>
-                                <div class="col-sm-9">
+                                <label for="file" class="control-label col-sm-6"><h4><b>Seleccione el tipo de estación meteorológica de la que proviene este conjunto de datos.</b></h4></label>
+                                <div class="col-sm-6">
                                     <select name="weatherstation" class="form-control btn btn-outline-info">
                                         @foreach($stations as $station)
                                         <option id='{{$station->id}}' value='{{$station->id}}'>{{$station->stations}}</option>
