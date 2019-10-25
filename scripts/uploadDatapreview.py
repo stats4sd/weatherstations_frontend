@@ -57,10 +57,10 @@ try:
 
     cols = openFile().columns.tolist()
     cols = '`,`'.join(cols)
-    print(cols)
+
 
     for i, row in openFile().iterrows():
-        sql = f"INSERT INTO `data_template` (`{cols}`) VALUES (" + "%s,"*(len(row)-1) + "%s)"
+        sql = "INSERT INTO `data_template` (`{cols}`) VALUES (" + "%s,"*(len(row)-1) + "%s)"
         cursor.execute(sql, tuple(row))
     print('data is uploading')
 
