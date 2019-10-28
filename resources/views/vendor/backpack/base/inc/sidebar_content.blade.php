@@ -24,10 +24,3 @@
 <li class='nav-item'><a class='nav-link' href="{{ backpack_url('tenDays') }}"><i class="nav-icon far fa-calendar-minus"></i>Ten Days</a></li>
 <li class='nav-item'><a class='nav-link' href="{{ backpack_url('monthly') }}"><i class="nav-icon far fa-calendar-alt"></i>Monthly</a></li>
 <li class='nav-item'><a class='nav-link' href="{{ backpack_url('yearly') }}"><i class="nav-icon far fa-calendar"></i>Yearly</a></li>
-
-
-
-
-
-
-<li class='nav-item'><a class='nav-link' href='{{ backpack_url('setting') }}'><i class='nav-icon fa fa-cog'></i> <span>Settings</span></a></li>
