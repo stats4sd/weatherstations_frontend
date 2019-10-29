@@ -24,7 +24,8 @@ params = tuple(params)
 try:
 	con = MySQLConnection(user=user, passwd=passwd, host=host, db=db)
 	cursor = con.cursor()
-	query = query % params
+	#query = query % params
+	query = "select * from `data` where `id_station` = 1"
 	print('PARAMS', params)
 	cursor.execute(query)
 	with open(path + name_file,'w', newline='') as csv_file:
