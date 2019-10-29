@@ -6,6 +6,7 @@ use App\File;
 use DB;
 use Excel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -68,13 +69,14 @@ class FileController extends Controller
 
                 $scriptName = 'uploadDatapreview.py';
                 $scriptPath = base_path() . '/scripts/' . $scriptName;
-                $path_name = Storage::url("/").$path;
+                $path_name = Storage::path("/").$path;
+            
             
             
         
         //python script accepts 3 arguments in this order: scriptPath, path_name, station_id
 
-        $process = new Process("python {$scriptPath} {$path_name} {$station}");
+        $process = new Process("python3.7 {$scriptPath} {$path_name} {$station}");
 
         $process->run();
         

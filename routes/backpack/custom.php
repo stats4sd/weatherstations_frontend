@@ -46,9 +46,6 @@ Route::get('admin/dashboard', 'DashboardController@index');
 Route::get('admin/dashboard/{id}', 'DashboardController@charts');
 
 
-
-// Route::get('/home', 'HomeController@index')->name('home')->middleware('verified');
-
 Route::resource('files','FileController');
 Route::resource('stations', 'StationController');
 Route::resource('datas','DataController');

@@ -51,7 +51,7 @@
 
                 <div class="custom-select" style="width:200px;">
                     <select id="year">
-                        <option>Select year</option>
+                        <!-- <option>Select year</option> -->
                         <option value="2006">2006</option>
                         <option value="2007">2007</option>
                         <option value="2008">2008</option>

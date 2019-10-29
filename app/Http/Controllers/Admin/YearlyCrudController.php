@@ -10,6 +10,7 @@ use App\Models\Yearly;
 use Backpack\CRUD\CrudPanel;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
 
 /**
@@ -92,13 +93,32 @@ class YearlyCrudController extends CrudController
     }
 
     public function download(Request $request)
-    {
+    { 
+        $scriptName = 'save_data_csv.py';
+        $scriptPath = base_path() . '/scripts/' . $scriptName;
+        $db_user = config('database.connections.mysql.username');
+        $db_password = config('database.connections.mysql.password');
+        $db_name = config('database.connections.mysql.database');
+        $base_path = base_path();
         $query = Session('yearly_query');
-        $params = Session('yearly_params');
+        $params = join(",",Session('yearly_params'));
+        $query = '"'.$query.'"';
+        $params = '"'.$params.'"';
+        $file_name = "yearly.csv";
+        
+        //python script accepts 7 arguments in this order: db_user db_password db_name base_path() query params
       
-        ProcessDataExport::dispatch($query , $params);
+        $process = new Process("python {$scriptPath} {$db_user} {$db_password} {$db_name} {$base_path} {$query} {$params} {$file_name}");
+
+        $process->run();
+        
+        if(!$process->isSuccessful()) {
             
-        return Storage::url("data/data.csv");
+           throw new ProcessFailedException($process);
+        
+        } 
+        Log::info("python done.");
+        Log::info($process->getOutput());
     }
 
   
