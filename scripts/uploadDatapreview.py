@@ -1,13 +1,14 @@
+#!/usr/bin/python3.7
 import mysql.connector as mysql
-import dbConfig as config
+import dbConfig as config 
 import pandas as pd
 from datetime import datetime
 import sys
 path = sys.argv[1]
 station_id = sys.argv[2]
 
-def openFile():
 
+def openFile():
    
     data = pd.read_csv(path, na_values=['--.-', '--', '---'], low_memory=False)
     df = pd.DataFrame(data)
