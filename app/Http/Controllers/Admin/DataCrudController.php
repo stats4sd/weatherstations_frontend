@@ -205,11 +205,12 @@ class DataCrudController extends CrudController
         $query = '"'.$query.'"';
         $params = '"'.$params.'"';
         $file_name = date('mdY')."data.csv";
+        dd("python3.7 {$scriptPath} {$db_user} {$db_password} {$db_name} {$base_path} {$query} {$params} {$file_name}");
 
         
         //python script accepts 7 arguments in this order: db_user db_password db_name base_path() query params
       
-        $process = new Process("python {$scriptPath} {$db_user} {$db_password} {$db_name} {$base_path} {$query} {$params} {$file_name}");
+        $process = new Process("python3.7 {$scriptPath} {$db_user} {$db_password} {$db_name} {$base_path} {$query} {$params} {$file_name}");
 
         $process->run();
         
