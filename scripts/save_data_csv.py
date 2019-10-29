@@ -19,8 +19,7 @@ for x in params:
 	
 query = query.replace("?", "%s")
 params = tuple(params)
-ctime = datetime.now()
-name_file = str(ctime.strftime('%Y%m%d'))+name_file
+print(query+' %'+params)
 
 try:
 	con = MySQLConnection(user=user, passwd=passwd, host=host, db=db)
