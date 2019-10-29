@@ -104,7 +104,7 @@ class YearlyCrudController extends CrudController
         $params = join(",",Session('yearly_params'));
         $query = '"'.$query.'"';
         $params = '"'.$params.'"';
-        $file_name = "yearly.csv";
+        $file_name = date('mdY')."yearly.csv";
         
         //python script accepts 7 arguments in this order: db_user db_password db_name base_path() query params
       

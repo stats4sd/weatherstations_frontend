@@ -191,15 +191,6 @@ class DataCrudController extends CrudController
         
     }
 
-    // public function download(Request $request)
-    // {
-    //     $query = Session('query');
-    //     $params = Session('params');
-      
-    //     ProcessDataExport::dispatch($query , $params);
-            
-    //     return Storage::url("data/data.csv");
-    // }
 
     public function download()
     {
@@ -213,7 +204,8 @@ class DataCrudController extends CrudController
         $params = join(",",Session('params'));
         $query = '"'.$query.'"';
         $params = '"'.$params.'"';
-        $file_name = "data.csv";
+        $file_name = date('mdY')."data.csv";
+
         
         //python script accepts 7 arguments in this order: db_user db_password db_name base_path() query params
       
@@ -228,6 +220,7 @@ class DataCrudController extends CrudController
         } 
         Log::info("python done.");
         Log::info($process->getOutput());
+        return response($file_name);
        
     }
 

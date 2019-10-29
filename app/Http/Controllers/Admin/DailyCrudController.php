@@ -110,7 +110,7 @@ class DailyCrudController extends CrudController
         $params = join(",",Session('daily_params'));
         $query = '"'.$query.'"';
         $params = '"'.$params.'"';
-        $file_name = "daily.csv";
+        $file_name = date('mdY')."daily.csv";
         
         //python script accepts 7 arguments in this order: db_user db_password db_name base_path() query params
       

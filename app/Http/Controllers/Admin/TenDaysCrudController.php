@@ -113,7 +113,7 @@ class TenDaysCrudController extends CrudController
         $params = join(",",Session('tendays_params'));
         $query = '"'.$query.'"';
         $params = '"'.$params.'"';
-        $file_name = "tendays.csv";
+        $file_name = date('mdY')."tendays.csv";
         
         //python script accepts 7 arguments in this order: db_user db_password db_name base_path() query params
       

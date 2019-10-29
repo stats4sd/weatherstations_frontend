@@ -149,7 +149,7 @@ class MonthlyCrudController extends CrudController
         $params = join(",",Session('monthly_params'));
         $query = '"'.$query.'"';
         $params = '"'.$params.'"';
-        $file_name = "monthly.csv";
+        $file_name = date('mdY')."monthly.csv";
         
         //python script accepts 7 arguments in this order: db_user db_password db_name base_path() query params
       
