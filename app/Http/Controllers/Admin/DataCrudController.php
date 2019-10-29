@@ -205,7 +205,7 @@ class DataCrudController extends CrudController
         $query = '"'.$query.'"';
         $params = '"'.$params.'"';
         $file_name = date('mdY')."data.csv";
-        echo($query)
+        echo($query);
 
         
         //python script accepts 7 arguments in this order: db_user db_password db_name base_path() query params
