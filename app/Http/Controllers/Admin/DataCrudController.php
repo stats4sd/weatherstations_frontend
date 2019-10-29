@@ -219,7 +219,7 @@ class DataCrudController extends CrudController
         
         } else {
             
-            dd($process->getMessage());
+            echo $process->getOutput();
         }
         Log::info("python done.");
         Log::info($process->getOutput());
