@@ -10,7 +10,7 @@ user = sys.argv[1] # your username
 passwd = sys.argv[2] # your password
 host = '127.0.0.1' # your host
 db = sys.argv[3] # database where your table is stored
-path = sys.argv[4] + '/storage/app/public/rawfile/'
+path = sys.argv[4] + '/storage/app/public/data/'
 query = sys.argv[5]
 name_file = sys.argv[7]
 params = (sys.argv[6]).split(',')
@@ -25,7 +25,7 @@ try:
 	con = MySQLConnection(user=user, passwd=passwd, host=host, db=db)
 	cursor = con.cursor()
 	query = query % params
-	print(query)
+	print('PARAMS', params)
 	cursor.execute(query)
 	with open(path + name_file,'w', newline='') as csv_file:
 	    column_names = [i[0] for i in cursor.description]
