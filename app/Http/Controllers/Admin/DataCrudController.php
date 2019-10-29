@@ -217,7 +217,10 @@ class DataCrudController extends CrudController
             
            throw new ProcessFailedException($process);
         
-        } 
+        } else {
+            
+            dd($process->isSuccessful());
+        }
         Log::info("python done.");
         Log::info($process->getOutput());
         #return response($file_name);
