@@ -5,12 +5,13 @@ import csv
 import requests
 import json
 from datetime import datetime
+import dbConfig as config
 
-user = sys.argv[1] # your username
-passwd = sys.argv[2] # your password
-host = '127.0.0.1' # your host
-db = sys.argv[3] # database where your table is stored
-path = sys.argv[4] + '/storage/rawfile/'
+# user = sys.argv[1] # your username
+# passwd = sys.argv[2] # your password
+# host = '127.0.0.1' # your host
+# db = sys.argv[3] # database where your table is stored
+path = sys.argv[4] + '/storage/app/public/data/'
 query = sys.argv[5]
 name_file = sys.argv[7]
 params = (sys.argv[6]).split(',')
@@ -22,10 +23,9 @@ params = tuple(params)
 
 
 try:
-	con = MySQLConnection(user=user, passwd=passwd, host=host, db=db)
+	con = MySQLConnection(**config.dbConfig)
 	cursor = con.cursor()
-	#query = query % params
-	query = "select * from `data` where `id_station` = 1"
+	query = query % params
 	print('PARAMS', params)
 	cursor.execute(query)
 	with open(path + name_file,'w', newline='') as csv_file:

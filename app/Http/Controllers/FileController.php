@@ -70,7 +70,7 @@ class FileController extends Controller
                 $scriptName = 'uploadDatapreview.py';
                 $scriptPath = base_path() . '/scripts/' . $scriptName;
                 $path_name = Storage::path("/").$path;
-            
+
             
             
         
