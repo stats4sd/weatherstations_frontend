@@ -152,8 +152,9 @@ class DashboardController extends Controller
         return view('dashboard');
     }
 
-    public function charts($id, $aggr)
+    public function charts(Request $resquest)
     {   
+        dd($resquest);
         $station_data = DB::table('yearly_data')->get();
        
         $lava_temp_in= new Lavacharts;

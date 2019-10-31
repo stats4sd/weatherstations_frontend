@@ -28,7 +28,7 @@
 
                 <div class="custom-select" style="width:200px;">
                     <select id="station">
-                        <option>Station</option>
+                        <!-- <option>Station</option> -->
                         <option value="1">Chojñapata</option>
                         <option value="2">Chinchaya China</option>
                         <option value="3">Chinchaya Davis</option>
@@ -41,7 +41,7 @@
 
                 <div class="custom-select" style="width:200px;">
                     <select id = "aggregation">
-                        <option>Aggregation</option>
+                        <!-- <option>Aggregation</option> -->
                         <option value="daily">Daily</option>
                         <option value="ten_days">Ten Days</option>
                         <option value="monthly">Monthly</option>
@@ -70,7 +70,7 @@
                 </div>
                 <div class="custom-select" style="width:200px;">
                     <select id="month">
-                        <option>Select Month</option>
+                        <!-- <option>Select Month</option> -->
                         <option value="01">January</option>
                         <option value="02">February</option>
                         <option value="03">March</option>
@@ -111,23 +111,56 @@
 
 @section('after_scripts')
 <script type="text/javascript">
-    
-
 
 jQuery(document).ready(function(){
 
     jQuery("#station").change(function(){
-      jQuery('#aggregation').change(function(){
+        var station_id = jQuery('#station').val();
+            var agg = jQuery('#aggregation').val();
+            var year = jQuery('#year').val();
+            var month = jQuery('#month').val();
+            console.log(station_id, agg, year, month);
+
+            $.ajax("url":'{{ url($crud->route."/charts") }}', {
+            method: "POST",
+            data: {
+                station_id: station_id,
+                agg: agg,
+                year : year,
+                month : month,
+            }
+        }).done(function(res) {
+            // jQuery('#message').html(res.message);
+            location.reload();
+
+        });
+        });
+
+    jQuery('#aggregation').change(function(){
         
             var value = jQuery('#station').val();
             var agg = jQuery('#aggregation').val();
             var year = jQuery('#year').val();
             var month = jQuery('#month').val();
             console.log(value, agg, year, month);
-         
+        });
+
+    jQuery('#year').change(function(){
         
-      });
-    });
+            var value = jQuery('#station').val();
+            var agg = jQuery('#aggregation').val();
+            var year = jQuery('#year').val();
+            var month = jQuery('#month').val();
+            console.log(value, agg, year, month);        
+        });
+
+    jQuery('#month').change(function(){
+            var value = jQuery('#station').val();
+            var agg = jQuery('#aggregation').val();
+            var year = jQuery('#year').val();
+            var month = jQuery('#month').val();
+            console.log(value, agg, year, month);
+        });
 
 });
 
