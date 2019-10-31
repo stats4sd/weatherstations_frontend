@@ -34,7 +34,7 @@
 					//location.reload();
 				},
 				"error": function(result){
-					
+					console.log("error")
 	        		jQuery("#error").prop('hidden' , false)
 	        		jQuery("#error").html(result.responseJSON.message.substr(0, 100));
 
