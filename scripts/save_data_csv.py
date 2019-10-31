@@ -21,9 +21,10 @@ params = tuple(params)
 try:
 	con = MySQLConnection(**config.dbConfig)
 	cursor = con.cursor()
-	#query = query % params
+	print('QUERY 1',query)
+	query = query % params
 	print('PARAMS ', params)
-	print('QUERY ', query)
+	print('QUERY 2', query)
 	print('Name file ', name_file)
 	print('PATH ', path)
 	cursor.execute(query)
