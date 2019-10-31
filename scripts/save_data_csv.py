@@ -7,10 +7,6 @@ import json
 from datetime import datetime
 import dbConfig as config
 
-# user = sys.argv[1] # your username
-# passwd = sys.argv[2] # your password
-# host = '127.0.0.1' # your host
-# db = sys.argv[3] # database where your table is stored
 path = sys.argv[1] + '/storage/app/public/data/'
 query = sys.argv[2]
 name_file = sys.argv[4]
