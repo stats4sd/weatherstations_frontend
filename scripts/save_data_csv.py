@@ -14,14 +14,14 @@ params = (sys.argv[3]).split(',')
 for x in params:
 	x = '"'+x+'"'
 	
-#query = query.replace("?", "%s")
+query = query.replace("?", "%s")
 params = tuple(params)
 
 
 try:
 	con = MySQLConnection(**config.dbConfig)
 	cursor = con.cursor()
-	query = query % params
+	#query = query % params
 	print('PARAMS ', params)
 	print('QUERY ', query)
 	print('Name file ', name_file)
