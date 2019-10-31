@@ -15,13 +15,13 @@ for x in params:
 	x = '"'+x+'"'
 	
 query = query.replace("?", "%s")
+print('QUERY 1',query)
 params = tuple(params)
 
 
 try:
 	con = MySQLConnection(**config.dbConfig)
 	cursor = con.cursor()
-	print('QUERY 1',query)
 	query = query % params
 	print('PARAMS ', params)
 	print('QUERY 2', query)
