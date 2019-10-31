@@ -22,7 +22,10 @@ try:
 	con = MySQLConnection(**config.dbConfig)
 	cursor = con.cursor()
 	query = query % params
-	print('PARAMS', params)
+	print('PARAMS ', params)
+	print('QUERY ', 	query)
+	print('Name file ', name_file)
+	print('PATH ' path)
 	cursor.execute(query)
 	with open(path + name_file,'w', newline='') as csv_file:
 	    column_names = [i[0] for i in cursor.description]
