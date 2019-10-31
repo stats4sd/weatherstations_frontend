@@ -14,8 +14,8 @@ params = (sys.argv[3]).split(',')
 for x in params:
 	x = '"'+x+'"'
 	
+print('QUERY before replace',query)
 query = query.replace("?", "%s")
-print('QUERY 1',query)
 params = tuple(params)
 
 
