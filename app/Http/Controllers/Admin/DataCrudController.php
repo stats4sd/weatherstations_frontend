@@ -204,6 +204,7 @@ class DataCrudController extends CrudController
         $file_name = date('mdY')."data.csv";
         
         //python script accepts 4 arguments in this order: base_path(), query, params and file name
+        Log::info($query);
       
         $process = new Process("python3.7 {$scriptPath} {$base_path} {$query} {$params} {$file_name}");
 
