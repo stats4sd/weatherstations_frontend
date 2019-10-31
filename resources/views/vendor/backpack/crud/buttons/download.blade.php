@@ -29,7 +29,7 @@
 				"success": function(result) {
 					console.log("success");
 					original = window.location.origin;
-					filename = result;
+					filename = result[0];
 					console.log('filename', filename);
 					window.location.replace(original+'/storage/rawfiles/'+filename);
 					//location.reload();
