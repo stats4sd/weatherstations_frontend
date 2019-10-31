@@ -11,10 +11,10 @@ import dbConfig as config
 # passwd = sys.argv[2] # your password
 # host = '127.0.0.1' # your host
 # db = sys.argv[3] # database where your table is stored
-path = sys.argv[4] + '/storage/app/public/data/'
-query = sys.argv[5]
-name_file = sys.argv[7]
-params = (sys.argv[6]).split(',')
+path = sys.argv[1] + '/storage/app/public/data/'
+query = sys.argv[2]
+name_file = sys.argv[4]
+params = (sys.argv[3]).split(',')
 for x in params:
 	x = '"'+x+'"'
 	

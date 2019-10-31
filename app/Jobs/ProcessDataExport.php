@@ -51,7 +51,7 @@ class ProcessDataExport implements ShouldQueue
         $query = '"'.$query.'"';
         $params = '"'.$params.'"';
         
-        //python script accepts 7 arguments in this order: db_user db_password db_name base_path() query params
+        //python script accepts 4 arguments in this order: base_path(), query, params and file name
       
         $process = new Process("python {$scriptPath} {$db_user} {$db_password} {$db_name} {$base_path} {$query} {$params}");
 

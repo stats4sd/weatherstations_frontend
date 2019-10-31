@@ -196,17 +196,12 @@ class DataCrudController extends CrudController
     {
         $scriptName = 'save_data_csv.py';
         $scriptPath = base_path() . '/scripts/' . $scriptName;
-        $db_user = config('database.connections.mysql.username');
-        $db_password = config('database.connections.mysql.password');
-        $db_name = config('database.connections.mysql.database');
         $base_path = base_path();
         $query = Session('query');
         $params = join(",",Session('params'));
         $query = '"'.$query.'"';
         $params = '"'.$params.'"';
         $file_name = date('mdY')."data.csv";
-        echo($query);
-
         
         //python script accepts 7 arguments in this order: db_user db_password db_name base_path() query params
       

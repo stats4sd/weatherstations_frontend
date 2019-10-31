@@ -105,9 +105,6 @@ class TenDaysCrudController extends CrudController
     {
         $scriptName = 'save_data_csv.py';
         $scriptPath = base_path() . '/scripts/' . $scriptName;
-        $db_user = config('database.connections.mysql.username');
-        $db_password = config('database.connections.mysql.password');
-        $db_name = config('database.connections.mysql.database');
         $base_path = base_path();
         $query = Session('tendays_query');
         $params = join(",",Session('tendays_params'));
@@ -115,9 +112,9 @@ class TenDaysCrudController extends CrudController
         $params = '"'.$params.'"';
         $file_name = date('mdY')."tendays.csv";
         
-        //python script accepts 7 arguments in this order: db_user db_password db_name base_path() query params
+        //python script accepts 4 arguments in this order: base_path(), query, params and file name
       
-        $process = new Process("python {$scriptPath} {$db_user} {$db_password} {$db_name} {$base_path} {$query} {$params} {$file_name}");
+        $process = new Process("python {$scriptPath} {$base_path} {$query} {$params} {$file_name}");
 
         $process->run();
         
