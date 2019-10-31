@@ -30,6 +30,7 @@
 					console.log("success");
 					original = window.location.origin;
 					filename = result['file_name'];
+					console.log(filename);
 					window.location.replace(original+'/storage/rawfiles/'+filename);
 					//location.reload();
 				},
