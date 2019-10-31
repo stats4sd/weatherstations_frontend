@@ -25,7 +25,7 @@ try:
 	print('PARAMS ', params)
 	print('QUERY ', 	query)
 	print('Name file ', name_file)
-	print('PATH ' path)
+	print('PATH ', path)
 	cursor.execute(query)
 	with open(path + name_file,'w', newline='') as csv_file:
 	    column_names = [i[0] for i in cursor.description]
