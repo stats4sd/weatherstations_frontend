@@ -221,7 +221,7 @@ class DataCrudController extends CrudController
         }
         Log::info("python done.");
         Log::info($process->getOutput());
-        #return response($file_name);
+        return response($file_name);
        
     }
 
