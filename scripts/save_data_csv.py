@@ -20,7 +20,8 @@ params = tuple(params)
 try:
 	con = MySQLConnection(**config.dbConfig)
 	cursor = con.cursor()
-	query = query % params
+	if params:
+		query = query % params
 	cursor.execute(query)
 	with open(path + name_file,'w', newline='') as csv_file:
 	    column_names = [i[0] for i in cursor.description]
