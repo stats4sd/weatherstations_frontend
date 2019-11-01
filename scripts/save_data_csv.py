@@ -10,19 +10,22 @@ import dbConfig as config
 path = sys.argv[1] + '/storage/app/public/data/'
 query = sys.argv[2]
 name_file = sys.argv[4]
-params = (sys.argv[3]).split(',')
-params = ['"{0}"'.format(param) for param in params]
-	
-print('2 params', params)
-query = query.replace("?", "%s")
-params = tuple(params)
+params = sys.argv[3]
 print('1 params',params)
+
+if  params not in ['/']:
+	params = params.split(',')
+	params = ['"{0}"'.format(param) for param in params]
+	params = tuple(params)
+	query = query.replace("?", "%s")
+	params = tuple(params)
+	query = query % params
+	print('2 params', params)
+
 
 try:
 	con = MySQLConnection(**config.dbConfig)
 	cursor = con.cursor()
-	if params:
-		query = query % params
 	print("query", query)
 	cursor.execute(query)
 	with open(path + name_file,'w', newline='') as csv_file:
