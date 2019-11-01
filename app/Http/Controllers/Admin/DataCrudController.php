@@ -217,11 +217,11 @@ class DataCrudController extends CrudController
         
         } else {
             
-            echo $process->getOutput();
+            $process->getOutput();
         }
         Log::info("python done.");
         Log::info($process->getOutput());
-       
+
         $path_download =  Storage::url('/data/'.$file_name);
         return response()->json(['path' => $path_download]);
     }
