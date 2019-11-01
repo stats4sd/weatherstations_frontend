@@ -14,14 +14,17 @@ params = (sys.argv[3]).split(',')
 for x in params:
 	x = '"'+x+'"'
 	
+print('2 params', params)
 query = query.replace("?", "%s")
 params = tuple(params)
+print('1 params',params)
 
 try:
 	con = MySQLConnection(**config.dbConfig)
 	cursor = con.cursor()
 	if params:
 		query = query % params
+	print("query", query)
 	cursor.execute(query)
 	with open(path + name_file,'w', newline='') as csv_file:
 	    column_names = [i[0] for i in cursor.description]
