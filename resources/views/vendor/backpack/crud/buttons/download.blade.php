@@ -28,10 +28,10 @@
 				"method":"POST",
 				"success": function(result) {
 					console.log("success");
-					original = window.location.origin;
-					filename = result['file_name'];
-					console.log(filename);
-					window.location.replace(original+'/storage/rawfiles/'+filename);
+					
+					path = result['path'];
+					console.log(path);
+					window.location.replace(path);
 					//location.reload();
 				},
 				"error": function(result){

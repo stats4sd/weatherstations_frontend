@@ -121,7 +121,7 @@ jQuery(document).ready(function(){
             var month = jQuery('#month').val();
             console.log(station_id, agg, year, month);
 
-            $.ajax("url":'{{ url($crud->route."/charts") }}', {
+            $.ajax("url":"{{ url($crud->route.'/charts') }}", {
             method: "POST",
             data: {
                 station_id: station_id,
