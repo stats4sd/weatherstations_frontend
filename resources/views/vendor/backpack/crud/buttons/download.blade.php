@@ -28,11 +28,9 @@
 				"method":"POST",
 				"success": function(result) {
 					console.log("success");
-					
 					path = result['path'];
 					console.log(path);
 					window.location.href= path;
-					//location.reload();
 				},
 				"error": function(result){
 					console.log("error")

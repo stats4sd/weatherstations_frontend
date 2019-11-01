@@ -108,6 +108,8 @@ class DailyCrudController extends CrudController
         $query = '"'.$query.'"';
         $params = '"'.$params.'"';
         $file_name = date('mdY')."daily.csv";
+        $query = str_replace('`',' ',$query);
+
         
         //python script accepts 7 arguments in this order: db_user db_password db_name base_path() query params
       
@@ -119,10 +121,15 @@ class DailyCrudController extends CrudController
             
            throw new ProcessFailedException($process);
         
-        } 
+        } else {
+            
+            $process->getOutput();
+        }
         Log::info("python done.");
         Log::info($process->getOutput());
-    }
 
+        $path_download =  Storage::url('/data/'.$file_name);
+        return response()->json(['path' => $path_download]);
+    }
     
 }

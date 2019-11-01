@@ -102,8 +102,10 @@ class YearlyCrudController extends CrudController
         $query = '"'.$query.'"';
         $params = '"'.$params.'"';
         $file_name = date('mdY')."yearly.csv";
-        
+        $query = str_replace('`',' ',$query);
+
         //python script accepts 4 arguments in this order: base_path(), query, params and file name
+        Log::info($query);
       
         $process = new Process("python3.7 {$scriptPath} {$base_path} {$query} {$params} {$file_name}");
 
@@ -113,9 +115,15 @@ class YearlyCrudController extends CrudController
             
            throw new ProcessFailedException($process);
         
-        } 
+        } else {
+            
+            $process->getOutput();
+        }
         Log::info("python done.");
         Log::info($process->getOutput());
+
+        $path_download =  Storage::url('/data/'.$file_name);
+        return response()->json(['path' => $path_download]);
     }
 
   
