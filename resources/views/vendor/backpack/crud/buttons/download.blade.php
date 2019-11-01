@@ -31,7 +31,7 @@
 					
 					path = result['path'];
 					console.log(path);
-					window.location.replace(path);
+					window.location.href= path;
 					//location.reload();
 				},
 				"error": function(result){
