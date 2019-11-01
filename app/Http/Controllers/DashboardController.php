@@ -15,7 +15,6 @@ use Yajra\DataTables\DataTables;
 class DashboardController extends Controller
 {
     public function index ()
-
     {
 
         $station_data = DB::table('yearly_data')->get();
@@ -35,6 +34,7 @@ class DashboardController extends Controller
             Lava::LineChart('TemperatureIn', $datatable,[
                     'title' => 'Yearly Temperatures Interna °C'                 
             ]);
+
         }
 
         $lava_temp_out= new Lavacharts;
@@ -152,14 +152,19 @@ class DashboardController extends Controller
         return view('dashboard');
     }
 
-    public function charts(Request $resquest)
+    public function charts(Request $request)
     {   
-        dd($resquest);
+        $id = $request->station_id;
+        $aggr = $request->agg;
+        $year = $request->year;
+        $month = $request->month;
+        //dd($id, $aggr, $year, $month);
+
         $station_data = DB::table('yearly_data')->get();
-       
+        
         $lava_temp_in= new Lavacharts;
         if(($aggr == 'daily')){
-            $data=Daily::select("fecha as 0","max_temperatura_interna as 1", "avg_temperatura_interna as 2","min_temperatura_interna as 3")->where('id_station', '=', $id)->where('fecha', '>=', '2018-09-01')->get()->toArray();
+            $data=Daily::select("fecha as 0","max_temperatura_interna as 1", "avg_temperatura_interna as 2","min_temperatura_interna as 3")->where('id_station', '=', $id)->get()->toArray();
         }else if(($aggr == 'ten_days')){
             $data=Tendays::select("max_fecha as 0","max_temperatura_interna as 1", "avg_temperatura_interna as 2","min_temperatura_interna as 3")->where('id_station', '=', $id)->get()->toArray();
         }

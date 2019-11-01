@@ -1,6 +1,6 @@
 
 
-<a href="javascript:void(0)" onclick="getDownload(event)" class="btn btn-sm btn-secondary" data-toggle="popover"><i class="fa fa-download"></i> Download</a>
+<a href="javascript:void(0)" onclick="getDownload(event)" class="btn btn-sm btn-secondary" data-toggle="popover"><i class="fa fa-download"></i> Download by filter</a>
 
 <div hidden class="alert alert-danger alert-block" id="error"></div>
 

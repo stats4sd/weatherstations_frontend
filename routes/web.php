@@ -48,7 +48,7 @@ Route::get('data/{id}/delete', 'DataCrudController@destroy');
 
 //Dashboard
 Route::get('admin/dashboard', 'DashboardController@index');
-Route::get('admin/dashboard/charts', 'DashboardController@charts');
+Route::post('admin/dashboard/{id}/charts', 'DashboardController@charts');
 
 
 

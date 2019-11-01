@@ -91,12 +91,18 @@
                 <div class="box-body">
                     <div class="container-fluid">
                         <div class="row">
-
-                            <div class="col-sm-12">
+                          
+                            <div class="col-sm-6">
                                 <div id="temps_div_in"></div>
                                     <?= Lava::render('LineChart', 'TemperatureIn', 'temps_div_in') ?>  
                             </div>
+                            
+                            
 
+                        </div>
+                        <div class="row">
+                            <canvas id="myChart" height="280" width="600"></canvas>
+                            
                         </div>
                     </div>
                 </div>
@@ -110,7 +116,27 @@
 
 
 @section('after_scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 <script type="text/javascript">
+    var ctx = document.getElementById('myChart').getContext('2d');
+var chart = new Chart(ctx, {
+    // The type of chart we want to create
+    type: 'line',
+
+    // The data for our dataset
+    data: {
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        datasets: [{
+            label: 'My First dataset',
+            backgroundColor: 'rgb(255, 99, 132)',
+            borderColor: 'rgb(255, 99, 132)',
+            data: [0, 10, 5, 2, 20, 30, 45]
+        }]
+    },
+
+    // Configuration options go here
+    options: {}
+});
 
 jQuery(document).ready(function(){
 
@@ -121,7 +147,7 @@ jQuery(document).ready(function(){
             var month = jQuery('#month').val();
             console.log(station_id, agg, year, month);
 
-            $.ajax("url":"{{ url($crud->route.'/charts') }}", {
+            jQuery.ajax('{{ url('admin/dashboard/charts') }}', {
             method: "POST",
             data: {
                 station_id: station_id,
@@ -131,7 +157,7 @@ jQuery(document).ready(function(){
             }
         }).done(function(res) {
             // jQuery('#message').html(res.message);
-            location.reload();
+            //location.reload();
 
         });
         });
