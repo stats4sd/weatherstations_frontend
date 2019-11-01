@@ -36,6 +36,7 @@
 				},
 				"error": function(result){
 					console.log("error")
+					console.log(result)
 	        		jQuery("#error").prop('hidden' , false)
 	        		jQuery("#error").html(result.responseJSON.message.substr(0, 100));
 
