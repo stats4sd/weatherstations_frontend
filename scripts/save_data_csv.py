@@ -11,8 +11,7 @@ path = sys.argv[1] + '/storage/app/public/data/'
 query = sys.argv[2]
 name_file = sys.argv[4]
 params = (sys.argv[3]).split(',')
-for x in params:
-	x = '"'+x+'"'
+params = ['"{0}"'.format(param) for param in params]
 	
 print('2 params', params)
 query = query.replace("?", "%s")
