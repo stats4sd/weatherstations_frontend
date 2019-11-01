@@ -13,12 +13,11 @@ name_file = sys.argv[4]
 params = sys.argv[3]
 print('1 params',params)
 
-if  params not in ['/']:
+if  params:
 	params = params.split(',')
 	params = ['"{0}"'.format(param) for param in params]
 	params = tuple(params)
 	query = query.replace("?", "%s")
-	params = tuple(params)
 	query = query % params
 	print('2 params', params)
 
