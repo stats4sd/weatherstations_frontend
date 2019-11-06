@@ -42,6 +42,7 @@ class FileController extends Controller
      */
     public function store(Request $request)
     {
+        set_time_limit(0);
 
         // Retrieve file from POST request
         //sends units type to DataTemplate

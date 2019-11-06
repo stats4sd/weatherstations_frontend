@@ -42,8 +42,8 @@ Route::group([
 
 // Dashboard
 
-Route::get('admin/dashboard', 'DashboardController@index');
-Route::get('admin/dashboard/{id}', 'DashboardController@charts');
+#Route::get('admin/dashboard', 'DashboardController@index');
+#Route::get('admin/dashboard/getMonthly', 'DashboardController@getMonthly');
 
 
 Route::resource('files','FileController');

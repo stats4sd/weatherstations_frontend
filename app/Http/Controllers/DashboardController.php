@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Daily;
 use App\Dashboard;
+use App\Models\Monthly;
 use App\Tendays;
 use App\Yearly;
 use DB;
@@ -154,6 +155,7 @@ class DashboardController extends Controller
 
     public function charts(Request $request)
     {   
+        dd($request);
         $id = $request->station_id;
         $aggr = $request->agg;
         $year = $request->year;
@@ -186,6 +188,42 @@ class DashboardController extends Controller
 
         return view('dashboard');
 
+    }
+
+
+    public function getAllMonthly()
+    {
+        $fecha = Monthly::orderBy('fecha')->pluck('fecha');
+        if(! empty($fecha)){
+            foreach ($fecha as $month) {
+                $date = new \DateTime($month);
+                $month_no = $date->format('m');
+                $month_name = $date->format('M');
+                $month_array[ $month_no ] = $month_name;
+               
+            }
+        }
+
+        return $month_array;
+    }
+
+    public function getMonthlyCount($month)
+    {
+        $monthly_data_count = Monthly::where('month', $month)->get()->count();
+        return $monthly_data_count; 
+    }
+
+    public function getMonthlyData()
+    {
+        $monthly_data_count_array = array();
+        $month_array = $this->getAllMonthly();
+        if(! empty($month_array)){
+            foreach ($month_array as $month_no => $month_name) {
+                $monthly_count = $this->getMonthlyCount($month_no);
+                array_push($monthly_data_count_array, $monthly_count);
+            }
+        }
+        return $monthly_data_count_array;
     }
 
 
