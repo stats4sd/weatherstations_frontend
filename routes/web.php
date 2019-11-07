@@ -20,16 +20,11 @@ Route::get('', function () {
     return redirect('/admin');
 });
 
-// Route::get('/home', 'HomeController@index')->name('home')->middleware('verified');
+
 
 Route::resource('files','FileController');
 Route::resource('stations', 'StationController');
 Route::resource('datas','DataController');
-Route::get('/export_excel','HomeController@index');
-Route::post('/export_excel/excel','HomeController@excel')->name('export_excel.excel');
-Route::post('/excelData', 'HomeController@excelData')->name('excelData');
-
-
 
 
 //NEW Upload page

@@ -21,89 +21,134 @@
                 <div class="box-header with-border">
                     <div class="box-title">
                         <label>Daily Aggregation Charts</label>
-                        <h2>Chojñapata</h2>
+                    
                     </div>
                 </div>
-                
+                <form method="post">
+                    @csrf
 
-                <div class="custom-select" style="width:200px;">
-                    <select id="station">
-                        <!-- <option>Station</option> -->
-                        <option value="1">Chojñapata</option>
-                        <option value="2">Chinchaya China</option>
-                        <option value="3">Chinchaya Davis</option>
-                        <option value="4">Calahuancane</option>
-                        <option value="5">Cutusuma</option>
-                        <option value="6">Iñacamaya</option>
-                        <option value="7">Incamya</option>
-                    </select>                   
-                </div>
+                    <div class="form-group">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-sm">
+                                    <label for="station" class="col-sm-2 col-form-label"><b>Station</b></label>
+                                    
+                                        <select class="form-control" id="station" style="width:200px;">
+                                            <option value="1">Chojñapata</option>
+                                            <option value="2">Chinchaya China</option>
+                                            <option value="3">Chinchaya Davis</option>
+                                            <option value="4">Calahuancane</option>
+                                            <option value="5">Cutusuma</option>
+                                            <option value="6">Iñacamaya</option>
+                                            <option value="7">Incamya</option>
+                                        </select>  
+                                  
+                                </div>
+                                <div class="col-sm">
+                                    
+                                    <label for="aggregation" class="col-sm-2 col-form-label"><b>Aggregation</b></label>
+                                    
+                                    <select class="form-control" id="aggregation" style="width:200px;">
+                                        <option value="daily">Daily</option>
+                                        <option value="ten_days">Ten Days</option>
+                                        <option value="monthly">Monthly</option>
+                                        <option value="yearly">Yearly</option>
+                                    </select>   
+                                </div>
+                                <div class="col-sm">
+                                    <label for="year" class="col-sm-2 col-form-label"><b>Year</b></label>
+                                    <select class="form-control" id="year" style="width:200px;">
+                                        @foreach($years as $year)
 
-                <div class="custom-select" style="width:200px;">
-                    <select id = "aggregation">
-                        <!-- <option>Aggregation</option> -->
-                        <option value="daily">Daily</option>
-                        <option value="ten_days">Ten Days</option>
-                        <option value="monthly">Monthly</option>
-                        <option value="yearly">Yearly</option>
-                    </select>                   
-                </div>
+                                        <option value={{$year->fecha}}>{{$year->fecha}}</option>
+                                        
+                                        @endforeach
+                                    </select>                   
 
-                <div class="custom-select" style="width:200px;">
-                    <select id="year">
-                        <!-- <option>Select year</option> -->
-                        <option value="2006">2006</option>
-                        <option value="2007">2007</option>
-                        <option value="2008">2008</option>
-                        <option value="2009">2009</option>
-                        <option value="2010">2010</option>
-                        <option value="2011">2011</option>
-                        <option value="2012">2012</option>
-                        <option value="2013">2013</option>
-                        <option value="2014">2014</option>
-                        <option value="2015">2015</option>
-                        <option value="2016">2016</option>
-                        <option value="2017">2017</option>
-                        <option value="2018">2018</option>
-                        <option value="2019">2019</option>
-                    </select>                   
-                </div>
-                <div class="custom-select" style="width:200px;">
-                    <select id="month">
-                        <!-- <option>Select Month</option> -->
-                        <option value="01">January</option>
-                        <option value="02">February</option>
-                        <option value="03">March</option>
-                        <option value="04">April</option>
-                        <option value="05">May</option>
-                        <option value="06">June</option>
-                        <option value="07">July</option>
-                        <option value="08">August</option>
-                        <option value="09">September</option>
-                        <option value="10">October</option>
-                        <option value="11">November</option>
-                        <option value="12">December</option>
-                    </select>
-                </div>
+                                    
+                                </div>
+                                <div class="col-sm">
+                                    <label for="month" class="col-sm-2 col-form-label"><b>Month</b></label>
+                                    <select class="form-control" id="month" style="width:200px;">
+                                        <option value="01">January</option>
+                                        <option value="02">February</option>
+                                        <option value="03">March</option>
+                                        <option value="04">April</option>
+                                        <option value="05">May</option>
+                                        <option value="06">June</option>
+                                        <option value="07">July</option>
+                                        <option value="08">August</option>
+                                        <option value="09">September</option>
+                                        <option value="10">October</option>
+                                        <option value="11">November</option>
+                                        <option value="12">December</option>
+                                    </select>                   
 
+                                    
+                                </div>
+                                <div class="col-sm">
+                                     <button type="submit" id="filter" class="btn btn-dark mt-4">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
+                </form>
 
                 <div class="box-body">
                     <div class="container-fluid">
                         <div class="row">
-                          
-                            <div class="col-sm-6">
-                                <div id="temps_div_in"></div>
-                                    <?= Lava::render('LineChart', 'TemperatureIn', 'temps_div_in') ?>  
+
+                            <div class="col-sm-6">    
+                                <h4><b>Temperatura Interna</b></h4>
+                                <canvas id="tempInt" height="280" width="600"></canvas>
                             </div>
                             
-                            
+                            <div class="col-sm-6">
+                                <h4><b>Temperatura Externa</b></h4>
+                                <canvas id="tempOut" height="280" width="600"></canvas>
+                            </div>
+                         </div>
 
-                        </div>
-                        <div class="row">
-                            <canvas id="myChart" height="280" width="600"></canvas>
+                        
+                        <div class="row">  
+                            <div class="col-sm-6">
+                            <h4><b>Humedad Interna</b></h4>    
+                                <canvas id="HumInt" height="280" width="600"></canvas>
+                            </div>
                             
+                            <div class="col-sm-6">
+                                <h4><b>Humedad Externa</b></h4>
+                                <canvas id="HumOut" height="280" width="600"></canvas>
+                            </div>
                         </div>
+
+                        <div class="row">
+                            <div class="col-sm-6">    
+                                <h4><b>Presion Relativa</b></h4>
+                                <canvas id="PresRel" height="280" width="600"></canvas>
+                            </div>
+                            
+                            <div class="col-sm-6">
+                                <h4><b>Presion Absoluta</b></h4>
+                                <canvas id="PresAbs" height="280" width="600"></canvas>
+                            </div>
+                        </div>
+
+                        
+                        <div class="row">  
+                            <div class="col-sm-6">    
+                                <h4><b>Sensacion termica</b></h4>
+                                <canvas id="SenTerm" height="280" width="600"></canvas>
+                            </div>
+                            
+                            <div class="col-sm-6">
+                                <h4><b>Velocidad viento</b></h4>
+                                <canvas id="VelocViento" height="280" width="600"></canvas>
+                            </div>
+                        </div>
+
+                        
                     </div>
                 </div>
             </div>
@@ -122,50 +167,357 @@
 
 jQuery(document).ready(function(){
 
-    jQuery("#station").change(function(){
+    jQuery("#filter").click(function(event){
+        event.preventDefault();
         var station_id = jQuery('#station').val();
             var agg = jQuery('#aggregation').val();
             var year = jQuery('#year').val();
             var month = jQuery('#month').val();
+    
             console.log(station_id, agg, year, month);
 
-            jQuery.ajax('{{ url('admin/dashboard/charts') }}', {
-            method: "POST",
-            data: {
-                station_id: station_id,
+            $.ajax({
+            url : '/admin/dashboard/charts',
+            type : 'POST',
+            data : {
+                station_id : station_id,
                 agg: agg,
-                year : year,
-                month : month,
-            }
-        }).done(function(res) {
+                year: year,
+                month: month,
+                year: year
+            },
             
+        }).done(function(response) {
+            var data = response.data;
+            var fecha = data.map(x => {
+                return x.fecha;
+            });
+
+            var max = data.map(x => {
+                return x.max_temperatura_interna;
+            });
+            
+            var min = data.map(x => {
+                return x.min_temperatura_interna;
+            });
+            var max_temp_ext = data.map(x => {
+                return x.max_temperatura_externa;
+            });
+            
+            var min_temp_ext= data.map(x => {
+                return x.min_temperatura_externa;
+            });
+            var max_hum_int = data.map(x => {
+                return x.max_humedad_interna;
+            });
+            
+            var min_hum_int= data.map(x => {
+                return x.min_humedad_interna;
+            });
+
+            var max_hum_ext = data.map(x => {
+                return x.max_humedad_externa;
+            });
+            
+            var min_hum_ext= data.map(x => {
+                return x.min_humedad_externa;
+            });
+
+            var max_pres_rel = data.map(x => {
+                return x.max_presion_relativa;
+            });
+            
+            var min_pres_rel= data.map(x => {
+                return x.min_presion_relativa;
+            });
+
+            var max_pres_abs = data.map(x => {
+                return x.max_presion_absoluta;
+            });
+            
+            var min_pres_abs= data.map(x => {
+                return x.min_presion_absoluta;
+            });
+
+            var max_sen_term = data.map(x => {
+                return x.max_sensacion_termica;
+            });
+            
+            var min_sen_term= data.map(x => {
+                return x.min_sensacion_termica;
+            });
+          
+            var max_veloc_viento = data.map(x => {
+                return x.max_velocidad_viento;
+            });
+            
+            var min_veloc_viento= data.map(x => {
+                return x.min_velocidad_viento;
+            });
+
+
+
+            
+            console.log(response);
+            //temperature inside 
+            var tempInt = document.getElementById('tempInt').getContext('2d');
+            var mixedChart = new Chart(tempInt, {
+                type: 'line',
+
+                data: {
+                    datasets: [{
+                        label: 'Max Temp In',
+                        data: max,
+                        borderColor: 'rgb(255, 99, 132)',
+                        options: {
+                                    title: {
+                                        display: true,
+                                        text: 'Custom Chart Title'
+                                    }
+                                }
+                        
+                    }, {
+                        label: 'Min Temp In',
+                        data: min,
+                        borderColor: 'rgb(54, 162, 235)',
+
+                        // Changes this dataset to become a line
+                        type: 'line'
+                    }],
+                    labels: fecha
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+                });
+            //temperature outside
+            var tempOut = document.getElementById('tempOut').getContext('2d');
+            var mixedChart = new Chart(tempOut, {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: 'Max Temp Out',
+                        data: max_temp_ext,
+                        borderColor: 'rgb(255, 99, 132)',
+                    }, {
+                        label: 'Min Temp Out',
+                        data: min_temp_ext,
+                        borderColor: 'rgb(54, 162, 235)',
+
+                        // Changes this dataset to become a line
+                        type: 'line'
+                    }],
+                    labels: fecha
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+                });
+
+            //humedad interna
+            var HumInt = document.getElementById('HumInt').getContext('2d');
+            var mixedChart = new Chart(HumInt, {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: 'Max Humedad In',
+                        data: max_hum_int,
+                        borderColor: 'rgb(255, 99, 132)'
+                    }, {
+                        label: 'Min Humedad In',
+                        data: min_hum_int,
+                        borderColor: 'rgb(54, 162, 235)',
+
+                        // Changes this dataset to become a line
+                        type: 'line'
+                    }],
+                    labels: fecha
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+                });
+
+
+            //humedad externa
+            var HumOut = document.getElementById('HumOut').getContext('2d');
+            var mixedChart = new Chart(HumOut, {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: 'Max Humedad Out',
+                        data: max_hum_ext,
+                        borderColor: 'rgb(255, 99, 132)'
+                    }, {
+                        label: 'Min Humedad Out',
+                        data: min_hum_ext,
+                        borderColor: 'rgb(54, 162, 235)',
+
+                        // Changes this dataset to become a line
+                        type: 'line'
+                    }],
+                    labels: fecha
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+                });
+
+            //presion relativa
+
+            var PresRel = document.getElementById('PresRel').getContext('2d');
+            var mixedChart = new Chart(PresRel, {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: 'Max Presion Relativa',
+                        data: max_pres_rel,
+                        borderColor: 'rgb(255, 99, 132)'
+                    }, {
+                        label: 'Min Presion Relativa',
+                        data: min_pres_rel,
+                        borderColor: 'rgb(54, 162, 235)',
+
+                        // Changes this dataset to become a line
+                        type: 'line'
+                    }],
+                    labels: fecha
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+                });
+
+
+            //presion absoluta
+
+            var PresAbs = document.getElementById('PresAbs').getContext('2d');
+            var mixedChart = new Chart(PresAbs, {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: 'Max Presion Absoluta',
+                        data: max_pres_abs,
+                        borderColor: 'rgb(255, 99, 132)'
+                    }, {
+                        label: 'Min Presion Absoluta',
+                        data: min_pres_abs,
+                        borderColor: 'rgb(54, 162, 235)',
+
+                        // Changes this dataset to become a line
+                        type: 'line'
+                    }],
+                    labels: fecha
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+                });
+            //Sensacion Termica
+            var SenTerm = document.getElementById('SenTerm').getContext('2d');
+            var mixedChart = new Chart(SenTerm, {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: 'Max Sensacion Termica',
+                        data: max_sen_term,
+                        borderColor: 'rgb(255, 99, 132)'
+                    }, {
+                        label: 'Min Sensacion Termica',
+                        data: min_sen_term,
+                        borderColor: 'rgb(54, 162, 235)',
+
+                        // Changes this dataset to become a line
+                        type: 'line'
+                    }],
+                    labels: fecha
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+                });
+            //Velocidad Viento 
+
+            var VelocViento = document.getElementById('VelocViento').getContext('2d');
+            var mixedChart = new Chart(VelocViento, {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: 'Max Velocidad Viento',
+                        data: max_veloc_viento,
+                        borderColor: 'rgb(255, 99, 132)'
+                    }, {
+                        label: 'Min Velocidad Viento',
+                        data: min_veloc_viento,
+                        borderColor: 'rgb(54, 162, 235)',
+
+                        // Changes this dataset to become a line
+                        type: 'line'
+                    }],
+                    labels: fecha
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+                });
+            
+            
+            });
+
+
+
         });
 
-    jQuery('#aggregation').change(function(){
-        
-            var value = jQuery('#station').val();
-            var agg = jQuery('#aggregation').val();
-            var year = jQuery('#year').val();
-            var month = jQuery('#month').val();
-            console.log(value, agg, year, month);
-        });
 
-    jQuery('#year').change(function(){
-        
-            var value = jQuery('#station').val();
-            var agg = jQuery('#aggregation').val();
-            var year = jQuery('#year').val();
-            var month = jQuery('#month').val();
-            console.log(value, agg, year, month);        
-        });
-
-    jQuery('#month').change(function(){
-            var value = jQuery('#station').val();
-            var agg = jQuery('#aggregation').val();
-            var year = jQuery('#year').val();
-            var month = jQuery('#month').val();
-            console.log(value, agg, year, month);
-        });
+    
 
 });
 

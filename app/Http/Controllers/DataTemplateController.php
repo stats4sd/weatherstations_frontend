@@ -287,7 +287,15 @@ class DataTemplateController extends Controller
     			 	'wind_samp' => $value->wind_samp,
     			 	'wind_tx' => $value->wind_tx,
     			 	'iss_recept' => $value->iss_recept,
-    			 	'id_station' => $value->id_station
+    			 	'id_station' => $value->id_station,
+    			 	'created_at' => $value->created_at,
+    			 	'updated_at' => $value->updated_at,
+    			 	'leaf_temp_1' => $value->leaf_temp_1,
+    			 	'leaf_temp_2' => $value->leaf_temp_2,
+    			 	'soil_temp_1' => $value->soil_temp_1,
+    			 	'soil_temp_2' => $value->soil_temp_2
+
+
     		]);
     	}
     	} catch(Exception $e) {
