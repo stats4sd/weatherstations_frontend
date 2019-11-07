@@ -14,6 +14,8 @@
 		 * @return {null}   Result of function is not returned - but the user is redirected to the download url once the file has been generated.
 		 */
       	function getFilter(e) {
+
+
       		var target = e.target;
 
       		target.disabled = true;
@@ -26,25 +28,27 @@
 				
 				'order':order,
 			}
-			$.ajax({
-				"url": "{{ url($crud->route . '/deleteByFilters') }}",
-				"method":"POST",
-				"data": postObj,
-				"success": function(result) {
-			
-					console.log("success");
-					location.reload();
-
-				},
-				"error": function(result){
+			if (confirm('¿Estás seguro de que deseas eliminar estos datos?')) {
+				$.ajax({
+					"url": "{{ url($crud->route . '/deleteByFilters') }}",
+					"method":"POST",
+					"data": postObj,
+					"success": function(result) {
 				
-					console.log("error");
-				},
-				"complete": function() {
-					target.disabled = false;
-					target.innerHTML = "<i class='fa fa-ban'></i> Data Deleted ";
-				}
-			})
+						console.log("success");
+						location.reload();
+
+					},
+					"error": function(result){
+					
+						console.log("error");
+					},
+					"complete": function() {
+						target.disabled = false;
+						target.innerHTML = "<i class='fa fa-ban'></i> Data Deleted ";
+					}
+				})
+			}
 		}
 	 
 	}

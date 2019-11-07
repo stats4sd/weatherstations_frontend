@@ -87,7 +87,7 @@
                                     
                                 </div>
                                 <div class="col-sm">
-                                     <button type="submit" id="filter" class="btn btn-dark mt-4">Submit</button>
+                                     <button type="submit" id="filter" class="btn btn-dark mt-4" checked>Submit</button>
                                 </div>
                             </div>
                         </div>
@@ -167,9 +167,14 @@
 
 jQuery(document).ready(function(){
 
+
     jQuery("#filter").click(function(event){
+
         event.preventDefault();
-        var station_id = jQuery('#station').val();
+        var target = event.target;
+        target.disabled = true;
+        target.innerHTML = `<div class="spinner-border spinner-border-sm"></div> Preparing...`;
+            var station_id = jQuery('#station').val();
             var agg = jQuery('#aggregation').val();
             var year = jQuery('#year').val();
             var month = jQuery('#month').val();
@@ -188,6 +193,8 @@ jQuery(document).ready(function(){
             },
             
         }).done(function(response) {
+            target.disabled = false;
+            target.innerHTML = " Submit ";
             var data = response.data;
             var fecha = data.map(x => {
                 return x.fecha;
@@ -257,8 +264,6 @@ jQuery(document).ready(function(){
 
 
 
-            
-            console.log(response);
             //temperature inside 
             var tempInt = document.getElementById('tempInt').getContext('2d');
             var mixedChart = new Chart(tempInt, {
