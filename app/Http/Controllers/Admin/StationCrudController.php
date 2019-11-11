@@ -51,11 +51,21 @@ class StationCrudController extends CrudController
                 'label' => 'Station',
                 'type' => 'text',
             ],
+            [
+                'name' => 'label',
+                'label' => 'Label',
+                'type' => 'text',
+            ],
         ]);
         $this->crud->addFields([
             [
                 'name' => 'stations',
                 'label' => 'Station',
+                'type' => 'text',
+            ],
+            [
+                'name' => 'label',
+                'label' => 'Label',
                 'type' => 'text',
             ]
         ]);

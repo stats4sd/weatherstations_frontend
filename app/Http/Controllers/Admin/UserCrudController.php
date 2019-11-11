@@ -40,52 +40,57 @@ class UserCrudController extends CrudController
         */
 
         // TODO: remove setFromDb() and manually define Fields and Columns
-        $this->crud->setFromDb();
-        $this->crud->setColumns([
-            [
-                'name' => 'name',
-                'label' => 'Name',
-                'type' => 'text',
-            ],
-            [
-                'name' => 'email',
-                'label' => 'Email',
-                'type' => 'email',
-            ],
-            [
-                'name' => 'type',
-                'label' => 'Type',
-                'type' => 'text',
-            ],
-            [
-                'name' => 'created_at',
-                'label' => 'Created at',
-                'type' => 'date',
-            ],
-        ]);
+        $this->crud->operation('list', function() {
+            $this->crud->setColumns([
+                [
+                    'name' => 'name',
+                    'label' => 'Name',
+                    'type' => 'text',
+                ],
+                [
+                    'name' => 'email',
+                    'label' => 'Email',
+                    'type' => 'email',
+                ],
+                [
+                    'name' => 'type',
+                    'label' => 'Type',
+                    'type' => 'text',
+                ],
+                [
+                    'name' => 'created_at',
+                    'label' => 'Created at',
+                    'type' => 'date',
+                ],
+            ]);
+       
+        });
+
+        $this->crud->operation(['create', 'update'], function() {
+
+            $this->crud->addFields([
+                [
+                    'name' => 'name',
+                    'label' => 'Name',
+                    'type' => 'text',
+                    'priority' => 1,
+                ],
+                [
+                    'name' => 'email',
+                    'label' => 'Email',
+                    'type' => 'email',
+                ],
+                [
+                    'name' => 'type',
+                    'label' => 'Type',
+                    'type' => 'select_from_array',
+                    'options' => ['default' => 'Default', 'admin' => 'Admin'],        
+                ],
+            ]);
+     
+        });
 
 
-        $this->crud->addFields([
-             [
-                'name' => 'name',
-                'label' => 'Name',
-                'type' => 'text',
-                'priority' => 1,
-            ],
-            [
-                'name' => 'email',
-                'label' => 'Email',
-                'type' => 'email',
-                
-            ],
-            [
-                'name' => 'type',
-                'label' => 'Type',
-                'type' => 'select_from_array',
-                'options' => ['default' => 'Default', 'admin' => 'Admin'],
-                
-            ],
-        ]);
         // add asterisk for fields that are required in UserRequest
         $this->crud->setRequiredFields(StoreRequest::class, 'create');
         $this->crud->setRequiredFields(UpdateRequest::class, 'edit');

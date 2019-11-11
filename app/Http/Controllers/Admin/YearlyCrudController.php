@@ -46,6 +46,17 @@ class YearlyCrudController extends CrudController
         // TODO: remove setFromDb() and manually define Fields and Columns
         $this->crud->operation('list', function(){
             $this->crud->addColumn('fecha')->makeFirstColumn();
+            $this->crud->addColumn([
+
+                'label' => 'Station',
+                'type' => 'select',
+                'name' => 'id_station',
+                'entity' => 'station',
+                'attribute' => 'label',
+                'model' => 'App\Models\Station',
+                'key' => 'updated_at'
+
+            ])->afterColumn('fecha');
             $this->crud->setFromDb();
         });
 
@@ -61,7 +72,7 @@ class YearlyCrudController extends CrudController
             'label' => 'Station',
         ],function(){
            
-            return Station::all()->pluck('stations', 'id')->toArray();;
+            return Station::all()->pluck('label', 'id')->toArray();;
 
         },function($value){
             $this->crud->addClause('where', 'id_station', $value);
@@ -73,14 +84,14 @@ class YearlyCrudController extends CrudController
             'type' => 'select2_multiple',
             'label' => 'Year',
         ],function(){
-           
-            return Yearly::all()->pluck('fecha', 'id')->toArray();
+           $years = Yearly::select('fecha')->orderBy('fecha')->pluck('fecha', 'fecha')->toArray();         
+            return $years;
 
         },function($values){
 
            foreach(json_decode($values) as $key => $value) {
 
-               $this->crud->addClause('orWhere', 'id', $value);
+               $this->crud->addClause('OrWhere', 'fecha', $value);
             }
 
         });
@@ -104,7 +115,7 @@ class YearlyCrudController extends CrudController
         $params = join(",",Session('yearly_params'));
         $query = '"'.$query.'"';
         $params = '"'.$params.'"';
-        $file_name = date('mdY')."yearly.csv";
+        $file_name = '"'.date('c')."yearly.csv".'"';
         $query = str_replace('`',' ',$query);
 
         //python script accepts 4 arguments in this order: base_path(), query, params and file name

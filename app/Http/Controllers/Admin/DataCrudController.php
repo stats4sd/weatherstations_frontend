@@ -44,9 +44,9 @@ class DataCrudController extends CrudController
     {
 
         /*
-        |--------------------------------------------------------------------------
+        |---------------------------------------------------------------------
         | CrudPanel Basic Information
-        |--------------------------------------------------------------------------
+        |---------------------------------------------------------------------
         */
        
         CRUD::setModel("App\Models\Data");
@@ -54,9 +54,9 @@ class DataCrudController extends CrudController
         CRUD::setEntityNameStrings('data', 'data');
 
         /*
-        |--------------------------------------------------------------------------
+        |---------------------------------------------------------------------
         | CrudPanel Configuration
-        |--------------------------------------------------------------------------
+        |---------------------------------------------------------------------
         */
 
 
@@ -68,7 +68,7 @@ class DataCrudController extends CrudController
         $this->crud->setRequiredFields(StoreRequest::class, 'create');
         $this->crud->setRequiredFields(UpdateRequest::class, 'edit');
  
-         $this->crud->operation('list', function() {
+        $this->crud->operation('list', function() {
        // your addColumn, addFilter, addButton calls here, for the List operation
             $this->crud->setColumns([
             [
@@ -76,7 +76,18 @@ class DataCrudController extends CrudController
                 'label' => 'Fecha hora',
                 'type' => 'datetime',
                 'format' => 'MM-DD-YYYY H:mm:s',
-            ]
+            ],
+            [
+                'label' => 'Station',
+                'type' => 'select',
+                'name' => 'id_station',
+                'entity' => 'station',
+                'attribute' => 'label',
+                'model' => 'App\Models\Station',
+                'key' => 'updated_at'
+
+            ],
+            
         ]);
              $this->crud->setFromDb();
         });
@@ -93,7 +104,7 @@ class DataCrudController extends CrudController
             'label' => 'Station',
         ],function(){
 
-            return Station::all()->pluck('stations', 'id')->toArray();
+            return Station::all()->pluck('label', 'id')->toArray();
 
 
         },function($value){
@@ -201,7 +212,8 @@ class DataCrudController extends CrudController
         $params = join(",",Session('params'));
         $query = '"'.$query.'"';
         $params = '"'.$params.'"';
-        $file_name = date('mdY')."data.csv";
+        $file_name = '"'.date('c')."data.csv".'"';
+        
         $query = str_replace('`',' ',$query);
 
         //python script accepts 4 arguments in this order: base_path(), query, params and file name

@@ -51,6 +51,17 @@ class MonthlyCrudController extends CrudController
         $this->crud->operation('list', function(){
             $this->crud->addColumn('year')->makeFirstColumn();
             $this->crud->addColumn('month')->afterColumn('year');
+            $this->crud->addColumn([
+
+                'label' => 'Station',
+                'type' => 'select',
+                'name' => 'id_station',
+                'entity' => 'station',
+                'attribute' => 'label',
+                'model' => 'App\Models\Station',
+                'key' => 'updated_at'
+
+            ])->afterColumn('fecha');
             
             $this->crud->setFromDb();
         });
@@ -64,7 +75,7 @@ class MonthlyCrudController extends CrudController
             'label' => 'Station',
         ],function(){
            
-            return Station::all()->pluck('stations', 'id')->toArray();;
+            return Station::all()->pluck('label', 'id')->toArray();
 
         },function($value){
             $this->crud->addClause('where', 'id_station', $value);
@@ -77,13 +88,13 @@ class MonthlyCrudController extends CrudController
             'label' => 'Years',
         ],function(){
 
-           return Yearly::all()->pluck('fecha', 'fecha')->toArray();
+           return Yearly::select('fecha')->orderBy('fecha')->pluck('fecha', 'fecha')->toArray();
 
         },function($values){
 
            foreach(json_decode($values) as $key => $value) {
-
-               $this->crud->addClause('OrWhere', 'year', $value);
+            
+               $this->crud->addClause('where', 'year', $value);
             }
 
         });
@@ -95,7 +106,6 @@ class MonthlyCrudController extends CrudController
         ],function(){
            
             return [
-
                 '01' => 'Enero',
                 '02' => 'Febrero',
                 '03' => 'Marzo',
@@ -114,7 +124,7 @@ class MonthlyCrudController extends CrudController
 
            foreach(json_decode($values) as $key => $value) {
 
-               $this->crud->addClause('OrWhere', 'month', $value);
+               $this->crud->addClause('orWhere', 'month', $value);
             }
 
         });
@@ -147,7 +157,7 @@ class MonthlyCrudController extends CrudController
         $params = join(",",Session('monthly_params'));
         $query = '"'.$query.'"';
         $params = '"'.$params.'"';
-        $file_name = date('mdY')."monthly.csv";
+        $file_name = '"'.date('c')."monthly.csv".'"';
         $query = str_replace('`',' ',$query);
 
         //python script accepts 4 arguments in this order: base_path(), query, params and file name

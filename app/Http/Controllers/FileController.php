@@ -42,7 +42,9 @@ class FileController extends Controller
      */
     public function store(Request $request)
     {
-        set_time_limit(0);
+        ini_set('memory_limit', '2048M');
+        ini_set('post_max_size', '2048M');
+        ini_set('upload_max_filesize', '2048M');
 
         // Retrieve file from POST request
         //sends units type to DataTemplate
@@ -66,8 +68,6 @@ class FileController extends Controller
                 $newFile->name = $name;
                 $newFile->station_id = $station;
                 #$newFile->save();
-      
-
                 $scriptName = 'uploadDatapreview.py';
                 $scriptPath = base_path() . '/scripts/' . $scriptName;
                 $path_name = Storage::path("/").$path;

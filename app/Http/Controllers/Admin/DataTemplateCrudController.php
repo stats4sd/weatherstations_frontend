@@ -41,18 +41,7 @@ class DataTemplateCrudController extends CrudController
         */
 
         // TODO: remove setFromDb() and manually define Fields and Columns
-        // $this->crud->addColumn('fecha_hora')->makeFirstColumn();
-        // $this->crud->addColumn('temperatura_externa')->afterColumn('fecha_hora');
-        // $this->crud->addColumn('temperatura_interna')->afterColumn('temperatura_externa');
         
-        
-        // $this->crud->addColumn('presion_relativa')->afterColumn('temperatura_interna');
-        // $this->crud->addColumn('velocidad_viento')->afterColumn('presion_absoluta');
-        // $this->crud->addColumn('lluvia_hora')->afterColumn('velocidad_viento');
-        // $this->crud->addColumn('rain')->afterColumn('lluvia_hora');
-       
-
-        // add asterisk for fields that are required in DataTemplateRequest
        
         $this->crud->enableExportButtons();
  

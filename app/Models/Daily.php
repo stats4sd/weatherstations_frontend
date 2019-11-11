@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Station;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use LaravelTreats\Model\Traits\HasCompositePrimaryKey;
@@ -36,6 +37,10 @@ class Daily extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+    public function station ()
+    {
+        return $this->belongsTo(Station::class,'id_station');
+    }
 
     /*
     |--------------------------------------------------------------------------

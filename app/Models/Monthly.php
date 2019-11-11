@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Station;
 use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 
@@ -34,7 +35,10 @@ class Monthly extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-
+    public function station()
+    {
+        return $this->belongsTo(Station::class, 'id_station');
+    }
     /*
     |--------------------------------------------------------------------------
     | SCOPES

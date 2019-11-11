@@ -48,7 +48,19 @@ class DailyCrudController extends CrudController
         $this->crud->operation('list', function(){
             $this->crud->orderBy('fecha');
             $this->crud->addColumn('fecha')->makeFirstColumn();
+            $this->crud->addColumn([
+
+                'label' => 'Station',
+                'type' => 'select',
+                'name' => 'id_station',
+                'entity' => 'station',
+                'attribute' => 'label',
+                'model' => 'App\Models\Station',
+                'key' => 'updated_at'
+
+            ])->afterColumn('fecha');
             $this->crud->setFromDb();
+
         });
         
 
@@ -61,7 +73,7 @@ class DailyCrudController extends CrudController
             'label' => 'Station',
         ],function(){
            
-            return Station::all()->pluck('stations', 'id')->toArray();;
+            return Station::all()->pluck('label', 'id')->toArray();;
 
         },function($value){
             $this->crud->addClause('where', 'id_station', $value);
@@ -108,7 +120,7 @@ class DailyCrudController extends CrudController
         $params = join(",",Session('daily_params'));
         $query = '"'.$query.'"';
         $params = '"'.$params.'"';
-        $file_name = date('mdY')."daily.csv";
+        $file_name = '"'.date('c')."daily.csv".'"';
         $query = str_replace('`',' ',$query);
 
         

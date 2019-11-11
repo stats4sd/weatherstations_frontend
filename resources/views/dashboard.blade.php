@@ -20,33 +20,32 @@
             <div class="box">
                 <div class="box-header with-border">
                     <div class="box-title">
-                        <label>Daily Aggregation Charts</label>
+                        <label></label>
                     
                     </div>
                 </div>
-                <form method="post">
+                <div class="card">
+                    <h5 class="card-header">Chart filters</h5>
+                    <div class="card-body">
+                        <form method="post">
                     @csrf
 
                     <div class="form-group">
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="col-sm">
-                                    <label for="station" class="col-sm-2 col-form-label"><b>Station</b></label>
+                                    <label for="station" ><b>Select station</b></label>
                                     
                                         <select class="form-control" id="station" style="width:200px;">
-                                            <option value="1">Chojñapata</option>
-                                            <option value="2">Chinchaya China</option>
-                                            <option value="3">Chinchaya Davis</option>
-                                            <option value="4">Calahuancane</option>
-                                            <option value="5">Cutusuma</option>
-                                            <option value="6">Iñacamaya</option>
-                                            <option value="7">Incamya</option>
+                                            @foreach($stations as $station)
+                                            <option value={{$station->id}}>{{$station->label}}</option>
+                                            @endforeach
                                         </select>  
                                   
                                 </div>
                                 <div class="col-sm">
                                     
-                                    <label for="aggregation" class="col-sm-2 col-form-label"><b>Aggregation</b></label>
+                                    <label for="aggregation"><b>Select aggregation level</b></label>
                                     
                                     <select class="form-control" id="aggregation" style="width:200px;">
                                         <option value="daily">Daily</option>
@@ -56,7 +55,7 @@
                                     </select>   
                                 </div>
                                 <div class="col-sm">
-                                    <label for="year" class="col-sm-2 col-form-label"><b>Year</b></label>
+                                    <label for="year"><b>Select year</b></label>
                                     <select class="form-control" id="year" style="width:200px;">
                                         @foreach($years as $year)
 
@@ -68,7 +67,7 @@
                                     
                                 </div>
                                 <div class="col-sm">
-                                    <label for="month" class="col-sm-2 col-form-label"><b>Month</b></label>
+                                    <label for="month"><b>Select month</b></label>
                                     <select class="form-control" id="month" style="width:200px;">
                                         <option value="01">January</option>
                                         <option value="02">February</option>
@@ -87,14 +86,14 @@
                                     
                                 </div>
                                 <div class="col-sm">
-                                     <button type="submit" id="filter" class="btn btn-dark mt-4" checked>Submit</button>
+                                     <button type="submit" id="filter" class="btn btn-dark mt-4" checked>Generate Charts</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                </form>
-
+                        </form>
+                    </div>
+                </div>
                 <div class="box-body">
                     <div class="container-fluid">
                         <div class="row">
@@ -125,12 +124,12 @@
 
                         <div class="row">
                             <div class="col-sm-6">    
-                                <h4><b>Presion Relativa</b></h4>
+                                <h4><b>Presión Relativa</b></h4>
                                 <canvas id="PresRel" height="280" width="600"></canvas>
                             </div>
                             
                             <div class="col-sm-6">
-                                <h4><b>Presion Absoluta</b></h4>
+                                <h4><b>Presión Absoluta</b></h4>
                                 <canvas id="PresAbs" height="280" width="600"></canvas>
                             </div>
                         </div>
@@ -138,7 +137,7 @@
                         
                         <div class="row">  
                             <div class="col-sm-6">    
-                                <h4><b>Sensacion termica</b></h4>
+                                <h4><b>Sensación térmica</b></h4>
                                 <canvas id="SenTerm" height="280" width="600"></canvas>
                             </div>
                             
@@ -163,10 +162,8 @@
 @section('after_scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 <script type="text/javascript">
-    
 
 jQuery(document).ready(function(){
-
 
     jQuery("#filter").click(function(event){
 
@@ -194,7 +191,7 @@ jQuery(document).ready(function(){
             
         }).done(function(response) {
             target.disabled = false;
-            target.innerHTML = " Submit ";
+            target.innerHTML = " Generate Charts ";
             var data = response.data;
             var fecha = data.map(x => {
                 return x.fecha;

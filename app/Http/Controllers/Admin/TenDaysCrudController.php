@@ -49,6 +49,17 @@ class TenDaysCrudController extends CrudController
             $this->crud->removeColumn('group_by');
             $this->crud->addColumn('max_fecha')->makeFirstColumn();
             $this->crud->addColumn('min_fecha')->afterColumn('max_fecha');
+            $this->crud->addColumn([
+
+                'label' => 'Station',
+                'type' => 'select',
+                'name' => 'id_station',
+                'entity' => 'station',
+                'attribute' => 'label',
+                'model' => 'App\Models\Station',
+                'key' => 'updated_at'
+                
+            ])->afterColumn('fecha');
             $this->crud->setFromDb();
 
         });
@@ -64,7 +75,7 @@ class TenDaysCrudController extends CrudController
             'label' => 'Station',
         ],function(){
            
-            return Station::all()->pluck('stations', 'id')->toArray();;
+            return Station::all()->pluck('label', 'id')->toArray();;
 
         },function($value){
             $this->crud->addClause('where', 'id_station', $value);
@@ -111,8 +122,8 @@ class TenDaysCrudController extends CrudController
         $params = join(",",Session('tendays_params'));
         $query = '"'.$query.'"';
         $params = '"'.$params.'"';
-        $file_name = date('mdY')."tendays.csv";
-         $query = str_replace('`',' ',$query);
+        $file_name = '"'.date('c')."tendays.csv".'"';
+        $query = str_replace('`',' ',$query);
 
         //python script accepts 4 arguments in this order: base_path(), query, params and file name
         Log::info($query);
