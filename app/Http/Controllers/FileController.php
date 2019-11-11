@@ -45,12 +45,18 @@ class FileController extends Controller
 
         // Retrieve file from POST request
         //sends units type to DataTemplate
-        dd($request);
+
+        $file_size = $request->file('data-file')->getSize();
+      
+        $validator = $request->validate([
+            'data-file' => 'required|max:8388608',
+        ]);
+        // dd($request->server('CONTENT_LENGTH'));
         Session::put('temp_unit', $_POST['temp_unit']);
         Session::put('pression_unit', $_POST['pression_unit']);
         Session::put('veloc_viento_unit', $_POST['veloc_viento_unit']);
         Session::put('precip_unit', $_POST['precip_unit']);
-
+        #dd($request);
         $station = $_POST['weatherstation'];
         
             if($request->hasFile('data-file')){
@@ -94,7 +100,7 @@ class FileController extends Controller
                 return Redirect::to('admin/dataTemplate');
 
             }
-            // \Alert::error("<h4>El archivo no fue seleccionado</h4>")->flash();
+            \Alert::error("<h4>El archivo no fue seleccionado</h4>")->flash();
 
             return Redirect::back();
 

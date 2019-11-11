@@ -213,7 +213,6 @@ class DataCrudController extends CrudController
         $query = '"'.$query.'"';
         $params = '"'.$params.'"';
         $file_name = '"'.date('c')."data.csv".'"';
-        
         $query = str_replace('`',' ',$query);
 
         //python script accepts 4 arguments in this order: base_path(), query, params and file name
