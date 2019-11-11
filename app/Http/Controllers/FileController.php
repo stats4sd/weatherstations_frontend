@@ -42,10 +42,10 @@ class FileController extends Controller
      */
     public function store(Request $request)
     {
-        
 
         // Retrieve file from POST request
         //sends units type to DataTemplate
+        dd($request);
         Session::put('temp_unit', $_POST['temp_unit']);
         Session::put('pression_unit', $_POST['pression_unit']);
         Session::put('veloc_viento_unit', $_POST['veloc_viento_unit']);
@@ -94,7 +94,7 @@ class FileController extends Controller
                 return Redirect::to('admin/dataTemplate');
 
             }
-            \Alert::error("<h4>El archivo no fue seleccionado</h4>")->flash();
+            // \Alert::error("<h4>El archivo no fue seleccionado</h4>")->flash();
 
             return Redirect::back();
 
