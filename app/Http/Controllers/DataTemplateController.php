@@ -139,7 +139,7 @@ class DataTemplateController extends Controller
 		$pression_unit = Session::get('pression_unit');
 		$data_template = DB::select('select fecha_hora, id_station, presion_relativa, presion_absoluta from data_template');
 
-			if($pression_unit!="hpa")
+			if($pression_unit!="e")
 			{
 				foreach ($data_template as $value) 
 				{
@@ -169,12 +169,13 @@ class DataTemplateController extends Controller
 
 	public function convertDataFtoC()
 	{
-		// set_time_limit(0);
+		set_time_limit(0);
 		$temp_unit = Session::get('temp_unit');
 		
-		if($temp_unit=='F')
+		if($temp_unit=='C')
 		{
-			$data_template = DataTemplate::select('select fecha_hora, id_station, temperatura_interna, temperatura_externa, sensacion_termica, punto_rocio, wind_chill, hi_temp, low_temp from data_template');
+			$data_template = DB::select('select fecha_hora, id_station, temperatura_interna, temperatura_externa, sensacion_termica, punto_rocio, wind_chill, hi_temp, low_temp from data_template');
+			
 			foreach ($data_template as $value) 
 			{
 				$temp_interna_round = $this->convertFahrenheitToCelsius($value->temperatura_interna);
@@ -191,7 +192,8 @@ class DataTemplateController extends Controller
 
 				$low_temp_round = $this->convertFahrenheitToCelsius($value->low_temp);
 
-					DataTemplate::where('fecha_hora','=', $value->fecha_hora)
+					DB::table('data_template')
+							->where('fecha_hora','=', $value->fecha_hora)
 							->where('id_station', '=',$value->id_station)
 							->update(
 						[
