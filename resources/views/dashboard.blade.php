@@ -176,7 +176,7 @@ jQuery(document).ready(function(){
             var year = jQuery('#year').val();
             var month = jQuery('#month').val();
     
-            console.log(station_id, agg, year, month);
+            $(this).css('color', 'red');
 
             $.ajax({
             url : '/admin/dashboard/charts',

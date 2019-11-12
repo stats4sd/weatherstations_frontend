@@ -231,8 +231,7 @@ class DataTemplateController extends Controller
 
     	$data_template = DB::select('select * from data_template');
     	$scriptPath = base_path() . '/scripts/storeData.py';
-    	
-		set_time_limit(0);
+    
 		
 		try {
 
@@ -248,7 +247,6 @@ class DataTemplateController extends Controller
 
     	}	finally {
 
-  			DB::table('data_template')->delete();
   			\Alert::success('Los datos han sido ingresados ​​exitosamente.')->flash();
 
 		}	
