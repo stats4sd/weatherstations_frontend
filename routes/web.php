@@ -21,7 +21,6 @@ Route::get('', function () {
 });
 
 
-
 Route::resource('files','FileController');
 Route::resource('stations', 'StationController');
 Route::resource('datas','DataController');

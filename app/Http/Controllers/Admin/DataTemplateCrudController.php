@@ -51,7 +51,11 @@ class DataTemplateCrudController extends CrudController
         $this->crud->addButtonFromView('top','convertDataInchToMmButton', 'convertDataInchToMmButton', 'end');
         $this->crud->addButtonFromView('top','storeFileButton', 'storeFileButton', 'end');
         $this->crud->addButtonFromView('top', 'cleanTableButton', 'cleanTableButton', 'end' );
-        $this->crud->setFromDb();
+
+        $this->crud->operation('list', function() {
+            $this->crud->addColumn('fecha_hora')->makeFirstColumn();
+            $this->crud->setFromDb();
+        });
         //Filter
         $this->crud->addFilter([
             'name' => 'id_station',
