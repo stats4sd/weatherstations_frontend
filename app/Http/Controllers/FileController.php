@@ -50,7 +50,7 @@ class FileController extends Controller
         Session::put('pression_unit', $_POST['pression_unit']);
         Session::put('veloc_viento_unit', $_POST['veloc_viento_unit']);
         Session::put('precip_unit', $_POST['precip_unit']);
-        #dd($request);
+        
         $station = $_POST['weatherstation'];
         
             if($request->hasFile('data-file')){
@@ -60,7 +60,6 @@ class FileController extends Controller
                 $file_name = replace(" ", "_", $file->getClientOriginalName());
                 $name = time() . '_' . $file_name;
                 $path = $file->storeAs('rawfiles',$name);
-
                 $newFile = new File;
                 $newFile->path = $path;
                 $newFile->name = $name;
