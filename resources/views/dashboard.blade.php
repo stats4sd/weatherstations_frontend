@@ -162,7 +162,25 @@
 @section('after_scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 <script type="text/javascript">
+jQuery(document).ready(function(){
+    jQuery("#aggregation").change(function(event){
 
+        var agg = jQuery('#aggregation').val();
+    
+        if(agg=='ten_days' || agg=='monthly'){
+                $("#month").attr('disabled','disabled');
+               
+        }else if(agg=='yearly'){
+            $("#month").attr('disabled','disabled');
+            $("#year").attr('disabled','disabled');
+            
+        }else {
+             $("#month").removeAttr('disabled');
+            $("#year").removeAttr('disabled');
+        }
+
+    });
+});
 jQuery(document).ready(function(){
 
     jQuery("#filter").click(function(event){
@@ -175,10 +193,6 @@ jQuery(document).ready(function(){
             var agg = jQuery('#aggregation').val();
             var year = jQuery('#year').val();
             var month = jQuery('#month').val();
-            
-            // var station_name = $('#station').find(":selected");
-            var conceptName = $('#station').find(":selected").css("font-weight", 'bold');
-            // console.log(station_name);
 
             $.ajax({
             url : '/admin/dashboard/charts',

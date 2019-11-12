@@ -64,7 +64,7 @@ class FileController extends Controller
                 $newFile->path = $path;
                 $newFile->name = $name;
                 $newFile->station_id = $station;
-                #$newFile->save();
+                $newFile->save();
                 $scriptName = 'uploadDatapreview.py';
                 $scriptPath = base_path() . '/scripts/' . $scriptName;
                 $path_name = Storage::path("/").$path;
