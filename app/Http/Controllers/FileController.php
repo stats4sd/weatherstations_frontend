@@ -57,15 +57,15 @@ class FileController extends Controller
             
                 // handle file and store it for prosperity
                 $file = $request->file('data-file');
-             
-                $name = time() . '_' . $file->getClientOriginalName();
+                $file_name = replace(" ", "_", $file->getClientOriginalName());
+                $name = time() . '_' . $file_name;
                 $path = $file->storeAs('rawfiles',$name);
 
                 $newFile = new File;
                 $newFile->path = $path;
                 $newFile->name = $name;
                 $newFile->station_id = $station;
-                #$newFile->save();
+                $newFile->save();
                 $scriptName = 'uploadDatapreview.py';
                 $scriptPath = base_path() . '/scripts/' . $scriptName;
                 $path_name = Storage::path("/").$path;

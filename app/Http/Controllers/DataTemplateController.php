@@ -230,74 +230,16 @@ class DataTemplateController extends Controller
     {
 
     	$data_template = DB::select('select * from data_template');
+    	$scriptPath = base_path() . '/scripts/storeData.py';
     	
 		set_time_limit(0);
 		
 		try {
-    	foreach ($data_template as $value) {
 
-    		DB::table('data')->insert(
-    			[ 	
-    				'fecha_hora'=> $value->fecha_hora, 
-    			 	'intervalo' => $value->intervalo,
-    			 	'temperatura_interna' => $value->temperatura_interna,
-    			 	'humedad_interna' => $value->humedad_interna,
-    			 	'temperatura_externa' => $value->temperatura_externa,
-    			 	'humedad_externa' => $value->humedad_externa,
-    			 	'presion_relativa' => $value->presion_relativa,
-    			 	'presion_absoluta' => $value->presion_absoluta,
-    			 	'velocidad_viento' => $value->velocidad_viento,
-    			 	'sensacion_termica' => $value->sensacion_termica,
-    			 	'rafaga' => $value->rafaga,
-    			 	'direccion_del_viento' => $value->rafaga,
-    			 	'punto_rocio' => $value->rafaga,
-    			 	'lluvia_hora' => $value->lluvia_hora,
-    			 	'lluvia_24_horas' => $value->lluvia_24_horas,
-    			 	'lluvia_semana' => $value->lluvia_semana,
-    			 	'lluvia_mes' => $value->lluvia_mes,
-    			 	'lluvia_total' => $value->lluvia_total,
-    			 	'hi_temp' => $value->hi_temp,
-    			 	'low_temp' => $value->low_temp,
-    			 	'wind_cod' => $value->wind_cod,
-    			 	'wind_run' => $value->wind_run,
-    			 	'hi_speed' => $value->hi_speed,
-    			 	'hi_dir' => $value->hi_dir,
-    			 	'wind_cod_dom' => $value->wind_cod_dom,
-    			 	'wind_chill' => $value->wind_chill,
-    			 	'index_heat' => $value->index_heat,
-    			 	'index_thw' => $value->index_thw,
-    			 	'index_thsw' => $value->index_thsw,
-    			 	'rain' => $value->rain,
-    			 	'solar_rad' => $value->solar_rad,
-    			 	'solar_energy' => $value->solar_energy,
-    			 	'radsolar_max' => $value->radsolar_max,
-    			 	'uv_index' => $value->uv_index,
-    			 	'uv_dose' => $value->uv_dose,
-    			 	'uv_max' => $value->uv_max,
-    			 	'heat_days_d' => $value->heat_days_d,
-    			 	'cool_days_d' => $value->cool_days_d,
-    			 	'in_dew' => $value->in_dew,
-    			 	'in_heat' => $value->in_heat,
-    			 	'in_emc' => $value->in_emc,
-    			 	'in_air_density' => $value->in_air_density,
-    			 	'evapotran' => $value->evapotran,
-    			 	'soil_1_moist' => $value->soil_1_moist,
-    			 	'soil_2_moist' => $value->soil_2_moist,
-    			 	'leaf_wet1' => $value->leaf_wet1,
-    			 	'wind_samp' => $value->wind_samp,
-    			 	'wind_tx' => $value->wind_tx,
-    			 	'iss_recept' => $value->iss_recept,
-    			 	'id_station' => $value->id_station,
-    			 	'created_at' => $value->created_at,
-    			 	'updated_at' => $value->updated_at,
-    			 	'leaf_temp_1' => $value->leaf_temp_1,
-    			 	'leaf_temp_2' => $value->leaf_temp_2,
-    			 	'soil_temp_1' => $value->soil_temp_1,
-    			 	'soil_temp_2' => $value->soil_temp_2
+		$process = new Process("python3.7 {$scriptPath}");
 
-
-    		]);
-    	}
+        $process->run();
+    	
     	} catch(Exception $e) {
 
            $message = $e->getMessage();
