@@ -46,12 +46,6 @@ class FileController extends Controller
         // Retrieve file from POST request
         //sends units type to DataTemplate
 
-        $file_size = $request->file('data-file')->getSize();
-      
-        $validator = $request->validate([
-            'data-file' => 'required|max:8388608',
-        ]);
-        // dd($request->server('CONTENT_LENGTH'));
         Session::put('temp_unit', $_POST['temp_unit']);
         Session::put('pression_unit', $_POST['pression_unit']);
         Session::put('veloc_viento_unit', $_POST['veloc_viento_unit']);
@@ -81,7 +75,7 @@ class FileController extends Controller
         
         //python script accepts 3 arguments in this order: scriptPath, path_name, station_id
 
-        $process = new Process("python3.7 {$scriptPath} {$path_name} {$station}");
+        $process = new Process("python3.7 {$scriptPath} {$path_name} {$station}")->delay(now()->addSeconds(30));
 
         $process->run();
         
