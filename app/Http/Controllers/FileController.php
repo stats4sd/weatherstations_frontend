@@ -50,14 +50,14 @@ class FileController extends Controller
         Session::put('pression_unit', $_POST['pression_unit']);
         Session::put('veloc_viento_unit', $_POST['veloc_viento_unit']);
         Session::put('precip_unit', $_POST['precip_unit']);
-        
+
         $station = $_POST['weatherstation'];
         
             if($request->hasFile('data-file')){
             
                 // handle file and store it for prosperity
                 $file = $request->file('data-file');
-                $file_name = replace(" ", "_", $file->getClientOriginalName());
+                $file_name = str_replace(" ", "_", $file->getClientOriginalName());
                 $name = time() . '_' . $file_name;
                 $path = $file->storeAs('rawfiles',$name);
                 $newFile = new File;
