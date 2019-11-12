@@ -91,7 +91,7 @@ class YearlyCrudController extends CrudController
 
            foreach(json_decode($values) as $key => $value) {
 
-               $this->crud->addClause('OrWhere', 'fecha', $value);
+               $this->crud->addClause('orWhere', 'fecha', $value);
             }
 
         });

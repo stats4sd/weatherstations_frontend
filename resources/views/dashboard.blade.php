@@ -38,7 +38,7 @@
                                     
                                         <select class="form-control" id="station" style="width:200px;">
                                             @foreach($stations as $station)
-                                            <option value={{$station->id}}>{{$station->label}}</option>
+                                            <option class = "active" value={{$station->id}}>{{$station->label}}</option>
                                             @endforeach
                                         </select>  
                                   
@@ -175,8 +175,10 @@ jQuery(document).ready(function(){
             var agg = jQuery('#aggregation').val();
             var year = jQuery('#year').val();
             var month = jQuery('#month').val();
-    
-            $(this).css('color', 'red');
+            
+            // var station_name = $('#station').find(":selected");
+            var conceptName = $('#station').find(":selected").css("font-weight", 'bold');
+            // console.log(station_name);
 
             $.ajax({
             url : '/admin/dashboard/charts',
