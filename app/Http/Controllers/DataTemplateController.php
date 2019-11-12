@@ -139,7 +139,7 @@ class DataTemplateController extends Controller
 		$pression_unit = Session::get('pression_unit');
 		$data_template = DB::select('select fecha_hora, id_station, presion_relativa, presion_absoluta from data_template');
 
-			if($pression_unit!="e")
+			if($pression_unit!="hpa")
 			{
 				foreach ($data_template as $value) 
 				{
@@ -172,7 +172,7 @@ class DataTemplateController extends Controller
 		set_time_limit(0);
 		$temp_unit = Session::get('temp_unit');
 		
-		if($temp_unit=='C')
+		if($temp_unit=='F')
 		{
 			$data_template = DB::select('select fecha_hora, id_station, temperatura_interna, temperatura_externa, sensacion_termica, punto_rocio, wind_chill, hi_temp, low_temp from data_template');
 			
