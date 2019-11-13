@@ -9,7 +9,6 @@ use LaravelTreats\Model\Traits\HasCompositePrimaryKey;
 class DataTemplate extends Model
 {
     use CrudTrait;
-    use HasCompositePrimaryKey;
 
     /*
     |--------------------------------------------------------------------------

@@ -3,10 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 
-use App\Exports\DataExport;
 use App\Http\Requests\DataRequest as StoreRequest;
 use App\Http\Requests\DataRequest as UpdateRequest;
-use App\Jobs\ProcessDataExport;
 use App\Models\Data;
 use App\Models\Station;
 use Backpack\CRUD\CrudPanel;
@@ -21,7 +19,6 @@ use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use League\Flysystem\Exception;
-use Maatwebsite\Excel\Facades\Excel;
 use Prologue\Alerts\Facades\Alert;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
