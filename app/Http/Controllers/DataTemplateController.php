@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Alert;
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use App\Models\DataTemplate;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 use Exception;
+use Illuminate\Support\Facades\Log;
 
 class DataTemplateController extends Controller
 {
@@ -243,6 +245,7 @@ class DataTemplateController extends Controller
         if(!$process->isSuccessful()) {
             
            throw new ProcessFailedException($process);
+           \Alert::error('Los datos no se pueden guardar en la base de datos. Recomendamos verificar si hay duplicados')->flash();
         
         } else {
             
@@ -252,15 +255,7 @@ class DataTemplateController extends Controller
         Log::info("python done.");
         Log::info($process->getOutput());
 
-           
-     
-        
 
-    	
-
-
-			
- 	
     	return Redirect::back();
 
     }

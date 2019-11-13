@@ -70,7 +70,7 @@ class DataCrudController extends CrudController
  
         $this->crud->operation('list', function() {
        // your addColumn, addFilter, addButton calls here, for the List operation
-            $this->crud->setColumns([
+            $this->crud->setColumns([  
             [
                 'name' => 'fecha_hora',
                 'label' => 'Fecha hora',

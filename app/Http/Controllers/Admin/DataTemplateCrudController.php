@@ -8,6 +8,8 @@ use App\Http\Requests\DataTemplateRequest as UpdateRequest;
 use App\Models\Station;
 use Backpack\CRUD\CrudPanel;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
+
 
 /**
  * Class DataTemplateCrudController
@@ -17,9 +19,10 @@ use Backpack\CRUD\app\Http\Controllers\CrudController;
 class DataTemplateCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
-    #use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation { store as traitStore; }
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation { update as traitUpdate; }
-    use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation { destroy as traitDestroy; }
+    use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+   
     
 
     public function setup()
@@ -52,10 +55,23 @@ class DataTemplateCrudController extends CrudController
         $this->crud->addButtonFromView('top','storeFileButton', 'storeFileButton', 'end');
         $this->crud->addButtonFromView('top', 'cleanTableButton', 'cleanTableButton', 'end' );
 
+          // add asterisk for fields that are required in DataRequest
+        $this->crud->setRequiredFields(StoreRequest::class, 'create');
+        $this->crud->setRequiredFields(UpdateRequest::class, 'edit');
+
         $this->crud->operation('list', function() {
             $this->crud->addColumn('fecha_hora')->makeFirstColumn();
             $this->crud->setFromDb();
         });
+
+
+        $this->crud->operation(['create', 'update'], function() {
+
+            $this->crud->setFromDb();
+     
+        });
+
+
         //Filter
         $this->crud->addFilter([
             'name' => 'id_station',
@@ -90,6 +106,8 @@ class DataTemplateCrudController extends CrudController
            $this->crud->addClause('where', 'fecha_hora', '>=', $dates->from);
            $this->crud->addClause('where', 'fecha_hora', '<=', $dates->to . ' 23:59:59');
         });
+    
+
     }
 
     protected function setupCreateOperation()

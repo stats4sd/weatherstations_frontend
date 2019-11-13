@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
-use \LaravelTreats\Model\Traits\HasCompositePrimaryKey;
+use LaravelTreats\Model\Traits\HasCompositePrimaryKey;
 
 class DataTemplate extends Model
 {

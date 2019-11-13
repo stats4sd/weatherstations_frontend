@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-
-//use App\Data;
 use App\Models\Data;
 use Backpack\NewsCRUD\app\Models\Data;
 use DB;
@@ -19,11 +17,6 @@ class DataController extends Controller
     public function index()
     {
 
-        $datas = Data::orderby('id_station','asc')->get();
-        //return Data::where('id_station','1')->get();
-
-        //$datas = DB::select('SELECT * FROM data');
-        return Data::all();
     }
 
     /**
