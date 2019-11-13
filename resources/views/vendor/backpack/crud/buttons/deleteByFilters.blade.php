@@ -45,10 +45,13 @@
 					},
 					"complete": function() {
 						target.disabled = false;
-						target.innerHTML = "<i class='fa fa-ban'></i> Data Deleted ";
+						target.innerHTML = "<i class='fa fa-trash-o'></i> Data Deleted ";
 					}
 				})
-			}
+			} else{
+				target.disabled = false;
+				target.innerHTML = "<i class='fa fa-trash-o'></i> delete by filters ";
+			} 
 		}
 	 
 	}

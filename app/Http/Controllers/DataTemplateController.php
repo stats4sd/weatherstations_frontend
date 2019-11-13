@@ -234,23 +234,32 @@ class DataTemplateController extends Controller
     	$scriptPath = base_path() . '/scripts/storeData.py';
     
 		
-		try {
-
+		
 		$process = new Process("python3.7 {$scriptPath}");
 
         $process->run();
     	
-    	} catch(Exception $e) {
-
-           $message = $e->getMessage();
-     
-        	\Alert::error("".substr($message, 0, 112)."")->flash();
-
-    	}	finally {
-
+    	
+        if(!$process->isSuccessful()) {
+            
+           throw new ProcessFailedException($process);
+        
+        } else {
+            
+            $process->getOutput();
   			\Alert::success('Los datos han sido ingresados ​​exitosamente.')->flash();
+        }
+        Log::info("python done.");
+        Log::info($process->getOutput());
 
-		}	
+           
+     
+        
+
+    	
+
+
+			
  	
     	return Redirect::back();
 
