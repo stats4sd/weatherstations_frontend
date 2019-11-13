@@ -2,11 +2,26 @@
 
 namespace App\Http\Controllers\Admin;
 
+
 use App\Http\Requests\DataRequest as StoreRequest;
 use App\Http\Requests\DataRequest as UpdateRequest;
+use App\Models\Data;
 use App\Models\Station;
 use Backpack\CRUD\CrudPanel;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
+use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Backpack\CRUD\app\Library\CrudPanel\Traits\hasAccessOrFail;
+use Backpack\CRUD\app\Library\CrudPanel\Traits\setDefaultPageLength;
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
+use League\Flysystem\Exception;
+use Prologue\Alerts\Facades\Alert;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
 /**
  * Class DataCrudController
@@ -15,61 +30,94 @@ use Backpack\CRUD\app\Http\Controllers\CrudController;
  */
 class DataCrudController extends CrudController
 {
+    use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation { update as traitUpdate; }
+    use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation { destroy as traitDestroy; }
+    use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+   
+   
+
     public function setup()
     {
+
         /*
-        |--------------------------------------------------------------------------
+        |---------------------------------------------------------------------
         | CrudPanel Basic Information
-        |--------------------------------------------------------------------------
+        |---------------------------------------------------------------------
         */
-        $this->crud->setModel('App\Models\Data');
-        $this->crud->setRoute(config('backpack.base.route_prefix') . '/data');
-        $this->crud->setEntityNameStrings('data', 'data');
+       
+        CRUD::setModel("App\Models\Data");
+        CRUD::setRoute(config('backpack.base.route_prefix').'/data');
+        CRUD::setEntityNameStrings('data', 'data');
 
         /*
-        |--------------------------------------------------------------------------
+        |---------------------------------------------------------------------
         | CrudPanel Configuration
-        |--------------------------------------------------------------------------
+        |---------------------------------------------------------------------
         */
 
-        // TODO: remove setFromDb() and manually define Fields and Columns
-        
-        $this->crud->addColumn('fecha_hora')->makeFirstColumn();
-        $this->crud->setFromDb();
+
+        $this->crud->enableExportButtons();
+
+         
 
         // add asterisk for fields that are required in DataRequest
         $this->crud->setRequiredFields(StoreRequest::class, 'create');
         $this->crud->setRequiredFields(UpdateRequest::class, 'edit');
-        $this->crud->enableExportButtons();
-        $this->crud->removeButton('create');
+ 
+        $this->crud->operation('list', function() {
+       // your addColumn, addFilter, addButton calls here, for the List operation
+            $this->crud->setColumns([  
+            [
+                'name' => 'fecha_hora',
+                'label' => 'Fecha hora',
+                'type' => 'datetime',
+                'format' => 'MM-DD-YYYY H:mm:s',
+            ],
+            [
+                'label' => 'Station',
+                'type' => 'select',
+                'name' => 'id_station',
+                'entity' => 'station',
+                'attribute' => 'label',
+                'model' => 'App\Models\Station',
+                'key' => 'updated_at'
 
+            ],
+            
+        ]);
+             $this->crud->setFromDb();
+        });
+
+          $this->crud->operation(['create', 'update'], function() {
+
+            $this->crud->setFromDb();
+     
+        });
         //Filter
         $this->crud->addFilter([
             'name' => 'id_station',
             'type' => 'select2',
             'label' => 'Station',
         ],function(){
-           
-            return Station::all()->pluck('stations', 'id')->toArray();;
+
+            return Station::all()->pluck('label', 'id')->toArray();
+
 
         },function($value){
+
+            $station_id_value = $value;
+           
             $this->crud->addClause('where', 'id_station', $value);
 
         });
-        $this->crud->addFilter([ // date filter
-          'type' => 'date',
-          'name' => 'date',
-          'label'=> 'Date'
-        ],
-        false,
-        function($value) { // if the filter is active, apply these constraints
-          $this->crud->addClause('where', 'fecha_hora', $value);
-        });
+        
 
         $this->crud->addFilter([ // daterange filter
            'type' => 'date_range',
            'name' => 'from_to',
            'label'=> 'Date range'
+
         ],
         false,
         function($value) { // if the filter is active, apply these constraints
@@ -77,23 +125,113 @@ class DataCrudController extends CrudController
            $this->crud->addClause('where', 'fecha_hora', '>=', $dates->from);
            $this->crud->addClause('where', 'fecha_hora', '<=', $dates->to . ' 23:59:59');
         });
+
+        
+        $this->crud->addButtonFromView('top', 'deleteByFilters', 'deleteByFilters', 'end');
+        $this->crud->addButtonFromView('top', 'download', 'download', 'end');
+        $this->crud->setDefaultPageLength(50);
+
+          /**
+         * Get the SQL definition of the query being run:
+         * This includes all the active filters;
+         * Save it to the session to pass to the download function.
+         * $query = string - escaped SQL statement;
+         * $params = array - parameters to insert into the escaped SQL query.
+         */
+
+
+        if($this->crud->actionIs('list') || $this->crud->actionIs('search') ){
+            $query = $this->crud->query->getQuery()->toSql();
+            $params = $this->crud->query->getQuery()->getBindings();
+            Session(['query' => $query ]);
+            Session(['params' => $params ]);
+
+        }
+
+       
     }
 
-    public function store(StoreRequest $request)
+    protected function setupCreateOperation()
     {
-        // your additional operations before save here
-        $redirect_location = parent::storeCrud($request);
-        // your additional operations after save here
-        // use $this->data['entry'] or $this->crud->entry
-        return $redirect_location;
+        $this->crud->setValidation(StoreRequest::class);
     }
 
-    public function update(UpdateRequest $request)
+    protected function setupUpdateOperation()
     {
-        // your additional operations before save here
-        $redirect_location = parent::updateCrud($request);
-        // your additional operations after save here
-        // use $this->data['entry'] or $this->crud->entry
-        return $redirect_location;
+        $this->crud->setValidation(UpdateRequest::class);
     }
+
+
+    public function deleteByFilters (Request $request) 
+    {
+        $query = Session('query');
+        $bindings = Session('params');
+      
+        $id_station_pos = strpos($query, 'id_station');
+        $date_pos = strpos($query, 'fecha_hora');
+        if(!empty($id_station_pos) and !empty($date_pos))
+        {
+            if($id_station_pos < $date_pos)
+            {
+                $response = Data::where('id_station', $bindings[0])->whereBetween('fecha_hora', [$bindings[1], $bindings[2]])->delete();
+
+
+            }else if($id_station_pos > $date_pos)
+            {
+                $response = Data::where('id_station', $bindings[2])->whereBetween('fecha_hora', [$bindings[0], $bindings[1]])->delete();
+            }
+            \Alert::success('<h4>El archivo ha sido subido exitosamente</h4>')->flash();
+
+        }else if (!empty($id_station_pos) and empty($date_pos))
+        {
+            $response = Data::where('id_station', $bindings[0])->delete();
+            \Alert::success('<h4>El archivo ha sido subido exitosamente</h4>')->flash();
+        } else if (!empty($date_pos) and empty($id_station_pos))
+        {
+            $response = Data::whereBetween('fecha_hora', [$bindings[0], $bindings[1]])->delete();
+            \Alert::success('<h4>El archivo ha sido subido exitosamente</h4>')->flash();
+        } else 
+        {
+             \Alert::error('<h4>Para eliminar por filtro uno de los filtros debe estar activo</h4>')->flash();
+
+        }
+
+        
+    }
+
+
+    public function download()
+    {
+        $scriptName = 'save_data_csv.py';
+        $scriptPath = base_path() . '/scripts/' . $scriptName;
+        $base_path = base_path();
+        $query = Session('query');
+        $params = join(",",Session('params'));
+        $query = '"'.$query.'"';
+        $params = '"'.$params.'"';
+        $file_name = date('c')."data.csv";
+        $query = str_replace('`',' ',$query);
+
+        //python script accepts 4 arguments in this order: base_path(), query, params and file name
+        Log::info($query);
+      
+        $process = new Process("python3.7 {$scriptPath} {$base_path} {$query} {$params} {$file_name}");
+
+        $process->run();
+        
+        if(!$process->isSuccessful()) {
+            
+           throw new ProcessFailedException($process);
+        
+        } else {
+            
+            $process->getOutput();
+        }
+        Log::info("python done.");
+        Log::info($process->getOutput());
+
+        $path_download =  Storage::url('/data/'.$file_name);
+        return response()->json(['path' => $path_download]);
+    }
+       
 }

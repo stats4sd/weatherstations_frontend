@@ -21,10 +21,15 @@
         "resolve-url-loader": "^2.3.1",
         "sass": "^1.17.3",
         "sass-loader": "^7.1.0",
-        "vue": "^2.5.17",
-        "vue-template-compiler": "^2.6.9"
+        "vue": "^2.6.10",
+        "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
-        "bootstrap-sass": "^3.4.0"
+        "bootstrap-sass": "^3.4.0",
+        "chart.js": "^2.9.1",
+        "laravel-echo": "^1.6.1",
+        "popper": "^1.0.1",
+        "pusher-js": "^5.0.2",
+        "sweetalert": "^2.1.2"
     }
 }

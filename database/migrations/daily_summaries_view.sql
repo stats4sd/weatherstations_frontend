@@ -8,7 +8,7 @@ SELECT
     -- ######### START WITH THE GROUP-BY FIELDS
     -- ## We want 'daily'
     -- ## Grouped by weather-station
-
+    id as id,
     LEFT(fecha_hora,10) as fecha,
     id_station as id_station,
 

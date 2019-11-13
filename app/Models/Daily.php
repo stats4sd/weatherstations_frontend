@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Station;
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
-use Backpack\CRUD\CrudTrait;
+use LaravelTreats\Model\Traits\HasCompositePrimaryKey;
 
 class Daily extends Model
 {
     use CrudTrait;
+    use HasCompositePrimaryKey;
 
     /*
     |--------------------------------------------------------------------------
@@ -16,7 +19,7 @@ class Daily extends Model
     */
 
     protected $table = 'daily_data';
-    // protected $primaryKey = 'id';
+    
     // public $timestamps = false;
     // protected $guarded = ['id'];
     protected $fillable = [];
@@ -34,6 +37,10 @@ class Daily extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+    public function station ()
+    {
+        return $this->belongsTo(Station::class,'id_station');
+    }
 
     /*
     |--------------------------------------------------------------------------

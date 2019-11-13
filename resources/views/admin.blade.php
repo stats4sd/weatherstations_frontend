@@ -1,13 +1,9 @@
-@extends('backpack::layout')
+@extends(backpack_view('blank'))
 @section('header')
     <section class="content-header">
       <h1>
         Data Uploader
       </h1>
-      <ol class="breadcrumb">
-        <li><a href="{{ backpack_url() }}">{{ config('backpack.base.upload') }}</a></li>
-       <!--  <li class="active">{{ trans('backpack::base.uploads') }}</li> -->
-      </ol>
     </section>
 @endsection
 
@@ -39,18 +35,18 @@
                         <form action="{{ route('files.store') }} " method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group row">
-                                <label for="file" class="control-label col-sm-3"><h4><b>Elija un archivo de datos para subir. Este debe ser el archivo sin editar recuperado del sistema de la estación meteorológica</b></h4></label>
-                                <div class="col-sm-9">
+                                <label for="file" class="control-label col-sm-6"><h4>Elija un archivo de datos para subir. Este debe ser el archivo sin editar recuperado del sistema de la estación meteorológica</h4></label>
+                                <div class="col-sm-6">
                                     <input name="data-file" type="file" class="form-control-file btn btn-outline-info">
                                 </div>
                             </div>
 
                             <div class="form-group row">
-                                <label for="file" class="control-label col-sm-3"><h4><b>Seleccione el tipo de estación meteorológica de la que proviene este conjunto de datos.</b></h4></label>
-                                <div class="col-sm-9">
+                                <label for="file" class="control-label col-sm-6"><h4>Seleccione el tipo de estación meteorológica de la que proviene este conjunto de datos.</h4></label>
+                                <div class="col-sm-6">
                                     <select name="weatherstation" class="form-control btn btn-outline-info">
                                         @foreach($stations as $station)
-                                        <option id='{{$station->id}}' value='{{$station->id}}'>{{$station->stations}}</option>
+                                        <option id='{{$station->id}}' value='{{$station->id}}'>{{$station->label}}</option>
                                         @endforeach
 
                                     </select>
@@ -107,11 +103,11 @@
 
                             <button class="submit btn btn-info mb-5" >Submit File</button>
                           </form>
-                          <div>
+                          <!-- <div>
                             <h3><b>Vaya a la página Data Preview para convertir los valores de datos y cargar datos en la base de datos</b></h3>
                             <br>
                           </div>
-                          <a href="dataTemplate" class="btn btn-info" role="button">Data Preview</a>
+                          <a href="dataTemplate" class="btn btn-info" role="button">Data Preview</a> -->
 
                     </div>
                 </div>

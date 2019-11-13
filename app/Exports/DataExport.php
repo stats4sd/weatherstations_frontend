@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Data;
+use App\Models\Data;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\FromQuery;

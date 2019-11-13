@@ -8,6 +8,7 @@ use Backpack\CRUD\app\Http\Controllers\CrudController;
 use App\Http\Requests\UserRequest as StoreRequest;
 use App\Http\Requests\UserRequest as UpdateRequest;
 use Backpack\CRUD\CrudPanel;
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 
 
 /**
@@ -17,6 +18,10 @@ use Backpack\CRUD\CrudPanel;
  */
 class UserCrudController extends CrudController
 {
+    use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     public function setup()
     {
         /*
@@ -35,52 +40,57 @@ class UserCrudController extends CrudController
         */
 
         // TODO: remove setFromDb() and manually define Fields and Columns
-        $this->crud->setFromDb();
-        $this->crud->setColumns([
-            [
-                'name' => 'name',
-                'label' => 'Name',
-                'type' => 'text',
-            ],
-            [
-                'name' => 'email',
-                'label' => 'Email',
-                'type' => 'email',
-            ],
-            [
-                'name' => 'type',
-                'label' => 'Type',
-                'type' => 'text',
-            ],
-            [
-                'name' => 'created_at',
-                'label' => 'Created at',
-                'type' => 'date',
-            ],
-        ]);
+        $this->crud->operation('list', function() {
+            $this->crud->setColumns([
+                [
+                    'name' => 'name',
+                    'label' => 'Name',
+                    'type' => 'text',
+                ],
+                [
+                    'name' => 'email',
+                    'label' => 'Email',
+                    'type' => 'email',
+                ],
+                [
+                    'name' => 'type',
+                    'label' => 'Type',
+                    'type' => 'text',
+                ],
+                [
+                    'name' => 'created_at',
+                    'label' => 'Created at',
+                    'type' => 'date',
+                ],
+            ]);
+       
+        });
+
+        $this->crud->operation(['create', 'update'], function() {
+
+            $this->crud->addFields([
+                [
+                    'name' => 'name',
+                    'label' => 'Name',
+                    'type' => 'text',
+                    'priority' => 1,
+                ],
+                [
+                    'name' => 'email',
+                    'label' => 'Email',
+                    'type' => 'email',
+                ],
+                [
+                    'name' => 'type',
+                    'label' => 'Type',
+                    'type' => 'select_from_array',
+                    'options' => ['default' => 'Default', 'admin' => 'Admin'],        
+                ],
+            ]);
+     
+        });
 
 
-        $this->crud->addFields([
-             [
-                'name' => 'name',
-                'label' => 'Name',
-                'type' => 'text',
-                'priority' => 1,
-            ],
-            [
-                'name' => 'email',
-                'label' => 'Email',
-                'type' => 'email',
-                
-            ],
-            [
-                'name' => 'type',
-                'label' => 'Type',
-                'type' => 'select_from_array',
-                'options' => ['default' => 'Default', 'admin' => 'Admin'],
-                
-            ],
-        ]);
         // add asterisk for fields that are required in UserRequest
         $this->crud->setRequiredFields(StoreRequest::class, 'create');
         $this->crud->setRequiredFields(UpdateRequest::class, 'edit');
@@ -89,21 +99,13 @@ class UserCrudController extends CrudController
        
     }
 
-    public function store(StoreRequest $request)
+    protected function setupCreateOperation()
     {
-        // your additional operations before save here
-        $redirect_location = parent::storeCrud($request);
-        // your additional operations after save here
-        // use $this->data['entry'] or $this->crud->entry
-        return $redirect_location;
+        $this->crud->setValidation(StoreRequest::class);
     }
 
-    public function update(UpdateRequest $request)
+    protected function setupUpdateOperation()
     {
-        // your additional operations before save here
-        $redirect_location = parent::updateCrud($request);
-        // your additional operations after save here
-        // use $this->data['entry'] or $this->crud->entry
-        return $redirect_location;
+        $this->crud->setValidation(UpdateRequest::class);
     }
 }
