@@ -1,10 +1,10 @@
 
 
 dbConfig = {
-            'user': 'weatherstations',
-            'password': 'stations26443',
-            'host': 'localhost',
-            'db': 'staging_weatherstations'
+            'user': '',
+            'password': '',
+            'host': '',
+            'db': ''
             }
 
 list_columns_davis = ['hi_temp', 'low_temp', 'wind_cod',
