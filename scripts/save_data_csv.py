@@ -7,6 +7,7 @@ import json
 from datetime import datetime
 import dbConfig as config
 
+
 path = sys.argv[1] + '/storage/app/public/data/'
 query = sys.argv[2]
 name_file = sys.argv[4]

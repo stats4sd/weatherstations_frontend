@@ -1,6 +1,7 @@
 #!/usr/bin/python3.7
 import mysql.connector as mysql
 import dbConfig as config 
+import listColumnsName as columns_name
 import pandas as pd
 from datetime import datetime
 import sys
@@ -19,14 +20,14 @@ def openFile():
     # add id_station
     df['id_station'] = station_id
     # replace columns name
-    df = df.rename(columns=config.columns_db)
+    df = df.rename(columns=columns_name.columns_db)
     df = df.where((pd.notnull(df)), None)
 
     #checks the type of station
     if (data.shape[1] > 30):
 
         # drop rows with missing value / NaN in any column
-        df = df.dropna(how='all', subset=config.list_columns_davis)
+        df = df.dropna(how='all', subset=columns_name.list_columns_davis)
 
 
         # create timestamp for uploading into database
@@ -43,7 +44,7 @@ def openFile():
 
     else:
         # drop rows with missing value / NaN in any column
-        df = df.dropna(how='all', subset=config.list_columns_chinas)
+        df = df.dropna(how='all', subset=columns_name.list_columns_chinas)
         # drop columns not necessary
         df = df.drop(['No.'], axis=1)
 
