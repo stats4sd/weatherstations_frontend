@@ -23,7 +23,7 @@ def openFile():
         for fecha_hora, time in zip(df.fecha_hora, df.time):
             date = fecha_hora.split('/')
             hour = time.split(':')
-            date_time.append(str(datetime(int(20 + date[2]), int(date[1]), int(date[0]), int(hour[0]), int(hour[1]))))
+            date_time.append(str(datetime(int('20' + date[2]), int(date[1]), int(date[0]), int(hour[0]), int(hour[1]))))
 
         # dateTime is in Date
         df.fecha_hora = date_time
@@ -31,7 +31,7 @@ def openFile():
         df = df.drop(['time'], axis=1)
         df = df.where((pd.notnull(df)), None)
         # drop rows with missing value / NaN in any column
-        df = df.dropna(how='all', subset=columns_name.list_columns_name)
+        #df = df.dropna(how='all', subset=columns_name.list_columns_name)
 
         df['id_station'] = station_id
           
