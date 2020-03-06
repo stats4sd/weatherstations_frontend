@@ -45,7 +45,7 @@ class FileController extends Controller
 
         // Retrieve file from POST request
         //sends units type to DataTemplate
-
+        dd($request);
         Session::put('temp_unit', $_POST['temp_unit']);
         Session::put('pression_unit', $_POST['pression_unit']);
         Session::put('veloc_viento_unit', $_POST['veloc_viento_unit']);
@@ -53,8 +53,8 @@ class FileController extends Controller
 
         $station = $_POST['weatherstation'];
         
+        
             if($request->hasFile('data-file')){
-            
                 // handle file and store it for prosperity
                 $file = $request->file('data-file');
                 $file_name = str_replace(" ", "_", $file->getClientOriginalName());
@@ -93,7 +93,7 @@ class FileController extends Controller
                 return Redirect::to('admin/dataTemplate');
 
             }
-            \Alert::error("<h4>El archivo no fue seleccionado</h4>")->flash();
+            #\Alert::error("<h4>El archivo no fue seleccionado</h4>")->flash();
 
             return Redirect::back();
 

@@ -50,3 +50,14 @@ list_columns_chinas = ['temperatura_interna', 'humedad_interna', 'temperatura_ex
                         'punto_rocio', 'lluvia_hora', 'lluvia_24_horas',
                         'lluvia_semana', 'lluvia_mes', 'lluvia_total'
                        ]
+
+list_columns_davis_text = {'Unnamed: 0_level_0_Date':'fecha_hora', 'Unnamed: 1_level_0_Time':'time', 'Temp_Out':'temperatura_externa',
+       'Hi_Temp':'hi_temp', 'Low_Temp':'low_temp', 'Out_Hum':'humedad_externa', 'Dew_Pt.':'punto_rocio', 'Wind_Speed':'velocidad_viento', 'Wind_Dir':'direccion_del_viento',
+       'Wind_Run':'wind_run', 'Hi_Speed':'hi_speed', 'Hi_Dir':'hi_dir', 'Wind_Chill':'wind_chill', 'Heat_Index':'index_heat',
+       'THW_Index':'index_thw', 'THSW_Index':'index_thsw', 'Unnamed: 16_level_0_Bar  ':'presion_relativa',
+       'Unnamed: 17_level_0_Rain':'rain', 'Rain_Rate':'lluvia_hora', 'Solar_Rad.':'solar_rad', 'Solar_Energy':'solar_energy',
+       'Hi Solar_Rad. ':'radsolar_max', 'UV _Index':'uv_index', 'UV _Dose':'uv_dose', 'Hi _UV ':'uv_max', 'Heat_D-D ':'heat_days_d',
+       'Cool_D-D ':'cool_days_d', 'In _Temp':'temperatura_interna', 'In_Hum':'humedad_interna', 'In _Dew':'in_dew', 'In _Heat':'in_heat', 'In _EMC':'in_emc',
+       'In Air_Density':'in_air_density', 'Unnamed: 33_level_0_ET ':'evapotran', 'Soil 1_Moist.':'soil_1_moist', 'Soil 2_Moist.':'soil_2_moist',
+       'Soil _Temp 1':'soil_temp_1','Soil _Temp 2':'soil_temp_2', 'Leaf_Wet 1':'leaf_wet1', 'Leaf_Wet 2':'leaf_wet2','Wind_Samp':'wind_samp', 'Wind_Tx ':'wind_tx', 'ISS _Recept':'iss_recept',
+       'Leaf_Temp 1':'leaf_temp_1', 'Leaf_Temp 2':'leaf_temp_2', 'Arc._Int.':'intervalo'}
