@@ -1,3 +1,3 @@
 steps:
 - name: 'gcr.io/cloud-builders/gcloud'
-  args:  [compute, ssh, ssd-website, --project=ssd-main, --zone=europe-west1-c, --command, "cd /var/scripts/ && sudo ./deploy-staging.sh"]
+  args:  [compute, ssh, weatherstations, --project=mcknight-ccrp, --zone=europe-west1-b, --command, "cd /var/scripts/ && sudo ./deploy-staging.sh"]
