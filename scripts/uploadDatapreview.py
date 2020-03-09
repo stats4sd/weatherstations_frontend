@@ -31,7 +31,7 @@ def openFile():
         df = df.drop(['time'], axis=1)
         df = df.where((pd.notnull(df)), None)
         # drop rows with missing value / NaN in any column
-        #df = df.dropna(how='all', subset=columns_name.list_columns_name)
+        df = df.dropna(how='all', subset=columns_name.list_columns_davis_to_drop)
 
         df['id_station'] = station_id
           
@@ -52,10 +52,8 @@ def openFile():
 
     
         # drop rows with missing value / NaN in any column
-        df = df.dropna(how='all', subset=columns_name.list_columns_name)
-        # drop columns not necessary
-        df = df.drop(['No.'], axis=1)
-
+        df = df.dropna(how='all', subset=columns_name.list_columns_chinas_to_drop)
+       
     return df
 
 
