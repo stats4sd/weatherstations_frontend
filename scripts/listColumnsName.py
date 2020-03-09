@@ -19,7 +19,7 @@ list_columns_chinas_to_drop = [
                                 'lluvia_24_horas', 'lluvia_semana', 'lluvia_mes', 'lluvia_total'
                                ]
 
-#dictionary of columns name for converting the original columns name into database columns name 
+#dictionary of columns name for converting the original csv file columns name into database columns name 
 columns_db = {
                 'Date': 'fecha_hora', 'Hi_Temp':'hi_temp', 'Low_Temp': 'low_temp', 'Wind_Cod':'wind_cod',
                 'Wind_Run':'wind_run', 'Hi_Speed':'hi_speed', 'Hi_Dir':'hi_dir', 
@@ -59,7 +59,7 @@ list_columns_name = [
                       'leaf_temp_2', 'soil_temp_1', 'soil_temp_2'
                     ]
 
-#dictionary of columns name for converting the original columns name into database columns name
+#dictionary of columns name for converting the original text file columns name into database columns name 
 list_columns_davis_text = {
                             'Unnamed: 0_level_0_Date':'fecha_hora', 'Unnamed: 1_level_0_Time':'time', 
                             'Temp_Out':'temperatura_externa', 'Hi_Temp':'hi_temp', 'Low_Temp':'low_temp', 
