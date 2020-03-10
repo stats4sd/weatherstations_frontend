@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <li class='nav-item'><a class='nav-link' href="{{ backpack_url('dashboard') }}"><i class="nav-icon fa fa-dashboard"></i> {{ trans('backpack::base.dashboard') }}</a></li>
-@if(backpack_user()->type=='admin' or backpack_user()->email=='lucia@stats4sd.org' or backpack_user()->email=='d.e.mills@stats4sd.org@')
+@if(backpack_user()->type=='admin' or backpack_user()->email=='lucia@stats4sd.org' or backpack_user()->email=='d.e.mills@stats4sd.org')
 
 <li class='nav-item nav-dropdown'>
     <a class='nav-link nav-dropdown-toggle' href="#"><i class="nav-icon fa fa-newspaper-o"></i>Data Management</a>
