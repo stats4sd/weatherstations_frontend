@@ -14,25 +14,26 @@ def openFile():
     if(path[len(path)-3 : ] == "txt"):
     
         df = pd.read_csv(path, na_values=['--.-', '--', '---'], sep="\t", header=[0,1])
+        #join the two headers into one  
         df.columns = df.columns.map('_'.join)
-
+        #rename the column name for davis station into column name for the database  
         df = df.rename(columns=columns_name.list_columns_davis_text)
-
-        # create timestamp for uploading into database 2010-05-26 22:30:00
+        #create the timestamp for uploading into database 
         date_time = []
         for fecha_hora, time in zip(df.fecha_hora, df.time):
             date = fecha_hora.split('/')
             hour = time.split(':')
             date_time.append(str(datetime(int('20' + date[2]), int(date[1]), int(date[0]), int(hour[0]), int(hour[1]))))
 
-        # dateTime is in Date
+        #pass the right datestamp into fecha_hora
         df.fecha_hora = date_time
         #drop columns not necessary
         df = df.drop(['time'], axis=1)
+
         df = df.where((pd.notnull(df)), None)
         # drop rows with missing value / NaN in any column
         df = df.dropna(how='all', subset=columns_name.list_columns_davis_to_drop)
-
+        #add the station_id column
         df['id_station'] = station_id
           
 
@@ -44,13 +45,13 @@ def openFile():
         # remove extra space in columns name
         df.columns = df.columns.str.rstrip()
 
-        # add id_station
+        # add id_station column
         df['id_station'] = station_id
         # replace columns name
         df = df.rename(columns=columns_name.columns_db)
+
         df = df.where((pd.notnull(df)), None)
 
-    
         # drop rows with missing value / NaN in any column
         df = df.dropna(how='all', subset=columns_name.list_columns_chinas_to_drop)
        
