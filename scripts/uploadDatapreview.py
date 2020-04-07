@@ -16,11 +16,13 @@ def openFile():
         df = pd.read_csv(path, na_values=['--.-', '--', '---'], sep="\t", header=[0,1])
         #join the two headers into one  
         df.columns = df.columns.map('_'.join)
+        print(df.columns)
         #rename the column name for davis station into column name for the database  
         df = df.rename(columns=columns_name.list_columns_davis_text)
         #create the timestamp for uploading into database 
         date_time = []
         for fecha_hora, time in zip(df.fecha_hora, df.time):
+
             date = fecha_hora.split('/')
             hour = time.split(':')
             date_time.append(str(datetime(int('20' + date[2]), int(date[1]), int(date[0]), int(hour[0]), int(hour[1]))))
@@ -39,7 +41,7 @@ def openFile():
 
     else:
    
-        data = pd.read_csv(path, na_values=['--.-', '--', '---'], low_memory=False)
+        data = pd.read_csv(path, encoding="utf-8", na_values=['--.-', '--', '---'], low_memory=False)
         df = pd.DataFrame(data)
 
         # remove extra space in columns name
@@ -47,10 +49,26 @@ def openFile():
 
         # add id_station column
         df['id_station'] = station_id
+
+        #drop columns not necessary
+        df = df.drop(['No.'], axis=1)
+
         # replace columns name
-        df = df.rename(columns=columns_name.columns_db)
+        df = df.rename(columns=columns_name.list_columns_chinas_csv)
 
         df = df.where((pd.notnull(df)), None)
+        #create the timestamp for uploading into database 
+        date_time = []
+        for fecha_hora in df.fecha_hora:
+            date = fecha_hora.strip()
+            date = date.split(' ')
+            hours = date[1].split(':')
+            date_splited = date[0].split('/')
+            date_time.append(str(datetime(int(date_splited[2]), int(date_splited[1]), int(date_splited[0]), int(hours[0]), int(hours[1]), int(hours[2]))))
+
+
+        #pass the right datestamp into fecha_hora
+        df.fecha_hora = date_time
 
         # drop rows with missing value / NaN in any column
         df = df.dropna(how='all', subset=columns_name.list_columns_chinas_to_drop)

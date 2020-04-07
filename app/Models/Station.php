@@ -18,8 +18,8 @@ class Station extends Model
     protected $table = 'stations';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
-    // protected $guarded = ['id'];
-    protected $fillable = ['stations'];
+    protected $guarded = ['id'];
+    // protected $fillable = ['stations'];
     // protected $hidden = [];
     // protected $dates = [];
 
