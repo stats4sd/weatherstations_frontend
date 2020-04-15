@@ -57,9 +57,8 @@ class DataCrudController extends CrudController
         */
 
 
-        $this->crud->enableExportButtons();
+        // $this->crud->enableExportButtons();
 
-         
 
         // add asterisk for fields that are required in DataRequest
         $this->crud->setRequiredFields(StoreRequest::class, 'create');
@@ -127,7 +126,7 @@ class DataCrudController extends CrudController
         });
 
         
-        $this->crud->addButtonFromView('top', 'deleteByFilters', 'deleteByFilters', 'end');
+        // $this->crud->addButtonFromView('top', 'deleteByFilters', 'deleteByFilters', 'end');
         $this->crud->addButtonFromView('top', 'download', 'download', 'end');
         $this->crud->setDefaultPageLength(50);
 

@@ -14,9 +14,24 @@ def openFile():
     if(path[len(path)-3 : ] == "txt"):
     
         df = pd.read_csv(path, na_values=['--.-', '--', '---'], sep="\t", header=[0,1])
-        #join the two headers into one  
-        df.columns = df.columns.map('_'.join)
-        print(df.columns)
+        new_columns_names = []
+        for i in df.columns:
+
+            if(i[0][0:7]=="Unnamed"):
+                #include only the second column name 
+                new_column_name = i[1].strip()            
+            else: 
+                i = list(i)
+                i[0] = i[0].strip()
+                i[1] = i[1].strip()
+                new_column_name = i[0] + '_' + i[1]
+                new_column_name = new_column_name.replace(' ', '_')
+
+            new_columns_names.append(new_column_name)
+              
+        #pass the new columns_name to the dataframe 
+        df.columns = new_columns_names
+    
         #rename the column name for davis station into column name for the database  
         df = df.rename(columns=columns_name.list_columns_davis_text)
         #create the timestamp for uploading into database 

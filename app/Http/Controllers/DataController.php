@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Data;
-use Backpack\NewsCRUD\app\Models\Data;
 use DB;
 use Illuminate\Http\Request;
 
@@ -16,7 +15,7 @@ class DataController extends Controller
      */
     public function index()
     {
-
+        return view('data_preview');
     }
 
     /**
