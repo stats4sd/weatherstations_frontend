@@ -46,7 +46,6 @@ class DataTemplateCrudController extends CrudController
         // TODO: remove setFromDb() and manually define Fields and Columns
         
        
-        $this->crud->enableExportButtons();
  
         $this->crud->addButtonFromView('top','convertDataFtoCButton', 'convertDataFtoCButton', 'end');
         $this->crud->addButtonFromView('top','convertDataInhgOrMmhgToHpaButton', 'convertDataInhgOrMmhgToHpaButton', 'end');
