@@ -57,6 +57,11 @@ class StationCrudController extends CrudController
                 'type' => 'text',
             ],
             [
+                'name' => 'type',
+                'label' => 'Station Type',
+                'type' => 'text',
+            ],
+            [
                 'name' => 'latitude',
                 'label' => 'latitude',
                 'type' => 'text',
@@ -78,6 +83,14 @@ class StationCrudController extends CrudController
                 'name' => 'label',
                 'label' => 'Label',
                 'type' => 'text',
+            ],
+            [
+                'name' => 'type',
+                'label' => 'Station Type',
+                'type' => 'select2_from_array',
+                'options' => ['davis' => 'Davis', 'chinas' => 'Chinas'],
+                'allows_null' => false,
+                'default' => 'davis',
             ],
             [
                 'name' => 'latitude',
