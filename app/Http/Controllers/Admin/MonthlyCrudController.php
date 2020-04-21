@@ -218,7 +218,6 @@ class MonthlyCrudController extends CrudController
             ]);
         });
 
-        $this->crud->enableExportButtons();
 
         // Filter
         $this->crud->addFilter([

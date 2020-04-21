@@ -9,6 +9,7 @@ use App\Http\Requests\UserRequest as StoreRequest;
 use App\Http\Requests\UserRequest as UpdateRequest;
 use Backpack\CRUD\CrudPanel;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Illuminate\Support\Facades\Hash;
 
 
 /**
@@ -19,8 +20,8 @@ use Backpack\CRUD\app\Models\Traits\CrudTrait;
 class UserCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation { store as traitStore; }
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation { update as traitUpdate; }
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     public function setup()
     {
@@ -76,6 +77,12 @@ class UserCrudController extends CrudController
                     'priority' => 1,
                 ],
                 [
+                    'name' => 'password',
+                    'label' => 'Password',
+                    'type' => 'password',
+                    'priority' => 1,
+                ],
+                [
                     'name' => 'email',
                     'label' => 'Email',
                     'type' => 'email',
@@ -108,4 +115,47 @@ class UserCrudController extends CrudController
     {
         $this->crud->setValidation(UpdateRequest::class);
     }
+
+     /**
+     * Store a newly created resource in the database.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function store()
+    {
+        $this->crud->request = $this->crud->validateRequest();
+        $this->crud->request = $this->handlePasswordInput($this->crud->request);
+
+        return $this->traitStore();
+    }
+
+    /**
+     * Update the specified resource in the database.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update()
+    {
+        $this->crud->request = $this->crud->validateRequest();
+        $this->crud->request = $this->handlePasswordInput($this->crud->request);
+
+        return $this->traitUpdate();
+    }
+
+     /**
+     * Handle password input fields.
+     */
+    protected function handlePasswordInput($request)
+    {
+        // Encrypt password if specified.
+        if ($request->input('password')) {
+            $request->request->set('password', Hash::make($request->input('password')));
+        } else {
+            $request->request->remove('password');
+        }
+
+        return $request;
+    }
+
+
 }

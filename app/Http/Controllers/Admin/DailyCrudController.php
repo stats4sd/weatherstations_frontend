@@ -221,7 +221,7 @@ class DailyCrudController extends CrudController
         
 
         $this->crud->addButtonFromView('top', 'download', 'download', 'end');
-        $this->crud->enableExportButtons();
+        
         // Filter
         $this->crud->addFilter([
             'name' => 'id_station',

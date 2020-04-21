@@ -1,0 +1,3 @@
+steps:
+- name: 'gcr.io/cloud-builders/gcloud'
+  args:  [compute, ssh, weatherstations, --project=mcknight-ccrp, --zone=europe-west1-b, --command, "cd /var/www/staging-weatherstations_frontend/deployment && sudo chmod +x deploy-staging.sh && sudo ./deploy-staging.sh"]

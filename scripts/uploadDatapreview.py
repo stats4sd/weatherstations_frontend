@@ -1,6 +1,7 @@
 #!/usr/bin/python3.7
 import mysql.connector as mysql
 import dbConfig as config 
+import listColumnsName as columns_name
 import pandas as pd
 from datetime import datetime
 import sys
@@ -9,44 +10,84 @@ station_id = sys.argv[2]
 
 
 def openFile():
-   
-    data = pd.read_csv(path, na_values=['--.-', '--', '---'], low_memory=False)
-    df = pd.DataFrame(data)
 
-    # remove extra space in columns name
-    df.columns = df.columns.str.rstrip()
+    if(path[len(path)-3 : ] == "txt"):
+    
+        df = pd.read_csv(path, na_values=['--.-', '--', '---'], sep="\t", header=[0,1])
+        new_columns_names = []
+        for i in df.columns:
 
-    # add id_station
-    df['id_station'] = station_id
-    # replace columns name
-    df = df.rename(columns=config.columns_db)
-    df = df.where((pd.notnull(df)), None)
+            if(i[0][0:7]=="Unnamed"):
+                #include only the second column name 
+                new_column_name = i[1].strip()            
+            else: 
+                i = list(i)
+                i[0] = i[0].strip()
+                i[1] = i[1].strip()
+                new_column_name = i[0] + '_' + i[1]
+                new_column_name = new_column_name.replace(' ', '_')
 
-    #checks the type of station
-    if (data.shape[1] > 30):
-
-        # drop rows with missing value / NaN in any column
-        df = df.dropna(how='all', subset=config.list_columns_davis)
-
-
-        # create timestamp for uploading into database
+            new_columns_names.append(new_column_name)
+              
+        #pass the new columns_name to the dataframe 
+        df.columns = new_columns_names
+    
+        #rename the column name for davis station into column name for the database  
+        df = df.rename(columns=columns_name.list_columns_davis_text)
+        #create the timestamp for uploading into database 
         date_time = []
-        for y, m, d, time in zip(df.YYYY, df.MM, df.DD, df.Time):
-            hour = time.split(':')
-            date_time.append(str(datetime(int(y), int(m), int(d), int(hour[0]), int(hour[1]))))
+        for fecha_hora, time in zip(df.fecha_hora, df.time):
 
-        # dateTime is in Date
+            date = fecha_hora.split('/')
+            hour = time.split(':')
+            date_time.append(str(datetime(int('20' + date[2]), int(date[1]), int(date[0]), int(hour[0]), int(hour[1]))))
+
+        #pass the right datestamp into fecha_hora
         df.fecha_hora = date_time
         #drop columns not necessary
-        df = df.drop(['YYYY', 'MM', 'DD', 'Time', 'Date_Davis', 'Time_Davis'], axis=1)
+        df = df.drop(['time'], axis=1)
 
+        df = df.where((pd.notnull(df)), None)
+        # drop rows with missing value / NaN in any column
+        df = df.dropna(how='all', subset=columns_name.list_columns_davis_to_drop)
+        #add the station_id column
+        df['id_station'] = station_id
+          
 
     else:
-        # drop rows with missing value / NaN in any column
-        df = df.dropna(how='all', subset=config.list_columns_chinas)
-        # drop columns not necessary
+   
+        data = pd.read_csv(path, encoding="utf-8", na_values=['--.-', '--', '---'], low_memory=False)
+        df = pd.DataFrame(data)
+
+        # remove extra space in columns name
+        df.columns = df.columns.str.rstrip()
+
+        # add id_station column
+        df['id_station'] = station_id
+
+        #drop columns not necessary
         df = df.drop(['No.'], axis=1)
 
+        # replace columns name
+        df = df.rename(columns=columns_name.list_columns_chinas_csv)
+
+        df = df.where((pd.notnull(df)), None)
+        #create the timestamp for uploading into database 
+        date_time = []
+        for fecha_hora in df.fecha_hora:
+            date = fecha_hora.strip()
+            date = date.split(' ')
+            hours = date[1].split(':')
+            date_splited = date[0].split('/')
+            date_time.append(str(datetime(int(date_splited[2]), int(date_splited[1]), int(date_splited[0]), int(hours[0]), int(hours[1]), int(hours[2]))))
+
+
+        #pass the right datestamp into fecha_hora
+        df.fecha_hora = date_time
+
+        # drop rows with missing value / NaN in any column
+        df = df.dropna(how='all', subset=columns_name.list_columns_chinas_to_drop)
+       
     return df
 
 

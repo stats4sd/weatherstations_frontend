@@ -1,12 +1,13 @@
 import mysql.connector as mysql
 import dbConfig as config
+import listColumnsName as columns_name
 
 # connects to database
 conn = mysql.connect(**config.dbConfig)
 cursor = conn.cursor()
 
 try:
-    cols = '`,`'.join(config.list_columns_name)
+    cols = '`,`'.join(columns_name.list_columns_name)
     sql = f"INSERT INTO `data` (`{cols}`) SELECT `{cols}` FROM `data_template` "
     print("data is inserting")
     cursor.execute(sql)

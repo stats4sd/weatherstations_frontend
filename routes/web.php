@@ -23,7 +23,7 @@ Route::get('', function () {
 
 Route::resource('files','FileController');
 Route::resource('stations', 'StationController');
-Route::resource('datas','DataController');
+// Route::resource('datas','DataController');
 
 
 //NEW Upload page
