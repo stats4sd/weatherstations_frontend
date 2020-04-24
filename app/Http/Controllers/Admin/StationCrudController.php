@@ -47,8 +47,8 @@ class StationCrudController extends CrudController
                 'type' => 'number',
             ],
             [
-                'name' => 'stations',
-                'label' => 'Station',
+                'name' => 'hardware_id',
+                'label' => 'Hardware id',
                 'type' => 'text',
             ],
             [
@@ -75,8 +75,8 @@ class StationCrudController extends CrudController
 
         $this->crud->addFields([
             [
-                'name' => 'stations',
-                'label' => 'Station',
+                'name' => 'hardware_id',
+                'label' => 'Hardware id',
                 'type' => 'text',
             ],
             [
