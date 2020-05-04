@@ -50,7 +50,6 @@
         "optimize-autoloader": true,
         "preferred-install": "dist",
         "sort-packages": true,
-        "process-timeout": 0
     },
     "extra": {
         "laravel": {
