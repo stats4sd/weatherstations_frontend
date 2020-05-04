@@ -105,7 +105,7 @@ try:
     for i, row in openFile().iterrows():
         sql = f"INSERT INTO `data_template` (`{cols}`) VALUES (" + "%s,"*(len(row)-1) + "%s)"
         cursor.execute(sql, tuple(row))
-        conn.commit()
+    conn.commit()
 
 except mysql.Error as err:
     print(f'Failed to upload data: {err}')
