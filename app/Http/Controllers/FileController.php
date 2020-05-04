@@ -74,6 +74,8 @@ class FileController extends Controller
         //python script accepts 3 arguments in this order: scriptPath, path_name, station_id
 
         $process = new Process("python3.7 {$scriptPath} {$path_name} {$station}");
+
+        $process->setTimeout(300);
         
         $process->run();
         

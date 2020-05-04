@@ -26,7 +26,7 @@
         "prologue/alerts": "^0.4.3",
         "pusher/pusher-php-server": "^4.0",
         "spatie/laravel-translatable": "^4.2",
-        "symfony/process": "^4.3",
+        "symfony/process": "4.3.*",
         "symfony/psr-http-message-bridge": "*",
         "tightenco/parental": "0.8",
         "twbs/bootstrap": "4.2.1",
