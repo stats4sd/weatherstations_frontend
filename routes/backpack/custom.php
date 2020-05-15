@@ -35,7 +35,6 @@ Route::group([
     Route::crud('tenDays', 'TenDaysCrudController');
     Route::crud('upload', 'UploadCrudController');
     Route::crud('dataTemplate', 'DataTemplateCrudController');
-    Route::crud('meteobridge', 'MeteobridgeCrudController');
 
 }); // this should be the absolute last line of this file
 

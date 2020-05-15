@@ -13,7 +13,6 @@
       <li class='nav-item'><a class='nav-link' href="{{ backpack_url('data') }}"><i class="nav-icon fas fa-list"></i> Data</a></li>
       <li class='nav-item'><a class='nav-link' href="{{ backpack_url('upload') }}"><i class="nav-icon fa fa-cloud-upload"></i> Data Uploader</a></li>
       <li class='nav-item'><a class='nav-link' href="{{ backpack_url('dataTemplate') }}"><i class="nav-icon far fa-window-maximize"></i> Data Preview</a></li>
-      <li class='nav-item'><a class='nav-link' href="{{ backpack_url('meteobridge') }}"><i class="nav-icon fa fa-tag"></i> Meteobridge </a></li>
     </ul>
 </li>
 
