@@ -36,10 +36,9 @@ Route::group([
     Route::crud('upload', 'UploadCrudController');
     Route::crud('dataTemplate', 'DataTemplateCrudController');
 
+    Route::crud('departamento', 'DepartamentoCrudController');
+    Route::crud('municipio', 'MunicipioCrudController');
+    Route::crud('comunidad', 'ComunidadCrudController');
+    Route::crud('cultivo', 'CultivoCrudController');
+    Route::crud('variedad', 'VariedadCrudController');
 }); // this should be the absolute last line of this file
-
-
-
-
-
-
