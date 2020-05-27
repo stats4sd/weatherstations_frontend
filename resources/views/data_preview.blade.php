@@ -76,6 +76,8 @@
                 <option>Comunidad1</option>
                 <option>Comunidad2</option>
               </select>
+              <h4><b>Coordinate</b></h4>
+              <h4><b>Radius</b></h4>
                
             </div>
           </div>

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePachagramaTable extends Migration
+class CreatePlagasYEnfermedades extends Migration
 {
     /**
      * Run the migrations.
@@ -13,20 +13,17 @@ class CreatePachagramaTable extends Migration
      */
     public function up()
     {
-        Schema::create('pachagrama', function (Blueprint $table) {
+        Schema::create('plagas_y_enfermedades', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('comunidad_id');
-            $table->string('farmer_id');
-            $table->integer('intensidad_helada');
-            $table->integer('intensidad_lluvia');
-            $table->integer('intensidad_granizada');
-            $table->integer('intensidad_radiacion_solar');
-            $table->date('fecha_siembra');
-            $table->date('fecha_emergencia');
-            $table->date('fecha_floracion');
-            $table->date('fecha_maduracion');
             $table->integer('cultivo_id');
             $table->integer('variedad_id');
+            $table->string('plaga_incidencia');
+            $table->decimal('plaga_severidad');
+            $table->string('unidad');
+            $table->string('enfermedad_incidencia');
+            $table->string('sitio_de_control');
+            $table->string('tipo_de_control');
             $table->bigInteger('submission_id');
             $table->timestamps();
         });
@@ -39,6 +36,8 @@ class CreatePachagramaTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pachagrama');
+        Schema::table('plagas_y_enfermedades', function (Blueprint $table) {
+            //
+        });
     }
 }
