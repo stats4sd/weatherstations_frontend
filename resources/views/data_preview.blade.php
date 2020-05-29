@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,102 +33,27 @@
       <div class="row">
         <div class="col-md-12">
           <div class="intro mt-5 mb-5">
-           
+          
             
             </div>
           </div>
         </div>
       </div>
   
-
+ 
 
     <div class="container">
       <h3 class="section-title font-weight-bold text-center mb-3">Download data</h3>
         <p class="section-intro mx-auto text-center mb-5 text-secondary">Description about the data.</p>
         
      <div id="mapid"></div>
-      <div class="row">
-        <div class="col-sm-4 mb-5">
-          <div class="card">
-      
-            <div class="container mt-5">
-              <h4><b>Modules</b></h4>
-              
-              <select class="js-example-basic-multiple" name="modules[]" multiple="multiple">
-                <option value="meteorologica">Información meteorológica</option>
-                <option value="pachagrama">Información de Pachagrama (agroclimático)</option>
-                <option value="manajeoParcela">Manejo de la parcela</option>
-                <option value="parcela">Información de parcelas</option>
-                <option value="suelo">Suelos</option>
-                <option value="plagas">Plagas</option>
-              </select>
-             
-
-              <h4><b>Start date</b></h4>
-              <div class="form-group row">
-                
-                <div>
-                  <input class="form-control" type="date" value="2011-08-19" id="example-date-input">
-                </div>
-              </div>
-              <h4><b>End date</b></h4>
-              <div class="form-group row">
-              
-                <div>
-                  <input class="form-control" type="date" value="2011-08-19" id="example-date-input">
-                </div>
-              </div>
-              <h4><b>Location</b></h4>
-              <select class="js-example-basic-multiple" name="modules[]" multiple="multiple">
-                <option value="comunidad1">Comunidad 1</option>
-                <option value="comunidad2">Comunidad 2</option>
-                <option value="comunidad3">Comunidad 3</option>
-                <option value="comunidad4">Comunidad 4</option>
-                <option value="comunidad5">Comunidad 5</option>
-                <option value="comunidad6">Comunidad 6</option>
-              </select>
-              
-               
-            </div>
-          </div>
-        </div>
-
-        <div class="col-sm-8 mb-5">
-
-          <div class="card">
-            <div class="container mt-5">
-              <h4><b>Table</b></h4>
-            	<table id="table_id" class="display">
-				    <thead>
-				        <tr>
-				            <th>Column 1</th>
-				            <th>Column 2</th>
-				        </tr>
-				    </thead>
-				    <tbody>
-				        <tr>
-				            <td>Row 1 Data 1</td>
-				            <td>Row 1 Data 2</td>
-				        </tr>
-				        <tr>
-				            <td>Row 2 Data 1</td>
-				            <td>Row 2 Data 2</td>
-				        </tr>
-				    </tbody>
-				</table>
-            </div>
-          </div>
-
-		  
-
-		          
-		    </div>
-
-
-
-        </div>
-      </div>
+     <div id="app">
+      <data-preview></data-preview>
+       
+     </div>
     </div>
+     
+
 
  
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.js"></script>
@@ -141,6 +67,8 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+ <!--====== Javascripts & Jquery ======-->
+    <script src="{{ asset('js/app.js') }}"></script>
 <script type="text/javascript">
   var mymap = L.map('mapid').setView([51.505, -0.09], 13);
 
@@ -153,25 +81,15 @@ L.marker([51.5, -0.09]).addTo(mymap)
     .openPopup();
 
 $(document).ready( function () {
-	$('#table_id').DataTable();
+	$('#table_id').DataTable({
+  });
 });
 
 $(document).ready(function() {
     $('.js-example-basic-multiple').select2();
 });
 
-axios.get('api/themes')
-  .then(function (response) {
-    // handle success
-    console.log(response);
-  })
-  .catch(function (error) {
-    // handle error
-    console.log(error);
-  })
-  .then(function () {
-    // always executed
-  });
+
 
 
 </script>

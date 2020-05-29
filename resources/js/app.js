@@ -6,8 +6,10 @@
  */
 
 require('./bootstrap');
-const axios = require('axios').default;
 window.Vue = require('vue');
+import vSelect from 'vue-select'
+
+Vue.component('v-select', vSelect)
 
 /**
  * The following block of code may be used to automatically register your
@@ -18,6 +20,9 @@ window.Vue = require('vue');
  */
 
 // Vue.component('example-component', require('./components/ExampleComponent.vue'));
+Vue.component('control-panel', require('./components/ControlPanel.vue').default);
+Vue.component('tables', require('./components/Tables.vue').default);
+Vue.component('data-preview', require('./components/DataPreview.vue').default);
 
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key)))
@@ -29,11 +34,5 @@ window.Vue = require('vue');
  */
 
 const app = new Vue({
-    el: '#app',
-    created() {
-    	Echo.channel('channelEvent')
-    	  .listen('GenerateFileCompleted', (e) => {
-    	  alert('Generate file for downloding data');
-    	});
-    }
+    el: '#app' 
 });

@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use Khill\Lavacharts\Lavacharts;
-use App\Daily;
+use App\Models\Daily;
+use App\Http\Controllers\Controller;
 
 class DailyController extends Controller
 {
@@ -15,10 +16,10 @@ class DailyController extends Controller
      */
     public function index()
     {
-        
-        
-        //$daily = Daily::all();
-        //return view('home', compact('daily'));
+        $weatherDaily = Daily::paginate(5);
+
+
+        return $weatherDaily->toJson(); 
     }
 
     /**
