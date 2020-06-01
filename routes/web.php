@@ -39,6 +39,7 @@ Route::get('dataTemplate/cleanTable', 'DataTemplateController@cleanTable');
 Route::get('data/{id}/delete', 'DataCrudController@destroy');
 
 
+Route::post('show', 'DataController@show');
 
 //Dashboard
 Route::get('admin/dashboard', 'DashboardController@index');

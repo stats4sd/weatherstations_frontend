@@ -1932,26 +1932,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
+var rootUrl = '';
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      modules: ['Información meteorológica', 'Información de Pachagrama (agroclimático)', 'Manejo de la parcela', 'Información de parcelas', 'Suelos', 'Plagas'],
       startDate: null,
       endDate: null,
       comunidadsSelected: [],
       modulesSelected: []
     };
   },
-  props: ['comunidads'],
+  props: ['comunidads', 'modules'],
   watch: {
+    modulesSelected: function modulesSelected() {
+      this.$emit('update:modulesSelected', this.modulesSelected);
+    },
     comunidadsSelected: function comunidadsSelected() {
       this.$emit('update:comunidadsSelected', this.comunidadsSelected);
     },
@@ -1960,6 +1955,20 @@ __webpack_require__.r(__webpack_exports__);
     },
     endDate: function endDate() {
       this.$emit('update:endDate', this.endDate);
+    }
+  },
+  methods: {
+    submit: function submit(event) {
+      axios({
+        method: 'post',
+        url: rootUrl + "/show",
+        data: {
+          comunidadsSelected: this.comunidadsSelected,
+          modulesSelected: this.modulesSelected,
+          startDate: this.startDate,
+          endDate: this.endDate
+        }
+      });
     }
   }
 });
@@ -2016,7 +2025,7 @@ __webpack_require__.r(__webpack_exports__);
       endDate: null,
       weatherDaily: [],
       pachagrama: [],
-      comunidads: ['comunidad1', 'comunidad2'],
+      comunidads: [],
       comunidadsSelected: [],
       modulesSelected: []
     };
@@ -2024,11 +2033,10 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var _this = this;
 
-    axios.get('api/weatherDaily').then(function (response) {
-      _this.weatherDaily = response.data.data;
-      console.log(_this.weatherDaily);
+    axios.get('api/comunidads').then(function (response) {
+      _this.comunidads = response.data;
+      console.log(response.data);
     }), axios.get('api/pachagrama').then(function (response) {
-      console.log(response.data.data);
       _this.pachagrama = response.data.data;
     });
   },
@@ -47753,63 +47761,66 @@ var render = function() {
         _vm._v(" "),
         _vm._m(1),
         _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.startDate,
-                expression: "startDate"
-              }
-            ],
-            staticClass: "form-control",
-            staticStyle: { width: "100%" },
-            attrs: { type: "date", value: "2011-08-19" },
-            domProps: { value: _vm.startDate },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.startDate = $event.target.value
-              }
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.startDate,
+              expression: "startDate"
             }
-          })
-        ]),
+          ],
+          staticClass: "form-control",
+          staticStyle: { width: "100%" },
+          attrs: { type: "date", value: "2011-08-19" },
+          domProps: { value: _vm.startDate },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.startDate = $event.target.value
+            }
+          }
+        }),
         _vm._v(" "),
         _vm._m(2),
         _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.endDate,
-                expression: "endDate"
-              }
-            ],
-            staticClass: "form-control",
-            staticStyle: { width: "100%" },
-            attrs: { type: "date", value: "2011-08-19" },
-            domProps: { value: _vm.endDate },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.endDate = $event.target.value
-              }
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.endDate,
+              expression: "endDate"
             }
-          })
-        ]),
+          ],
+          staticClass: "form-control",
+          staticStyle: { width: "100%" },
+          attrs: { type: "date", value: "2011-08-19" },
+          domProps: { value: _vm.endDate },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.endDate = $event.target.value
+            }
+          }
+        }),
         _vm._v(" "),
         _vm._m(3),
         _vm._v(" "),
         _c("v-select", {
           staticStyle: { width: "100%" },
-          attrs: { options: _vm.comunidads, multiple: "" },
+          attrs: {
+            label: "name",
+            options: _vm.comunidads,
+            reduce: function(name) {
+              return name.id
+            },
+            multiple: ""
+          },
           model: {
             value: _vm.comunidadsSelected,
             callback: function($$v) {
@@ -47817,7 +47828,17 @@ var render = function() {
             },
             expression: "comunidadsSelected"
           }
-        })
+        }),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-primary mt-5",
+            staticStyle: { width: "100%" },
+            on: { click: _vm.submit }
+          },
+          [_vm._v("Submit")]
+        )
       ],
       1
     )
@@ -47834,19 +47855,19 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("h4", [_c("b", [_vm._v("Start date")])])
+    return _c("h4", { staticClass: "mt-3" }, [_c("b", [_vm._v("Start date")])])
   },
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("h4", [_c("b", [_vm._v("End date")])])
+    return _c("h4", { staticClass: "mt-3" }, [_c("b", [_vm._v("End date")])])
   },
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("h4", [_c("b", [_vm._v("Location")])])
+    return _c("h4", { staticClass: "mt-3" }, [_c("b", [_vm._v("Location")])])
   }
 ]
 render._withStripped = true
@@ -47882,7 +47903,9 @@ var render = function() {
                 comunidads: _vm.comunidads,
                 comunidadsSelected: _vm.comunidadsSelected,
                 startDate: _vm.startDate,
-                endDate: _vm.endDate
+                endDate: _vm.endDate,
+                modules: _vm.modules,
+                modulesSelected: _vm.modulesSelected
               },
               on: {
                 "update:comunidadsSelected": function($event) {
@@ -47902,6 +47925,15 @@ var render = function() {
                 },
                 "update:end-date": function($event) {
                   _vm.endDate = $event
+                },
+                "update:modules": function($event) {
+                  _vm.modules = $event
+                },
+                "update:modulesSelected": function($event) {
+                  _vm.modulesSelected = $event
+                },
+                "update:modules-selected": function($event) {
+                  _vm.modulesSelected = $event
                 }
               }
             })

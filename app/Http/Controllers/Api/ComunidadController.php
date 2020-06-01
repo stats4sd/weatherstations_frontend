@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\Models\Data;
-use DB;
 use Illuminate\Http\Request;
+use App\Models\Comunidad;
+use App\Http\Controllers\Controller;
+use DB;
 
-class DataController extends Controller
+class ComunidadController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +16,9 @@ class DataController extends Controller
      */
     public function index()
     {
-        return view('data_preview');
+        $comunidad = DB::table('comunidad')->select('id', 'name')->get();
+       
+        return $comunidad->toJson();
     }
 
     /**
@@ -45,12 +48,9 @@ class DataController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request)
+    public function show($id)
     {
-   
-        $weather = DB::table('daily_data')->whereBetween('fecha',[$request->startDate, $request->endDate])->whereIn('comunidad', $request->comunidadsSelected)->paginate(5);
-        dd($weather);
-     
+        //
     }
 
     /**
@@ -61,7 +61,7 @@ class DataController extends Controller
      */
     public function edit($id)
     {
-         //
+        //
     }
 
     /**
@@ -86,10 +86,4 @@ class DataController extends Controller
     {
         //
     }
-
-    public function download(Request $request)
-    {
-
-    }
-
 }

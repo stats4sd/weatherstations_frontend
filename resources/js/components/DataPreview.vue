@@ -6,7 +6,7 @@
             <div class="container mt-5">
               
               
-	<control-panel :comunidads="comunidads" :comunidadsSelected.sync="comunidadsSelected" :startDate.sync="startDate" :endDate.sync="endDate"></control-panel>
+	<control-panel :comunidads="comunidads" :comunidadsSelected.sync="comunidadsSelected" :startDate.sync="startDate" :endDate.sync="endDate" :modules.sync="modules" :modulesSelected.sync="modulesSelected"></control-panel>
               
 
               
@@ -37,7 +37,7 @@ export default {
                 endDate:null,
                 weatherDaily:[],
                 pachagrama:[],
-                comunidads:['comunidad1', 'comunidad2'],
+                comunidads:[],
                 comunidadsSelected:[],
                 modulesSelected:[]
 
@@ -46,12 +46,12 @@ export default {
         },
         mounted () {
 
-            axios.get('api/weatherDaily').then((response) => {
-                this.weatherDaily = response.data.data;
-                console.log(this.weatherDaily);
+            axios.get('api/comunidads').then((response) => {
+                this.comunidads = response.data;
+                console.log(response.data);
             }),
             axios.get('api/pachagrama').then((response) => {
-                  console.log(response.data.data);
+                  
                 this.pachagrama = response.data.data;
             })
         },

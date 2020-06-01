@@ -28,18 +28,6 @@
 	<link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
-
-    <div class="main mb-5">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="intro mt-5 mb-5">
-          
-            
-            </div>
-          </div>
-        </div>
-      </div>
-  
  
 
     <div class="container">
@@ -85,9 +73,6 @@ $(document).ready( function () {
   });
 });
 
-$(document).ready(function() {
-    $('.js-example-basic-multiple').select2();
-});
 
 
 
