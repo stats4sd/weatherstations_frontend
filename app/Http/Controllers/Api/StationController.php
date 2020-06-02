@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use App\Station;
+use App\Models\Station;
+use App\Http\Controllers\Controller;
 
 class StationController extends Controller
 {
@@ -17,7 +18,7 @@ class StationController extends Controller
     {
         //all data in this model
         $stations = Station::all();
-        return view('home', compact('stations'));
+        return $stations->toJson(); 
     }
 
     /**

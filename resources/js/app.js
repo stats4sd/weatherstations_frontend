@@ -8,8 +8,10 @@
 require('./bootstrap');
 window.Vue = require('vue');
 import vSelect from 'vue-select'
+import BootstrapVue from 'bootstrap-vue' //Importing
 
-Vue.component('v-select', vSelect)
+Vue.use(BootstrapVue) 
+
 
 /**
  * The following block of code may be used to automatically register your
@@ -23,6 +25,8 @@ Vue.component('v-select', vSelect)
 Vue.component('control-panel', require('./components/ControlPanel.vue').default);
 Vue.component('tables', require('./components/Tables.vue').default);
 Vue.component('data-preview', require('./components/DataPreview.vue').default);
+Vue.component('v-select', vSelect);
+
 
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key)))

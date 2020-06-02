@@ -21,12 +21,13 @@
         "resolve-url-loader": "^2.3.2",
         "sass": "^1.26.5",
         "sass-loader": "^7.3.1",
-        "vue": "^2.5.17",
+        "vue": "^2.6.11",
         "vue-template-compiler": "^2.6.11"
     },
     "dependencies": {
         "bootstrap-sass": "^3.4.1",
         "bootstrap-select": "^1.13.17",
+        "bootstrap-vue": "^2.15.0",
         "chart.js": "^2.9.3",
         "file-saver": "^2.0.2",
         "laravel-echo": "^1.8.0",

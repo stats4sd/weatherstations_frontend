@@ -6,9 +6,18 @@
             <div class="container mt-5">
               
               
-	<control-panel :comunidads="comunidads" :comunidadsSelected.sync="comunidadsSelected" :startDate.sync="startDate" :endDate.sync="endDate" :modules.sync="modules" :modulesSelected.sync="modulesSelected"></control-panel>
-              
-
+	<control-panel 
+        :comunidads="comunidads" 
+        :comunidadsSelected.sync="comunidadsSelected" 
+        :startDate.sync="startDate" 
+        :endDate.sync="endDate" 
+        :modules.sync="modules" 
+        :modulesSelected.sync="modulesSelected" 
+        :weather.sync="weather" 
+        :pachagrama.sync="pachagrama" 
+        :stations="stations" 
+        :stationsSelected.sync="stationsSelected" >
+    </control-panel>
               
 
             </div>
@@ -16,12 +25,25 @@
         </div>
 
         <div class="col-sm-8 mb-5">
+            <div>
+                <b-card no-body>
+                    <b-tabs pills card>
+                        <b-tab title="Información meteorológica" active>
+                            <b-card-text> <tables :data="weather.data"></tables></b-card-text>
+                        </b-tab>
+                        <b-tab title="Información de Pachagrama">
+                            <b-card-text><tables :data="pachagrama.data"></tables></b-card-text>
+                        </b-tab>
+                        <b-button class="ml-3 mb-3" variant="primary">Download</b-button>
+                    </b-tabs>
+              </b-card>
+            </div>
 
 
-	<tables :weather-daily="weatherDaily"></tables>
+           
        
 
-		    </div>
+		</div>
 
 
 
@@ -32,14 +54,17 @@
 export default {
         data(){
             return{
-                modules:['Información meteorológica', 'Información de Pachagrama (agroclimático)', 'Manejo de la parcela', 'Información de parcelas', 'Suelos', 'Plagas'],
+                modules:[{label:'Información meteorológica', value:'daily_data'},{label:'Información de Pachagrama (agroclimático)', value:'pachagrama'}, {label:'Cultivos', value:'cultivos'}, {label:'Suelos', value:'suelos'}, {label:'Plagas', value:'plagas_y_enfermedades'}],
+      
                 startDate:null,
                 endDate:null,
-                weatherDaily:[],
+                weather:[],
                 pachagrama:[],
+                stations:[],
                 comunidads:[],
                 comunidadsSelected:[],
-                modulesSelected:[]
+                modulesSelected:[],
+                stationsSelected:[]
 
             }
 
@@ -48,18 +73,11 @@ export default {
 
             axios.get('api/comunidads').then((response) => {
                 this.comunidads = response.data;
-                console.log(response.data);
             }),
-            axios.get('api/pachagrama').then((response) => {
-                  
-                this.pachagrama = response.data.data;
+            axios.get('api/stations').then((response) => {
+                this.stations = response.data;
             })
-        },
-         watch: {
-            comunidad() {
-                console.log(this.comunidad);
-            }
-        },
+        }
        
     }
 

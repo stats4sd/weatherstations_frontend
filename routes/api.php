@@ -18,4 +18,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::apiResource('comunidads', 'Api\\ComunidadController');
-Route::apiResource('pachagrama', 'Api\\PachagramaController');
+Route::apiResource('stations', 'Api\\StationController');

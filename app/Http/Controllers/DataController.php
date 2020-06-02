@@ -46,10 +46,27 @@ class DataController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Request $request)
-    {
-   
-        $weather = DB::table('daily_data')->whereBetween('fecha',[$request->startDate, $request->endDate])->whereIn('comunidad', $request->comunidadsSelected)->paginate(5);
-        dd($weather);
+    {   
+
+        foreach ($request->modulesSelected as $module) {
+            if($module=='daily_data'){
+                $weather = DB::table($module)->where('fecha','>=',$request->startDate)->where('fecha','<=',$request->endDate)->whereIn('id_station', $request->stationsSelected)->paginate(5);
+         
+            } if($module=='pachagrama') {
+
+                $pachagrama = DB::table($module)->where('fecha_siembra','>=',$request->startDate)->where('fecha_siembra','<=',$request->endDate)->whereIn('comunidad_id', $request->comunidadsSelected)->paginate(5);
+             
+            }
+                
+         }
+
+        return response()->json([
+            'weather' => json_decode($weather->toJson()), 
+            'pachagrama' => json_decode($pachagrama->toJson())
+        ]);
+       
+
+
      
     }
 
