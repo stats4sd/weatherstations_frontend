@@ -1935,9 +1935,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 var rootUrl = '';
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -1991,7 +1988,9 @@ var rootUrl = '';
         }
       }).then(function (result) {
         _this.weather = result.data.weather;
+        console.log(_this.weather);
         _this.pachagrama = result.data.pachagrama;
+        console.log(_this.pachagrama);
       }, function (error) {
         console.log(error);
       });
@@ -2013,6 +2012,13 @@ $(document).ready(function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -90769,35 +90775,72 @@ var render = function() {
                 "b-tabs",
                 { attrs: { pills: "", card: "" } },
                 [
-                  _c(
-                    "b-tab",
-                    {
-                      attrs: { title: "Información meteorológica", active: "" }
-                    },
-                    [
-                      _c(
-                        "b-card-text",
-                        [_c("tables", { attrs: { data: _vm.weather.data } })],
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "b-tab",
-                    { attrs: { title: "Información de Pachagrama" } },
-                    [
-                      _c(
-                        "b-card-text",
+                  _vm.weather.length !== 0
+                    ? _c(
+                        "b-tab",
+                        {
+                          attrs: {
+                            title: "Información meteorológica",
+                            active: ""
+                          }
+                        },
                         [
-                          _c("tables", { attrs: { data: _vm.pachagrama.data } })
+                          _c(
+                            "b-card-text",
+                            [
+                              _vm.weather.length !== 0
+                                ? _c("p", [
+                                    _vm._v(
+                                      "Showing " +
+                                        _vm._s(_vm.weather.to) +
+                                        " of " +
+                                        _vm._s(_vm.weather.total) +
+                                        " entries"
+                                    )
+                                  ])
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _c("tables", {
+                                attrs: { data: _vm.weather.data }
+                              })
+                            ],
+                            1
+                          )
                         ],
                         1
                       )
-                    ],
-                    1
-                  ),
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.pachagrama.length !== 0
+                    ? _c(
+                        "b-tab",
+                        { attrs: { title: "Información de Pachagrama" } },
+                        [
+                          _c(
+                            "b-card-text",
+                            [
+                              _vm.pachagrama.length !== 0
+                                ? _c("p", [
+                                    _vm._v(
+                                      "Showing " +
+                                        _vm._s(_vm.pachagrama.to) +
+                                        " of " +
+                                        _vm._s(_vm.pachagrama.total) +
+                                        " entries"
+                                    )
+                                  ])
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _c("tables", {
+                                attrs: { data: _vm.pachagrama.data }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    : _vm._e(),
                   _vm._v(" "),
                   _c(
                     "b-button",

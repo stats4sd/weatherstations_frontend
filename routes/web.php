@@ -24,6 +24,7 @@ Route::get('', function () {
 Route::resource('files','FileController');
 Route::resource('stations', 'StationController');
 Route::resource('datas','DataController');
+Route::get('download','DataController@download');
 
 
 //NEW Upload page

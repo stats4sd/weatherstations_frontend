@@ -9,9 +9,6 @@
              <h4  class="mt-3" v-if="modulesSelected.includes('daily_data')"><b>Stations</b></h4>
              <v-select v-if="modulesSelected.includes('daily_data')" :options="stations" :reduce="label => label.id" v-model="stationsSelected" multiple style="width:100%"></v-select>
               
-                
-
-
             <h4 class="mt-3"><b>Start date</b></h4>
     
                 <input class="form-control" type="date" v-model="startDate" style="width:100%">
@@ -86,7 +83,9 @@ const rootUrl = ''
                 })
                 .then((result) => {
                     this.weather = result.data.weather;
+                    console.log(this.weather)
                     this.pachagrama = result.data.pachagrama;
+                    console.log(this.pachagrama)
                 }, (error) => {
                     console.log(error);
                 });          

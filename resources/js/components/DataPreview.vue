@@ -28,11 +28,18 @@
             <div>
                 <b-card no-body>
                     <b-tabs pills card>
-                        <b-tab title="Información meteorológica" active>
-                            <b-card-text> <tables :data="weather.data"></tables></b-card-text>
+                        <b-tab v-if="weather.length!==0" title="Información meteorológica" active>
+
+                            <b-card-text>
+                                <p v-if="weather.length!==0">Showing {{weather.to}} of {{weather.total}} entries</p> 
+                                <tables :data="weather.data"></tables>
+                            </b-card-text>
                         </b-tab>
-                        <b-tab title="Información de Pachagrama">
-                            <b-card-text><tables :data="pachagrama.data"></tables></b-card-text>
+                        <b-tab v-if="pachagrama.length!==0" title="Información de Pachagrama">
+                            <b-card-text>
+                                <p v-if="pachagrama.length!==0">Showing {{pachagrama.to}} of {{pachagrama.total}} entries</p>
+                                <tables :data="pachagrama.data"></tables>
+                            </b-card-text>
                         </b-tab>
                         <b-button class="ml-3 mb-3" variant="primary">Download</b-button>
                     </b-tabs>
