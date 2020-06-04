@@ -9,21 +9,27 @@ import pandas as pd
 path = sys.argv[1] + '/storage/app/public/data/'
 query = sys.argv[2]
 name_file = sys.argv[3]
-name_file = 'data.xlsx'
 queries = query.split(';')
+sheet_names = sys.argv[4]
+sheet_names = sheet_names.split(',')
 
-
+print(queries);
 try:
 	con = MySQLConnection(**config.dbConfig)
 	cursor = con.cursor()
-	print("query", query)
-	writer = pd.ExcelWriter(path + name_file, engine='xlsxwriter')
+	dfs = {} 
+	i = 0
 	for query in queries:
 		cursor.execute(query)
 		df = pd.DataFrame(cursor, columns=[i[0] for i in cursor.description])
-		print(df)
+		dfs[sheet_names[i]] = df
+		i += 1
+	
+	writer = pd.ExcelWriter(path + name_file, engine='xlsxwriter')
 
-	df.[sheet_name].to_excel(writer, sheet_name='sheet_name', index=False)
+	for sheet_name in dfs.keys():
+		dfs[sheet_name].to_excel(writer, sheet_name=sheet_name, index=False)
+		
 	writer.save()
 	writer.close()
 	con.commit()

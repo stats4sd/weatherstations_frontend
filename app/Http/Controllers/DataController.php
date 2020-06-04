@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Data;
+use App\Models\Daily;
 use DB;
 use Illuminate\Http\Request;
 use Symfony\Component\Process\Process;
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class DataController extends Controller
@@ -55,21 +57,19 @@ class DataController extends Controller
         foreach ($request->modulesSelected as $module) {
             if($module=='daily_data'){
                 $weather = DB::table($module)->where('fecha','>=',$request->startDate)->where('fecha','<=',$request->endDate)->whereIn('id_station', $request->stationsSelected)->paginate(5);
-         
-            } if($module=='pachagrama') {
-                $pachagrama = DB::table($module)->where('fecha_siembra','>=',$request->startDate)->where('fecha_siembra','<=',$request->endDate)->whereIn('comunidad_id', $request->comunidadsSelected)->paginate(5);    
-            }
+                // $weather = Daily::select()->where('fecha','>=',$request->startDate)->where('fecha','<=',$request->endDate)->whereIn('id_station', $request->stationsSelected)->get();
                 
+                dd($weather);
+              
+            } if($module=='pachagrama') {
+                $pachagrama = DB::table($module)->where('fecha_siembra','>=',$request->startDate)->where('fecha_siembra','<=',$request->endDate)->whereIn('comunidad_id', $request->comunidadsSelected)->paginate(5);                  
+            }                
         }
-
-
+        
         return response()->json([
             'weather' => $weather, 
-            'pachagrama' => $pachagrama
+            'pachagrama' => $pachagrama,
         ]);
-       
-
-
      
     }
 
@@ -107,22 +107,41 @@ class DataController extends Controller
         //
     }
 
-    public function download()
+    public function download(Request $request)
     {
-        $scriptName = 'generate_xlsx_from_query.py';
-        $scriptPath = base_path() . '/scripts/' . $scriptName;
-        $base_path = base_path();
-        $query = "select * from pachagrama;select * from stations;";
-        
-        $query = '"'.$query.'"';
-        
+        $scriptPath = base_path() . '/scripts/generate_xlsx_from_query.py';
+        $base_path = base_path();    
         $file_name = date('c')."data.xlsx";
-        $query = str_replace('`',' ',$query);
 
-        //python script accepts 4 arguments in this order: base_path(), query, params and file name
+        $queries = '';
+        $sheet_names = '';
+
+        foreach ($request->modulesSelected as $module) {
+            if($module=='daily_data'){
+          
+                $query = "select * from ". $module . " where fecha >= '".$request->startDate."' and fecha <= '".$request->endDate."' and id_station in (". implode(",",$request->stationsSelected).");";
+
+                $queries = $queries.$query;
+                $sheet_names = $sheet_names.'weatherstations, ';
+               
+            } if($module=='pachagrama') {
+               
+                $query = "select * from ". $module . " where fecha_siembra >= '".$request->startDate."' and fecha_siembra <='".$request->endDate."' and comunidad_id in (". implode(",",$request->comunidadsSelected).");";
+
+                $queries = $queries.$query;
+                $sheet_names = $sheet_names.'pachagrama, ';
+
+            }                
+        }
+
+        $queries = rtrim($queries, ";");
+        $sheet_names = rtrim($sheet_names, ", ");
+        $queries = '"'.$queries.'"';
+        $sheet_names = '"'.$sheet_names.'"';
+   
+        //python script accepts 4 arguments in this order: base_path(), queries in string, file name and sheet names in string
       
-      
-        $process = new Process("python3.7 {$scriptPath} {$base_path} {$query} {$file_name}");
+        $process = new Process("python3.7 {$scriptPath} {$base_path} {$queries} {$file_name} {$sheet_names}");
 
         $process->run();
         
@@ -135,7 +154,6 @@ class DataController extends Controller
             $process->getOutput();
         }
        
-
         $path_download =  Storage::url('/data/'.$file_name);
         return response()->json(['path' => $path_download]);
     }

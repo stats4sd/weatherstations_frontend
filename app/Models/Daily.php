@@ -25,6 +25,9 @@ class Daily extends Model
     //protected $fillable = [];
     // protected $hidden = [];
     // protected $dates = [];
+     protected $casts = [
+        'id_station',
+    ];
 
     /*
     |--------------------------------------------------------------------------
@@ -59,4 +62,10 @@ class Daily extends Model
     | MUTATORS
     |--------------------------------------------------------------------------
     */
+
+    public function getIdStationAttribute($value)
+    {
+        $value = 0; 
+        return $value;
+    }
 }

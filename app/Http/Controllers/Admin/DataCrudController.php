@@ -208,7 +208,10 @@ class DataCrudController extends CrudController
         $params = join(",",Session('params'));
         $query = '"'.$query.'"';
         $params = '"'.$params.'"';
-        $file_name = date('c')."data.csv";
+        $date = str_replace(':', '', date('c'));
+        $date = str_replace('-', '', $date);
+        $date = str_replace('+', '', $date);
+        $file_name = "data.xlsx";
         $query = str_replace('`',' ',$query);
 
         //python script accepts 4 arguments in this order: base_path(), query, params and file name

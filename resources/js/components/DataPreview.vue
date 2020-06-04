@@ -41,7 +41,7 @@
                                 <tables :data="pachagrama.data"></tables>
                             </b-card-text>
                         </b-tab>
-                        <b-button class="ml-3 mb-3" variant="primary">Download</b-button>
+                        <b-button class="ml-3 mb-3" variant="primary" v-on:click="download">Download</b-button>
                     </b-tabs>
               </b-card>
             </div>
@@ -84,6 +84,28 @@ export default {
             axios.get('api/stations').then((response) => {
                 this.stations = response.data;
             })
+        },
+        methods: {
+            download: function (event) {
+                axios({
+                    method: 'post',
+                    url: "/download",
+                    data: {
+                        comunidadsSelected: this.comunidadsSelected,
+                        modulesSelected: this.modulesSelected,
+                        startDate: this.startDate,
+                        endDate: this.endDate,
+                        stationsSelected: this.stationsSelected,
+                    }
+                })
+                .then((result) => {
+                    
+                    window.location.href = result.data['path'];
+                }, (error) => {
+                    console.log(error);
+                });          
+               
+            }
         }
        
     }

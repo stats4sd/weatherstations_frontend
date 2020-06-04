@@ -1978,7 +1978,7 @@ var rootUrl = '';
 
       axios({
         method: 'post',
-        url: rootUrl + "/show",
+        url: "/show",
         data: {
           comunidadsSelected: this.comunidadsSelected,
           modulesSelected: this.modulesSelected,
@@ -1988,9 +1988,7 @@ var rootUrl = '';
         }
       }).then(function (result) {
         _this.weather = result.data.weather;
-        console.log(_this.weather);
         _this.pachagrama = result.data.pachagrama;
-        console.log(_this.pachagrama);
       }, function (error) {
         console.log(error);
       });
@@ -2109,6 +2107,25 @@ __webpack_require__.r(__webpack_exports__);
     }), axios.get('api/stations').then(function (response) {
       _this.stations = response.data;
     });
+  },
+  methods: {
+    download: function download(event) {
+      axios({
+        method: 'post',
+        url: "/download",
+        data: {
+          comunidadsSelected: this.comunidadsSelected,
+          modulesSelected: this.modulesSelected,
+          startDate: this.startDate,
+          endDate: this.endDate,
+          stationsSelected: this.stationsSelected
+        }
+      }).then(function (result) {
+        window.location.href = result.data['path'];
+      }, function (error) {
+        console.log(error);
+      });
+    }
   }
 });
 
@@ -90844,7 +90861,11 @@ var render = function() {
                   _vm._v(" "),
                   _c(
                     "b-button",
-                    { staticClass: "ml-3 mb-3", attrs: { variant: "primary" } },
+                    {
+                      staticClass: "ml-3 mb-3",
+                      attrs: { variant: "primary" },
+                      on: { click: _vm.download }
+                    },
                     [_vm._v("Download")]
                   )
                 ],

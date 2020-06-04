@@ -72,7 +72,7 @@ const rootUrl = ''
             submit: function (event) {
                 axios({
                     method: 'post',
-                    url: rootUrl+"/show",
+                    url: "/show",
                     data: {
                         comunidadsSelected: this.comunidadsSelected,
                         modulesSelected: this.modulesSelected,
@@ -83,9 +83,7 @@ const rootUrl = ''
                 })
                 .then((result) => {
                     this.weather = result.data.weather;
-                    console.log(this.weather)
                     this.pachagrama = result.data.pachagrama;
-                    console.log(this.pachagrama)
                 }, (error) => {
                     console.log(error);
                 });          

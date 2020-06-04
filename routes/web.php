@@ -24,7 +24,9 @@ Route::get('', function () {
 Route::resource('files','FileController');
 Route::resource('stations', 'StationController');
 Route::resource('datas','DataController');
-Route::get('download','DataController@download');
+
+Route::post('show', 'DataController@show');
+Route::post('datas/download','DataController@download');
 
 
 //NEW Upload page
@@ -39,8 +41,6 @@ Route::get('dataTemplate/cleanTable', 'DataTemplateController@cleanTable');
 
 Route::get('data/{id}/delete', 'DataCrudController@destroy');
 
-
-Route::post('show', 'DataController@show');
 
 //Dashboard
 Route::get('admin/dashboard', 'DashboardController@index');
