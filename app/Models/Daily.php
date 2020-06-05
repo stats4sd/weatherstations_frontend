@@ -65,7 +65,7 @@ class Daily extends Model
 
     public function getIdStationAttribute($value)
     {
-        $value = 0; 
-        return $value;
+        $label = Station::find($value)->first()->label;
+        return $label;
     }
 }

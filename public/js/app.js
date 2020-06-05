@@ -2066,9 +2066,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -103119,7 +103116,6 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 
- //Importing
 
 Vue.use(bootstrap_vue__WEBPACK_IMPORTED_MODULE_1__["default"]);
 /**
@@ -103129,11 +103125,11 @@ Vue.use(bootstrap_vue__WEBPACK_IMPORTED_MODULE_1__["default"]);
  *
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
-// Vue.component('example-component', require('./components/ExampleComponent.vue'));
 
 Vue.component('control-panel', __webpack_require__(/*! ./components/ControlPanel.vue */ "./resources/js/components/ControlPanel.vue")["default"]);
 Vue.component('tables', __webpack_require__(/*! ./components/Tables.vue */ "./resources/js/components/Tables.vue")["default"]);
-Vue.component('data-preview', __webpack_require__(/*! ./components/DataPreview.vue */ "./resources/js/components/DataPreview.vue")["default"]);
+Vue.component('data-preview', __webpack_require__(/*! ./components/DataPreview.vue */ "./resources/js/components/DataPreview.vue")["default"]); // Vue.component('map', require('./components/Map').default);
+
 Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_0___default.a); // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key)))
 

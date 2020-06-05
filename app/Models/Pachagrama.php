@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use App\Models\Comunidad;
 
 class Pachagrama extends Model
 {
@@ -52,4 +53,9 @@ class Pachagrama extends Model
     | MUTATORS
     |--------------------------------------------------------------------------
     */
+    public function getComunidadIdAttribute($value)
+    {
+        $name = Comunidad::find($value)->first()->name;
+        return $name;
+    }
 }

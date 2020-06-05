@@ -1,4 +1,5 @@
 <template>
+
 	 <div class="row">
         <div class="col-sm-4 mb-5">
           <div class="card">
@@ -45,10 +46,6 @@
                     </b-tabs>
               </b-card>
             </div>
-
-
-           
-       
 
 		</div>
 

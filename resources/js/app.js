@@ -8,7 +8,8 @@
 require('./bootstrap');
 window.Vue = require('vue');
 import vSelect from 'vue-select'
-import BootstrapVue from 'bootstrap-vue' //Importing
+import BootstrapVue from 'bootstrap-vue' 
+
 
 Vue.use(BootstrapVue) 
 
@@ -21,11 +22,12 @@ Vue.use(BootstrapVue)
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
 
-// Vue.component('example-component', require('./components/ExampleComponent.vue'));
 Vue.component('control-panel', require('./components/ControlPanel.vue').default);
 Vue.component('tables', require('./components/Tables.vue').default);
 Vue.component('data-preview', require('./components/DataPreview.vue').default);
+// Vue.component('map', require('./components/Map').default);
 Vue.component('v-select', vSelect);
+
 
 
 // const files = require.context('./', true, /\.vue$/i)
@@ -40,3 +42,5 @@ Vue.component('v-select', vSelect);
 const app = new Vue({
     el: '#app' 
 });
+
+
