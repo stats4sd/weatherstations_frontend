@@ -234,6 +234,8 @@ return [
         'Lava' => Khill\Lavacharts\Laravel\LavachartsFacade::class,
         'Datatables' => Yajra\Datatables\Facades\Datatables::class,
         'Alert' => 'Prologue\Alerts\Facades\Alert',
+        'Arr'       => Illuminate\Support\Arr::class,
+        'Str'       => Illuminate\Support\Str::class,
 
     ],
 

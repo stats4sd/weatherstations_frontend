@@ -237,7 +237,7 @@ class DataTemplateController extends Controller
     
 		
 		
-		$process = new Process("python3.7 {$scriptPath}");
+		$process = new Process("python3 {$scriptPath}");
 
         $process->run();
     	

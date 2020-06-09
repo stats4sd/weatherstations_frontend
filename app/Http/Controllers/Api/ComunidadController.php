@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use App\Station;
+use App\Models\Comunidad;
+use App\Http\Controllers\Controller;
+use DB;
 
-class StationController extends Controller
+class ComunidadController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,11 +15,10 @@ class StationController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-
     {
-        //all data in this model
-        $stations = Station::all();
-        return view('home', compact('stations'));
+        $comunidad = DB::table('comunidad')->select('id', 'name')->get();
+       
+        return $comunidad->toJson();
     }
 
     /**
@@ -49,7 +50,7 @@ class StationController extends Controller
      */
     public function show($id)
     {
-        return Station::find($id);
+        //
     }
 
     /**

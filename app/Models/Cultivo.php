@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 
-class Meteobridge extends Model
+class Cultivo extends Model
 {
     use CrudTrait;
 
@@ -15,11 +15,11 @@ class Meteobridge extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'meteobridge';
+    protected $table = 'cultivos';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
-    // protected $guarded = ['id'];
-    protected $fillable = [];
+    protected $guarded = ['id'];
+    // protected $fillable = [];
     // protected $hidden = [];
     // protected $dates = [];
 
@@ -43,7 +43,7 @@ class Meteobridge extends Model
 
     /*
     |--------------------------------------------------------------------------
-    | ACCESORS
+    | ACCESSORS
     |--------------------------------------------------------------------------
     */
 

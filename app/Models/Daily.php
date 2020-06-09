@@ -21,10 +21,13 @@ class Daily extends Model
     protected $table = 'daily_data';
     
     // public $timestamps = false;
-    // protected $guarded = ['id'];
-    protected $fillable = [];
+    protected $guarded = ['id'];
+    //protected $fillable = [];
     // protected $hidden = [];
     // protected $dates = [];
+     protected $casts = [
+        'id_station',
+    ];
 
     /*
     |--------------------------------------------------------------------------
@@ -59,4 +62,10 @@ class Daily extends Model
     | MUTATORS
     |--------------------------------------------------------------------------
     */
+
+    public function getIdStationAttribute($value)
+    {
+        $label = Station::find($value)->first()->label;
+        return $label;
+    }
 }

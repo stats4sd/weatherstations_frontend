@@ -35,12 +35,17 @@ Route::group([
     Route::crud('tenDays', 'TenDaysCrudController');
     Route::crud('upload', 'UploadCrudController');
     Route::crud('dataTemplate', 'DataTemplateCrudController');
-    Route::crud('meteobridge', 'MeteobridgeCrudController');
 
+    Route::crud('departamento', 'DepartamentoCrudController');
+    Route::crud('municipio', 'MunicipioCrudController');
+    Route::crud('comunidad', 'ComunidadCrudController');
+    Route::crud('cultivo', 'CultivoCrudController');
+    Route::crud('variedad', 'VariedadCrudController');
+    Route::crud('pachagrama', 'PachagramaCrudController');
+    Route::crud('fenologia', 'FenologiaCrudController');
+    Route::crud('parcela', 'ParcelaCrudController');
+    Route::crud('suelo', 'SueloCrudController');
+    Route::crud('manejoparcela', 'ManejoParcelaCrudController');
+    Route::crud('plagasyenfermedades', 'PlagasYEnfermedadesCrudController');
+    Route::crud('produccion', 'ProduccionCrudController');
 }); // this should be the absolute last line of this file
-
-
-
-
-
-

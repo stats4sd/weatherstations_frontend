@@ -71,6 +71,11 @@ class StationCrudController extends CrudController
                 'label' => 'longitude',
                 'type' => 'text',
             ],
+            [
+                'name' => 'altitude',
+                'label' => 'altitude',
+                'type' => 'text',
+            ],
         ]);
 
         $this->crud->addFields([

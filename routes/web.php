@@ -23,7 +23,10 @@ Route::get('', function () {
 
 Route::resource('files','FileController');
 Route::resource('stations', 'StationController');
-// Route::resource('datas','DataController');
+Route::resource('datas','DataController');
+
+Route::post('show', 'DataController@show');
+Route::post('datas/download','DataController@download');
 
 
 //NEW Upload page
@@ -37,7 +40,6 @@ Route::get('dataTemplate/storeFile', 'DataTemplateController@storeFile');
 Route::get('dataTemplate/cleanTable', 'DataTemplateController@cleanTable');
 
 Route::get('data/{id}/delete', 'DataCrudController@destroy');
-
 
 
 //Dashboard
