@@ -27,7 +27,6 @@
 
 <script>
 
-const rootUrl = ''
 
     export default {
         data: function(){

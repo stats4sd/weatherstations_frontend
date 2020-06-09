@@ -52,8 +52,8 @@ class DataController extends Controller
      */
     public function show(Request $request)
     {   
-        $weather = null;
-        $pachagrama = null;
+        $weather = [];
+        $pachagrama = [];
 
         foreach ($request->modulesSelected as $module) {
             if($module=='daily_data'){

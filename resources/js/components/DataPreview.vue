@@ -1,6 +1,8 @@
 <template>
+    <div>
+    <bolivia-map></bolivia-map>
 
-	 <div class="row">
+	<div class="row">
         <div class="col-sm-4 mb-5">
           <div class="card">
       
@@ -38,7 +40,7 @@
                         </b-tab>
                         <b-tab v-if="pachagrama.length!==0" title="Información de Pachagrama">
                             <b-card-text>
-                                <p v-if="pachagrama.length!==0">Showing {{pachagrama.to}} of {{pachagrama.total}} entries</p>
+                                <p v-if="pachagrama,length!==0">Showing {{pachagrama.to}} of {{pachagrama.total}} entries</p>
                                 <tables :data="pachagrama.data"></tables>
                             </b-card-text>
                         </b-tab>
@@ -53,6 +55,7 @@
 
         </div>
       </div>
+    </div>
 </template>
 <script type="text/javascript">
 export default {
