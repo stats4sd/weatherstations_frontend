@@ -22,6 +22,7 @@ class Parcela extends Model
     // protected $fillable = [];
     // protected $hidden = [];
     // protected $dates = [];
+    protected $casts = ['poligono_gps' => 'array'];
 
     /*
     |--------------------------------------------------------------------------
@@ -52,4 +53,5 @@ class Parcela extends Model
     | MUTATORS
     |--------------------------------------------------------------------------
     */
+
 }

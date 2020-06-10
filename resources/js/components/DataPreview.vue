@@ -1,6 +1,9 @@
 <template>
     <div>
-    <bolivia-map></bolivia-map>
+    <bolivia-map
+    :stations="stations"
+    :parcelas="parcelas"
+    ></bolivia-map>
 
 	<div class="row">
         <div class="col-sm-4 mb-5">
@@ -51,8 +54,6 @@
 
 		</div>
 
-
-
         </div>
       </div>
     </div>
@@ -67,6 +68,7 @@ export default {
                 endDate:null,
                 weather:[],
                 pachagrama:[],
+                parcelas:[],
                 stations:[],
                 comunidads:[],
                 comunidadsSelected:[],
@@ -83,6 +85,10 @@ export default {
             }),
             axios.get('api/stations').then((response) => {
                 this.stations = response.data;
+            }),
+            axios.get('api/parcelas').then((response) => {
+                this.parcelas = response.data;
+                console.log( this.parcelas);
             })
         },
         methods: {

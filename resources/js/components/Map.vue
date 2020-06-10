@@ -1,85 +1,96 @@
 
 <template>
 
-	<div style="height: 500px; width: 100%">
-   
+	<div style="height: 600px; width: 100%">  
     <l-map
-      
       :zoom="zoom"
       :center="center"
       :options="mapOptions"
-      style="height: 80%"
-      @update:center="centerUpdate"
-      @update:zoom="zoomUpdate"
+      @click="getPoint"
+     
     >
-      <l-tile-layer
-        :url="url"
-        :attribution="attribution"
-      />
-      <l-marker :lat-lng="withPopup">
-        <l-popup>
-          <div @click="innerClick">
-            I am a popup
-            <p v-show="showParagraph">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
-              sed pretium nisl, ut sagittis sapien. Sed vel sollicitudin nisi.
-              Donec finibus semper metus id malesuada.
-            </p>
-          </div>
-        </l-popup>
-      </l-marker>
-      <l-marker :lat-lng="withTooltip">
-        <l-tooltip :options="{ permanent: true, interactive: true }">
-          <div @click="innerClick">
-            I am a tooltip
-            <p v-show="showParagraph">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
-              sed pretium nisl, ut sagittis sapien. Sed vel sollicitudin nisi.
-              Donec finibus semper metus id malesuada.
-            </p>
-          </div>
-        </l-tooltip>
-      </l-marker>
+		<l-tile-layer
+		:url="url"
+		:attribution="attribution"
+		/>
+     	<div v-for="station in stations">
+      
+			<l-marker 
+			:lat-lng="[station.latitude, station.longitude]"
+			>
+
+			<l-icon
+			:icon-size="[64,64]"
+			:icon-anchor="[32,10]"
+			icon-url="images/station2.png"
+			/>
+			<l-popup>
+				<div>
+		            {{ station.label }}
+		        </div>
+	        </l-popup>
+			</l-marker>
+	   	</div> 
+	   	<div v-for="parcela in parcelas">
+	   		<l-polygon :lat-lngs="parcela.poligono_gps" :color="polygon.color">
+		   		<l-popup >
+		   			<img src="images/plot.jpg">
+		   			<p><b>Superficie: </b>{{parcela.superficie_hectareas}} ha</p>
+		   			<p><b>Pendiente: </b>{{parcela.pendiente}}</p>
+		   			<p><b>Drenaje: </b>{{parcela.drenaje}}</p>
+		   			<p><b>Salinidad: </b>{{parcela.salinidad}}</p>
+
+	
+		   		</l-popup>
+					
+		     
+	        </l-polygon>
+	   	</div> 
     </l-map>
   </div>
 
 </template>
 <script type="text/javascript">
 	import { latLng } from 'leaflet';
-	 export default {
-  
-  
-  data() {
-    return {
-      zoom: 13,
-      center: latLng(47.41322, -1.219482),
-      url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      attribution:
-        '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-      withPopup: latLng(47.41322, -1.219482),
-      withTooltip: latLng(47.41422, -1.250482),
-      currentZoom: 11.5,
-      currentCenter: latLng(47.41322, -1.219482),
-      showParagraph: false,
-      mapOptions: {
-        zoomSnap: 0.5
-      },
-      showMap: true
-    };
-  },
+	
+	export default {
+ 
+	data() {
+		return {
+			zoom: 6.5,
+			center: latLng(-16.499998, -68.1333328),
+			url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+			attribution:
+			'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+			showParagraph: false,
+			mapOptions: {
+			zoomSnap: 0.5
+			},
+			showMap: true,
+			polygon: {
+      
+		    	color: 'green'
+		    },
+		};
+	},
+
+	
+  props: ['stations', 'parcelas'],
   methods: {
-    zoomUpdate(zoom) {
-      this.currentZoom = zoom;
-    },
-    centerUpdate(center) {
-      this.currentCenter = center;
-    },
-    showLongText() {
-      this.showParagraph = !this.showParagraph;
-    },
-    innerClick() {
-      alert("Click!");
-    }
+  	getPoint(event) {
+  		var distance = [];
+  		$.each(this.stations, function(key, value){
+  			this.station = latLng(value.latitude,value.longitude);
+  			distance.push(this.station.distanceTo(event.latlng));
+  		})
+  			this.neaster = Math.min(...distance); 
+  		console.log(this.neaster);
+
+  		
+  	},
+
+   
+   
   }
 };
 </script>
