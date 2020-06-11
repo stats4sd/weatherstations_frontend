@@ -1,37 +1,35 @@
 <template>
     <div>
-    <bolivia-map
-    :stations="stations"
-    :parcelas="parcelas"
-    ></bolivia-map>
-
 	<div class="row">
         <div class="col-sm-4 mb-5">
-          <div class="card">
-      
-            <div class="container mt-5">
+            <div class="card">
+                <div class="container mt-5">
               
               
-	<control-panel 
-        :comunidads="comunidads" 
-        :comunidadsSelected.sync="comunidadsSelected" 
-        :startDate.sync="startDate" 
-        :endDate.sync="endDate" 
-        :modules.sync="modules" 
-        :modulesSelected.sync="modulesSelected" 
-        :weather.sync="weather" 
-        :pachagrama.sync="pachagrama" 
-        :stations="stations" 
-        :stationsSelected.sync="stationsSelected" >
-    </control-panel>
-              
+                	<control-panel 
+                        :departamentos="departamentos"
+                        :municipios="municipios"
+                        :comunidads="comunidads" 
 
+                        :comunidadsSelected.sync="comunidadsSelected" 
+                        :startDate.sync="startDate" 
+                        :endDate.sync="endDate" 
+                        :modules.sync="modules" 
+                        :modulesSelected.sync="modulesSelected" 
+                        :weather.sync="weather" 
+                        :pachagrama.sync="pachagrama" 
+                        :stations="stations" 
+                        :stationsSelected.sync="stationsSelected" >
+                    </control-panel>
+                </div>
             </div>
-          </div>
         </div>
-
         <div class="col-sm-8 mb-5">
-            <div>
+            <bolivia-map
+            :stations="stations"
+            :parcelas="parcelas"
+            ></bolivia-map>
+            <div class="mt-5">
                 <b-card no-body>
                     <b-tabs pills card>
                         <b-tab v-if="weather.length!==0" title="Información meteorológica" active>
@@ -51,12 +49,16 @@
                     </b-tabs>
               </b-card>
             </div>
+        </div>
+    </div>
+                      
 
-		</div>
+           
+
+		
 
         </div>
-      </div>
-    </div>
+    
 </template>
 <script type="text/javascript">
 export default {
@@ -70,6 +72,8 @@ export default {
                 pachagrama:[],
                 parcelas:[],
                 stations:[],
+                departamentos:[],
+                municipios:[],
                 comunidads:[],
                 comunidadsSelected:[],
                 modulesSelected:[],
@@ -80,6 +84,12 @@ export default {
         },
         mounted () {
 
+            axios.get('api/departamentos').then((response) => {
+                this.departamentos = response.data;
+            }),
+            axios.get('api/municipios').then((response) => {
+                this.municipios = response.data;
+            }),
             axios.get('api/comunidads').then((response) => {
                 this.comunidads = response.data;
             }),
@@ -88,7 +98,6 @@ export default {
             }),
             axios.get('api/parcelas').then((response) => {
                 this.parcelas = response.data;
-                console.log( this.parcelas);
             })
         },
         methods: {

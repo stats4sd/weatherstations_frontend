@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use App\Models\Submission;
 
 class Parcela extends Model
 {
@@ -35,6 +36,11 @@ class Parcela extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+    public function submissions()
+    {
+        return $this->belongsTo(Submission::class, 'submission_id');
+    }
+   
 
     /*
     |--------------------------------------------------------------------------

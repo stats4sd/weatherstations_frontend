@@ -16,7 +16,13 @@
             <h4 class="mt-3"><b>End date</b></h4>
 
                 <input class="form-control" type="date" v-model="endDate" style="width:100%">
-             
+
+            <h4 class="mt-3"><b>Departamento</b></h4>
+                <v-select label="name" :options="departamentos" :reduce="name => name.id" v-model="comunidadsSelected" multiple style="width:100%"></v-select>
+
+            <h4 class="mt-3"><b>Municipio</b></h4>
+                <v-select label="name" :options="municipios" :reduce="name => name.id" v-model="comunidadsSelected" multiple style="width:100%"></v-select>
+
             <h4 class="mt-3"><b>Comunidad</b></h4>
                 <v-select label="name" :options="comunidads" :reduce="name => name.id" v-model="comunidadsSelected" multiple style="width:100%"></v-select>
             <button class="btn btn-primary mt-5" v-on:click="submit" style="width:100%">Submit</button>
@@ -43,7 +49,7 @@
             }
 
         },
-        props: ['comunidads', 'modules', 'stations'],
+        props: ['departamentos','municipios','comunidads', 'modules', 'stations'],
         watch: {
             modulesSelected() {
                 this.$emit('update:modulesSelected', this.modulesSelected)

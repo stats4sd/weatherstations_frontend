@@ -6,7 +6,7 @@
       :zoom="zoom"
       :center="center"
       :options="mapOptions"
-      @click="getPoint"
+      @click="nearestParcela($event); nearestStation($event);"
      
     >
 		<l-tile-layer
@@ -46,6 +46,17 @@
 		     
 	        </l-polygon>
 	   	</div> 
+	   	<l-control position="bottomleft">
+	   	
+	   		<div class="card" style="width: 200px;">
+	   			<label><b>Insert radius in metres: </b></label>
+	   			<input v-model="radius" placeholder="edit me">
+	   			
+	   			<p><b>Stations:</b> {{neasterStation}}</p>
+	   			<p><b>Parcelas:</b> {{neasterParcela}}</p>
+	   		</div>
+	   	</l-control>
+	   	
     </l-map>
   </div>
 
@@ -71,26 +82,48 @@
       
 		    	color: 'green'
 		    },
+
+		    neasterStation:null,
+		    neasterParcela:null,
+		    radius: 100000000,
 		};
 	},
 
 	
   props: ['stations', 'parcelas'],
   methods: {
-  	getPoint(event) {
+  	nearestStation(event) {
   		var distance = [];
+  		
   		$.each(this.stations, function(key, value){
   			this.station = latLng(value.latitude,value.longitude);
   			distance.push(this.station.distanceTo(event.latlng));
   		})
-  			this.neaster = Math.min(...distance); 
-  		console.log(this.neaster);
+		this.neaster = Math.min(...distance);
+		
+		this.station_index  = distance.indexOf(this.neaster);
 
-  		
+		this.neasterStation = (this.stations[this.station_index].label);
+		
   	},
 
-   
-   
+  	nearestParcela(event) {
+  		var distance = [];
+  		var neasterParcela = '';
+  		
+  		var radius = this.radius;
+  		$.each(this.parcelas, function(key, value){
+  			this.parcela = latLng(value.submissions.latitude,value.submissions.longitude);
+  		
+  			if (this.parcela.distanceTo(event.latlng) <= radius) {
+  			
+  				neasterParcela = neasterParcela.concat(value.code, ', ');
+  			}
+  		
+  		})
+
+  		this.neasterParcela = neasterParcela;
+  	}
   }
 };
 </script>

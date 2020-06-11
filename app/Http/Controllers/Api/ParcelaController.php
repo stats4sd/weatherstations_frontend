@@ -11,7 +11,8 @@ class ParcelaController extends Controller
 {
     public function index()
     {
-        $parcelas = Parcela::all();
+        $parcelas = Parcela::with(['submissions'])->get();
+
         return $parcelas->toJson(); 
     }
 }

@@ -9,7 +9,7 @@ require('./bootstrap');
 window.Vue = require('vue');
 import vSelect from 'vue-select'
 import BootstrapVue from 'bootstrap-vue' 
-import { LMap, LTileLayer, LMarker, LPopup, LTooltip,  LIcon, LPolygon} from 'vue2-leaflet';
+import { LMap, LTileLayer, LMarker, LPopup, LTooltip,  LIcon, LPolygon, LControl} from 'vue2-leaflet';
 import 'leaflet/dist/leaflet.css';
 import {Icon} from 'leaflet';
 
@@ -28,6 +28,7 @@ Vue.component('l-popup', LPopup);
 Vue.component('l-tooltip', LTooltip);
 Vue.component('l-icon', LIcon);
 Vue.component('l-polygon', LPolygon);
+Vue.component('l-control', LControl);
 
 Vue.use(BootstrapVue) 
 
