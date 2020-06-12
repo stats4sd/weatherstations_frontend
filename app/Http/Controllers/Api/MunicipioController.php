@@ -10,7 +10,7 @@ class MunicipioController extends Controller
 {
     public function index()
     {
-        $municipios = Municipio::select('id', 'name')->get();
+        $municipios = Municipio::select('id', 'name', 'departamento_id')->get();
        
         return $municipios->toJson();
     }

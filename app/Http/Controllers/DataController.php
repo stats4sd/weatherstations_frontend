@@ -54,23 +54,70 @@ class DataController extends Controller
     {   
         $weather = [];
         $pachagrama = [];
+        $parcelas = [];
+        $suelos = [];
+        $manejo_parcela = [];
+        $plagas_y_enfermedades = [];
+        $produccion = [];
+        $fenologia = [];
 
         foreach ($request->modulesSelected as $module) {
             if($module=='daily_data'){
                 
                 $weather = Daily::select()->where('fecha','>=',$request->startDate)->where('fecha','<=',$request->endDate)->whereIn('id_station', $request->stationsSelected)->paginate(5);
-                
-            
               
             } if($module=='pachagrama') {
                 $pachagrama = Pachagrama::select()->where('fecha_siembra','>=',$request->startDate)->where('fecha_siembra','<=',$request->endDate)->whereIn('comunidad_id', $request->comunidadsSelected)->paginate(5);
                 
-            }                
+            } if($module=='parcelas') {
+                $parcelas = Parcelas::select()->where('fecha_siembra','>=',$request->startDate)->where('fecha_siembra','<=',$request->endDate)->whereIn('comunidad_id', $request->comunidadsSelected)->paginate(5);
+                foreach ($request->parcelasModulesSelected as $parcelas_modules){
+                    if($parcelas_modules=='suelos'){
+
+                    }
+                    if($parcelas_modules=='manejo_parcela'){
+                        
+                    }
+                    if($parcelas_modules=='plagas_y_enfermedades'){
+                        
+                    }
+                    if($parcelas_modules=='produccion'){
+                        
+                    }
+
+                }
+
+                
+            } if($module=='cultivos') {
+
+                foreach ($request->cultivosModulesSelected as $cultivo_modules){
+                    if($cultivo_modules=='fenologia'){
+
+                    }
+                    if($parcelas_modules=='manejo_parcela'){
+                        
+                    }
+                    if($cultivo_modules=='plagas_y_enfermedades'){
+                        
+                    }
+                    if($cultivo_modules=='produccion'){
+                        
+                    }
+
+                }
+
+            }                 
         }
         
         return response()->json([
             'weather' => $weather, 
             'pachagrama' => $pachagrama,
+            'parcelas' => $weather, 
+            'suelos' => $weather, 
+            'manejo_parcela' => $weather, 
+            'plagas_y_enfermedades' => $weather, 
+            'produccion' => $weather, 
+            'fenologia' => $weather, 
         ]);
      
     }

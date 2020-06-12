@@ -49,11 +49,13 @@
 	   	<l-control position="bottomleft">
 	   	
 	   		<div class="card" style="width: 200px;">
-	   			<label><b>Insert radius in metres: </b></label>
-	   			<input v-model="radius" placeholder="edit me">
-	   			
-	   			<p><b>Stations:</b> {{neasterStation}}</p>
-	   			<p><b>Parcelas:</b> {{neasterParcela}}</p>
+	   			<div class="mx-3 mt-3 mb-3">
+		   			<label><b>Insert radius in metres: </b></label>
+		   			<input v-model="radius" placeholder="edit me">
+		   			
+		   			<p><b>Stations:</b> {{neasterStation}}</p>
+		   			<p><b>Parcelas:</b> {{neasterParcela}}</p>
+	   			</div>
 	   		</div>
 	   	</l-control>
 	   	
