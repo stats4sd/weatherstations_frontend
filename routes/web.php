@@ -20,13 +20,18 @@ Route::get('', function () {
     return redirect('/admin');
 });
 
+Auth::routes();
 
+Route::resource('home','DataController')->middleware('auth');
+Route::post('home/download','DataController@download');
+
+Route::get('weatherstations', function () {
+    return view('weatherstations');
+});
 Route::resource('files','FileController');
 Route::resource('stations', 'StationController');
-Route::resource('datas','DataController');
 
 Route::post('show', 'DataController@show');
-Route::post('datas/download','DataController@download');
 
 
 //NEW Upload page
@@ -45,4 +50,3 @@ Route::get('data/{id}/delete', 'DataCrudController@destroy');
 //Dashboard
 Route::get('admin/dashboard', 'DashboardController@index');
 Route::post('admin/dashboard/charts', 'DashboardController@charts');
-

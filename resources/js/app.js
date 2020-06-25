@@ -45,6 +45,8 @@ Vue.component('control-panel', require('./components/ControlPanel.vue').default)
 Vue.component('tables', require('./components/Tables.vue').default);
 Vue.component('data-preview', require('./components/DataPreview.vue').default);
 Vue.component('bolivia-map', require('./components/Map.vue').default);
+Vue.component('progress-bar', require('./components/ProgressBar.vue').default);
+Vue.component('uploader-weather-data', require('./components/UploaderWeatherData.vue').default);
 Vue.component('v-select', vSelect);
 
 
