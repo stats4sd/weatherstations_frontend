@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Data;
 use App\Models\Daily;
 use App\Models\Pachagrama;
+use App\Models\Parcela;
 use DB;
 use Illuminate\Http\Request;
 use Symfony\Component\Process\Process;
@@ -70,9 +71,10 @@ class DataController extends Controller
                 $pachagrama = Pachagrama::select()->where('fecha_siembra','>=',$request->startDate)->where('fecha_siembra','<=',$request->endDate)->whereIn('comunidad_id', $request->comunidadsSelected)->paginate(5);
                 
             } if($module=='parcelas') {
-                $parcelas = Parcelas::select()->where('fecha_siembra','>=',$request->startDate)->where('fecha_siembra','<=',$request->endDate)->whereIn('comunidad_id', $request->comunidadsSelected)->paginate(5);
+                $parcelas = Parcela::select()->where('fecha_siembra','>=',$request->startDate)->where('fecha_siembra','<=',$request->endDate)->whereIn('comunidad_id', $request->comunidadsSelected)->paginate(5);
                 foreach ($request->parcelasModulesSelected as $parcelas_modules){
                     if($parcelas_modules=='suelos'){
+                        $pachagrama = Pachagrama::select()->where('fecha_siembra','>=',$request->startDate)->where('fecha_siembra','<=',$request->endDate)->whereIn('comunidad_id', $request->comunidadsSelected)->paginate(5);
 
                     }
                     if($parcelas_modules=='manejo_parcela'){
