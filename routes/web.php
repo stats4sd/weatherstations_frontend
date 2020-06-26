@@ -28,7 +28,7 @@ Route::post('home/download','DataController@download');
 Route::get('weatherstations', function () {
     return view('weatherstations');
 });
-Route::resource('files','FileController');
+Route::post('files','FileController@store');
 Route::resource('stations', 'StationController');
 
 Route::post('show', 'DataController@show');

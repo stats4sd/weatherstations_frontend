@@ -33,9 +33,16 @@
                             <h3>Upload the file</h3>
                             <p class="mt-3">Selection the file</p>
                             <div class="row img-block py-4 mx-4 justify-content-center">
-                                <b-form-file multiple :file-name-formatter="formatNames"></b-form-file>
-                               
+                                <label class="control-label col-sm-6" style="color: black"><h5>File</h5>
+                                    <b-form-file  v-model="file" placeholder="Choose a file or drop it here..."></b-form-file>
+                                </label>
                             </div>
+                            <div class="row img-block py-4 mx-4 justify-content-center">
+                                <label class="control-label col-sm-6" style="color: black"><h5>Station</h5>
+                                    <b-form-select v-model="selectedStation" :options="stations"></b-form-select>
+                                </label>
+                            </div>
+                               
                             <div style="text-align: center;">
                                 <button class="site-btn my-4" data-toggle="collapse" href="#collapseTwo"
                                     aria-expanded="false" aria-controls="collapseTwo"  v-on:click="nextToForm('uploadfile')">
@@ -95,7 +102,7 @@
                             </div>
                             <div style="text-align: center;">
                                 <button class="site-btn my-4" data-toggle="collapse" href="#collapseThree"
-                                    aria-expanded="false" aria-controls="collapseThree" v-on:click="nextToForm('units')">
+                                    aria-expanded="false" aria-controls="collapseThree" v-on:click="nextToForm('units'); submit();">
                                     Next
                                 </button>
                             </div>
@@ -130,36 +137,13 @@
                         data-parent="#survey-modules"
                     >
                         <div class="py-4 mx-4">
-                            <h3>Add optional modules</h3>
+                            <h3>Data Preview</h3>
                             <p class="mt-3">Selection options below to begin</p>
                             <div class="row py-4 mx-4 justify-content-center">
-                                <div
-                                    v-for="mod in modulesFilter"
-                                    :key="mod.id"
-                                    class="col-md-4"
-                                >
+                                <b-alert show>thera are rows {{total_rows}}</b-alert>
+
+                                <b-table striped hover responsive :items="items"></b-table>
                                 
-                                    <input
-                                        :id="`${mod.id}_check`"
-                                        v-model="selectedModules"
-                                        type="checkbox"
-                                        :value="mod.id"
-                                        class="d-none"
-                                    >
-                                    <!-- <div class="card"> -->
-                                        
-                                        <label
-                                            class="checkdiv"
-                                            :for="`${mod.id}_check`"
-                                            :class="{ 'selected' : selectedModules.includes(mod.id)}"
-                                        >
-                                            <img
-                                                :src="'storage/'+mod.logo"
-                                            >
-                                        </label>
-                                     
-                                
-                                </div>
                             </div>
                             <div style="text-align: center;">
                                 <button class="site-btn my-4" data-toggle="collapse" href="#collapseFour"
@@ -264,10 +248,15 @@ const rootUrl = process.env.MIX_APP_URL
                     { value: 'mm', text: 'mm' },
                     { value: 'inch', text: 'inch' }
                 ],
+                stations : [{value: '1', text: 'Station1'}, {value: '2', text: 'Station2'}],
+                selectedStation: '1',
                 selectedUnitTemp: 'C',
                 selectedUnitPres: 'hpa',
                 selectedUnitWind: 'm/s',
                 selectedUnitRain: 'mm',
+                file: null,
+                items: null,
+                total_rows: null,
 
                 
             }
@@ -290,23 +279,21 @@ const rootUrl = process.env.MIX_APP_URL
                 }
             },
             submit: function(event){
-                axios({
-                    method: 'post',
-                    url: rootUrl+"/survey-builder-selected",
-                    data: {
-                        selectedThemes: this.selectedThemes,
-                        selectedCore: this.selectedCore,
-                        selectedModules: this.selectedModules,
-                        formTitle: this.formTitle,
-                        formId: this.formId,
-                        defaultLanguage: this.defaultLanguage,
-                    }
-                })
-                .then((result) => {
-                    window.location.href = result.data['path'];
-                }, (error) => {
-                    console.log(error);
-                });                   
+
+                let formData = new FormData();
+                formData.append('data-file', this.file);
+                formData.append('selectedStation', this.selectedStation);
+                formData.append('selectedUnitTemp', this.selectedUnitTemp);
+                formData.append('selectedUnitPres', this.selectedUnitPres);
+                formData.append('selectedUnitWind', this.selectedUnitWind);
+                formData.append('selectedUnitRain', this.selectedUnitRain);
+
+                axios.post(rootUrl+'/files', formData, {
+                  }).then((result) => {
+                    console.log(result.data);
+                    this.total_rows = result.data.total;
+                    this.items = result.data.data;
+                  })
 
             }
         }
