@@ -132,6 +132,7 @@
                     this.plagas_y_enfermedades = result.data.plagas_y_enfermedades;
                     this.produccion = result.data.produccion;
                     this.fenologia = result.data.fenologia;
+                    console.log(result.data);
 
                 }, (error) => {
                     console.log(error);
