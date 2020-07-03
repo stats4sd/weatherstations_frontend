@@ -78,15 +78,14 @@ class FileController extends Controller
         $process->setTimeout(300);
         
         $process->run();
-        dd($process->isSuccessful());
         
-            if(!$process->isSuccessful()) {
-                
-               throw new ProcessFailedException($process);
-               \Alert::success('<h4>'.$process->getMessage().'</h4>')->flash();
+        if(!$process->isSuccessful()) {
             
-            } 
-        }
+           throw new ProcessFailedException($process);
+           \Alert::success('<h4>'.$process->getMessage().'</h4>')->flash();
+        
+        } 
+        
 
         $data_template = DataTemplate::paginate(5);
       

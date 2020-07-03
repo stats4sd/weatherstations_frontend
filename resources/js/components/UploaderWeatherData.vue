@@ -39,7 +39,7 @@
                             </div>
                             <div class="row img-block py-4 mx-4 justify-content-center">
                                 <label class="control-label col-sm-6" style="color: black"><h5>Station</h5>
-                                    <v-select :options="stations" :reduce="label => label.id" v-model="selectedStations" multiple></v-select>
+                                    <v-select :options="stations" :reduce="label => label.id" v-model="selectedStations"></v-select>
                                 </label>
                             </div>
                             <h3>Select the units</h3>
