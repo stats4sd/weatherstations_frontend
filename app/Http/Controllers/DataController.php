@@ -10,6 +10,7 @@ use App\Models\Suelo;
 use App\Models\ManejoParcela;
 use App\Models\PlagasYEnfermedades;
 use App\Models\Produccion;
+use App\Models\Fenologia;
 use DB;
 use Illuminate\Http\Request;
 use Symfony\Component\Process\Process;
@@ -61,7 +62,7 @@ class DataController extends Controller
         $pachagrama = [];
         $parcelas = [];
         $suelos = [];
-        $manejo_parcela = [];
+        $manejo_parcelas = [];
         $plagas_y_enfermedades = [];
         $produccion = [];
         $fenologia = [];
@@ -79,9 +80,10 @@ class DataController extends Controller
                 foreach ($request->parcelasModulesSelected as $parcelas_modules){
                     if($parcelas_modules=='suelos'){
                         $suelos = Suelo::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
+
                     }
-                    if($parcelas_modules=='manejo_parcela'){
-                        $manejo_parcela = ManejoParcela::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
+                    if($parcelas_modules=='manejo_parcelas'){
+                        $manejo_parcelas = ManejoParcela::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
                         
                     }
                     if($parcelas_modules=='plagas_y_enfermedades'){
@@ -102,8 +104,8 @@ class DataController extends Controller
                         $fenologia = Fenologia::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
 
                     }
-                    if($parcelas_modules=='manejo_parcela'){
-                        $manejo_parcela = ManejoParcela::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
+                    if($cultivo_modules=='manejo_parcelas'){
+                        $manejo_parcelas = ManejoParcela::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
                         
                     }
                     if($cultivo_modules=='plagas_y_enfermedades'){
@@ -124,7 +126,7 @@ class DataController extends Controller
             'pachagrama' => $pachagrama,
             'parcelas' => $parcelas, 
             'suelos' => $suelos, 
-            'manejo_parcela' => $manejo_parcela, 
+            'manejo_parcelas' => $manejo_parcelas, 
             'plagas_y_enfermedades' => $plagas_y_enfermedades, 
             'produccion' => $produccion, 
             'fenologia' => $fenologia, 

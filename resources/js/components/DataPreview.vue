@@ -21,6 +21,11 @@
                         :cultivosModulesSelected.sync="cultivosModulesSelected" 
                         :weather.sync="weather" 
                         :pachagrama.sync="pachagrama" 
+                        :suelos.sync="suelos"
+                        :manejo_parcelas.sync="manejo_parcelas"
+                        :plagas_y_enfermedades.sync="plagas_y_enfermedades"
+                        :produccion.sync="produccion"
+                        :fenologia.sync="fenologia"
                         :stations="stations" 
                         :stationsSelected.sync="stationsSelected" >
                     </control-panel>
@@ -77,7 +82,13 @@
                                 <tables :data="plagas_y_enfermedades.data"></tables>
                             </b-card-text>
                         </b-tab>
-                        <b-button class="ml-3 mb-3" variant="primary" v-on:click="download">Download</b-button>
+                        <b-tab v-if="produccion.length!==0" title="Produccion">
+                            <b-card-text>
+                                <p v-if="produccion.length!==0">Showing {{produccion.to}} of {{produccion.total}} entries</p>
+                                <tables :data="produccion.data"></tables>
+                            </b-card-text>
+                        </b-tab>
+                        <button class="site-btn mt-5" v-on:click="download">Download</button>
                     </b-tabs>
               </b-card>
             </div>
@@ -98,9 +109,9 @@ export default {
             return{
                 modules: [{label:'Información meteorológica', value:'daily_data'},{label:'Información de Pachagrama (agroclimático)', value:'pachagrama'}, {label:'Parcelas', value:'parcelas'}, {label:'Cultivos', value:'cultivos'} ],
 
-                parcelasModules: [{label:'Suelo', value:'suelo'},{label:'Manejo de la parcela', value:'manejo_parcela'}, {label:'Plagas y enfermedades', value:'plagas_y_enfermedades'}, {label:'Produccion', value:'produccion'} ],
+                parcelasModules: [{label:'Suelos', value:'suelos'},{label:'Manejo de la parcela', value:'manejo_parcelas'}, {label:'Plagas y enfermedades', value:'plagas_y_enfermedades'}, {label:'Produccion', value:'produccion'} ],
 
-                cultivosModules: [{label:'Fenologia', value:'fenologia'},{label:'Manejo de la parcela', value:'manejo_parcela'}, {label:'Plagas y enfermedades', value:'plagas_y_enfermedades'}, {label:'Produccion', value:'produccion'} ],
+                cultivosModules: [{label:'Fenologia', value:'fenologia'},{label:'Manejo de la parcela', value:'manejo_parcelas'}, {label:'Plagas y enfermedades', value:'plagas_y_enfermedades'}, {label:'Produccion', value:'produccion'} ],
       
                 startDate:null,
                 endDate:null,
@@ -122,6 +133,7 @@ export default {
                 cultivosModulesSelected:[],
                 stationsSelected:[],
                 cultivos:[],
+                produccion:[],
 
             }
 

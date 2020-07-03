@@ -50,7 +50,7 @@
 	   	
 	   		<div class="card" style="width: 200px;">
 	   			<div class="mx-3 mt-3 mb-3">
-		   			<label><b>Insert radius in metres: </b></label>
+		   			<label><b>Insert radius in Km: </b></label>
 		   			<input v-model="radius" placeholder="edit me">
 		   			
 		   			<p><b>Stations:</b> {{neasterStation}}</p>
@@ -87,7 +87,7 @@
 
 		    neasterStation:null,
 		    neasterParcela:null,
-		    radius: 100000000,
+		    radius: 100000,
 		};
 	},
 
@@ -112,8 +112,8 @@
   	nearestParcela(event) {
   		var distance = [];
   		var neasterParcela = '';
-  		
-  		var radius = this.radius;
+  		//convert radius in km 
+  		var radius = this.radius*1000;
   		$.each(this.parcelas, function(key, value){
   			this.parcela = latLng(value.submissions.latitude,value.submissions.longitude);
   		

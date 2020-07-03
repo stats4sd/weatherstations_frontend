@@ -39,13 +39,29 @@
                             </div>
                             <div class="row img-block py-4 mx-4 justify-content-center">
                                 <label class="control-label col-sm-6" style="color: black"><h5>Station</h5>
-                                    <b-form-select v-model="selectedStation" :options="stations"></b-form-select>
+                                    <v-select :options="stations" :reduce="label => label.id" v-model="selectedStations" multiple></v-select>
+                                </label>
+                            </div>
+                            <h3>Select the units</h3>
+                            <p class="mt-3">select units for the folllowing columns</p>
+                            <div class="row img-block py-4 mx-4 justify-content-center">
+                                <label class="control-label col-sm-3" style="color: black"><h5>Temperatura</h5>
+                                <b-form-select v-model="selectedUnitTemp" :options="unitTemp"></b-form-select>
+                                </label>
+                                <label class="control-label col-sm-3" style="color: black"><h5>Presión</h5>
+                                <b-form-select v-model="selectedUnitPres" :options="unitPres"></b-form-select>
+                                </label>
+                                <label class="control-label col-sm-3" style="color: black"><h5>Velocidad del viento</h5>
+                                <b-form-select v-model="selectedUnitWind" :options="unitWind"></b-form-select>
+                                </label>
+                                <label class="control-label col-sm-3" style="color: black"><h5>Precipitación</h5>
+                                <b-form-select v-model="selectedUnitRain" :options="unitRain"></b-form-select>
                                 </label>
                             </div>
                                
                             <div style="text-align: center;">
                                 <button class="site-btn my-4" data-toggle="collapse" href="#collapseTwo"
-                                    aria-expanded="false" aria-controls="collapseTwo"  v-on:click="nextToForm('uploadfile')">
+                                    aria-expanded="false" aria-controls="collapseTwo"  v-on:click="nextToForm('uploadfile'); submit();">
                                     Next
                                 </button>
                             </div>
@@ -80,26 +96,16 @@
                         data-parent="#survey-core"
                     >
                         <div class="py-4 mx-4">
-                            <h3>Select the units</h3>
-                            <p class="mt-3">select units for the folllowing columns</p>
-                            <div class="row img-block py-4 mx-4 justify-content-center">
-                                <label class="control-label col-sm-3" style="color: black"><h5>Temperatura</h5>
-                                <b-form-select v-model="selectedUnitTemp" :options="unitTemp"></b-form-select>
-                                </label>
-                                <label class="control-label col-sm-3" style="color: black"><h5>Presión</h5>
-                                <b-form-select v-model="selectedUnitPres" :options="unitPres"></b-form-select>
-                                </label>
-                                <label class="control-label col-sm-3" style="color: black"><h5>Velocidad del viento</h5>
-                                <b-form-select v-model="selectedUnitWind" :options="unitWind"></b-form-select>
-                                </label>
-                                <label class="control-label col-sm-3" style="color: black"><h5>Precipitación</h5>
-                                <b-form-select v-model="selectedUnitRain" :options="unitRain"></b-form-select>
-                                </label>
+                            <h3>Data Preview</h3>
+                            <p class="mt-3">Selection options below to begin</p>
+                            <div class="row py-4 mx-4 justify-content-center">
+                                <b-alert show>thera are rows {{total_rows}}</b-alert>
+
+                                <b-table striped hover responsive :items="items"></b-table>
                                 
-                                        
+                            </div>
                                 
                               
-                            </div>
                             <div style="text-align: center;">
                                 <button class="site-btn my-4" data-toggle="collapse" href="#collapseThree"
                                     aria-expanded="false" aria-controls="collapseThree" v-on:click="nextToForm('units'); submit();">
@@ -137,14 +143,7 @@
                         data-parent="#survey-modules"
                     >
                         <div class="py-4 mx-4">
-                            <h3>Data Preview</h3>
-                            <p class="mt-3">Selection options below to begin</p>
-                            <div class="row py-4 mx-4 justify-content-center">
-                                <b-alert show>thera are rows {{total_rows}}</b-alert>
-
-                                <b-table striped hover responsive :items="items"></b-table>
-                                
-                            </div>
+                            
                             <div style="text-align: center;">
                                 <button class="site-btn my-4" data-toggle="collapse" href="#collapseFour"
                                     aria-expanded="false" aria-controls="collapseFour" v-on:click="nextToForm('convertUnits')">
@@ -248,8 +247,8 @@ const rootUrl = process.env.MIX_APP_URL
                     { value: 'mm', text: 'mm' },
                     { value: 'inch', text: 'inch' }
                 ],
-                stations : [{value: '1', text: 'Station1'}, {value: '2', text: 'Station2'}],
-                selectedStation: '1',
+                stations : [],
+                selectedStations: [],
                 selectedUnitTemp: 'C',
                 selectedUnitPres: 'hpa',
                 selectedUnitWind: 'm/s',
@@ -260,6 +259,12 @@ const rootUrl = process.env.MIX_APP_URL
 
                 
             }
+        },
+        mounted () {
+
+            axios.get('api/stations').then((response) => {
+                this.stations = response.data;
+            })
         },
 
         

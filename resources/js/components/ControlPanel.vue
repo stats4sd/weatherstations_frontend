@@ -2,20 +2,20 @@
     <div class="container">
         <div class="row justify-content-center">
             
-            <h4><b>Modules</b></h4>
+            <h4><b>Select the modules</b></h4>
               
             <v-select  label="label" :options="modules" item-value="modules.value" :reduce="label => label.value" v-model="modulesSelected" multiple style="width:100%"></v-select>
 
-            <h4  class="mt-3" v-if="modulesSelected.includes('daily_data')"><b>Stations</b></h4>
+            <h4  class="mt-3" v-if="modulesSelected.includes('daily_data')"><b>From which station do you want to have data?</b></h4>
             <v-select v-if="modulesSelected.includes('daily_data')" :options="stations" :reduce="label => label.id" v-model="stationsSelected" multiple style="width:100%"></v-select>
 
-            <h4  class="mt-3" v-if="modulesSelected.includes('parcelas')"><b>Parcelas</b></h4>
+            <h4  class="mt-3" v-if="modulesSelected.includes('parcelas')"><b>What are you interested about plots?</b></h4>
             <v-select v-if="modulesSelected.includes('parcelas')" :options="parcelasModules" :reduce="label => label.value" v-model="parcelasModulesSelected" multiple style="width:100%"></v-select>
 
-            <h4  class="mt-3" v-if="modulesSelected.includes('cultivos')"><b>Cultivos</b></h4>
+            <h4  class="mt-3" v-if="modulesSelected.includes('cultivos')"><b>What are you interested about crops?</b></h4>
             <v-select v-if="modulesSelected.includes('cultivos')" :options="cultivosModules" :reduce="label => label.value" v-model="cultivosModulesSelected" multiple style="width:100%"></v-select>
               
-            <h4 class="mt-3"><b>Start date</b></h4>
+            <h4 class="mt-3 row"><b>Start date</b></h4>
     
                 <input class="form-control" type="date" v-model="startDate" style="width:100%">
             
@@ -31,7 +31,7 @@
 
             <h4 class="mt-3"><b>Comunidad</b></h4>
                 <v-select label="name" :options="comunidadsFilter" :reduce="name => name.id" v-model="comunidadsSelected" multiple style="width:100%"></v-select>
-            <button class="btn btn-primary mt-5" v-on:click="submit" style="width:100%">Submit</button>
+            <button class="site-btn mt-5" v-on:click="submit" style="width:100%">Submit</button>
         
         </div>
     </div>
@@ -59,7 +59,7 @@
                 comunidadsFilter:[],
                 parcelas:[],
                 suelos: [],
-                manejo_parcela: [],
+                manejo_parcelas: [],
                 plagas_y_enfermedades: [],
                 produccion: [],
                 fenologia: [],
@@ -103,6 +103,21 @@
             municipiosSelected() {
        
                 this.comunidadsFilter = this.comunidads.filter(comunidad => this.municipiosSelected.includes(comunidad.municipio_id));
+            },
+            suelos() {
+                this.$emit('update:suelos', this.suelos);
+            },
+            manejo_parcelas(){
+                this.$emit('update:manejo_parcelas', this.manejo_parcelas);
+            },
+            plagas_y_enfermedades(){
+                this.$emit('update:plagas_y_enfermedades', this.plagas_y_enfermedades);
+            },
+            produccion(){
+                this.$emit('update:produccion', this.produccion);
+            },
+            fenologia(){
+                this.$emit('update:fenologia', this.fenologia);
             }
 
         },
@@ -128,12 +143,11 @@
                     this.pachagrama = result.data.pachagrama;
                     this.parcelas = result.data.parcelas;
                     this.suelos = result.data.suelos;
-                    this.manejo_parcela = result.data.manejo_parcela;
+                    this.manejo_parcelas = result.data.manejo_parcelas;
                     this.plagas_y_enfermedades = result.data.plagas_y_enfermedades;
                     this.produccion = result.data.produccion;
                     this.fenologia = result.data.fenologia;
-                    console.log(result.data);
-
+                
                 }, (error) => {
                     console.log(error);
                 });          

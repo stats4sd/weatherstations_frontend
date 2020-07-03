@@ -50,7 +50,7 @@ class FileController extends Controller
         // Session::put('veloc_viento_unit', $_POST['veloc_viento_unit']);
         // Session::put('precip_unit', $_POST['precip_unit']);
 
-        $station = $request->selectedStation;
+        $station = $request->selectedStations;
         
         
             if($request->hasFile('data-file')){
@@ -78,16 +78,14 @@ class FileController extends Controller
         $process->setTimeout(300);
         
         $process->run();
+        dd($process->isSuccessful());
         
-            // if(!$process->isSuccessful()) {
+            if(!$process->isSuccessful()) {
                 
-            //    throw new ProcessFailedException($process);
-            //    \Alert::success('<h4>'.$process->getMessage().'</h4>')->flash();
+               throw new ProcessFailedException($process);
+               \Alert::success('<h4>'.$process->getMessage().'</h4>')->flash();
             
-            // } else {
-        
-
-            // }
+            } 
         }
 
         $data_template = DataTemplate::paginate(5);
