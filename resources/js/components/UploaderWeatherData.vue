@@ -99,7 +99,7 @@
                             <h3>Data Preview</h3>
                             <p class="mt-3">Selection options below to begin</p>
                             <div class="row py-4 mx-4 justify-content-center">
-                                <b-alert show>thera are rows {{total_rows}}</b-alert>
+                                <b-alert show>There are rows {{total_rows}}</b-alert>
 
                                 <b-table striped hover responsive :items="items"></b-table>
                                 
