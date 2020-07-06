@@ -14,6 +14,8 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 use \GuzzleHttp\Client;
 use App\Models\DataTemplate;
+use App\Models\DailyDataPreview;
+use App\Models\Daily;
 
 
 class FileController extends Controller
@@ -73,24 +75,31 @@ class FileController extends Controller
         
         //python script accepts 3 arguments in this order: scriptPath, path_name, station_id
 
-        $process = new Process("python3 {$scriptPath} {$path_name} {$station}");
+        // $process = new Process("python3 {$scriptPath} {$path_name} {$station}");
 
-        $process->setTimeout(300);
+        // $process->setTimeout(300);
         
-        $process->run();
+        // $process->run();
         
-        if(!$process->isSuccessful()) {
+        // if(!$process->isSuccessful()) {
             
-           throw new ProcessFailedException($process);
-           \Alert::success('<h4>'.$process->getMessage().'</h4>')->flash();
+        //    throw new ProcessFailedException($process);
+        //    \Alert::success('<h4>'.$process->getMessage().'</h4>')->flash();
         
-        } 
+        // } 
     }
         
 
         $data_template = DataTemplate::paginate(5);
+    
+        $error_data = $this->checkValues();
       
-        return $data_template->toJson(); 
+        
+        return response()->json([
+            'data_template' => $data_template, 
+            'error_data' => $error_data
+           
+        ]);
 
         // Send file onto cloud function
     }
@@ -138,6 +147,46 @@ class FileController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function checkValues()
+    {
+        $error_date = [];
+      
+        $daily_preview = DailyDataPreview::all();
+        foreach ($daily_preview as $key => $value) {
+     
+            $daily_temp_int = Daily::select('max_temperatura_interna')->whereMonth('fecha',  substr($value->fecha, -5, -3))->whereDay('fecha', substr($value->fecha, -2))->get();
+
+            $daily_temp_ext = Daily::select('max_temperatura_interna')->whereMonth('fecha',  substr($value->fecha, -5, -3))->whereDay('fecha', substr($value->fecha, -2))->get();
+
+             $daily_velocidad_viento = Daily::select('max_velocidad_viento')->whereMonth('fecha',  substr($value->fecha, -5, -3))->whereDay('fecha', substr($value->fecha, -2))->get();
+
+           
+            if(!$daily_temp_int->isEmpty()){
+            
+           
+               
+                $checkTempInt = abs($daily_temp_int[0]['max_temperatura_interna'] - $value->max_temperatura_interna) > 15;
+
+                $checkTempExt = abs($daily_temp_ext[0]['max_temperatura_externa'] - $value->max_temperatura_externa) > 15;
+
+                $checkPresRel = $value->max_presion_relativa < 500;
+
+                $checkViento = $value->max_velocidad_viento > 100 || $value->max_velocidad_viento > 2*$daily_velocidad_viento[0]['max_velocidad_viento'] ;
+
+              
+                if($checkTempInt || $checkTempExt || $checkPresRel || $checkViento){
+
+                    array_push($error_date, $value->fecha);
+                }
+            }
+        }
+
+        $error_data = DataTemplate::whereIn('fecha_hora',$error_date)->get();
+      
+        return $error_data; 
+
     }
 
     

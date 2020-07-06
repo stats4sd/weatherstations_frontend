@@ -32,12 +32,12 @@
                         <div class="py-4 mx-4">
                             <h3>Upload the file</h3>
                             <p class="mt-3">Selection the file</p>
-                            <div class="row img-block py-4 mx-4 justify-content-center">
+                            <div class="row mx-4 justify-content-center">
                                 <label class="control-label col-sm-6" style="color: black"><h5>File</h5>
                                     <b-form-file  v-model="file" placeholder="Choose a file or drop it here..."></b-form-file>
                                 </label>
                             </div>
-                            <div class="row img-block py-4 mx-4 justify-content-center">
+                            <div class="row mx-4 justify-content-center">
                                 <label class="control-label col-sm-6" style="color: black"><h5>Station</h5>
                                     <v-select :options="stations" :reduce="label => label.id" v-model="selectedStation"></v-select>
                                 </label>
@@ -98,28 +98,44 @@
                     >
                         <div class="py-4 mx-4">
                             <h3>Data Preview</h3>
-                            <p class="mt-3">Selection options below to begin</p>
+                            <p class="mt-3">This is an example of your data.</p>
                             <div class="row py-4 mx-4 justify-content-center">
                                 <b-alert show>There are rows {{total_rows}}</b-alert>
 
                                 <b-table striped hover responsive :items="items"></b-table>
                                 
                             </div>
+                            <div class="row py-4 mx-4 justify-content-center" v-if="error_data!=null">
+                                <b-alert show variant="danger">There are value not correct in the file. Please check the following date.</b-alert>
+
+                                <b-table striped hover responsive :items="error_data"></b-table>
+                                
+                            </div>
                                 
                               
                             <div style="text-align: center;">
                                 <button class="site-btn my-4" data-toggle="collapse" href="#collapseThree"
-                                    aria-expanded="false" aria-controls="collapseThree" v-on:click="nextToForm('units')">
-                                    Next
+                                    aria-expanded="false" aria-controls="collapseThree" v-on:click="nextToForm('units')" style="background: red;">
+                                    Cancel
                                 </button>
+                                <button class="site-btn my-4" data-toggle="collapse" href="#collapseThree"
+                                    aria-expanded="false" aria-controls="collapseThree" v-on:click="nextToForm('units')">
+                                    Convert Data
+                                </button>
+                                <button class="site-btn my-4" data-toggle="collapse" href="#collapseThree"
+                                    aria-expanded="false" aria-controls="collapseThree" v-on:click="nextToForm('units')">
+                                    UploadData
+                                </button>
+                                
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
         <div
-            id="survey-modules"
+            id="survey-core"
             class="container my-4">
             <div
                 id="toolsform"
@@ -133,73 +149,39 @@
                         <button
                             class="panel-link active collapsed"
                             data-toggle="collapse"
-                            data-target="#collapseThree"
+                            data-target="#collapseTree"
                         >
+                        <b-spinner v-if="busy_convertion" label="Spinning"></b-spinner>
                             Step 3: {{ steps[2].title }}
                         </button>
                     </div>
                     <div
-                        id="collapseThree"
+                        id="collapseTree"
                         class="collapse"
-                        data-parent="#survey-modules"
+                        data-parent="#survey-core"
                     >
                         <div class="py-4 mx-4">
-                            
-                            <div style="text-align: center;">
-                                <button class="site-btn my-4" data-toggle="collapse" href="#collapseFour"
-                                    aria-expanded="false" aria-controls="collapseFour" v-on:click="nextToForm('convertUnits')">
-                                    Next
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div
-            id="survey-review"
-            class="container my-4">
-            <div
-                id="toolsform"
-                class="accordion-area"
-            >
-                <div class="panel">
-                    <div
-                        id="headerOne"
-                        class="panel-header"
-                    >
-                        <button
-                            class="panel-link active collapsed"
-                            data-toggle="collapse"
-                            data-target="#collapseFour"
-                        >
-                            Step 4: {{ steps[3].title }}
-                        </button>
-                    </div>
-                    <div
-                        id="collapseFour"
-                        class="collapse"
-                        data-parent="#survey-review"
-                    >
-                        <div class="py-4 mx-4">
-                            <h3>Preview and finish</h3>
-                            <p class="mt-3"></p>
-                            
+                            <h3>Convert Data</h3>
+                            <p class="mt-3">If you want covert data select which units do you want to convert.</p>
                             <div class="row py-4 mx-4 justify-content-center">
-                           
-                            </div>
+                                <b-alert show>There are rows {{total_rows}}</b-alert>
 
+                                <b-table striped hover responsive :items="items"></b-table>
+                                
+                            </div>
                             <div style="text-align: center;">
-                                <button class="site-btn my-4" data-toggle="" href=""
-                                    aria-expanded="false" aria-controls="" v-on:click=''>
-                                    Finish
+                                <button class="site-btn my-4" data-toggle="collapse" href="#collapseThree"
+                                    aria-expanded="false" aria-controls="collapseThree" v-on:click="nextToForm('convert_data')">
+                                    UploadData
                                 </button>
                             </div>
+                          
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+       
 
     </div>
 </template>
@@ -219,16 +201,12 @@ const rootUrl = process.env.MIX_APP_URL
                     },
                     {
                         'id': 2,
-                        'title': "Select Units",
+                        'title': "Check value and units",
                     },
                     {
                         'id': 3,
                         'title': "Convert data",
-                    },
-                    {
-                        'id': 4,
-                        'title': "Preview and Finish",
-                    },
+                    }
                 ],
                 unitTemp : [
                     { value: 'C', text: 'Celsius (ºC)' },
@@ -258,6 +236,8 @@ const rootUrl = process.env.MIX_APP_URL
                 items: null,
                 total_rows: null,
                 busy: false,
+                busy_convertion:false,
+                error_data: null,
 
                 
             }
@@ -269,8 +249,6 @@ const rootUrl = process.env.MIX_APP_URL
             })
         },
 
-        
-       
 
         methods: {
             nextToForm: function (message) {
@@ -280,10 +258,7 @@ const rootUrl = process.env.MIX_APP_URL
                 } else if(message=='units') {
                     this.currentStep = 3;
                     $('#collapseTwo').collapse('hide');
-                } else if(message=='convertUnits') {
-                    this.currentStep = 4;
-                    $('#collapseThree').collapse('hide');
-                }
+                } 
             },
             submit: function(event){
                 this.busy = true;
@@ -295,13 +270,14 @@ const rootUrl = process.env.MIX_APP_URL
                 formData.append('selectedUnitWind', this.selectedUnitWind);
                 formData.append('selectedUnitRain', this.selectedUnitRain);
 
-                axios.post('https://staging-weatherstations.stats4sd.org'+'/files', formData, {
+                axios.post(rootUrl+'/files', formData, {
                   }).then((result) => {
-                    console.log(result.data);
-                    this.total_rows = result.data.total;
-                    this.items = result.data.data;
+                    console.log(result);
+                    this.total_rows = result.data.data_template.total;
+                    this.items = result.data.data_template.data;
+                    this.error_data = result.data.error_data;
                     this.busy= false;
-                  })
+                })
 
             }
         }

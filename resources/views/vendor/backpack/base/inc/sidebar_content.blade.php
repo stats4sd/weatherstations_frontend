@@ -45,3 +45,4 @@
 <li class='nav-item'><a class='nav-link' href='{{ backpack_url('plagasyenfermedades') }}'><i class='nav-icon la la-question'></i> PlagasYEnfermedades</a></li>
 <li class='nav-item'><a class='nav-link' href='{{ backpack_url('produccion') }}'><i class='nav-icon la la-question'></i> Produccions</a></li>
 <li class='nav-item'><a class='nav-link' href='{{ backpack_url('submission') }}'><i class='nav-icon la la-question'></i> Submissions</a></li>
+<li class='nav-item'><a class='nav-link' href='{{ backpack_url('dailydatapreview') }}'><i class='nav-icon la la-question'></i> DailyDataPreviews</a></li>
