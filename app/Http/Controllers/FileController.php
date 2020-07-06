@@ -50,9 +50,9 @@ class FileController extends Controller
         // Session::put('veloc_viento_unit', $_POST['veloc_viento_unit']);
         // Session::put('precip_unit', $_POST['precip_unit']);
 
-        $station = $request->selectedStations;
-        
-        
+        $station = $request->selectedStation;
+
+       
             if($request->hasFile('data-file')){
                 // handle file and store it for prosperity
                 $file = $request->file('data-file');
@@ -73,18 +73,19 @@ class FileController extends Controller
         
         //python script accepts 3 arguments in this order: scriptPath, path_name, station_id
 
-        $process = new Process("python3 {$scriptPath} {$path_name} {$station}");
+        // $process = new Process("python3 {$scriptPath} {$path_name} {$station}");
 
-        $process->setTimeout(300);
+        // $process->setTimeout(300);
         
-        $process->run();
+        // $process->run();
         
-        if(!$process->isSuccessful()) {
+        // if(!$process->isSuccessful()) {
             
-           throw new ProcessFailedException($process);
-           \Alert::success('<h4>'.$process->getMessage().'</h4>')->flash();
+        //    throw new ProcessFailedException($process);
+        //    \Alert::success('<h4>'.$process->getMessage().'</h4>')->flash();
         
-        } 
+        // } 
+    }
         
 
         $data_template = DataTemplate::paginate(5);

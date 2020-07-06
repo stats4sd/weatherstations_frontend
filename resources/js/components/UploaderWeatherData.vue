@@ -39,7 +39,7 @@
                             </div>
                             <div class="row img-block py-4 mx-4 justify-content-center">
                                 <label class="control-label col-sm-6" style="color: black"><h5>Station</h5>
-                                    <v-select :options="stations" :reduce="label => label.id" v-model="selectedStations"></v-select>
+                                    <v-select :options="stations" :reduce="label => label.id" v-model="selectedStation"></v-select>
                                 </label>
                             </div>
                             <h3>Select the units</h3>
@@ -87,6 +87,7 @@
                             data-toggle="collapse"
                             data-target="#collapseTwo"
                         >
+                        <b-spinner v-if="busy" label="Spinning"></b-spinner>
                             Step 2: {{ steps[1].title }}
                         </button>
                     </div>
@@ -108,7 +109,7 @@
                               
                             <div style="text-align: center;">
                                 <button class="site-btn my-4" data-toggle="collapse" href="#collapseThree"
-                                    aria-expanded="false" aria-controls="collapseThree" v-on:click="nextToForm('units'); submit();">
+                                    aria-expanded="false" aria-controls="collapseThree" v-on:click="nextToForm('units')">
                                     Next
                                 </button>
                             </div>
@@ -190,7 +191,7 @@
 
                             <div style="text-align: center;">
                                 <button class="site-btn my-4" data-toggle="" href=""
-                                    aria-expanded="false" aria-controls="" v-on:click='submit'>
+                                    aria-expanded="false" aria-controls="" v-on:click=''>
                                     Finish
                                 </button>
                             </div>
@@ -248,7 +249,7 @@ const rootUrl = process.env.MIX_APP_URL
                     { value: 'inch', text: 'inch' }
                 ],
                 stations : [],
-                selectedStations: [],
+                selectedStation: [],
                 selectedUnitTemp: 'C',
                 selectedUnitPres: 'hpa',
                 selectedUnitWind: 'm/s',
@@ -256,6 +257,7 @@ const rootUrl = process.env.MIX_APP_URL
                 file: null,
                 items: null,
                 total_rows: null,
+                busy: false,
 
                 
             }
@@ -284,7 +286,7 @@ const rootUrl = process.env.MIX_APP_URL
                 }
             },
             submit: function(event){
-
+                this.busy = true;
                 let formData = new FormData();
                 formData.append('data-file', this.file);
                 formData.append('selectedStation', this.selectedStation);
@@ -298,6 +300,7 @@ const rootUrl = process.env.MIX_APP_URL
                     console.log(result.data);
                     this.total_rows = result.data.total;
                     this.items = result.data.data;
+                    this.busy= false;
                   })
 
             }
