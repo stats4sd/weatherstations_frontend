@@ -295,7 +295,7 @@ const rootUrl = process.env.MIX_APP_URL
                 formData.append('selectedUnitWind', this.selectedUnitWind);
                 formData.append('selectedUnitRain', this.selectedUnitRain);
 
-                axios.post(rootUrl+'/files', formData, {
+                axios.post('https://staging-weatherstations.stats4sd.org'+'/files', formData, {
                   }).then((result) => {
                     console.log(result.data);
                     this.total_rows = result.data.total;
