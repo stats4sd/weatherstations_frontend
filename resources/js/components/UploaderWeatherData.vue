@@ -290,9 +290,9 @@
 
 <script>
 
-const rootUrl = process.env.MIX_APP_URL
+// const rootUrl = process.env.MIX_APP_URL
 
-// const rootUrl = 'https://staging-weatherstations.stats4sd.org/'
+const rootUrl = 'https://staging-weatherstations.stats4sd.org/'
 
     export default {
         data () {
