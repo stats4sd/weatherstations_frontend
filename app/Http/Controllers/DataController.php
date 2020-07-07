@@ -11,6 +11,7 @@ use App\Models\ManejoParcela;
 use App\Models\PlagasYEnfermedades;
 use App\Models\Produccion;
 use App\Models\Fenologia;
+use App\Models\DataTemplate;
 use DB;
 use Illuminate\Http\Request;
 use Symfony\Component\Process\Process;
@@ -172,7 +173,8 @@ class DataController extends Controller
     {
         $scriptPath = base_path() . '/scripts/generate_xlsx_from_query.py';
         $base_path = base_path();    
-        $file_name = date('c')."data.xlsx";
+        #$file_name = date('c')."data.xlsx";
+        $file_name = "data.xlsx";
 
         $queries = '';
         $sheet_names = '';
@@ -192,7 +194,78 @@ class DataController extends Controller
                 $queries = $queries.$query;
                 $sheet_names = $sheet_names.'pachagrama, ';
 
-            }                
+            } if($module=='parcelas') {
+                
+                $query = "select * from ". 'parcela' . " where comunidad_id in (". implode(",",$request->comunidadsSelected).");";
+
+                $queries = $queries.$query;
+                $sheet_names = $sheet_names.'parcelas, ';
+                foreach ($request->parcelasModulesSelected as $parcelas_modules){
+                    if($parcelas_modules=='suelos'){
+                       
+                        $query = "select * from ". 'suelo' . " where comunidad_id in (". implode(",",$request->comunidadsSelected).");";
+
+                        $queries = $queries.$query;
+                        $sheet_names = $sheet_names.'suelos, ';
+
+                    }
+                    if($parcelas_modules=='manejo_parcelas'){
+                        $query = "select * from ". 'manejo_parcela' . " where comunidad_id in (". implode(",",$request->comunidadsSelected).");";
+
+                        $queries = $queries.$query;
+                        $sheet_names = $sheet_names.'manejo_parcelas, ';
+                        
+                    }
+                    if($parcelas_modules=='plagas_y_enfermedades'){
+                        $query = "select * from ". $parcelas_modules . " where comunidad_id in (". implode(",",$request->comunidadsSelected).");";
+
+                        $queries = $queries.$query;
+                        $sheet_names = $sheet_names.'plagas_y_enfermedades, ';
+                    }
+                    if($parcelas_modules=='produccion'){
+                        $query = "select * from ". $parcelas_modules . " where comunidad_id in (". implode(",",$request->comunidadsSelected).");";
+
+                        $queries = $queries.$query;
+                        $sheet_names = $sheet_names.'produccion, ';
+                        
+                    }
+
+                }
+
+                
+            } if($module=='cultivos') {
+
+                foreach ($request->cultivosModulesSelected as $cultivo_modules){
+                    if($cultivo_modules=='fenologia'){
+                        $query = "select * from ". $cultivo_modules . " where comunidad_id in (". implode(",",$request->comunidadsSelected).");";
+
+                        $queries = $queries.$query;
+                        $sheet_names = $sheet_names.'fenologia, ';
+
+                    }
+                    if($cultivo_modules=='manejo_parcelas'){
+                        $query = "select * from ". 'manejo_parcela' . " where comunidad_id in (". implode(",",$request->comunidadsSelected).");";
+
+                        $queries = $queries.$query;
+                        $sheet_names = $sheet_names.'manejo_parcelas, ';
+                        
+                    }
+                    if($cultivo_modules=='plagas_y_enfermedades'){
+                        $query = "select * from ". $cultivo_modules . " where comunidad_id in (". implode(",",$request->comunidadsSelected).");";
+
+                        $queries = $queries.$query;
+                        $sheet_names = $sheet_names.'plagas_y_enfermedades, ';
+                        
+                    }
+                    if($cultivo_modules=='produccion'){
+                        $query = "select * from ". $cultivo_modules . " where comunidad_id in (". implode(",",$request->comunidadsSelected).");";
+
+                        $queries = $queries.$query;
+                        $sheet_names = $sheet_names.'produccion, ';
+                    }
+
+                }
+            }               
         }
 
         $queries = rtrim($queries, ";");
@@ -217,6 +290,15 @@ class DataController extends Controller
        
         $path_download =  Storage::url('/data/'.$file_name);
         return response()->json(['path' => $path_download]);
+    }
+
+    public function allData()
+    {
+
+        $all_data = DataTemplate::paginate(100);
+    
+        return $all_data->toJson();
+      
     }
 
 }

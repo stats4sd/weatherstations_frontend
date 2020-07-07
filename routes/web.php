@@ -17,13 +17,13 @@ use App\Events\GenerateFileCompleted;
 
 
 Route::get('', function () {
-    return redirect('/admin');
+    return redirect('/home');
 });
 
 Auth::routes();
 
 Route::resource('home','DataController')->middleware('auth');
-Route::post('home/download','DataController@download');
+Route::post('download','DataController@download');
 
 Route::get('weatherstations', function () {
     return view('weatherstations');
@@ -32,6 +32,13 @@ Route::post('files','FileController@store');
 Route::resource('stations', 'StationController');
 
 Route::post('show', 'DataController@show');
+Route::post('all_data','DataController@allData');
+Route::post('convertDataFtoC', 'DataTemplateController@convertDataFtoC');
+Route::post('convertDataInhgOrMmhgToHpa', 'DataTemplateController@convertDataInhgOrMmhgToHpa');
+Route::post('convertDatakmOrMToMs', 'DataTemplateController@convertDatakmOrMToMs');
+Route::post('convertDataInchToMm', 'DataTemplateController@convertDataInchToMm');
+Route::post('storeFile', 'DataTemplateController@storeFile');
+Route::post('cleanTable', 'DataTemplateController@cleanTable');
 
 
 //NEW Upload page

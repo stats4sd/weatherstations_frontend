@@ -21,6 +21,7 @@
                         :cultivosModulesSelected.sync="cultivosModulesSelected" 
                         :weather.sync="weather" 
                         :pachagrama.sync="pachagrama" 
+                        :parcelasData.sync="parcelasData"
                         :suelos.sync="suelos"
                         :manejo_parcelas.sync="manejo_parcelas"
                         :plagas_y_enfermedades.sync="plagas_y_enfermedades"
@@ -36,6 +37,8 @@
             <bolivia-map
             :stations="stations"
             :parcelas="parcelas"
+            :stationsSelected.sync="stationsSelected" 
+
             ></bolivia-map>
             <div class="mt-5">
                 <b-card no-body style="height: 500px;">

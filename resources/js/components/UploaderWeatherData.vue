@@ -106,7 +106,7 @@
                                 
                             </div>
                             <div class="row py-4 mx-4 justify-content-center" v-if="error_data!=null">
-                                <b-alert show variant="danger">There are value not correct in the file. Please check the following date.</b-alert>
+                                <b-alert show variant="danger" v-if="error_data!=null">There are value not correct in the file. Please check the following date.</b-alert>
 
                                 <b-table striped hover responsive :items="error_data"></b-table>
                                 
@@ -114,17 +114,19 @@
                                 
                               
                             <div style="text-align: center;">
+                                <b-alert show variant="danger" v-if="error!=null">{{error}}</b-alert>
+                                <b-alert show variant="success" v-if="success!=null">{{success}}</b-alert>
                                 <button class="site-btn my-4" data-toggle="collapse" href="#collapseThree"
-                                    aria-expanded="false" aria-controls="collapseThree" v-on:click="nextToForm('units')" style="background: red;">
+                                    aria-expanded="false" aria-controls="collapseThree" v-on:click="cleanTable" style="background: red;">
                                     Cancel
                                 </button>
                                 <button class="site-btn my-4" data-toggle="collapse" href="#collapseThree"
-                                    aria-expanded="false" aria-controls="collapseThree" v-on:click="nextToForm('units')">
+                                    aria-expanded="false" aria-controls="collapseThree" v-on:click="nextToForm('units'); showAllData();">
                                     Convert Data
                                 </button>
                                 <button class="site-btn my-4" data-toggle="collapse" href="#collapseThree"
-                                    aria-expanded="false" aria-controls="collapseThree" v-on:click="nextToForm('units')">
-                                    UploadData
+                                    aria-expanded="false" aria-controls="collapseThree" v-on:click="storeFile">
+                                    Store Data in DB
                                 </button>
                                 
                             </div>
@@ -163,16 +165,40 @@
                         <div class="py-4 mx-4">
                             <h3>Convert Data</h3>
                             <p class="mt-3">If you want covert data select which units do you want to convert.</p>
+                                <b-alert show>
+                                    <h5><b>Units</b></h5>
+                                    <p><b>Temperature</b> {{selectedUnitTemp}}</p>
+                                    <p><b>Presión</b> {{selectedUnitPres}}</p>
+                                    <p><b>Velocidad del viento</b> {{selectedUnitWind}}</p>
+                                    <p><b>Precipitación</b> {{selectedUnitRain}}</p>
+                                </b-alert>
+                               <button class="site-btn my-4" v-on:click="convertDataFtoC"><b-spinner v-if="busy_convert_temp" label="Spinning"></b-spinner>
+                                    Convert °F to °C
+                                </button>
+                                <button class="site-btn my-4" v-on:click="convertDataInhgOrMmhgToHpa"><b-spinner v-if="busy_convert_pres" label="Spinning"></b-spinner>
+                                    Convert inhg or mmhg to hpa
+                                </button>
+                                <button class="site-btn my-4" v-on:click="convertDatakmOrMToMs"><b-spinner v-if="busy_convert_wind" label="Spinning"></b-spinner>
+                                    Convert km/h or mph to m/s
+                                </button>
+                                <button class="site-btn my-4" v-on:click="convertDataInchToMm"><b-spinner v-if="busy_convert_rain" label="Spinning"></b-spinner>
+                                    Convert inch to mm
+                                </button>
                             <div class="row py-4 mx-4 justify-content-center">
-                                <b-alert show>There are rows {{total_rows}}</b-alert>
 
-                                <b-table striped hover responsive :items="items"></b-table>
+                                <b-table sticky-header="600px" striped hover responsive :items="all_data"></b-table>
                                 
                             </div>
                             <div style="text-align: center;">
+                                <b-alert show variant="danger" v-if="error!=null">{{error}}</b-alert>
+                                <b-alert show variant="success" v-if="success!=null">{{success}}</b-alert>
                                 <button class="site-btn my-4" data-toggle="collapse" href="#collapseThree"
-                                    aria-expanded="false" aria-controls="collapseThree" v-on:click="nextToForm('convert_data')">
-                                    UploadData
+                                    aria-expanded="false" aria-controls="collapseThree" style="background: red;"v-on:click="cleanTable"><b-spinner v-if="busy_clean" label="Spinning"></b-spinner>
+                                    Clean Table
+                                </button>
+                                <button class="site-btn my-4" data-toggle="collapse" href="#collapseThree"
+                                    aria-expanded="false" aria-controls="collapseThree" v-on:click="storeFile"><b-spinner v-if="busy_store" label="Spinning"></b-spinner>
+                                    Store Data in DB
                                 </button>
                             </div>
                           
@@ -236,10 +262,18 @@ const rootUrl = process.env.MIX_APP_URL
                 items: null,
                 total_rows: null,
                 busy: false,
-                busy_convertion:false,
+                busy_convertion: false,
+                busy_convert_temp: false,
+                busy_convert_pres: false,
+                busy_convert_wind: false,
+                busy_convert_rain: false,
+                busy_store: false,
+                busy_clean: false,
                 error_data: null,
+                all_data: null,
+                success: null,
+                error: null,
 
-                
             }
         },
         mounted () {
@@ -272,14 +306,145 @@ const rootUrl = process.env.MIX_APP_URL
 
                 axios.post(rootUrl+'/files', formData, {
                   }).then((result) => {
-                    console.log(result);
                     this.total_rows = result.data.data_template.total;
                     this.items = result.data.data_template.data;
                     this.error_data = result.data.error_data;
                     this.busy= false;
                 })
 
-            }
+            },
+
+            showAllData: function(){
+                this.busy_convertion = true;
+               
+                axios.post(rootUrl+'/all_data', {
+                  }).then((result) => {
+                    console.log(result);
+                    this.all_data = result.data.data;
+                    this.busy_convertion= false;
+                })
+
+            },
+            convertDataFtoC: function(){
+                this.busy_convert_temp= true;
+                axios({
+                    method: 'post',
+                    url: "/convertDataFtoC",
+                    data: {
+                        temp_unit: this.selectedUnitTemp,
+                       
+                    }
+                })
+                .then((result) => {
+                    console.log(result);
+                    this.all_data = result.data.data;
+                    this.busy_convert_temp= false;
+                    
+                }, (error) => {
+                    console.log(error);
+                });          
+
+            },
+            convertDataInhgOrMmhgToHpa: function(){
+                this.busy_convert_pres= true;
+                axios({
+                    method: 'post',
+                    url: "/convertDataInhgOrMmhgToHpa",
+                    data: {
+                        pression_unit: this.selectedUnitPres,
+                       
+                    }
+                })
+                .then((result) => {
+                    console.log(result);
+                    this.all_data = result.data.data;
+                    this.busy_convert_pres= false;
+                    
+                }, (error) => {
+                    console.log(error);
+                });          
+
+            },
+
+            convertDatakmOrMToMs: function(){
+                this.busy_convert_wind= true;
+                axios({
+                    method: 'post',
+                    url: "/convertDatakmOrMToMs",
+                    data: {
+                        veloc_viento_unit: this.selectedUnitWind,
+                       
+                    }
+                })
+                .then((result) => {
+                    console.log(result);
+                    this.all_data = result.data.data;
+                    this.busy_convert_wind= false;
+                    
+                }, (error) => {
+                    console.log(error);
+                });          
+
+            },
+            convertDataInchToMm: function(){
+                this.busy_convert_rain= true;
+                axios({
+                    method: 'post',
+                    url: "/convertDataInchToMm",
+                    data: {
+                        precip_unit: this.selectedUnitRain,
+                       
+                    }
+                })
+                .then((result) => {
+                    console.log(result);
+                    this.all_data = result.data.data;
+                    this.busy_convert_rain= false;
+                    
+                }, (error) => {
+                    console.log(error);
+                });          
+
+            },
+
+            storeFile: function(){
+                this.busy_store= true;
+                axios({
+                    method: 'post',
+                    url: "/storeFile",
+                })
+                .then((result) => {
+                    console.log(result.data.success);
+                    this.success = result.data.success
+                    this.error = result.data.error
+                    this.busy_store= false;
+                    
+                }, (error) => {
+                    console.log(error);
+                    this.error = error
+                    this.busy_store= false;
+                });          
+
+            },
+
+            cleanTable: function(){
+                this.busy_clean= true;
+                axios({
+                    method: 'post',
+                    url: "/cleanTable",
+                })
+                .then((result) => {
+                    console.log(result);
+                    this.busy_clean= false;
+                    
+                }, (error) => {
+                    console.log(error);
+                    this.busy_clean= false;
+                });          
+
+            },
+
+
         }
     }
 
