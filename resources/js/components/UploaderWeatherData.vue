@@ -246,19 +246,20 @@
                                     <b-form-select v-model="selectedUnitRain" :options="unitRain"></b-form-select>
                                     </label>
                                 </div>
-                               
-                               <button class="site-btn my-4" v-on:click="convertDataFtoC"><b-spinner v-if="busy_convert_temp" label="Spinning"></b-spinner>
-                                    Convert °F to °C
-                                </button>
-                                <button class="site-btn my-4" v-on:click="convertDataInhgOrMmhgToHpa"><b-spinner v-if="busy_convert_pres" label="Spinning"></b-spinner>
-                                    Convert inhg or mmhg to hpa
-                                </button>
-                                <button class="site-btn my-4" v-on:click="convertDatakmOrMToMs"><b-spinner v-if="busy_convert_wind" label="Spinning"></b-spinner>
-                                    Convert km/h or mph to m/s
-                                </button>
-                                <button class="site-btn my-4" v-on:click="convertDataInchToMm"><b-spinner v-if="busy_convert_rain" label="Spinning"></b-spinner>
-                                    Convert inch to mm
-                                </button>
+                                <div style="text-align: center;">
+                                   <button class="site-btn my-4" v-on:click="convertDataFtoC"><b-spinner v-if="busy_convert_temp" label="Spinning"></b-spinner>
+                                        Convert °F to °C
+                                    </button>
+                                    <button class="site-btn my-4" v-on:click="convertDataInhgOrMmhgToHpa"><b-spinner v-if="busy_convert_pres" label="Spinning"></b-spinner>
+                                        Convert inhg or mmhg to hpa
+                                    </button>
+                                    <button class="site-btn my-4" v-on:click="convertDatakmOrMToMs"><b-spinner v-if="busy_convert_wind" label="Spinning"></b-spinner>
+                                        Convert km/h or mph to m/s
+                                    </button>
+                                    <button class="site-btn my-4" v-on:click="convertDataInchToMm"><b-spinner v-if="busy_convert_rain" label="Spinning"></b-spinner>
+                                        Convert inch to mm
+                                    </button>
+                                </div>
                             <div class="row py-4 mx-4 justify-content-center">
 
                                 <b-table sticky-header="600px" striped hover responsive :items="all_data"></b-table>
