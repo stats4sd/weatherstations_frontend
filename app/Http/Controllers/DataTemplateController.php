@@ -163,11 +163,11 @@ class DataTemplateController extends Controller
 								'presion_relativa' => $pression_relativa_round, 
 								'presion_absoluta' => $pression_absoluta_round,
 						]);
-					\Alert::success('La presión relativa y absoluta se ha convertido a la hpa.')->flash();
+					// \Alert::success('La presión relativa y absoluta se ha convertido a la hpa.')->flash();
 				}
 			}else 
 			{
-				\Alert::warning('La presión relativa y absoluta está en hPa de acuerdo con el usuario que cargó los datos.')->flash();
+				// \Alert::warning('La presión relativa y absoluta está en hPa de acuerdo con el usuario que cargó los datos.')->flash();
 
 			}
 		$all_data = DataTemplate::paginate(100);

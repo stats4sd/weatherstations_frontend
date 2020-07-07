@@ -152,6 +152,10 @@ class FileController extends Controller
     public function checkValues()
     {
         $error_date = [];
+        $error_temp = false;
+        $error_press = false;
+        $error_wind = false;
+        $error_rain = false;
       
         $daily_preview = DailyDataPreview::all();
         foreach ($daily_preview as $key => $value) {
@@ -164,9 +168,7 @@ class FileController extends Controller
 
            
             if(!$daily_temp_int->isEmpty()){
-            
-           
-               
+
                 $checkTempInt = abs($daily_temp_int[0]['max_temperatura_interna'] - $value->max_temperatura_interna) > 15;
 
                 $checkTempExt = abs($daily_temp_ext[0]['max_temperatura_externa'] - $value->max_temperatura_externa) > 15;
@@ -176,8 +178,15 @@ class FileController extends Controller
                 $checkViento = $value->max_velocidad_viento > 100 || $value->max_velocidad_viento > 2*$daily_velocidad_viento[0]['max_velocidad_viento'] ;
 
               
-                if($checkTempInt || $checkTempExt || $checkPresRel || $checkViento){
+                if($checkTempInt || $checkTempExt){
+                    $error_temp = true;
+                    array_push($error_date, $value->fecha);
+                }if($checkPresRel){
+                    $error_press = true;
+                    array_push($error_date, $value->fecha);
 
+                }if($checkViento){
+                    $error_wind = true;
                     array_push($error_date, $value->fecha);
                 }
             }
@@ -185,7 +194,15 @@ class FileController extends Controller
 
         $error_data = DataTemplate::whereIn('fecha_hora',$error_date)->get();
       
-        return $error_data; 
+        return response([
+           
+            'error_data' => $error_data,
+            'error_temp' => $error_temp,
+            'error_press' => $error_press,
+            'error_wind' => $error_wind,
+            'error_rain' => $error_rain
+           
+        ]); 
 
     }
 

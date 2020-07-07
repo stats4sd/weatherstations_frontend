@@ -31,19 +31,20 @@
                     >
                         <div class="py-4 mx-4">
                             <h3>Upload the file</h3>
-                            <p class="mt-3">Selection the file</p>
+                            
                             <div class="row mx-4 justify-content-center">
-                                <label class="control-label col-sm-6" style="color: black"><h5>File</h5>
+                                <label class="control-label col-sm-6" style="color: black"><h5>Select the file</h5>
                                     <b-form-file  v-model="file" placeholder="Choose a file or drop it here..."></b-form-file>
                                 </label>
                             </div>
                             <div class="row mx-4 justify-content-center">
-                                <label class="control-label col-sm-6" style="color: black"><h5>Station</h5>
+                                <label class="control-label col-sm-6" style="color: black"><h5>Select the station</h5>
                                     <v-select :options="stations" :reduce="label => label.id" v-model="selectedStation"></v-select>
                                 </label>
                             </div>
                             <h3>Select the units</h3>
-                            <p class="mt-3">select units for the folllowing columns</p>
+                            <p class="mt-3">Select the units present in the file for the following variables.</p>
+
                             <div class="row img-block py-4 mx-4 justify-content-center">
                                 <label class="control-label col-sm-3" style="color: black"><h5>Temperatura</h5>
                                 <b-form-select v-model="selectedUnitTemp" :options="unitTemp"></b-form-select>
@@ -106,9 +107,68 @@
                                 
                             </div>
                             <div class="row py-4 mx-4 justify-content-center" v-if="error_data!=null">
-                                <b-alert show variant="danger" v-if="error_data!=null">There are value not correct in the file. Please check the following date.</b-alert>
+                                <b-alert show variant="danger" v-if="error_temp || error_press || error_wind||error_rain ">There are some values with the wrong units please check the following table and proceed with 'Convert Data' or press Cancel for uploading a new file.</b-alert>
 
-                                <b-table striped hover responsive :items="error_data"></b-table>
+                                <b-table sticky-header="600px" striped hover responsive :items="error_data">
+                                    <template v-if="error_temp" v-slot:cell(temperatura_interna)="data">
+                                        <b :style="tempIntBackColor">{{ data.value }}</b>
+                                    </template>
+                                    <template v-if="error_temp" v-slot:cell(temperatura_externa)="data">
+                                        <b :style="tempIntBackColor">{{ data.value }}</b>
+                                    </template>
+                                    <template v-if="error_temp" v-slot:cell(sensacion_termica)="data">
+                                        <b :style="tempIntBackColor">{{ data.value }}</b>
+                                    </template>
+                                    <template v-if="error_temp" v-slot:cell(punto_rocio)="data">
+                                        <b :style="tempIntBackColor">{{ data.value }}</b>
+                                    </template>
+                                    <template v-if="error_temp" v-slot:cell(wind_chill)="data">
+                                        <b :style="tempIntBackColor">{{ data.value }}</b>
+                                    </template>
+                                    <template v-if="error_temp" v-slot:cell(hi_temp)="data">
+                                        <b :style="tempIntBackColor">{{ data.value }}</b>
+                                    </template>
+                                    <template v-if="error_temp" v-slot:cell(low_temp)="data">
+                                        <b :style="tempIntBackColor">{{ data.value }}</b>
+                                    </template>
+                                    <template v-if="error_temp" v-slot:cell(low_temp)="data">
+                                        <b :style="tempIntBackColor">{{ data.value }}</b>
+                                    </template>
+                                    <template v-if="error_press" v-slot:cell(presion_relativa)="data">
+                                        <b :style="tempIntBackColor">{{ data.value }}</b>
+                                    </template>
+                                    <template v-if="error_press" v-slot:cell(presion_absoluta)="data">
+                                        <b :style="tempIntBackColor">{{ data.value }}</b>
+                                    </template>
+                                    <template v-if="error_wind" v-slot:cell(velocidad_viento)="data">
+                                        <b :style="tempIntBackColor">{{ data.value }}</b>
+                                    </template>
+                                    <template v-if="error_wind" v-slot:cell(rafaga)="data">
+                                        <b :style="tempIntBackColor">{{ data.value }}</b>
+                                    </template>
+                                    <template v-if="error_wind" v-slot:cell(hi_speed)="data">
+                                        <b :style="tempIntBackColor">{{ data.value }}</b>
+                                    </template>
+                                    <template v-if="error_rain" v-slot:cell(lluvia_hora)="data">
+                                        <b :style="tempIntBackColor">{{ data.value }}</b>
+                                    </template>
+                                    <template v-if="error_rain" v-slot:cell(lluvia_24_horas)="data">
+                                        <b :style="tempIntBackColor">{{ data.value }}</b>
+                                    </template>
+                                    <template v-if="error_rain" v-slot:cell(lluvia_semana)="data">
+                                        <b :style="tempIntBackColor">{{ data.value }}</b>
+                                    </template>
+                                    <template v-if="error_rain" v-slot:cell(lluvia_mes)="data">
+                                        <b :style="tempIntBackColor">{{ data.value }}</b>
+                                    </template>
+                                    <template v-if="error_rain" v-slot:cell(lluvia_total)="data">
+                                        <b :style="tempIntBackColor">{{ data.value }}</b>
+                                    </template>
+                                    <template v-if="error_rain" v-slot:cell(rain)="data">
+                                        <b :style="tempIntBackColor">{{ data.value }}</b>
+                                    </template>
+
+                                </b-table>
                                 
                             </div>
                                 
@@ -116,6 +176,7 @@
                             <div style="text-align: center;">
                                 <b-alert show variant="danger" v-if="error!=null">{{error}}</b-alert>
                                 <b-alert show variant="success" v-if="success!=null">{{success}}</b-alert>
+                               
                                 <button class="site-btn my-4" data-toggle="collapse" href="#collapseThree"
                                     aria-expanded="false" aria-controls="collapseThree" v-on:click="cleanTable" style="background: red;">
                                     Cancel
@@ -124,7 +185,7 @@
                                     aria-expanded="false" aria-controls="collapseThree" v-on:click="nextToForm('units'); showAllData();">
                                     Convert Data
                                 </button>
-                                <button class="site-btn my-4" data-toggle="collapse" href="#collapseThree"
+                                <button v-if="error_temp && error_press && error_wind && error_rain " class="site-btn my-4" data-toggle="collapse" href="#collapseThree"
                                     aria-expanded="false" aria-controls="collapseThree" v-on:click="storeFile">
                                     Store Data in DB
                                 </button>
@@ -164,14 +225,28 @@
                     >
                         <div class="py-4 mx-4">
                             <h3>Convert Data</h3>
-                            <p class="mt-3">If you want covert data select which units do you want to convert.</p>
                                 <b-alert show>
-                                    <h5><b>Units</b></h5>
-                                    <p><b>Temperature</b> {{selectedUnitTemp}}</p>
-                                    <p><b>Presión</b> {{selectedUnitPres}}</p>
-                                    <p><b>Velocidad del viento</b> {{selectedUnitWind}}</p>
-                                    <p><b>Precipitación</b> {{selectedUnitRain}}</p>
+                                    For <b>Temperatura</b>, the unit should be <b>Celsius (ºC)</b>.<br>
+                                    For <b>Presión</b>, the unit should be <b>hPa</b>. <br>
+                                    For <b>Velocidad del viento</b>, the unit should be <b>m/s</b>. <br>
+                                    For <b>Precipitación del viento</b>, the unit should be <b>mm</b>. <br>
                                 </b-alert>
+                                <p class="mt-3">Select the units present in the file for the following variables.</p>
+                                <div class="row justify-content-center">
+                                    <label class="control-label col-sm-3" style="color: black"><h5>Temperatura</h5>
+                                    <b-form-select v-model="selectedUnitTemp" :options="unitTemp"></b-form-select>
+                                    </label>
+                                    <label class="control-label col-sm-3" style="color: black"><h5>Presión</h5>
+                                    <b-form-select v-model="selectedUnitPres" :options="unitPres"></b-form-select>
+                                    </label>
+                                    <label class="control-label col-sm-3" style="color: black"><h5>Velocidad del viento</h5>
+                                    <b-form-select v-model="selectedUnitWind" :options="unitWind"></b-form-select>
+                                    </label>
+                                    <label class="control-label col-sm-3" style="color: black"><h5>Precipitación</h5>
+                                    <b-form-select v-model="selectedUnitRain" :options="unitRain"></b-form-select>
+                                    </label>
+                                </div>
+                               
                                <button class="site-btn my-4" v-on:click="convertDataFtoC"><b-spinner v-if="busy_convert_temp" label="Spinning"></b-spinner>
                                     Convert °F to °C
                                 </button>
@@ -214,9 +289,9 @@
 
 <script>
 
-// const rootUrl = process.env.MIX_APP_URL
+const rootUrl = process.env.MIX_APP_URL
 
-const rootUrl = 'https://staging-weatherstations.stats4sd.org/'
+// const rootUrl = 'https://staging-weatherstations.stats4sd.org/'
 
     export default {
         data () {
@@ -275,7 +350,17 @@ const rootUrl = 'https://staging-weatherstations.stats4sd.org/'
                 all_data: null,
                 success: null,
                 error: null,
+                error_temp:false,
+                error_press:false,
+                error_wind:false,
+                error_rain:false
 
+            }
+        },
+        props:{ 
+            bgColor: {
+                type: String, 
+                default: 'red'
             }
         },
         mounted () {
@@ -283,6 +368,15 @@ const rootUrl = 'https://staging-weatherstations.stats4sd.org/'
             axios.get('api/stations').then((response) => {
                 this.stations = response.data;
             })
+        },
+        computed:{
+            tempIntBackColor() {
+                return {
+                    "color": this.bgColor,
+                };
+            
+
+            }
         },
 
 
@@ -308,10 +402,15 @@ const rootUrl = 'https://staging-weatherstations.stats4sd.org/'
 
                 axios.post(rootUrl+'/files', formData, {
                   }).then((result) => {
+                    console.log(result.data.error_data.original.error_data);
                     this.total_rows = result.data.data_template.total;
                     this.items = result.data.data_template.data;
-                    this.error_data = result.data.error_data;
+                    this.error_data = result.data.error_data.original.error_data;
                     this.busy= false;
+                    this.error_temp = result.data.error_data.original.error_temp;
+                    this.error_press = result.data.error_data.original.error_press;
+                    this.error_wind = result.data.error_data.original.error_wind;
+                    this.error_rain = result.data.error_data.original.error_rain;
                 })
 
             },
