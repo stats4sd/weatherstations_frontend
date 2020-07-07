@@ -343,6 +343,7 @@ const rootUrl = 'https://staging-weatherstations.stats4sd.org/'
                     this.busy_convert_temp= false;
                     
                 }, (error) => {
+                    this.busy_convert_temp= false;
                     console.log(error);
                 });          
 
@@ -364,6 +365,7 @@ const rootUrl = 'https://staging-weatherstations.stats4sd.org/'
                     
                 }, (error) => {
                     console.log(error);
+                    this.busy_convert_pres= false;
                 });          
 
             },
@@ -385,6 +387,7 @@ const rootUrl = 'https://staging-weatherstations.stats4sd.org/'
                     
                 }, (error) => {
                     console.log(error);
+                    this.busy_convert_wind= false;
                 });          
 
             },
@@ -405,6 +408,7 @@ const rootUrl = 'https://staging-weatherstations.stats4sd.org/'
                     
                 }, (error) => {
                     console.log(error);
+                    this.busy_convert_rain= false;
                 });          
 
             },

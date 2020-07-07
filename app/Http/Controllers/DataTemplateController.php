@@ -156,8 +156,7 @@ class DataTemplateController extends Controller
 
 					$pression_absoluta_round = $this->convertInhgOrMmhgToHpa($value->presion_absoluta, $request->pression_unit);
 
-						DB::table('data_template')
-								->where('fecha_hora','=', $value->fecha_hora)
+						DataTemplate::where('fecha_hora','=', $value->fecha_hora)
 								->where('id_station', '=',$value->id_station)
 								->update(
 							[
