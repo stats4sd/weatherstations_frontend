@@ -542,6 +542,7 @@ const rootUrl = process.env.MIX_APP_URL
                 .then((result) => {
                     console.log(result);
                     this.busy_clean= false;
+                    window.location.reload();
                     
                 }, (error) => {
                     console.log(error);
