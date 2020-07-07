@@ -14,7 +14,7 @@ class AddDepartamentoIdToMunicipiosTable extends Migration
     public function up()
     {
         Schema::table('municipio', function (Blueprint $table) {
-            $table->bigIncrements('departamento_id');
+            $table->bigInteger('departamento_id');
         });
     }
 

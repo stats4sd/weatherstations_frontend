@@ -14,7 +14,7 @@ class AddMunicipioIdToComunidadTable extends Migration
     public function up()
     {
         Schema::table('comunidad', function (Blueprint $table) {
-            $table->bigIncrements('municipio_id');
+            $table->bigInteger('municipio_id');
         });
     }
 
