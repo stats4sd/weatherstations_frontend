@@ -25547,7 +25547,7 @@ input[type=color].form-control:disabled {
 
 .progressbar li {
   list-style-type: none;
-  width: 25%;
+  width: 30%;
   float: left;
   position: relative;
   text-align: center;

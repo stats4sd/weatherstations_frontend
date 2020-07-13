@@ -101,13 +101,19 @@
                             <h3>Data Preview</h3>
                             <p class="mt-3">This is an example of your data.</p>
                             <div class="row py-4 mx-4 justify-content-center">
-                                <b-alert show>There are rows {{total_rows}}</b-alert>
+                                <b-alert show v-if="items!=null">There are rows {{total_rows}}</b-alert>
 
                                 <b-table striped hover responsive :items="items"></b-table>
                                 
                             </div>
+
+                             <div class="row py-4 mx-4 justify-content-center">
+                                <canvas id="myChart" width="400" height="400"></canvas>
+                                
+                            </div>
+
                             <div class="row py-4 mx-4 justify-content-center" v-if="error_data!=null">
-                                <b-alert show variant="danger" v-if="error_temp || error_press || error_wind||error_rain ">There are some values with the wrong units please check the following table and proceed with 'Convert Data' or press Cancel for uploading a new file.</b-alert>
+                                <b-alert show variant="danger" v-if="error_temp || error_press || error_wind||error_rain ">There are some values with the wrong units please check the following table and proceed with 'Convert Data' or press 'Cancel' for uploading a new file.</b-alert>
 
                                 <b-table sticky-header="600px" striped hover responsive :items="error_data">
                                     <template v-if="error_temp" v-slot:cell(temperatura_interna)="data">
@@ -290,9 +296,7 @@
 
 <script>
 
-// const rootUrl = process.env.MIX_APP_URL
-
-const rootUrl = 'https://staging-weatherstations.stats4sd.org/'
+const rootUrl = process.env.MIX_APP_URL
 
     export default {
         data () {
