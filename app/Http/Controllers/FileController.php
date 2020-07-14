@@ -54,51 +54,48 @@ class FileController extends Controller
 
         $station = $request->selectedStation;
 
-       
-            if($request->hasFile('data-file')){
-                // handle file and store it for prosperity
-                $file = $request->file('data-file');
-                $file_name = str_replace(" ", "_", $file->getClientOriginalName());
-                $name = time() . '_' . $file_name;
-                $path = $file->storeAs('rawfiles',$name);
-                $newFile = new File;
-                $newFile->path = $path;
-                $newFile->name = $name;
-                $newFile->station_id = $station;
-                $newFile->save();
-                $scriptName = 'uploadDatapreview.py';
-                $scriptPath = base_path() . '/scripts/' . $scriptName;
-                $path_name = Storage::path("/").$path;
 
-            
-            
-        
-        //python script accepts 3 arguments in this order: scriptPath, path_name, station_id
+        if($request->hasFile('data-file')){
+            // handle file and store it for prosperity
+            $file = $request->file('data-file');
+            $file_name = str_replace(" ", "_", $file->getClientOriginalName());
+            $name = time() . '_' . $file_name;
+            $path = $file->storeAs('rawfiles',$name);
+            $newFile = new File;
+            $newFile->path = $path;
+            $newFile->name = $name;
+            $newFile->station_id = $station;
+            $newFile->save();
+            $scriptName = 'uploadDatapreview.py';
+            $scriptPath = base_path() . '/scripts/' . $scriptName;
+            $path_name = Storage::path("/").$path;
 
-        $process = new Process("python3 {$scriptPath} {$path_name} {$station}");
 
-        $process->setTimeout(300);
-        
-        $process->run();
-        
-        if(!$process->isSuccessful()) {
-            
-           throw new ProcessFailedException($process);
-           \Alert::success('<h4>'.$process->getMessage().'</h4>')->flash();
-        
-        } 
-    }
-        
+
+
+            //python script accepts 3 arguments in this order: scriptPath, path_name, station_id
+
+            $process = new Process("pipenv run python3 {$scriptPath} {$path_name} {$station}");
+
+            $process->setTimeout(300);
+
+            $process->run();
+
+            if(!$process->isSuccessful()) {
+                throw new ProcessFailedException($process);
+            }
+        }
+
 
         $data_template = DataTemplate::paginate(5);
-    
+
         $error_data = $this->checkValues();
-      
-        
+
+
         return response()->json([
-            'data_template' => $data_template, 
+            'data_template' => $data_template,
             'error_data' => $error_data
-           
+
         ]);
 
         // Send file onto cloud function
@@ -156,17 +153,17 @@ class FileController extends Controller
         $error_press = false;
         $error_wind = false;
         $error_rain = false;
-      
+
         $daily_preview = DailyDataPreview::all();
         foreach ($daily_preview as $key => $value) {
-     
+
             $daily_temp_int = Daily::select('max_temperatura_interna')->whereMonth('fecha',  substr($value->fecha, -5, -3))->whereDay('fecha', substr($value->fecha, -2))->get();
 
             $daily_temp_ext = Daily::select('max_temperatura_interna')->whereMonth('fecha',  substr($value->fecha, -5, -3))->whereDay('fecha', substr($value->fecha, -2))->get();
 
              $daily_velocidad_viento = Daily::select('max_velocidad_viento')->whereMonth('fecha',  substr($value->fecha, -5, -3))->whereDay('fecha', substr($value->fecha, -2))->get();
 
-           
+
             if(!$daily_temp_int->isEmpty()){
 
                 $checkTempInt = abs($daily_temp_int[0]['max_temperatura_interna'] - $value->max_temperatura_interna) > 15;
@@ -177,7 +174,7 @@ class FileController extends Controller
 
                 $checkViento = $value->max_velocidad_viento > 100 || $value->max_velocidad_viento > 2*$daily_velocidad_viento[0]['max_velocidad_viento'] ;
 
-              
+
                 if($checkTempInt || $checkTempExt){
                     $error_temp = true;
                     array_push($error_date, $value->fecha);
@@ -193,18 +190,18 @@ class FileController extends Controller
         }
 
         $error_data = DataTemplate::whereIn('fecha_hora',$error_date)->get();
-      
+
         return response([
-           
+
             'error_data' => $error_data,
             'error_temp' => $error_temp,
             'error_press' => $error_press,
             'error_wind' => $error_wind,
             'error_rain' => $error_rain
-           
-        ]); 
+
+        ]);
 
     }
 
-    
+
 }

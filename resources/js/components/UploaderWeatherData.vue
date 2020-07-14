@@ -30,8 +30,8 @@
                         data-parent="#survey-sections"
                     >
                         <div class="py-4 mx-4">
-                            <h3>Upload the file</h3>
-                            
+                            <h3>Upload data file</h3>
+                            <p>Upload the .csv or .txt file you extracted from the weatherstation. Make sure you upload the original, un-edited data file.</p>
                             <div class="row mx-4 justify-content-center">
                                 <label class="control-label col-sm-6" style="color: black"><h5>Select the file</h5>
                                     <b-form-file  v-model="file" placeholder="Choose a file or drop it here..."></b-form-file>
@@ -43,7 +43,7 @@
                                 </label>
                             </div>
                             <h3>Select the units</h3>
-                            <p class="mt-3">Select the units present in the file for the following variables.</p>
+                            <p class="mt-3">Select the units used in the file for the following variable types:</p>
 
                             <div class="row img-block py-4 mx-4 justify-content-center">
                                 <label class="control-label col-sm-3" style="color: black"><h5>Temperatura</h5>
@@ -59,11 +59,12 @@
                                 <b-form-select v-model="selectedUnitRain" :options="unitRain"></b-form-select>
                                 </label>
                             </div>
-                               
+
                             <div style="text-align: center;">
+                                <b-alert show variant="danger" v-if="uploadError!=null">{{uploadError}}</b-alert>
                                 <button class="site-btn my-4" data-toggle="collapse" href="#collapseTwo"
-                                    aria-expanded="false" aria-controls="collapseTwo"  v-on:click="nextToForm('uploadfile'); submit();">
-                                    Next
+                                    aria-expanded="false" aria-controls="collapseTwo"  v-on:click="submit();" :disabled="busy">
+                                    <b-spinner small v-if="busy" label="Spinning"></b-spinner> Upload File
                                 </button>
                             </div>
                         </div>
@@ -104,12 +105,12 @@
                                 <b-alert show v-if="items!=null">There are rows {{total_rows}}</b-alert>
 
                                 <b-table striped hover responsive :items="items"></b-table>
-                                
+
                             </div>
 
                              <div class="row py-4 mx-4 justify-content-center">
                                 <canvas id="myChart" width="400" height="400"></canvas>
-                                
+
                             </div>
 
                             <div class="row py-4 mx-4 justify-content-center" v-if="error_data!=null">
@@ -175,14 +176,14 @@
                                     </template>
 
                                 </b-table>
-                                
+
                             </div>
-                                
-                              
+
+
                             <div style="text-align: center;">
                                 <b-alert show variant="danger" v-if="error!=null">{{error}}</b-alert>
                                 <b-alert show variant="success" v-if="success!=null">{{success}}</b-alert>
-                               
+
                                 <button class="site-btn my-4" data-toggle="collapse" href="#collapseThree"
                                     aria-expanded="false" aria-controls="collapseThree" v-on:click="cleanTable" style="background: red;">
                                     Cancel
@@ -195,7 +196,7 @@
                                     aria-expanded="false" aria-controls="collapseThree" v-on:click="storeFile">
                                     Store Data in DB
                                 </button>
-                                
+
                             </div>
                         </div>
                     </div>
@@ -269,7 +270,7 @@
                             <div class="row py-4 mx-4 justify-content-center">
 
                                 <b-table sticky-header="600px" striped hover responsive :items="all_data"></b-table>
-                                
+
                             </div>
                             <div style="text-align: center;">
                                 <b-alert show variant="danger" v-if="error!=null">{{error}}</b-alert>
@@ -283,13 +284,13 @@
                                     Store Data in DB
                                 </button>
                             </div>
-                          
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-       
+
 
     </div>
 </template>
@@ -335,7 +336,7 @@ const rootUrl = process.env.MIX_APP_URL
                     { value: 'inch', text: 'inch' }
                 ],
                 stations : [],
-                selectedStation: [],
+                selectedStation: null,
                 selectedUnitTemp: 'C',
                 selectedUnitPres: 'hpa',
                 selectedUnitWind: 'm/s',
@@ -358,13 +359,14 @@ const rootUrl = process.env.MIX_APP_URL
                 error_temp:false,
                 error_press:false,
                 error_wind:false,
-                error_rain:false
+                error_rain:false,
+                uploadError: null,
 
             }
         },
-        props:{ 
+        props:{
             bgColor: {
-                type: String, 
+                type: String,
                 default: 'red'
             }
         },
@@ -379,7 +381,7 @@ const rootUrl = process.env.MIX_APP_URL
                 return {
                     "color": this.bgColor,
                 };
-            
+
 
             }
         },
@@ -393,9 +395,22 @@ const rootUrl = process.env.MIX_APP_URL
                 } else if(message=='units') {
                     this.currentStep = 3;
                     $('#collapseTwo').collapse('hide');
-                } 
+                }
             },
             submit: function(event){
+
+                this.uploadError = null;
+
+                if(!this.file) {
+                    this.uploadError = "Please choose a file to upload";
+                    return;
+                }
+
+                if(!this.selectedStation) {
+                    this.uploadError = "Please select the station this data came from";
+                    return;
+                }
+
                 this.busy = true;
                 let formData = new FormData();
                 formData.append('data-file', this.file);
@@ -405,8 +420,7 @@ const rootUrl = process.env.MIX_APP_URL
                 formData.append('selectedUnitWind', this.selectedUnitWind);
                 formData.append('selectedUnitRain', this.selectedUnitRain);
 
-                axios.post(rootUrl+'/files', formData, {
-                  }).then((result) => {
+                axios.post(rootUrl+'/files', formData, {}).then((result) => {
                     console.log(result.data.error_data.original.error_data);
                     this.total_rows = result.data.data_template.total;
                     this.items = result.data.data_template.data;
@@ -416,13 +430,19 @@ const rootUrl = process.env.MIX_APP_URL
                     this.error_press = result.data.error_data.original.error_press;
                     this.error_wind = result.data.error_data.original.error_wind;
                     this.error_rain = result.data.error_data.original.error_rain;
+
+                    this.nextToForm('uploadfile');
                 })
+                .catch((result) => {
+                    this.uploadError = "The file could not be uploaded. Please check it is in the correct format, or contact the site administrator for more information";
+                });
+
 
             },
 
             showAllData: function(){
                 this.busy_convertion = true;
-               
+
                 axios.post(rootUrl+'/all_data', {
                   }).then((result) => {
                     console.log(result);
@@ -438,18 +458,18 @@ const rootUrl = process.env.MIX_APP_URL
                     url: "/convertDataFtoC",
                     data: {
                         temp_unit: this.selectedUnitTemp,
-                       
+
                     }
                 })
                 .then((result) => {
                     console.log(result);
                     this.all_data = result.data.data;
                     this.busy_convert_temp= false;
-                    
+
                 }, (error) => {
                     this.busy_convert_temp= false;
                     console.log(error);
-                });          
+                });
 
             },
             convertDataInhgOrMmhgToHpa: function(){
@@ -459,18 +479,18 @@ const rootUrl = process.env.MIX_APP_URL
                     url: "/convertDataInhgOrMmhgToHpa",
                     data: {
                         pression_unit: this.selectedUnitPres,
-                       
+
                     }
                 })
                 .then((result) => {
                     console.log(result);
                     this.all_data = result.data.data;
                     this.busy_convert_pres= false;
-                    
+
                 }, (error) => {
                     console.log(error);
                     this.busy_convert_pres= false;
-                });          
+                });
 
             },
 
@@ -481,18 +501,18 @@ const rootUrl = process.env.MIX_APP_URL
                     url: "/convertDatakmOrMToMs",
                     data: {
                         veloc_viento_unit: this.selectedUnitWind,
-                       
+
                     }
                 })
                 .then((result) => {
                     console.log(result);
                     this.all_data = result.data.data;
                     this.busy_convert_wind= false;
-                    
+
                 }, (error) => {
                     console.log(error);
                     this.busy_convert_wind= false;
-                });          
+                });
 
             },
             convertDataInchToMm: function(){
@@ -502,18 +522,18 @@ const rootUrl = process.env.MIX_APP_URL
                     url: "/convertDataInchToMm",
                     data: {
                         precip_unit: this.selectedUnitRain,
-                       
+
                     }
                 })
                 .then((result) => {
                     console.log(result);
                     this.all_data = result.data.data;
                     this.busy_convert_rain= false;
-                    
+
                 }, (error) => {
                     console.log(error);
                     this.busy_convert_rain= false;
-                });          
+                });
 
             },
 
@@ -528,12 +548,12 @@ const rootUrl = process.env.MIX_APP_URL
                     this.success = result.data.success
                     this.error = result.data.error
                     this.busy_store= false;
-                    
+
                 }, (error) => {
                     console.log(error);
                     this.error = error
                     this.busy_store= false;
-                });          
+                });
 
             },
 
@@ -547,11 +567,11 @@ const rootUrl = process.env.MIX_APP_URL
                     console.log(result);
                     this.busy_clean= false;
                     window.location.reload();
-                    
+
                 }, (error) => {
                     console.log(error);
                     this.busy_clean= false;
-                });          
+                });
 
             },
 
