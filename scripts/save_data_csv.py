@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+
 from mysql.connector import MySQLConnection, Error
 import sys
 import csv
@@ -32,12 +32,12 @@ try:
 	    column_names = [i[0] for i in cursor.description]
 	    writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
 	    writer.writerow(column_names)
-	   
+
 	    for row in cursor.fetchall():
 	    	writer.writerow(row)
 	con.commit()
 
-	
+
 except Error as e:
 
 	print('Error:', e)

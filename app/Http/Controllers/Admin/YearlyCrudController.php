@@ -25,7 +25,7 @@ class YearlyCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
-    
+
     public function setup()
     {
         /*
@@ -53,13 +53,13 @@ class YearlyCrudController extends CrudController
                 ],
                 [
                     'label' => 'Station',
-                    'type' => 'select', 
+                    'type' => 'select',
                     'name' => 'id_station',
                     'entity' => 'station',
                     'attribute' => 'label',
                     'model' => 'App\Models\Station',
                     'key' => 'updated_at'
-                ], 
+                ],
                 [
                     'label' => 'Max Temp Int',
                     'name' => 'max_temperatura_interna',
@@ -215,7 +215,7 @@ class YearlyCrudController extends CrudController
         });
 
         // add asterisk for fields that are required in YearlyRequest
-       
+
         $this->crud->addButtonFromView('top', 'download', 'download', 'end');
 
         // Filter
@@ -224,7 +224,7 @@ class YearlyCrudController extends CrudController
             'type' => 'select2',
             'label' => 'Station',
         ],function(){
-           
+
             return Station::all()->pluck('label', 'id')->toArray();;
 
         },function($value){
@@ -237,7 +237,7 @@ class YearlyCrudController extends CrudController
             'type' => 'select2_multiple',
             'label' => 'Year',
         ],function(){
-           $years = Yearly::select('fecha')->orderBy('fecha')->pluck('fecha', 'fecha')->toArray();         
+           $years = Yearly::select('fecha')->orderBy('fecha')->pluck('fecha', 'fecha')->toArray();
             return $years;
 
         },function($values){
@@ -257,7 +257,7 @@ class YearlyCrudController extends CrudController
     }
 
     public function download(Request $request)
-    { 
+    {
         $scriptName = 'save_data_csv.py';
         $scriptPath = base_path() . '/scripts/' . $scriptName;
         $base_path = base_path();
@@ -270,17 +270,17 @@ class YearlyCrudController extends CrudController
 
         //python script accepts 4 arguments in this order: base_path(), query, params and file name
         Log::info($query);
-      
-        $process = new Process("python3 {$scriptPath} {$base_path} {$query} {$params} {$file_name}");
+
+        $process = new Process("pipenv python3 {$scriptPath} {$base_path} {$query} {$params} {$file_name}");
 
         $process->run();
-        
+
         if(!$process->isSuccessful()) {
-            
+
            throw new ProcessFailedException($process);
-        
+
         } else {
-            
+
             $process->getOutput();
         }
         Log::info("python done.");
@@ -290,5 +290,5 @@ class YearlyCrudController extends CrudController
         return response()->json(['path' => $path_download]);
     }
 
-  
+
 }

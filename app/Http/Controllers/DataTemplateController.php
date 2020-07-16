@@ -34,7 +34,7 @@ class DataTemplateController extends Controller
 			$press_hpa = $value*1.3332239;
 			return round($value*1.3332239, 2);
 		}
-		
+
 	}
 	public function convertkmOrMToMs($value)
 	{
@@ -48,7 +48,7 @@ class DataTemplateController extends Controller
 		{
 			$veloc_viento_ms = $value*0.44704;
 			return round($veloc_viento_ms, 2);
-		}	
+		}
 	}
 
 	public function convertInchToMm($value)
@@ -65,7 +65,7 @@ class DataTemplateController extends Controller
 		if($request->precip_unit != "mm")
 		{
 			foreach ($data_template as $value) {
-				
+
 				$lluvia_hora_round = $this->convertInchToMm($value->lluvia_hora);
 				$lluvia_24_horas_round = $this->convertInchToMm($value->lluvia_24_horas);
 				$lluvia_semana_round = $this->convertInchToMm($value->lluvia_semana);
@@ -73,13 +73,13 @@ class DataTemplateController extends Controller
 				$lluvia_total_round = $this->convertInchToMm($value->lluvia_total);
 				$rain_round = $this->convertInchToMm($value->rain);
 
-				
+
 				DB::table('data_template')
 								->where('fecha_hora','=', $value->fecha_hora)
 								->where('id_station', '=',$value->id_station)
 								->update(
 							[
-								'lluvia_hora' => $lluvia_hora_round, 
+								'lluvia_hora' => $lluvia_hora_round,
 								'lluvia_24_horas' => $lluvia_24_horas_round,
 								'lluvia_semana' => $lluvia_semana_round,
 								'lluvia_mes' => $lluvia_mes_round,
@@ -90,13 +90,13 @@ class DataTemplateController extends Controller
 			}
 
 
-		}else 
+		}else
 			{
 				\Alert::warning('La lluvia_hora, lluvia_24_horas, lluvia_semana, lluvia_mes y lluvia_total está en mm de acuerdo con el usuario que cargó los datos.')->flash();
 			}
 
 		$all_data = DataTemplate::paginate(100);
-    
+
         return $all_data->toJson();
 
 
@@ -110,7 +110,7 @@ class DataTemplateController extends Controller
 		$data_template = DB::select('select fecha_hora, id_station, velocidad_viento, rafaga, hi_speed from data_template');
 		if($request->veloc_viento_unit!="m/s")
 		{
-			foreach ($data_template as $value) 
+			foreach ($data_template as $value)
 			{
 				$velocidad_viento_round = $this->convertkmOrMToMs($value->velocidad_viento, $request->veloc_viento_unit);
 				$rafaga_round = $this->convertkmOrMToMs($value->rafaga, $request->veloc_viento_unit);
@@ -121,7 +121,7 @@ class DataTemplateController extends Controller
 								->where('id_station', '=',$value->id_station)
 								->update(
 							[
-								'velocidad_viento' => $velocidad_viento_round, 
+								'velocidad_viento' => $velocidad_viento_round,
 								'rafaga' => $rafaga_round,
 								'hi_speed' => $hi_speed_round
 						]);
@@ -129,28 +129,28 @@ class DataTemplateController extends Controller
 			}
 
 
-		}else 
+		}else
 			{
 				\Alert::warning('La velocidad_viento, rafaga y hi_speed está en m/s de acuerdo con el usuario que cargó los datos.')->flash();
 
 			}
 
 		$all_data = DataTemplate::paginate(100);
-    
+
         return $all_data->toJson();
 
 	}
-	
+
 	public function convertDataInhgOrMmhgToHpa(Request $request)
 	{
 		set_time_limit(0);
-		
+
 		// $pression_unit = Session::get('pression_unit');
 		$data_template = DB::select('select fecha_hora, id_station, presion_relativa, presion_absoluta from data_template');
 
 			if($request->pression_unit!="hpa")
 			{
-				foreach ($data_template as $value) 
+				foreach ($data_template as $value)
 				{
 					$pression_relativa_round = $this->convertInhgOrMmhgToHpa($value->presion_relativa, $request->pression_unit);
 
@@ -160,18 +160,18 @@ class DataTemplateController extends Controller
 								->where('id_station', '=',$value->id_station)
 								->update(
 							[
-								'presion_relativa' => $pression_relativa_round, 
+								'presion_relativa' => $pression_relativa_round,
 								'presion_absoluta' => $pression_absoluta_round,
 						]);
 					// \Alert::success('La presión relativa y absoluta se ha convertido a la hpa.')->flash();
 				}
-			}else 
+			}else
 			{
 				// \Alert::warning('La presión relativa y absoluta está en hPa de acuerdo con el usuario que cargó los datos.')->flash();
 
 			}
 		$all_data = DataTemplate::paginate(100);
-    
+
         return $all_data->toJson();
 
 	}
@@ -181,12 +181,12 @@ class DataTemplateController extends Controller
 	{
 		set_time_limit(0);
 		// $temp_unit = Session::get('temp_unit');
-	
+
 		if($request->temp_unit=='F')
 		{
 			$data_template = DB::select('select fecha_hora, id_station, temperatura_interna, temperatura_externa, sensacion_termica, punto_rocio, wind_chill, hi_temp, low_temp from data_template');
-			
-			foreach ($data_template as $value) 
+
+			foreach ($data_template as $value)
 			{
 				$temp_interna_round = $this->convertFahrenheitToCelsius($value->temperatura_interna);
 
@@ -207,7 +207,7 @@ class DataTemplateController extends Controller
 							->where('id_station', '=',$value->id_station)
 							->update(
 						[
-							'temperatura_interna' => $temp_interna_round, 
+							'temperatura_interna' => $temp_interna_round,
 							'temperatura_externa' => $temp_externa_round,
 							'sensacion_termica' => $sensacion_term_round,
 							'punto_rocio' => $punto_rocio_round,
@@ -219,24 +219,24 @@ class DataTemplateController extends Controller
 
 
 			}
-			
+
 		} else {
 			\Alert::warning('La temperatura interna y externa están en grados centígrados según el usuario que cargó los datos.')->flash();
 		}
 
 		$all_data = DataTemplate::paginate(100);
-    
+
         return $all_data->toJson();
-		
+
 	}
 
 
 
     public function checkvalue()
     {
-    	
+
     	$this->convertDataFtoC();
-    	
+
     	return Redirect::back();
     }
     public function storeFile()
@@ -244,24 +244,24 @@ class DataTemplateController extends Controller
 
     	$data_template = DB::select('select * from data_template');
     	$scriptPath = base_path() . '/scripts/storeData.py';
-    
-		
-		
-		$process = new Process("python3 {$scriptPath}");
+
+
+
+		$process = new Process("pipenv python3 {$scriptPath}");
 
         $process->run();
-    	
-    	
+
+
         if(!$process->isSuccessful()) {
-            
+
            throw new ProcessFailedException($process);
-           
+
         	return response()->json(['error' => 'Los datos no se pueden guardar en la base de datos. Recomendamos verificar si hay duplicados']);
 
         } else {
-            
+
             $process->getOutput();
-  			
+
   			return response()->json(['success' => 'Los datos han sido ingresados ​​exitosamente.']);
         }
         Log::info("python done.");
@@ -279,5 +279,5 @@ class DataTemplateController extends Controller
     	return Redirect::back();
 
     }
-    
+
 }
