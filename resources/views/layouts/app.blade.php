@@ -20,13 +20,13 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
-   
-    
+
+
     <!-- App scripts -->
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-lg navbar-light bg-primary">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('home') }}" style="color:white;" >
                     Agronometric
@@ -37,14 +37,16 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto">    
-
-                        <div class="topnav">
-                          <a class="active" style="color:white;" href="home">Home</a>
-                          <a href="weatherstations" style="color:white;" >Weatherstations</a>
-                          <a href="admin" style="color:white;" >Admin</a>
-                        </div>
-
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                          <a class="nav-link @if(Route::current()->uri==='home') active @endif" href="home">Home</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link @if(Route::current()->uri==='weatherstations') active @endif" href="weatherstations">Upload Data</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link @if(Route::current()->uri==='admin') active @endif" href="admin">Admin</a>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -90,13 +92,13 @@
 </body>
      <!-- jQuery -->
     <script src="//code.jquery.com/jquery.js"></script>
-   
+
     <!-- Bootstrap JavaScript -->
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
      <!-- DataTables -->
-    
+
    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/b-1.5.6/b-colvis-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/fc-3.2.5/fh-3.1.4/r-2.2.2/sc-2.0.0/sl-1.3.0/datatables.min.css"/>
- 
+
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/b-1.5.6/b-colvis-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/fc-3.2.5/fh-3.1.4/r-2.2.2/sc-2.0.0/sl-1.3.0/datatables.min.js"></script>
