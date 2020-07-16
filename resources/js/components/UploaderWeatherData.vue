@@ -4,31 +4,21 @@
             :current-step="currentStep"
             :steps="steps"
         />
-        <div
-            id="survey-sections"
-            class="container my-4">
-            <div
-                id="toolsform"
-                class="accordion-area"
-            >
+        <div class="container my-4">
+            <div class="accordion-area" role="tablist">
                 <div class="panel">
-                    <div
-                        id="headerOne"
-                        class="panel-header"
-                    >
-                        <button
+                    <div class="panel-header">
+                        <b-button
                             class="panel-link active"
-                            data-toggle="collapse"
-                            data-target="#collapseOne"
+                            :class="visible1 ? null : 'collapsed'"
+                            :aria-expanded="visible1 ? 'true' : 'false'"
+                            aria-controls="collapse-1"
+                            @click="currentStep = 1"
                         >
                             Step 1: {{ steps[0].title }}
-                        </button>
+                        </b-button>
                     </div>
-                    <div
-                        id="collapseOne"
-                        class="collapse show"
-                        data-parent="#survey-sections"
-                    >
+                    <b-collapse id="collapse-1" accordion="accordion" role="tabpanel" v-model="visible1">
                         <div class="py-4 mx-4">
                             <h3>Upload data file</h3>
                             <p>Upload the .csv or .txt file you extracted from the weatherstation. Make sure you upload the original, un-edited data file.</p>
@@ -61,43 +51,29 @@
                             </div>
 
                             <div style="text-align: center;">
+                                <b-alert show varient="info">After you upload the file, you will have a chance to review the data values and confirm that these are the correct units before continuing.</b-alert>
                                 <b-alert show variant="danger" v-if="uploadError!=null">{{uploadError}}</b-alert>
-                                <button class="site-btn my-4" data-toggle="collapse" href="#collapseTwo"
-                                    aria-expanded="false" aria-controls="collapseTwo"  v-on:click="submit();" :disabled="busy">
+                                <button class="site-btn my-4" v-on:click="submit();" :disabled="busy">
                                     <b-spinner small v-if="busy" label="Spinning"></b-spinner> Upload File
                                 </button>
                             </div>
                         </div>
-                    </div>
+                    </b-collapse>
                 </div>
-            </div>
-        </div>
-        <div
-            id="survey-core"
-            class="container my-4">
-            <div
-                id="toolsform"
-                class="accordion-area"
-            >
                 <div class="panel">
-                    <div
-                        id="headerOne"
-                        class="panel-header"
-                    >
-                        <button
-                            class="panel-link active collapsed"
-                            data-toggle="collapse"
-                            data-target="#collapseTwo"
+                    <div class="panel-header">
+                        <b-button
+                            class="panel-link active"
+                            :class="visible2 ? null : 'collapsed'"
+                            :aria-expanded="visible2 ? 'true' : 'false'"
+                            aria-controls="collapse-1"
+                            @click="currentStep = 2"
                         >
-                        <b-spinner v-if="busy" label="Spinning"></b-spinner>
+                            <b-spinner v-if="busy" label="Spinning"></b-spinner>
                             Step 2: {{ steps[1].title }}
-                        </button>
+                        </b-button>
                     </div>
-                    <div
-                        id="collapseTwo"
-                        class="collapse"
-                        data-parent="#survey-core"
-                    >
+                    <b-collapse id="collapse-2" accordion="accordion" role="tabpanel" v-model="visible2">
                         <div class="py-4 mx-4">
                             <h3>Data Preview</h3>
                             <p class="mt-3">This is an example of your data.</p>
@@ -189,7 +165,7 @@
                                     Cancel
                                 </button>
                                 <button class="site-btn my-4" data-toggle="collapse" href="#collapseThree"
-                                    aria-expanded="false" aria-controls="collapseThree" v-on:click="nextToForm('units'); showAllData();">
+                                    aria-expanded="false" aria-controls="collapseThree" v-on:click="currentStep=3; showAllData();">
                                     Convert Data
                                 </button>
                                 <button v-if="error_temp && error_press && error_wind && error_rain " class="site-btn my-4" data-toggle="collapse" href="#collapseThree"
@@ -199,74 +175,59 @@
 
                             </div>
                         </div>
-                    </div>
+                    </b-collapse>
                 </div>
-            </div>
-        </div>
-
-        <div
-            id="survey-core"
-            class="container my-4">
-            <div
-                id="toolsform"
-                class="accordion-area"
-            >
                 <div class="panel">
-                    <div
-                        id="headerOne"
-                        class="panel-header"
-                    >
-                        <button
-                            class="panel-link active collapsed"
-                            data-toggle="collapse"
-                            data-target="#collapseTree"
+                    <div class="panel-header">
+                        <b-button
+                            class="panel-link active"
+                            :class="visible3 ? null : 'collapsed'"
+                            :aria-expanded="visible3 ? 'true' : 'false'"
+                            aria-controls="collapse-1"
+                            @click="currentStep = 3"
                         >
-                        <b-spinner v-if="busy_convertion" label="Spinning"></b-spinner>
+                            <b-spinner v-if="busy" label="Spinning"></b-spinner>
                             Step 3: {{ steps[2].title }}
-                        </button>
+                        </b-button>
                     </div>
-                    <div
-                        id="collapseTree"
-                        class="collapse"
-                        data-parent="#survey-core"
-                    >
+                    <b-collapse id="collapse-3" accordion="accordion" role="tabpanel" v-model="visible3">
                         <div class="py-4 mx-4">
                             <h3>Convert Data</h3>
-                                <b-alert show>
-                                    For <b>Temperatura</b>, the unit should be <b>Celsius (ºC)</b>.<br>
-                                    For <b>Presión</b>, the unit should be <b>hPa</b>. <br>
-                                    For <b>Velocidad del viento</b>, the unit should be <b>m/s</b>. <br>
-                                    For <b>Precipitación del viento</b>, the unit should be <b>mm</b>. <br>
-                                </b-alert>
-                                <p class="mt-3">Select the units present in the file for the following variables.</p>
-                                <div class="row justify-content-center">
-                                    <label class="control-label col-sm-3" style="color: black"><h5>Temperatura</h5>
-                                    <b-form-select v-model="selectedUnitTemp" :options="unitTemp"></b-form-select>
-                                    </label>
-                                    <label class="control-label col-sm-3" style="color: black"><h5>Presión</h5>
-                                    <b-form-select v-model="selectedUnitPres" :options="unitPres"></b-form-select>
-                                    </label>
-                                    <label class="control-label col-sm-3" style="color: black"><h5>Velocidad del viento</h5>
-                                    <b-form-select v-model="selectedUnitWind" :options="unitWind"></b-form-select>
-                                    </label>
-                                    <label class="control-label col-sm-3" style="color: black"><h5>Precipitación</h5>
-                                    <b-form-select v-model="selectedUnitRain" :options="unitRain"></b-form-select>
-                                    </label>
-                                </div>
-                                <div style="text-align: center;">
-                                   <button class="site-btn my-4" v-on:click="convertDataFtoC"><b-spinner v-if="busy_convert_temp" label="Spinning"></b-spinner>
-                                        Convert °F to °C
-                                    </button>
-                                    <button class="site-btn my-4" v-on:click="convertDataInhgOrMmhgToHpa"><b-spinner v-if="busy_convert_pres" label="Spinning"></b-spinner>
-                                        Convert inhg or mmhg to hpa
-                                    </button>
-                                    <button class="site-btn my-4" v-on:click="convertDatakmOrMToMs"><b-spinner v-if="busy_convert_wind" label="Spinning"></b-spinner>
-                                        Convert km/h or mph to m/s
-                                    </button>
-                                    <button class="site-btn my-4" v-on:click="convertDataInchToMm"><b-spinner v-if="busy_convert_rain" label="Spinning"></b-spinner>
-                                        Convert inch to mm
-                                    </button>
-                                </div>
+                            <b-alert show>
+                                For <b>Temperatura</b>, the unit should be <b>Celsius (ºC)</b>.<br>
+                                For <b>Presión</b>, the unit should be <b>hPa</b>. <br>
+                                For <b>Velocidad del viento</b>, the unit should be <b>m/s</b>. <br>
+                                For <b>Precipitación del viento</b>, the unit should be <b>mm</b>. <br>
+                            </b-alert>
+                            <p class="mt-3">Select the units present in the file for the following variables.</p>
+                            <div class="row justify-content-center">
+                                <label class="control-label col-sm-3" style="color: black"><h5>Temperatura</h5>
+                                <b-form-select v-model="selectedUnitTemp" :options="unitTemp"></b-form-select>
+                                </label>
+                                <label class="control-label col-sm-3" style="color: black"><h5>Presión</h5>
+                                <b-form-select v-model="selectedUnitPres" :options="unitPres"></b-form-select>
+                                </label>
+                                <label class="control-label col-sm-3" style="color: black"><h5>Velocidad del viento</h5>
+                                <b-form-select v-model="selectedUnitWind" :options="unitWind"></b-form-select>
+                                </label>
+                                <label class="control-label col-sm-3" style="color: black"><h5>Precipitación</h5>
+                                <b-form-select v-model="selectedUnitRain" :options="unitRain"></b-form-select>
+                                </label>
+                            </div>
+                            <div style="text-align: center;">
+                                <button class="site-btn my-4" v-on:click="convertDataFtoC"><b-spinner v-if="busy_convert_temp" label="Spinning"></b-spinner>
+                                    Convert °F to °C
+                                </button>
+                                <button class="site-btn my-4" v-on:click="convertDataInhgOrMmhgToHpa"><b-spinner v-if="busy_convert_pres" label="Spinning"></b-spinner>
+                                    Convert inhg or mmhg to hpa
+                                </button>
+                                <button class="site-btn my-4" v-on:click="convertDatakmOrMToMs"><b-spinner v-if="busy_convert_wind" label="Spinning"></b-spinner>
+                                    Convert km/h or mph to m/s
+                                </button>
+                                <button class="site-btn my-4" v-on:click="convertDataInchToMm"><b-spinner v-if="busy_convert_rain" label="Spinning"></b-spinner>
+                                    Convert inch to mm
+                                </button>
+                            </div>
                             <div class="row py-4 mx-4 justify-content-center">
 
                                 <b-table sticky-header="600px" striped hover responsive :items="all_data"></b-table>
@@ -276,7 +237,7 @@
                                 <b-alert show variant="danger" v-if="error!=null">{{error}}</b-alert>
                                 <b-alert show variant="success" v-if="success!=null">{{success}}</b-alert>
                                 <button class="site-btn my-4" data-toggle="collapse" href="#collapseThree"
-                                    aria-expanded="false" aria-controls="collapseThree" style="background: red;"v-on:click="cleanTable"><b-spinner v-if="busy_clean" label="Spinning"></b-spinner>
+                                    aria-expanded="false" aria-controls="collapseThree" style="background: red;" v-on:click="cleanTable"><b-spinner v-if="busy_clean" label="Spinning"></b-spinner>
                                     Clean Table
                                 </button>
                                 <button class="site-btn my-4" data-toggle="collapse" href="#collapseThree"
@@ -286,12 +247,10 @@
                             </div>
 
                         </div>
-                    </div>
+                    </b-collapse>
                 </div>
             </div>
         </div>
-
-
     </div>
 </template>
 
@@ -381,24 +340,26 @@ const rootUrl = process.env.MIX_APP_URL
                 return {
                     "color": this.bgColor,
                 };
-
-
-            }
+            },
+            visible1: {
+                get: function() { return this.currentStep === 1 },
+                set: function(newValue) { if(newValue) this.currentStep = 1 }
+            },
+            visible2: {
+                get: function() { return this.currentStep === 2 },
+                set: function(newValue) { if(newValue) this.currentStep = 2 }
+            },
+            visible3: {
+                get: function() { return this.currentStep === 3 },
+                set: function(newValue) { if(newValue) this.currentStep = 3 }
+            },
         },
 
 
         methods: {
-            nextToForm: function (message) {
-                if(message=='uploadfile') {
-                    this.currentStep = 2;
-                    $('#collapseOne').collapse('hide');
-                } else if(message=='units') {
-                    this.currentStep = 3;
-                    $('#collapseTwo').collapse('hide');
-                }
-            },
             submit: function(event){
 
+                //check form for errors
                 this.uploadError = null;
 
                 if(!this.file) {
@@ -425,17 +386,19 @@ const rootUrl = process.env.MIX_APP_URL
                     this.total_rows = result.data.data_template.total;
                     this.items = result.data.data_template.data;
                     this.error_data = result.data.error_data.original.error_data;
-                    this.busy= false;
                     this.error_temp = result.data.error_data.original.error_temp;
                     this.error_press = result.data.error_data.original.error_press;
                     this.error_wind = result.data.error_data.original.error_wind;
                     this.error_rain = result.data.error_data.original.error_rain;
 
-                    this.nextToForm('uploadfile');
+                    this.currentStep = 2;
                 })
                 .catch((result) => {
                     this.uploadError = "The file could not be uploaded. Please check it is in the correct format, or contact the site administrator for more information";
-                });
+                })
+                .then(() => {
+                    this.busy = false;
+                })
 
 
             },
