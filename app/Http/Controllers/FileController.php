@@ -84,19 +84,22 @@ class FileController extends Controller
             if(!$process->isSuccessful()) {
                 throw new ProcessFailedException($process);
             }
+
+            $data_template = DataTemplate::paginate(5);
+
+            $error_data = $this->checkValues();
+
+
+            return response()->json([
+                'data_template' => $data_template,
+                'error_data' => $error_data
+
+            ]);
         }
 
-
-        $data_template = DataTemplate::paginate(5);
-
-        $error_data = $this->checkValues();
+        abort(500, 'request did not contain a file - please check that the file was correctly attached');
 
 
-        return response()->json([
-            'data_template' => $data_template,
-            'error_data' => $error_data
-
-        ]);
 
         // Send file onto cloud function
     }

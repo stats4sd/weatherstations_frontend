@@ -53,8 +53,8 @@
                             <div style="text-align: center;">
                                 <b-alert show varient="info">After you upload the file, you will have a chance to review the data values and confirm that these are the correct units before continuing.</b-alert>
                                 <b-alert show variant="danger" v-if="uploadError!=null">{{uploadError}}</b-alert>
-                                <button class="site-btn my-4" v-on:click="submit();" :disabled="busy">
-                                    <b-spinner small v-if="busy" label="Spinning"></b-spinner> Upload File
+                                <button class="site-btn my-4" v-on:click="submit();" :disabled="busy_upload">
+                                    <b-spinner small v-if="busy_upload" label="Spinning"></b-spinner> Upload File
                                 </button>
                             </div>
                         </div>
@@ -66,10 +66,9 @@
                             class="panel-link active"
                             :class="visible2 ? null : 'collapsed'"
                             :aria-expanded="visible2 ? 'true' : 'false'"
-                            aria-controls="collapse-1"
+                            aria-controls="collapse-2"
                             @click="currentStep = 2"
                         >
-                            <b-spinner v-if="busy" label="Spinning"></b-spinner>
                             Step 2: {{ steps[1].title }}
                         </b-button>
                     </div>
@@ -77,15 +76,70 @@
                         <div class="py-4 mx-4">
                             <h3>Data Preview</h3>
                             <p class="mt-3">This is an example of your data.</p>
-                            <div class="row py-4 mx-4 justify-content-center">
-                                <b-alert show v-if="items!=null">There are rows {{total_rows}}</b-alert>
+                            <b-alert show varient="success" >Please check that the columns you expect to be filled contain data, and that the values look sensible for the selected location, the time of year and the units chosen.</b-alert>
+                            <div class="d-flex mx-4 justify-content-center">
+                                <b-alert show v-if="previewData!=null">There are {{total_rows}} rows</b-alert>
 
-                                <b-table striped hover responsive :items="items"></b-table>
+                                <b-table striped hover responsive :items="previewData">
+                                    <template v-slot:cell(temperatura_interna)="data">
+                                        {{ data.value }} {{ data.value!='' ? selectedUnitTemp : ''}}
+                                    </template>
+                                    <template v-slot:cell(temperatura_externa)="data">
+                                        {{ data.value }} {{ data.value!='' ? selectedUnitTemp : ''}}
+                                    </template>
+                                    <template v-slot:cell(sensacion_termica)="data">
+                                        {{ data.value }} {{ data.value!='' ? selectedUnitTemp : ''}}
+                                    </template>
+                                    <template v-slot:cell(punto_rocio)="data">
+                                        {{ data.value }} {{ data.value!='' ? selectedUnitTemp : ''}}
+                                    </template>
+                                    <template v-slot:cell(wind_chill)="data">
+                                        {{ data.value }} {{ data.value!='' ? selectedUnitTemp : ''}}
+                                    </template>
+                                    <template v-slot:cell(hi_temp)="data">
+                                        {{ data.value }} {{ data.value!='' ? selectedUnitTemp : ''}}
+                                    </template>
+                                    <template v-slot:cell(low_temp)="data">
+                                        {{ data.value }} {{ data.value!='' ? selectedUnitTemp : ''}}
+                                    </template>
+                                    <template v-slot:cell(low_temp)="data">
+                                        {{ data.value }} {{ data.value!='' ? selectedUnitTemp : ''}}
+                                    </template>
+                                    <template v-slot:cell(presion_relativa)="data">
+                                        {{ data.value }} {{ data.value!='' ? selectedUnitPres : ''}}
+                                    </template>
+                                    <template v-slot:cell(presion_absoluta)="data">
+                                        {{ data.value }} {{ data.value!='' ? selectedUnitPres : ''}}
+                                    </template>
+                                    <template v-slot:cell(velocidad_viento)="data">
+                                        {{ data.value }} {{ data.value!='' ? selectedUnitWind : ''}}
+                                    </template>
+                                    <template v-slot:cell(rafaga)="data">
+                                        {{ data.value }} {{ data.value!='' ? selectedUnitWind : ''}}
+                                    </template>
+                                    <template v-slot:cell(hi_speed)="data">
+                                        {{ data.value }} {{ data.value!='' ? selectedUnitWind : ''}}
+                                    </template>
+                                    <template v-slot:cell(lluvia_hora)="data">
+                                        {{ data.value }} {{ data.value!='' ? selectedUnitRain : ''}}
+                                    </template>
+                                    <template v-slot:cell(lluvia_24_horas)="data">
+                                        {{ data.value }} {{ data.value!='' ? selectedUnitRain : ''}}
+                                    </template>
+                                    <template v-slot:cell(lluvia_semana)="data">
+                                        {{ data.value }} {{ data.value!='' ? selectedUnitRain : ''}}
+                                    </template>
+                                    <template v-slot:cell(lluvia_mes)="data">
+                                        {{ data.value }} {{ data.value!='' ? selectedUnitRain : ''}}
+                                    </template>
+                                    <template v-slot:cell(lluvia_total)="data">
+                                        {{ data.value }} {{ data.value!='' ? selectedUnitRain : ''}}
+                                    </template>
+                                    <template v-slot:cell(rain)="data">
+                                        {{ data.value }} {{ data.value!='' ? selectedUnitRain : ''}}
+                                    </template>
 
-                            </div>
-
-                             <div class="row py-4 mx-4 justify-content-center">
-                                <canvas id="myChart" width="400" height="400"></canvas>
+                                </b-table>
 
                             </div>
 
@@ -183,10 +237,10 @@
                             class="panel-link active"
                             :class="visible3 ? null : 'collapsed'"
                             :aria-expanded="visible3 ? 'true' : 'false'"
-                            aria-controls="collapse-1"
+                            aria-controls="collapse-3"
                             @click="currentStep = 3"
                         >
-                            <b-spinner v-if="busy" label="Spinning"></b-spinner>
+                            <b-spinner v-if="busy_conversion" label="Spinning"></b-spinner>
                             Step 3: {{ steps[2].title }}
                         </b-button>
                     </div>
@@ -277,8 +331,8 @@ const rootUrl = process.env.MIX_APP_URL
                     }
                 ],
                 unitTemp : [
-                    { value: 'C', text: 'Celsius (ºC)' },
-                    { value: 'F', text: 'Farhenheit (ºF)' }
+                    { value: 'ºC', text: 'Celsius (ºC)' },
+                    { value: 'ºF', text: 'Farhenheit (ºF)' }
                     ],
                 unitPres : [
                     { value: 'hpa', text: 'hPa' },
@@ -296,15 +350,15 @@ const rootUrl = process.env.MIX_APP_URL
                 ],
                 stations : [],
                 selectedStation: null,
-                selectedUnitTemp: 'C',
+                selectedUnitTemp: 'ºC',
                 selectedUnitPres: 'hpa',
                 selectedUnitWind: 'm/s',
                 selectedUnitRain: 'mm',
                 file: null,
-                items: null,
+                previewData: null,
                 total_rows: null,
-                busy: false,
-                busy_convertion: false,
+                busy_upload: false,
+                busy_conversion: false,
                 busy_convert_temp: false,
                 busy_convert_pres: false,
                 busy_convert_wind: false,
@@ -372,7 +426,7 @@ const rootUrl = process.env.MIX_APP_URL
                     return;
                 }
 
-                this.busy = true;
+                this.busy_upload = true;
                 let formData = new FormData();
                 formData.append('data-file', this.file);
                 formData.append('selectedStation', this.selectedStation);
@@ -382,9 +436,13 @@ const rootUrl = process.env.MIX_APP_URL
                 formData.append('selectedUnitRain', this.selectedUnitRain);
 
                 axios.post(rootUrl+'/files', formData, {}).then((result) => {
-                    console.log(result.data.error_data.original.error_data);
+
                     this.total_rows = result.data.data_template.total;
-                    this.items = result.data.data_template.data;
+                    this.previewData = result.data.data_template.data;
+
+                    // console.log("previewData", this.previewData)
+                    // this.previewData = this.addUnitsToPreview(this.previewData);
+
                     this.error_data = result.data.error_data.original.error_data;
                     this.error_temp = result.data.error_data.original.error_temp;
                     this.error_press = result.data.error_data.original.error_press;
@@ -393,11 +451,16 @@ const rootUrl = process.env.MIX_APP_URL
 
                     this.currentStep = 2;
                 })
-                .catch((result) => {
-                    this.uploadError = "The file could not be uploaded. Please check it is in the correct format, or contact the site administrator for more information";
-                })
+                // .catch((error) => {
+                //     if(error.response && error.response.hasOwnProperty('data')) {
+                //         this.uploadError = error.response.data.message;
+                //     }
+                //     else {
+                //         this.uploadError = "The file could not be uploaded. Please check it is in the correct format, or contact the site administrator for more information";
+                //     }
+                // })
                 .then(() => {
-                    this.busy = false;
+                    this.busy_upload = false;
                 })
 
 
@@ -537,6 +600,15 @@ const rootUrl = process.env.MIX_APP_URL
                 });
 
             },
+
+            // addUnitsToPreview: function(dataPreview) {
+            //     return dataPreview.map( (record) => {
+            //         Object.keys(record).forEach( (key) => {
+            //             if(key == "temperatura_interna") { record.temperatura_interna_ºF = record.temperatura_interna; delete record.temperatura_interna}
+            //         });
+            //         return record;
+            //     });
+            // }
 
 
         }
