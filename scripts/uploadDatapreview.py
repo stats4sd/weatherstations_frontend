@@ -1,4 +1,4 @@
-#!/usr/bin/python3.7
+
 import mysql.connector as mysql
 import dbConfig as config 
 import listColumnsName as columns_name
