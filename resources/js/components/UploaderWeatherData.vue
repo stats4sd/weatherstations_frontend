@@ -451,14 +451,15 @@ const rootUrl = process.env.MIX_APP_URL
 
                     this.currentStep = 2;
                 })
-                // .catch((error) => {
-                //     if(error.response && error.response.hasOwnProperty('data')) {
-                //         this.uploadError = error.response.data.message;
-                //     }
-                //     else {
-                //         this.uploadError = "The file could not be uploaded. Please check it is in the correct format, or contact the site administrator for more information";
-                //     }
-                // })
+                .catch((error) => {
+                    this.busy_upload = false;
+                    if(error.response && error.response.hasOwnProperty('data')) {
+                        this.uploadError = error.response.data.message;
+                    }
+                    else {
+                        this.uploadError = "The file could not be uploaded. Please check it is in the correct format, or contact the site administrator for more information";
+                    }
+                })
                 .then(() => {
                     this.busy_upload = false;
                 })

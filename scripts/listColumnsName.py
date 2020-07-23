@@ -52,11 +52,11 @@ list_columns_name = [
                       'wind_cod_dom', 'wind_chill', 'index_heat', 'index_thw', 'index_thsw', 'presion_relativa', 
                       'rain', 'solar_rad', 'solar_energy', 'radsolar_max', 'uv_index', 'uv_dose', 'uv_max', 
                       'heat_days_d', 'cool_days_d', 'in_dew', 'in_heat', 'in_emc', 'in_air_density', 'evapotran', 
-                      'soil_1_moist', 'soil_2_moist', 'soil_3_moist', 'leaf_wet1', 'wind_samp', 'wind_tx', 'iss_recept', 'intervalo', 
+                      'soil_1_moist', 'soil_2_moist', 'soil_3_moist','soil_4_moist', 'leaf_wet1', 'leaf_wet2', 'leaf_wet3', 'leaf_wet4' 'wind_samp', 'wind_tx', 'iss_recept', 'intervalo', 
                       'temperatura_interna', 'humedad_interna', 'punto_rocio', 'humedad_externa', 'temperatura_externa', 
                       'id_station', 'presion_absoluta', 'velocidad_viento', 'sensacion_termica', 'rafaga', 'direccion_del_viento', 
                       'lluvia_hora', 'lluvia_24_horas', 'lluvia_semana', 'lluvia_mes', 'lluvia_total', 'leaf_temp_1', 
-                      'leaf_temp_2', 'soil_temp_1', 'soil_temp_2'
+                      'leaf_temp_2', 'soil_temp_1', 'soil_temp_2', 'soil_temp_3', 'soil_temp_4'
                     ]
 
 
@@ -75,10 +75,11 @@ list_columns_davis_text = {
                             'In_Temp':'temperatura_interna', 'In_Hum':'humedad_interna', 'In_Dew':'in_dew', 
                             'In_Heat':'in_heat', 'In_EMC':'in_emc', 'In_Air_Density':'in_air_density', 
                             'ET':'evapotran', 'Soil_1_Moist.':'soil_1_moist', 
-                            'Soil_2_Moist.':'soil_2_moist','Soil_3_Moist.':'soil_3_moist', 'Soil_Temp_1':'soil_temp_1','Soil_Temp_2':'soil_temp_2', 
-                            'Leaf_Wet_1':'leaf_wet1', 'Leaf_Wet_2':'leaf_wet2','Wind_Samp':'wind_samp', 
+                            'Soil_2_Moist.':'soil_2_moist','Soil_3_Moist.':'soil_3_moist', 'Soil_4_Moist.':'soil_4_moist' , 
+                            'Soil_Temp_1':'soil_temp_1','Soil_Temp_2':'soil_temp_2', 'Soil_Temp_3':'soil_temp_3', 'Soil_Temp_4':'soil_temp_4',  
+                            'Leaf_Wet_1':'leaf_wet1', 'Leaf_Wet_2':'leaf_wet2','Leaf_Wet_3':'leaf_wet3','Leaf_Wet_4':'leaf_wet4','Wind_Samp':'wind_samp', 
                             'Wind_Tx':'wind_tx', 'ISS_Recept':'iss_recept', 'Leaf_Temp_1':'leaf_temp_1', 
-                            'Leaf_Temp_2':'leaf_temp_2', 'Arc._Int.':'intervalo'
+                            'Leaf_Temp_2':'leaf_temp_2','Leaf_Temp_3':'leaf_temp_3','Leaf_Temp_4':'leaf_temp_4', 'Arc._Int.':'intervalo'
                           }
 
 #dictionary of columns name for converting the chinas csv file columns name into database columns name 

@@ -2,11 +2,15 @@ import mysql.connector as mysql
 import dbConfig as config
 import listColumnsName as columns_name
 import pandas as pd
+import convertorUnits as convertor
 from datetime import datetime
 import sys
 path = sys.argv[1]
 station_id = sys.argv[2]
-
+selected_unit_temp = sys.argv[3]
+selected_unit_pres = sys.argv[4]
+selected_unit_wind = sys.argv[5]
+selected_unit_rain = sys.argv[6]
 
 def openFile():
 
@@ -52,6 +56,18 @@ def openFile():
         #add the station_id column
         df['id_station'] = station_id
 
+        #convert data
+        if selected_unit_rain != "mm":
+            print('converting data rain in inch to mm')
+            df = convertor.convertDataInchToMm(df, selected_unit_rain, 1)
+
+        if selected_unit_wind != "m/s":
+            print('converting data wind in km or mph to ms')
+            df = convertor.convertDatakmOrMToMs(df, selected_unit_wind, 1)
+
+        if selected_unit_temp != "ºC":
+            print('converting data temperature in F to C')
+            df = convertor.convertDataFtoC(df, selected_unit_temp, 1)
 
     else:
 
@@ -86,7 +102,22 @@ def openFile():
 
         # drop rows with missing value / NaN in any column
         df = df.dropna(how='all', subset=columns_name.list_columns_chinas_to_drop)
+        #convert data
+        if selected_unit_pres != "hpa":
+            print('converting data presion in inhg or mmhg to hpa')
+            df = convertor.convertDataInhgOrMmhgToHpa(df, selected_unit_pres, 0)
 
+        if selected_unit_rain != "mm":
+            print('converting data rain in inch to mm')
+            df = convertor.convertDataInchToMm(df, selected_unit_rain, 0)
+
+        if selected_unit_wind != "m/s":
+            print('converting data wind in km or mph to ms')
+            df = convertor.convertDatakmOrMToMs(df, selected_unit_wind, 0)
+
+        if selected_unit_temp != "ºC":
+            print('converting data temperature in F to C')
+            df = convertor.convertDataFtoC(df, selected_unit_temp, 0)
     return df
 
 
@@ -95,13 +126,14 @@ conn = mysql.connect(**config.dbConfig)
 cursor = conn.cursor()
 
 try:
-
-    cols = openFile().columns.tolist()
+    data = openFile()
+    cols = data.columns.tolist()
+    print(cols)
     cols = '`,`'.join(cols)
 
     print('data is uploading')
 
-    for i, row in openFile().iterrows():
+    for i, row in data.iterrows():
         sql = f"INSERT INTO `data_template` (`{cols}`) VALUES (" + "%s,"*(len(row)-1) + "%s)"
         cursor.execute(sql, tuple(row))
     conn.commit()

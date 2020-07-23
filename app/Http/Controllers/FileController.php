@@ -45,12 +45,6 @@ class FileController extends Controller
      */
     public function store(Request $request)
     {
-        // Retrieve file from POST request
-        //sends units type to DataTemplate
-        // Session::put('temp_unit', $_POST['temp_unit']);
-        // Session::put('pression_unit', $_POST['pression_unit']);
-        // Session::put('veloc_viento_unit', $_POST['veloc_viento_unit']);
-        // Session::put('precip_unit', $_POST['precip_unit']);
 
         $station = $request->selectedStation;
 
@@ -75,7 +69,7 @@ class FileController extends Controller
 
             //python script accepts 3 arguments in this order: scriptPath, path_name, station_id
 
-            $process = new Process("pipenv run python3 {$scriptPath} {$path_name} {$station}");
+            $process = new Process("pipenv run python3 {$scriptPath} {$path_name} {$station} {$request->selectedUnitTemp} {$request->selectedUnitPres} {$request->selectedUnitWind} {$request->selectedUnitRain}");
 
             $process->setTimeout(300);
 
@@ -205,6 +199,5 @@ class FileController extends Controller
         ]);
 
     }
-
 
 }
