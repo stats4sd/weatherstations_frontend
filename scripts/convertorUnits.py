@@ -69,11 +69,11 @@ def convertDataInhgOrMmhgToHpa(dataframe, pression_unit, davis):
 			
 			dataframe['presion_relativa'] = convertInhgOrMmhgToHpa(dataframe['presion_relativa'], pression_unit)
 
-			dataframe['presion_absoluta'] = convertInhgOrMmhgToHpa(dataframe['presion_absoluta'], pression_unit)
 
 		if pression_unit != "hpa" and not davis:
 			
 			dataframe['presion_relativa'] = convertInhgOrMmhgToHpa(dataframe['presion_relativa'], pression_unit)
+			dataframe['presion_absoluta'] = convertInhgOrMmhgToHpa(dataframe['presion_absoluta'], pression_unit)
 
 		return dataframe
 

@@ -5,18 +5,21 @@ import pandas as pd
 import convertorUnits as convertor
 from datetime import datetime
 import sys
+
 path = sys.argv[1]
 station_id = sys.argv[2]
 selected_unit_temp = sys.argv[3]
 selected_unit_pres = sys.argv[4]
 selected_unit_wind = sys.argv[5]
 selected_unit_rain = sys.argv[6]
+uploader_id = sys.argv[6]
 
 def openFile():
 
     if(path[len(path)-3 : ] == "txt"):
 
         df = pd.read_csv(path, na_values=['--.-', '--', '---'], sep="\t", header=[0,1])
+
         new_columns_names = []
         for i in df.columns:
 
@@ -50,13 +53,18 @@ def openFile():
         #drop columns not necessary
         df = df.drop(['time'], axis=1)
 
-        df = df.where((pd.notnull(df)), None)
         # drop rows with missing value / NaN in any column
         df = df.dropna(how='all', subset=columns_name.list_columns_davis_to_drop)
         #add the station_id column
         df['id_station'] = station_id
+        #add the uploader_id column
+        df['uploader_id'] = uploader_id
 
         #convert data
+        if selected_unit_pres != "hpa":
+            print('converting data presion in inhg or mmhg to hpa')
+            df = convertor.convertDataInhgOrMmhgToHpa(df, selected_unit_pres, 1)
+
         if selected_unit_rain != "mm":
             print('converting data rain in inch to mm')
             df = convertor.convertDataInchToMm(df, selected_unit_rain, 1)
@@ -69,6 +77,8 @@ def openFile():
             print('converting data temperature in F to C')
             df = convertor.convertDataFtoC(df, selected_unit_temp, 1)
 
+        df = df.where((pd.notnull(df)), None)
+
     else:
 
         data = pd.read_csv(path, encoding="utf-8", na_values=['--.-', '--', '---'], low_memory=False)
@@ -80,13 +90,15 @@ def openFile():
         # add id_station column
         df['id_station'] = station_id
 
+        #add the uploader_id column
+        df['uploader_id'] = uploader_id
+
         #drop columns not necessary
         df = df.drop(['No.'], axis=1)
 
         # replace columns name
         df = df.rename(columns=columns_name.list_columns_chinas_csv)
 
-        df = df.where((pd.notnull(df)), None)
         #create the timestamp for uploading into database
         date_time = []
         for fecha_hora in df.fecha_hora:
@@ -118,6 +130,9 @@ def openFile():
         if selected_unit_temp != "ºC":
             print('converting data temperature in F to C')
             df = convertor.convertDataFtoC(df, selected_unit_temp, 0)
+            
+        df = df.where((pd.notnull(df)), None)
+
     return df
 
 
@@ -128,7 +143,6 @@ cursor = conn.cursor()
 try:
     data = openFile()
     cols = data.columns.tolist()
-    print(cols)
     cols = '`,`'.join(cols)
 
     print('data is uploading')

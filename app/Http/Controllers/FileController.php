@@ -63,13 +63,12 @@ class FileController extends Controller
             $scriptName = 'uploadDatapreview.py';
             $scriptPath = base_path() . '/scripts/' . $scriptName;
             $path_name = Storage::path("/").$path;
-
-
+            $uploader_id = $this->generateRandomString();
 
 
             //python script accepts 3 arguments in this order: scriptPath, path_name, station_id
 
-            $process = new Process("pipenv run python3 {$scriptPath} {$path_name} {$station} {$request->selectedUnitTemp} {$request->selectedUnitPres} {$request->selectedUnitWind} {$request->selectedUnitRain}");
+            $process = new Process("pipenv run python3 {$scriptPath} {$path_name} {$station} {$request->selectedUnitTemp} {$request->selectedUnitPres} {$request->selectedUnitWind} {$request->selectedUnitRain} {$uploader_id}");
 
             $process->setTimeout(300);
 
@@ -79,10 +78,9 @@ class FileController extends Controller
                 throw new ProcessFailedException($process);
             }
 
-            $data_template = DataTemplate::paginate(5);
+            $data_template = DataTemplate::paginate(10)->where('uploader_id', '=', $uploader_id);
 
-            $error_data = $this->checkValues();
-
+            $error_data = $this->checkValues($uploader_id);
 
             return response()->json([
                 'data_template' => $data_template,
@@ -143,7 +141,7 @@ class FileController extends Controller
         //
     }
 
-    public function checkValues()
+    public function checkValues($uploader_id)
     {
         $error_date = [];
         $error_temp = false;
@@ -151,7 +149,8 @@ class FileController extends Controller
         $error_wind = false;
         $error_rain = false;
 
-        $daily_preview = DailyDataPreview::all();
+        // $daily_preview = DailyDataPreview::all()->where('uploader_id', '=', $uploader_id);
+        $daily_preview = DB::table('daily_data_preview')->where('uploader_id', '=', $uploader_id)->get();
         foreach ($daily_preview as $key => $value) {
 
             $daily_temp_int = Daily::select('max_temperatura_interna')->whereMonth('fecha',  substr($value->fecha, -5, -3))->whereDay('fecha', substr($value->fecha, -2))->get();
@@ -186,7 +185,7 @@ class FileController extends Controller
             }
         }
 
-        $error_data = DataTemplate::whereIn('fecha_hora',$error_date)->get();
+        $error_data = DataTemplate::whereIn('fecha_hora',$error_date)->where('uploader_id', '=', $uploader_id)->get();
 
         return response([
 
@@ -197,6 +196,50 @@ class FileController extends Controller
             'error_rain' => $error_rain
 
         ]);
+
+    }
+
+    public function generateRandomString($length = 10) 
+    { 
+        $random_string = substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
+        return $random_string;
+    }
+
+    public function cleanTable($uploader_id)
+    {
+        DB::table('data_template')->where('uploader_id', '=', $uploader_id)->delete();
+        
+        return Redirect::back();
+
+    }
+
+    public function storeFile($uploader_id)
+    {
+
+        $scriptPath = base_path() . '/scripts/storeData.py';
+
+        $process = new Process("pipenv run python3 {$scriptPath} {$uploader_id}");
+
+        $process->run();
+
+
+        if(!$process->isSuccessful()) {
+
+           throw new ProcessFailedException($process);
+
+            return response()->json(['error' => 'Los datos no se pueden guardar en la base de datos. Recomendamos verificar si hay duplicados']);
+
+        } else {
+
+            $process->getOutput();
+
+            return response()->json(['success' => 'Los datos han sido ingresados ​​exitosamente.']);
+        }
+        Log::info("python done.");
+        Log::info($process->getOutput());
+
+
+        return Redirect::back();
 
     }
 

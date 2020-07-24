@@ -33,26 +33,14 @@ Route::resource('stations', 'StationController');
 
 Route::post('show', 'DataController@show');
 Route::post('all_data','DataController@allData');
-Route::post('convertDataFtoC', 'DataTemplateController@convertDataFtoC');
-Route::post('convertDataInhgOrMmhgToHpa', 'DataTemplateController@convertDataInhgOrMmhgToHpa');
-Route::post('convertDatakmOrMToMs', 'DataTemplateController@convertDatakmOrMToMs');
-Route::post('convertDataInchToMm', 'DataTemplateController@convertDataInchToMm');
-Route::post('storeFile', 'DataTemplateController@storeFile');
-Route::post('cleanTable', 'DataTemplateController@cleanTable');
 
+Route::post('storeFile/{uploader_id}', 'FileController@storeFile');
+Route::post('cleanTable/{uploader_id}', 'FileController@cleanTable');
 
 //NEW Upload page
 
 Route::get('admin/upload', 'UploadController@index');
-Route::get('dataTemplate/convertDataFtoC', 'DataTemplateController@convertDataFtoC');
-Route::get('dataTemplate/convertDataInhgOrMmhgToHpa', 'DataTemplateController@convertDataInhgOrMmhgToHpa');
-Route::get('dataTemplate/convertDatakmOrMToMs', 'DataTemplateController@convertDatakmOrMToMs');
-Route::get('dataTemplate/convertDataInchToMm', 'DataTemplateController@convertDataInchToMm');
-Route::get('dataTemplate/storeFile', 'DataTemplateController@storeFile');
-Route::get('dataTemplate/cleanTable', 'DataTemplateController@cleanTable');
-
 Route::get('data/{id}/delete', 'DataCrudController@destroy');
-
 
 Route::post('files.store','FileController@store');
 //Dashboard
