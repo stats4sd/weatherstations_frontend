@@ -34,8 +34,8 @@ class DataCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation { update as traitUpdate; }
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation { destroy as traitDestroy; }
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
-   
-   
+
+
 
     public function setup()
     {
@@ -45,7 +45,7 @@ class DataCrudController extends CrudController
         | CrudPanel Basic Information
         |---------------------------------------------------------------------
         */
-       
+
         CRUD::setModel("App\Models\Data");
         CRUD::setRoute(config('backpack.base.route_prefix').'/data');
         CRUD::setEntityNameStrings('data', 'data');
@@ -63,10 +63,10 @@ class DataCrudController extends CrudController
         // add asterisk for fields that are required in DataRequest
         $this->crud->setRequiredFields(StoreRequest::class, 'create');
         $this->crud->setRequiredFields(UpdateRequest::class, 'edit');
- 
+
         $this->crud->operation('list', function() {
        // your addColumn, addFilter, addButton calls here, for the List operation
-            $this->crud->setColumns([  
+            $this->crud->setColumns([
             [
                 'name' => 'fecha_hora',
                 'label' => 'Fecha hora',
@@ -83,7 +83,7 @@ class DataCrudController extends CrudController
                 'key' => 'updated_at'
 
             ],
-            
+
         ]);
              $this->crud->setFromDb();
         });
@@ -91,7 +91,7 @@ class DataCrudController extends CrudController
           $this->crud->operation(['create', 'update'], function() {
 
             $this->crud->setFromDb();
-     
+
         });
         //Filter
         $this->crud->addFilter([
@@ -106,11 +106,11 @@ class DataCrudController extends CrudController
         },function($value){
 
             $station_id_value = $value;
-           
+
             $this->crud->addClause('where', 'id_station', $value);
 
         });
-        
+
 
         $this->crud->addFilter([ // daterange filter
            'type' => 'date_range',
@@ -125,7 +125,7 @@ class DataCrudController extends CrudController
            $this->crud->addClause('where', 'fecha_hora', '<=', $dates->to . ' 23:59:59');
         });
 
-        
+
         // $this->crud->addButtonFromView('top', 'deleteByFilters', 'deleteByFilters', 'end');
         $this->crud->addButtonFromView('top', 'download', 'download', 'end');
         $this->crud->setDefaultPageLength(50);
@@ -147,7 +147,7 @@ class DataCrudController extends CrudController
 
         }
 
-       
+
     }
 
     protected function setupCreateOperation()
@@ -161,11 +161,11 @@ class DataCrudController extends CrudController
     }
 
 
-    public function deleteByFilters (Request $request) 
+    public function deleteByFilters (Request $request)
     {
         $query = Session('query');
         $bindings = Session('params');
-      
+
         $id_station_pos = strpos($query, 'id_station');
         $date_pos = strpos($query, 'fecha_hora');
         if(!empty($id_station_pos) and !empty($date_pos))
@@ -189,13 +189,13 @@ class DataCrudController extends CrudController
         {
             $response = Data::whereBetween('fecha_hora', [$bindings[0], $bindings[1]])->delete();
             \Alert::success('<h4>El archivo ha sido subido exitosamente</h4>')->flash();
-        } else 
+        } else
         {
              \Alert::error('<h4>Para eliminar por filtro uno de los filtros debe estar activo</h4>')->flash();
 
         }
 
-        
+
     }
 
 
@@ -216,17 +216,17 @@ class DataCrudController extends CrudController
 
         //python script accepts 4 arguments in this order: base_path(), query, params and file name
         Log::info($query);
-      
-        $process = new Process("python3 {$scriptPath} {$base_path} {$query} {$params} {$file_name}");
+
+        $process = new Process("pipenv python3 {$scriptPath} {$base_path} {$query} {$params} {$file_name}");
 
         $process->run();
-        
+
         if(!$process->isSuccessful()) {
-            
+
            throw new ProcessFailedException($process);
-        
+
         } else {
-            
+
             $process->getOutput();
         }
         Log::info("python done.");
@@ -235,5 +235,5 @@ class DataCrudController extends CrudController
         $path_download =  Storage::url('/data/'.$file_name);
         return response()->json(['path' => $path_download]);
     }
-       
+
 }

@@ -25,7 +25,7 @@ class DailyCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
-    
+
 
     public function setup()
     {
@@ -37,7 +37,7 @@ class DailyCrudController extends CrudController
         CRUD::setModel('App\Models\Daily');
         CRUD::setRoute(config('backpack.base.route_prefix') . '/daily');
         CRUD::setEntityNameStrings('daily', 'daily');
-    
+
         /*
         |--------------------------------------------------------------------------
         | CrudPanel Configuration
@@ -56,13 +56,13 @@ class DailyCrudController extends CrudController
                 ],
                 [
                     'label' => 'Station',
-                    'type' => 'select', 
+                    'type' => 'select',
                     'name' => 'id_station',
                     'entity' => 'station',
                     'attribute' => 'label',
                     'model' => 'App\Models\Station',
                     'key' => 'updated_at'
-                ], 
+                ],
                 [
                     'label' => 'Max Temp Int',
                     'name' => 'max_temperatura_interna',
@@ -218,17 +218,17 @@ class DailyCrudController extends CrudController
 
 
         });
-        
+
 
         $this->crud->addButtonFromView('top', 'download', 'download', 'end');
-        
+
         // Filter
         $this->crud->addFilter([
             'name' => 'id_station',
             'type' => 'select2',
             'label' => 'Station',
         ],function(){
-           
+
             return Station::all()->pluck('label', 'id')->toArray();;
 
         },function($value){
@@ -279,19 +279,19 @@ class DailyCrudController extends CrudController
         $file_name = date('c')."daily.csv";
         $query = str_replace('`',' ',$query);
 
-        
+
         //python script accepts 7 arguments in this order: db_user db_password db_name base_path() query params
-      
-        $process = new Process("python3 {$scriptPath} {$base_path} {$query} {$params} {$file_name}");
+
+        $process = new Process("pipenv python3 {$scriptPath} {$base_path} {$query} {$params} {$file_name}");
 
         $process->run();
-        
+
         if(!$process->isSuccessful()) {
-            
+
            throw new ProcessFailedException($process);
-        
+
         } else {
-            
+
             $process->getOutput();
         }
         Log::info("python done.");
@@ -300,5 +300,5 @@ class DailyCrudController extends CrudController
         $path_download =  Storage::url('/data/'.$file_name);
         return response()->json(['path' => $path_download]);
     }
-    
+
 }
