@@ -130,7 +130,7 @@ def openFile():
         if selected_unit_temp != "ºC":
             print('converting data temperature in F to C')
             df = convertor.convertDataFtoC(df, selected_unit_temp, 0)
-            
+
         df = df.where((pd.notnull(df)), None)
 
     return df
