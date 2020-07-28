@@ -15,10 +15,12 @@ class CreateComunidadTable extends Migration
     {
         Schema::create('comunidad', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->bigIncrements('municipio_id');
             $table->string('name');
+            $table->string('code');
             $table->decimal('latitude', 9,6);
             $table->decimal('longitude', 9,6);
-             $table->decimal('altitude', 9,6);
+            $table->decimal('altitude', 9,6);
             $table->timestamps();
         });
     }

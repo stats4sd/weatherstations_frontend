@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 use \GuzzleHttp\Client;
+use App\Models\DataTemplate;
 
 
 class FileController extends Controller
@@ -42,17 +43,16 @@ class FileController extends Controller
      */
     public function store(Request $request)
     {
-
         // Retrieve file from POST request
         //sends units type to DataTemplate
-        Session::put('temp_unit', $_POST['temp_unit']);
-        Session::put('pression_unit', $_POST['pression_unit']);
-        Session::put('veloc_viento_unit', $_POST['veloc_viento_unit']);
-        Session::put('precip_unit', $_POST['precip_unit']);
+        // Session::put('temp_unit', $_POST['temp_unit']);
+        // Session::put('pression_unit', $_POST['pression_unit']);
+        // Session::put('veloc_viento_unit', $_POST['veloc_viento_unit']);
+        // Session::put('precip_unit', $_POST['precip_unit']);
 
-        $station = $_POST['weatherstation'];
-        
-        
+        $station = $request->selectedStation;
+
+       
             if($request->hasFile('data-file')){
                 // handle file and store it for prosperity
                 $file = $request->file('data-file');
@@ -85,18 +85,12 @@ class FileController extends Controller
            \Alert::success('<h4>'.$process->getMessage().'</h4>')->flash();
         
         } 
-        Log::info("python done.");
-        Log::info($process->getOutput());
+    }
+        
 
-
-                 
-                \Alert::success('<h4>El archivo ha sido subido exitosamente</h4>')->flash();
-                return Redirect::to('admin/dataTemplate');
-
-            }
-            #\Alert::error("<h4>El archivo no fue seleccionado</h4>")->flash();
-
-            return Redirect::back();
+        $data_template = DataTemplate::paginate(5);
+      
+        return $data_template->toJson(); 
 
         // Send file onto cloud function
     }

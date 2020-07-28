@@ -5,6 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Data;
 use App\Models\Daily;
 use App\Models\Pachagrama;
+use App\Models\Parcela;
+use App\Models\Suelo;
+use App\Models\ManejoParcela;
+use App\Models\PlagasYEnfermedades;
+use App\Models\Produccion;
+use App\Models\Fenologia;
 use DB;
 use Illuminate\Http\Request;
 use Symfony\Component\Process\Process;
@@ -54,23 +60,76 @@ class DataController extends Controller
     {   
         $weather = [];
         $pachagrama = [];
+        $parcelas = [];
+        $suelos = [];
+        $manejo_parcelas = [];
+        $plagas_y_enfermedades = [];
+        $produccion = [];
+        $fenologia = [];
 
         foreach ($request->modulesSelected as $module) {
             if($module=='daily_data'){
                 
                 $weather = Daily::select()->where('fecha','>=',$request->startDate)->where('fecha','<=',$request->endDate)->whereIn('id_station', $request->stationsSelected)->paginate(5);
-                
-            
               
             } if($module=='pachagrama') {
-                $pachagrama = Pachagrama::select()->where('fecha_siembra','>=',$request->startDate)->where('fecha_siembra','<=',$request->endDate)->whereIn('comunidad_id', $request->comunidadsSelected)->paginate(5);
+                $pachagrama = Pachagrama::select()->where('fecha_siembra','>=',$request->comunidadsSelected)->paginate(5);
                 
-            }                
+            } if($module=='parcelas') {
+                $parcelas = Parcela::select()->whereIn('comunidad_id', $request->comunidadsSelected)->paginate(5);
+                foreach ($request->parcelasModulesSelected as $parcelas_modules){
+                    if($parcelas_modules=='suelos'){
+                        $suelos = Suelo::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
+
+                    }
+                    if($parcelas_modules=='manejo_parcelas'){
+                        $manejo_parcelas = ManejoParcela::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
+                        
+                    }
+                    if($parcelas_modules=='plagas_y_enfermedades'){
+                        $plagas_y_enfermedades = PlagasYEnfermedades::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
+                    }
+                    if($parcelas_modules=='produccion'){
+                        $produccion = Produccion::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
+                        
+                    }
+
+                }
+
+                
+            } if($module=='cultivos') {
+
+                foreach ($request->cultivosModulesSelected as $cultivo_modules){
+                    if($cultivo_modules=='fenologia'){
+                        $fenologia = Fenologia::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
+
+                    }
+                    if($cultivo_modules=='manejo_parcelas'){
+                        $manejo_parcelas = ManejoParcela::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
+                        
+                    }
+                    if($cultivo_modules=='plagas_y_enfermedades'){
+                        $plagas_y_enfermedades = PlagasYEnfermedades::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
+                        
+                    }
+                    if($cultivo_modules=='produccion'){
+                        $produccion = Produccion::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
+                    }
+
+                }
+
+            }                 
         }
         
         return response()->json([
             'weather' => $weather, 
             'pachagrama' => $pachagrama,
+            'parcelas' => $parcelas, 
+            'suelos' => $suelos, 
+            'manejo_parcelas' => $manejo_parcelas, 
+            'plagas_y_enfermedades' => $plagas_y_enfermedades, 
+            'produccion' => $produccion, 
+            'fenologia' => $fenologia, 
         ]);
      
     }

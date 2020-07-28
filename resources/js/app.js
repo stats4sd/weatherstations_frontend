@@ -9,7 +9,7 @@ require('./bootstrap');
 window.Vue = require('vue');
 import vSelect from 'vue-select'
 import BootstrapVue from 'bootstrap-vue' 
-import { LMap, LTileLayer, LMarker, LPopup, LTooltip} from 'vue2-leaflet';
+import { LMap, LTileLayer, LMarker, LPopup, LTooltip,  LIcon, LPolygon, LControl} from 'vue2-leaflet';
 import 'leaflet/dist/leaflet.css';
 import {Icon} from 'leaflet';
 
@@ -26,6 +26,9 @@ Vue.component('l-tile-layer', LTileLayer);
 Vue.component('l-marker', LMarker);
 Vue.component('l-popup', LPopup);
 Vue.component('l-tooltip', LTooltip);
+Vue.component('l-icon', LIcon);
+Vue.component('l-polygon', LPolygon);
+Vue.component('l-control', LControl);
 
 Vue.use(BootstrapVue) 
 
@@ -42,6 +45,8 @@ Vue.component('control-panel', require('./components/ControlPanel.vue').default)
 Vue.component('tables', require('./components/Tables.vue').default);
 Vue.component('data-preview', require('./components/DataPreview.vue').default);
 Vue.component('bolivia-map', require('./components/Map.vue').default);
+Vue.component('progress-bar', require('./components/ProgressBar.vue').default);
+Vue.component('uploader-weather-data', require('./components/UploaderWeatherData.vue').default);
 Vue.component('v-select', vSelect);
 
 

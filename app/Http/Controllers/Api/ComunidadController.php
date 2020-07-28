@@ -16,7 +16,7 @@ class ComunidadController extends Controller
      */
     public function index()
     {
-        $comunidad = DB::table('comunidad')->select('id', 'name')->get();
+        $comunidad = DB::table('comunidad')->select('id', 'name', 'municipio_id')->get();
        
         return $comunidad->toJson();
     }
