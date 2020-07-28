@@ -151,6 +151,7 @@ class FileController extends Controller
 
         // $daily_preview = DailyDataPreview::all()->where('uploader_id', '=', $uploader_id);
         $daily_preview = DB::table('daily_data_preview')->where('uploader_id', '=', $uploader_id)->get();
+        
         foreach ($daily_preview as $key => $value) {
 
             $daily_temp_int = Daily::select('max_temperatura_interna')->whereMonth('fecha',  substr($value->fecha, -5, -3))->whereDay('fecha', substr($value->fecha, -2))->get();
