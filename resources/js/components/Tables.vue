@@ -1,17 +1,13 @@
 <template>
 
-    <div class="container">
         <div class="justify-content-center">
+            <div class="mt-5"> 
+ 
+                <b-table striped hover responsive :items="data" ></b-table>
 
-            <div class="container mt-5"> 
- 
-                 <b-table striped hover responsive :items="data" ></b-table>
-            </div>
- 
-        </div>
-            
-           
-    </div>
+            </div>   
+    	</div>
+
 </template>
 
 <script>

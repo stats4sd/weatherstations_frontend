@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use App\Models\Submission;
 
 class Parcela extends Model
 {
@@ -22,6 +23,7 @@ class Parcela extends Model
     // protected $fillable = [];
     // protected $hidden = [];
     // protected $dates = [];
+    protected $casts = ['poligono_gps' => 'array'];
 
     /*
     |--------------------------------------------------------------------------
@@ -34,6 +36,11 @@ class Parcela extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+    public function submissions()
+    {
+        return $this->belongsTo(Submission::class, 'submission_id');
+    }
+   
 
     /*
     |--------------------------------------------------------------------------
@@ -52,4 +59,5 @@ class Parcela extends Model
     | MUTATORS
     |--------------------------------------------------------------------------
     */
+
 }

@@ -1,26 +1,32 @@
-#!/usr/bin/python3.7
 import mysql.connector as mysql
-import dbConfig as config 
+import dbConfig as config
 import listColumnsName as columns_name
 import pandas as pd
+import convertorUnits as convertor
 from datetime import datetime
 import sys
+
 path = sys.argv[1]
 station_id = sys.argv[2]
-
+selected_unit_temp = sys.argv[3]
+selected_unit_pres = sys.argv[4]
+selected_unit_wind = sys.argv[5]
+selected_unit_rain = sys.argv[6]
+uploader_id = sys.argv[6]
 
 def openFile():
 
     if(path[len(path)-3 : ] == "txt"):
-    
+
         df = pd.read_csv(path, na_values=['--.-', '--', '---'], sep="\t", header=[0,1])
+
         new_columns_names = []
         for i in df.columns:
 
             if(i[0][0:7]=="Unnamed"):
-                #include only the second column name 
-                new_column_name = i[1].strip()            
-            else: 
+                #include only the second column name
+                new_column_name = i[1].strip()
+            else:
                 i = list(i)
                 i[0] = i[0].strip()
                 i[1] = i[1].strip()
@@ -28,13 +34,13 @@ def openFile():
                 new_column_name = new_column_name.replace(' ', '_')
 
             new_columns_names.append(new_column_name)
-              
-        #pass the new columns_name to the dataframe 
+
+        #pass the new columns_name to the dataframe
         df.columns = new_columns_names
-    
-        #rename the column name for davis station into column name for the database  
+
+        #rename the column name for davis station into column name for the database
         df = df.rename(columns=columns_name.list_columns_davis_text)
-        #create the timestamp for uploading into database 
+        #create the timestamp for uploading into database
         date_time = []
         for fecha_hora, time in zip(df.fecha_hora, df.time):
 
@@ -47,15 +53,34 @@ def openFile():
         #drop columns not necessary
         df = df.drop(['time'], axis=1)
 
-        df = df.where((pd.notnull(df)), None)
         # drop rows with missing value / NaN in any column
         df = df.dropna(how='all', subset=columns_name.list_columns_davis_to_drop)
         #add the station_id column
         df['id_station'] = station_id
-          
+        #add the uploader_id column
+        df['uploader_id'] = uploader_id
+
+        #convert data
+        if selected_unit_pres != "hpa":
+            print('converting data presion in inhg or mmhg to hpa')
+            df = convertor.convertDataInhgOrMmhgToHpa(df, selected_unit_pres, 1)
+
+        if selected_unit_rain != "mm":
+            print('converting data rain in inch to mm')
+            df = convertor.convertDataInchToMm(df, selected_unit_rain, 1)
+
+        if selected_unit_wind != "m/s":
+            print('converting data wind in km or mph to ms')
+            df = convertor.convertDatakmOrMToMs(df, selected_unit_wind, 1)
+
+        if selected_unit_temp != "ºC":
+            print('converting data temperature in F to C')
+            df = convertor.convertDataFtoC(df, selected_unit_temp, 1)
+
+        df = df.where((pd.notnull(df)), None)
 
     else:
-   
+
         data = pd.read_csv(path, encoding="utf-8", na_values=['--.-', '--', '---'], low_memory=False)
         df = pd.DataFrame(data)
 
@@ -65,14 +90,16 @@ def openFile():
         # add id_station column
         df['id_station'] = station_id
 
+        #add the uploader_id column
+        df['uploader_id'] = uploader_id
+
         #drop columns not necessary
         df = df.drop(['No.'], axis=1)
 
         # replace columns name
         df = df.rename(columns=columns_name.list_columns_chinas_csv)
 
-        df = df.where((pd.notnull(df)), None)
-        #create the timestamp for uploading into database 
+        #create the timestamp for uploading into database
         date_time = []
         for fecha_hora in df.fecha_hora:
             date = fecha_hora.strip()
@@ -87,7 +114,25 @@ def openFile():
 
         # drop rows with missing value / NaN in any column
         df = df.dropna(how='all', subset=columns_name.list_columns_chinas_to_drop)
-       
+        #convert data
+        if selected_unit_pres != "hpa":
+            print('converting data presion in inhg or mmhg to hpa')
+            df = convertor.convertDataInhgOrMmhgToHpa(df, selected_unit_pres, 0)
+
+        if selected_unit_rain != "mm":
+            print('converting data rain in inch to mm')
+            df = convertor.convertDataInchToMm(df, selected_unit_rain, 0)
+
+        if selected_unit_wind != "m/s":
+            print('converting data wind in km or mph to ms')
+            df = convertor.convertDatakmOrMToMs(df, selected_unit_wind, 0)
+
+        if selected_unit_temp != "ºC":
+            print('converting data temperature in F to C')
+            df = convertor.convertDataFtoC(df, selected_unit_temp, 0)
+
+        df = df.where((pd.notnull(df)), None)
+
     return df
 
 
@@ -96,13 +141,13 @@ conn = mysql.connect(**config.dbConfig)
 cursor = conn.cursor()
 
 try:
-
-    cols = openFile().columns.tolist()
+    data = openFile()
+    cols = data.columns.tolist()
     cols = '`,`'.join(cols)
 
     print('data is uploading')
 
-    for i, row in openFile().iterrows():
+    for i, row in data.iterrows():
         sql = f"INSERT INTO `data_template` (`{cols}`) VALUES (" + "%s,"*(len(row)-1) + "%s)"
         cursor.execute(sql, tuple(row))
     conn.commit()

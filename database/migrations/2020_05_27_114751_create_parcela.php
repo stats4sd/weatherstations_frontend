@@ -16,6 +16,7 @@ class CreateParcela extends Migration
         Schema::create('parcela', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('comunidad_id');
+            $table->string('code');
             $table->decimal('superficie_m2');
             $table->decimal('superficie_originale');
             $table->string('unidad');

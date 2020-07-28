@@ -53,9 +53,9 @@ class Pachagrama extends Model
     | MUTATORS
     |--------------------------------------------------------------------------
     */
-    public function getComunidadIdAttribute($value)
-    {
-        $name = Comunidad::find($value)->first()->name;
-        return $name;
-    }
+    // public function getComunidadIdAttribute($value)
+    // {
+    //     $name = Comunidad::find($value)->first()->name;
+    //     return $name;
+    // }
 }
