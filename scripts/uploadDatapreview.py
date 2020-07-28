@@ -12,7 +12,7 @@ selected_unit_temp = sys.argv[3]
 selected_unit_pres = sys.argv[4]
 selected_unit_wind = sys.argv[5]
 selected_unit_rain = sys.argv[6]
-uploader_id = sys.argv[6]
+uploader_id = sys.argv[7]
 
 def openFile():
 
@@ -37,9 +37,10 @@ def openFile():
 
         #pass the new columns_name to the dataframe
         df.columns = new_columns_names
-
+ 
         #rename the column name for davis station into column name for the database
         df = df.rename(columns=columns_name.list_columns_davis_text)
+       
         #create the timestamp for uploading into database
         date_time = []
         for fecha_hora, time in zip(df.fecha_hora, df.time):
@@ -146,7 +147,7 @@ try:
     cols = '`,`'.join(cols)
 
     print('data is uploading')
-
+    
     for i, row in data.iterrows():
         sql = f"INSERT INTO `data_template` (`{cols}`) VALUES (" + "%s,"*(len(row)-1) + "%s)"
         cursor.execute(sql, tuple(row))
