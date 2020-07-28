@@ -89,7 +89,7 @@ class FileController extends Controller
             ]);
         }
 
-        // abort(500, 'request did not contain a file - please check that the file was correctly attached');
+        abort(500, 'request did not contain a file - please check that the file was correctly attached');
 
 
 
