@@ -1,4 +1,5 @@
 
+
 #list of columns name for Davis station to drop if the all the value are null
 list_columns_davis_to_drop = [
                               'hi_temp', 'low_temp','wind_run', 'hi_speed', 'hi_dir',
@@ -6,10 +7,9 @@ list_columns_davis_to_drop = [
                               'presion_relativa', 'rain', 'lluvia_hora', 'solar_rad',
                               'solar_energy', 'radsolar_max', 'uv_index', 'uv_dose',
                               'uv_max', 'heat_days_d', 'cool_days_d', 'in_dew', 'in_heat',
-                              'in_emc', 'in_air_density', 'evapotran', 'wind_samp', 'wind_tx', 'iss_recept','intervalo'
-
+                              'in_emc', 'in_air_density', 'evapotran', 'wind_samp',
+                              'wind_tx', 'iss_recept','intervalo'
                               ]
-
 #list of columns name for Chinas station to drop if the all the value are null
 list_columns_chinas_to_drop = [
                                 'temperatura_interna', 'humedad_interna', 'temperatura_externa', 
