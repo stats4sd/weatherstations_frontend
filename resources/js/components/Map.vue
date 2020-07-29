@@ -88,11 +88,17 @@
 		    neasterStation:null,
 		    neasterParcela:null,
 		    radius: 100000,
+		    stationsSelected:[],
 		};
 	},
 
 	
   props: ['stations', 'parcelas'],
+  watch:{
+  	stationsSelected(){
+                this.$emit('update:stationsSelected', this.stationsSelected);
+            }
+  },
   methods: {
   	nearestStation(event) {
   		var distance = [];
@@ -106,6 +112,8 @@
 		this.station_index  = distance.indexOf(this.neaster);
 
 		this.neasterStation = (this.stations[this.station_index].label);
+
+		this.stationsSelected = this.stations[this.station_index].id;
 		
   	},
 

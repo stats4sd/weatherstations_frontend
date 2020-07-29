@@ -17,13 +17,13 @@ use App\Events\GenerateFileCompleted;
 
 
 Route::get('', function () {
-    return redirect('/admin');
+    return redirect('/home');
 });
 
 Auth::routes();
 
 Route::resource('home','DataController')->middleware('auth');
-Route::post('home/download','DataController@download');
+Route::post('download','DataController@download');
 
 Route::get('weatherstations', function () {
     return view('weatherstations');
@@ -32,20 +32,15 @@ Route::post('files','FileController@store');
 Route::resource('stations', 'StationController');
 
 Route::post('show', 'DataController@show');
+Route::post('all_data','DataController@allData');
 
+Route::post('storeFile/{uploader_id}', 'FileController@storeFile');
+Route::post('cleanTable/{uploader_id}', 'FileController@cleanTable');
 
 //NEW Upload page
 
 Route::get('admin/upload', 'UploadController@index');
-Route::get('dataTemplate/convertDataFtoC', 'DataTemplateController@convertDataFtoC');
-Route::get('dataTemplate/convertDataInhgOrMmhgToHpa', 'DataTemplateController@convertDataInhgOrMmhgToHpa');
-Route::get('dataTemplate/convertDatakmOrMToMs', 'DataTemplateController@convertDatakmOrMToMs');
-Route::get('dataTemplate/convertDataInchToMm', 'DataTemplateController@convertDataInchToMm');
-Route::get('dataTemplate/storeFile', 'DataTemplateController@storeFile');
-Route::get('dataTemplate/cleanTable', 'DataTemplateController@cleanTable');
-
 Route::get('data/{id}/delete', 'DataCrudController@destroy');
-
 
 Route::post('files.store','FileController@store');
 //Dashboard

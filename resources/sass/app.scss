@@ -257,6 +257,10 @@
     line-height: 1;
     cursor: pointer;
     text-align: center;
+    &:disabled {
+        background: #838888;
+        cursor: default;
+    }
 }
 
 .site-btn-sec {
@@ -282,7 +286,7 @@
     margin-bottom: 1.5rem;
 
     }
-    
+
 .btn:hover {
     color: #fff;
     background-color: #f46036;

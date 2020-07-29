@@ -1,7 +1,7 @@
 <template>
-    <div class="row form-prog justify-content-center">
+    <div class="row justify-content-center">
         <div class="col-10 h-100">
-            <div class="container pbcont d-none d-sm-block">
+            <div class="container">
                 <ul class="progressbar">
                     <li
                         v-for="step in steps"

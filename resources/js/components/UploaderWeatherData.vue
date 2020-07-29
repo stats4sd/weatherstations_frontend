@@ -4,46 +4,37 @@
             :current-step="currentStep"
             :steps="steps"
         />
-        <div
-            id="survey-sections"
-            class="container my-4">
-            <div
-                id="toolsform"
-                class="accordion-area"
-            >
+        <div class="container my-4">
+            <div class="accordion-area" role="tablist">
                 <div class="panel">
-                    <div
-                        id="headerOne"
-                        class="panel-header"
-                    >
-                        <button
+                    <div class="panel-header">
+                        <b-button
                             class="panel-link active"
-                            data-toggle="collapse"
-                            data-target="#collapseOne"
+                            :class="visible1 ? null : 'collapsed'"
+                            :aria-expanded="visible1 ? 'true' : 'false'"
+                            aria-controls="collapse-1"
+                            @click="currentStep = 1"
                         >
                             Step 1: {{ steps[0].title }}
-                        </button>
+                        </b-button>
                     </div>
-                    <div
-                        id="collapseOne"
-                        class="collapse show"
-                        data-parent="#survey-sections"
-                    >
+                    <b-collapse id="collapse-1" accordion="accordion" role="tabpanel" v-model="visible1">
                         <div class="py-4 mx-4">
-                            <h3>Upload the file</h3>
-                            <p class="mt-3">Selection the file</p>
-                            <div class="row img-block py-4 mx-4 justify-content-center">
-                                <label class="control-label col-sm-6" style="color: black"><h5>File</h5>
+                            <h3>Upload data file</h3>
+                            <p>Upload the .csv or .txt file you extracted from the weatherstation. Make sure you upload the original, un-edited data file.</p>
+                            <div class="row mx-4 justify-content-center">
+                                <label class="control-label col-sm-6" style="color: black"><h5>Select the file</h5>
                                     <b-form-file  v-model="file" placeholder="Choose a file or drop it here..."></b-form-file>
                                 </label>
                             </div>
-                            <div class="row img-block py-4 mx-4 justify-content-center">
-                                <label class="control-label col-sm-6" style="color: black"><h5>Station</h5>
+                            <div class="row mx-4 justify-content-center">
+                                <label class="control-label col-sm-6" style="color: black"><h5>Select the station</h5>
                                     <v-select :options="stations" :reduce="label => label.id" v-model="selectedStation"></v-select>
                                 </label>
                             </div>
                             <h3>Select the units</h3>
-                            <p class="mt-3">select units for the folllowing columns</p>
+                            <p class="mt-3">Select the units used in the file for the following variable types:</p>
+
                             <div class="row img-block py-4 mx-4 justify-content-center">
                                 <label class="control-label col-sm-3" style="color: black"><h5>Temperatura</h5>
                                 <b-form-select v-model="selectedUnitTemp" :options="unitTemp"></b-form-select>
@@ -58,149 +49,185 @@
                                 <b-form-select v-model="selectedUnitRain" :options="unitRain"></b-form-select>
                                 </label>
                             </div>
-                               
+
                             <div style="text-align: center;">
-                                <button class="site-btn my-4" data-toggle="collapse" href="#collapseTwo"
-                                    aria-expanded="false" aria-controls="collapseTwo"  v-on:click="nextToForm('uploadfile'); submit();">
-                                    Next
+                                <b-alert show varient="info">After you upload the file, you will have a chance to review the data values and confirm that these are the correct units before continuing.</b-alert>
+                                <b-alert show variant="danger" v-if="uploadError!=null">{{uploadError}}</b-alert>
+                                <button class="site-btn my-4" v-on:click="submit();" :disabled="busy_upload">
+                                    <b-spinner small v-if="busy_upload" label="Spinning"></b-spinner> Upload File
                                 </button>
                             </div>
                         </div>
-                    </div>
+                    </b-collapse>
                 </div>
-            </div>
-        </div>
-        <div
-            id="survey-core"
-            class="container my-4">
-            <div
-                id="toolsform"
-                class="accordion-area"
-            >
                 <div class="panel">
-                    <div
-                        id="headerOne"
-                        class="panel-header"
-                    >
-                        <button
-                            class="panel-link active collapsed"
-                            data-toggle="collapse"
-                            data-target="#collapseTwo"
+                    <div class="panel-header">
+                        <b-button
+                            class="panel-link active"
+                            :class="visible2 ? null : 'collapsed'"
+                            :aria-expanded="visible2 ? 'true' : 'false'"
+                            aria-controls="collapse-2"
+                            @click="currentStep = 2"
                         >
-                        <b-spinner v-if="busy" label="Spinning"></b-spinner>
                             Step 2: {{ steps[1].title }}
-                        </button>
+                        </b-button>
                     </div>
-                    <div
-                        id="collapseTwo"
-                        class="collapse"
-                        data-parent="#survey-core"
-                    >
+                    <b-collapse id="collapse-2" accordion="accordion" role="tabpanel" v-model="visible2">
                         <div class="py-4 mx-4">
                             <h3>Data Preview</h3>
-                            <p class="mt-3">Selection options below to begin</p>
-                            <div class="row py-4 mx-4 justify-content-center">
-                                <b-alert show>There are rows {{total_rows}}</b-alert>
-
-                                <b-table striped hover responsive :items="items"></b-table>
-                                
-                            </div>
-                                
-                              
-                            <div style="text-align: center;">
-                                <button class="site-btn my-4" data-toggle="collapse" href="#collapseThree"
-                                    aria-expanded="false" aria-controls="collapseThree" v-on:click="nextToForm('units')">
-                                    Next
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div
-            id="survey-modules"
-            class="container my-4">
-            <div
-                id="toolsform"
-                class="accordion-area"
-            >
-                <div class="panel">
-                    <div
-                        id="headerOne"
-                        class="panel-header"
-                    >
-                        <button
-                            class="panel-link active collapsed"
-                            data-toggle="collapse"
-                            data-target="#collapseThree"
-                        >
-                            Step 3: {{ steps[2].title }}
-                        </button>
-                    </div>
-                    <div
-                        id="collapseThree"
-                        class="collapse"
-                        data-parent="#survey-modules"
-                    >
-                        <div class="py-4 mx-4">
-                            
-                            <div style="text-align: center;">
-                                <button class="site-btn my-4" data-toggle="collapse" href="#collapseFour"
-                                    aria-expanded="false" aria-controls="collapseFour" v-on:click="nextToForm('convertUnits')">
-                                    Next
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div
-            id="survey-review"
-            class="container my-4">
-            <div
-                id="toolsform"
-                class="accordion-area"
-            >
-                <div class="panel">
-                    <div
-                        id="headerOne"
-                        class="panel-header"
-                    >
-                        <button
-                            class="panel-link active collapsed"
-                            data-toggle="collapse"
-                            data-target="#collapseFour"
-                        >
-                            Step 4: {{ steps[3].title }}
-                        </button>
-                    </div>
-                    <div
-                        id="collapseFour"
-                        class="collapse"
-                        data-parent="#survey-review"
-                    >
-                        <div class="py-4 mx-4">
-                            <h3>Preview and finish</h3>
-                            <p class="mt-3"></p>
-                            
-                            <div class="row py-4 mx-4 justify-content-center">
+                            <p class="mt-3">This is an example of your data.</p>
+                            <b-alert show varient="success" >Please check that the columns you expect to be filled contain data, and that the values look sensible for the selected location, the time of year and the units chosen.</b-alert>
+                            <b-alert varient="secondary" v-if="previewData!=null">There are {{total_rows}} rows</b-alert>
                            
+                            <div class="d-flex mx-4 justify-content-center">
+
+                                <b-table striped hover responsive :items="previewData" style="max-height: 600px;">
+                                    <template v-slot:cell(temperatura_interna)="data">
+                                        {{ data.value }} {{ data.value!='' ? 'ºC' : ''}}
+                                    </template>
+                                    <template v-slot:cell(temperatura_externa)="data">
+                                        {{ data.value }} {{ data.value!='' ? 'ºC' : ''}}
+                                    </template>
+                                    <template v-slot:cell(sensacion_termica)="data">
+                                        {{ data.value }} {{ data.value!='' ? 'ºC' : ''}}
+                                    </template>
+                                    <template v-slot:cell(punto_rocio)="data">
+                                        {{ data.value }} {{ data.value!='' ? 'ºC' : ''}}
+                                    </template>
+                                    <template v-slot:cell(wind_chill)="data">
+                                        {{ data.value }} {{ data.value!='' ? 'ºC' : ''}}
+                                    </template>
+                                    <template v-slot:cell(hi_temp)="data">
+                                        {{ data.value }} {{ data.value!='' ? 'ºC' : ''}}
+                                    </template>
+                                    <template v-slot:cell(low_temp)="data">
+                                        {{ data.value }} {{ data.value!='' ? 'ºC' : ''}}
+                                    </template>
+                                    <template v-slot:cell(presion_relativa)="data">
+                                        {{ data.value }} {{ data.value!='' ? 'hPa' : ''}}
+                                    </template>
+                                    <template v-slot:cell(presion_absoluta)="data">
+                                        {{ data.value }} {{ data.value!='' ? 'hPa' : ''}}
+                                    </template>
+                                    <template v-slot:cell(velocidad_viento)="data">
+                                        {{ data.value }} {{ data.value!='' ? 'm/s' : ''}}
+                                    </template>
+                                    <template v-slot:cell(rafaga)="data">
+                                        {{ data.value }} {{ data.value!='' ? 'm/s' : ''}}
+                                    </template>
+                                    <template v-slot:cell(hi_speed)="data">
+                                        {{ data.value }} {{ data.value!='' ? 'm/s' : ''}}
+                                    </template>
+                                    <template v-slot:cell(lluvia_hora)="data">
+                                        {{ data.value }} {{ data.value!='' ? 'mm' : ''}}
+                                    </template>
+                                    <template v-slot:cell(lluvia_24_horas)="data">
+                                        {{ data.value }} {{ data.value!='' ? 'mm' : ''}}
+                                    </template>
+                                    <template v-slot:cell(lluvia_semana)="data">
+                                        {{ data.value }} {{ data.value!='' ? 'mm' : ''}}
+                                    </template>
+                                    <template v-slot:cell(lluvia_mes)="data">
+                                        {{ data.value }} {{ data.value!='' ? 'mm' : ''}}
+                                    </template>
+                                    <template v-slot:cell(lluvia_total)="data">
+                                        {{ data.value }} {{ data.value!='' ? 'mm' : ''}}
+                                    </template>
+                                    <template v-slot:cell(rain)="data">
+                                        {{ data.value }} {{ data.value!='' ? 'mm' : ''}}
+                                    </template>
+
+                                </b-table>
+
                             </div>
 
+                            <div class="row py-4 mx-4 justify-content-center" v-if="error_data!=null">
+                                <b-alert show variant="danger" v-if="error_temp || error_press || error_wind||error_rain ">There are some values with the wrong units please check the following table and proceed with <b>Cancel</b> for uploading a new file or press <b>Store Data in DB</b> if the values are correct.</b-alert>
+
+                                <b-table sticky-header="600px" striped hover responsive striped :items="error_data">
+                                    <template v-if="error_temp" v-slot:cell(temperatura_interna)="data">
+                                        <b :style="tempIntBackColor">{{ data.value }}</b>
+                                    </template>
+                                    <template v-if="error_temp" v-slot:cell(temperatura_externa)="data">
+                                        <b :style="tempIntBackColor">{{ data.value }}</b>
+                                    </template>
+                                    <template v-if="error_temp" v-slot:cell(sensacion_termica)="data">
+                                        <b :style="tempIntBackColor">{{ data.value }}</b>
+                                    </template>
+                                    <template v-if="error_temp" v-slot:cell(punto_rocio)="data">
+                                        <b :style="tempIntBackColor">{{ data.value }}</b>
+                                    </template>
+                                    <template v-if="error_temp" v-slot:cell(wind_chill)="data">
+                                        <b :style="tempIntBackColor">{{ data.value }}</b>
+                                    </template>
+                                    <template v-if="error_temp" v-slot:cell(hi_temp)="data">
+                                        <b :style="tempIntBackColor">{{ data.value }}</b>
+                                    </template>
+                                    <template v-if="error_temp" v-slot:cell(low_temp)="data">
+                                        <b :style="tempIntBackColor">{{ data.value }}</b>
+                                    </template>
+                                    <template v-if="error_temp" v-slot:cell(low_temp)="data">
+                                        <b :style="tempIntBackColor">{{ data.value }}</b>
+                                    </template>
+                                    <template v-if="error_press" v-slot:cell(presion_relativa)="data">
+                                        <b :style="tempIntBackColor">{{ data.value }}</b>
+                                    </template>
+                                    <template v-if="error_press" v-slot:cell(presion_absoluta)="data">
+                                        <b :style="tempIntBackColor">{{ data.value }}</b>
+                                    </template>
+                                    <template v-if="error_wind" v-slot:cell(velocidad_viento)="data">
+                                        <b :style="tempIntBackColor">{{ data.value }}</b>
+                                    </template>
+                                    <template v-if="error_wind" v-slot:cell(rafaga)="data">
+                                        <b :style="tempIntBackColor">{{ data.value }}</b>
+                                    </template>
+                                    <template v-if="error_wind" v-slot:cell(hi_speed)="data">
+                                        <b :style="tempIntBackColor">{{ data.value }}</b>
+                                    </template>
+                                    <template v-if="error_rain" v-slot:cell(lluvia_hora)="data">
+                                        <b :style="tempIntBackColor">{{ data.value }}</b>
+                                    </template>
+                                    <template v-if="error_rain" v-slot:cell(lluvia_24_horas)="data">
+                                        <b :style="tempIntBackColor">{{ data.value }}</b>
+                                    </template>
+                                    <template v-if="error_rain" v-slot:cell(lluvia_semana)="data">
+                                        <b :style="tempIntBackColor">{{ data.value }}</b>
+                                    </template>
+                                    <template v-if="error_rain" v-slot:cell(lluvia_mes)="data">
+                                        <b :style="tempIntBackColor">{{ data.value }}</b>
+                                    </template>
+                                    <template v-if="error_rain" v-slot:cell(lluvia_total)="data">
+                                        <b :style="tempIntBackColor">{{ data.value }}</b>
+                                    </template>
+                                    <template v-if="error_rain" v-slot:cell(rain)="data">
+                                        <b :style="tempIntBackColor">{{ data.value }}</b>
+                                    </template>
+
+                                </b-table>
+
+                            </div>
+
+
                             <div style="text-align: center;">
-                                <button class="site-btn my-4" data-toggle="" href=""
-                                    aria-expanded="false" aria-controls="" v-on:click=''>
-                                    Finish
+                                <b-alert show variant="danger" v-if="error!=null">{{error}}</b-alert>
+                                <b-alert show variant="success" v-if="success!=null">{{success}}</b-alert>
+
+                                <button class="site-btn my-4" data-toggle="collapse" href="#collapseThree"
+                                    aria-expanded="false" aria-controls="collapseThree" v-on:click="cleanTable" style="background: red;"><b-spinner small v-if="busy_clean" label="Spinning"></b-spinner> 
+                                    Cancel
                                 </button>
+                                <button class="site-btn my-4" data-toggle="collapse" href="#collapseThree"
+                                    aria-expanded="false" aria-controls="collapseThree" v-on:click="storeFile">
+                                    <b-spinner small v-if="busy_store" label="Spinning"></b-spinner> 
+                                    Store Data in DB
+                                </button>
+
                             </div>
                         </div>
-                    </div>
+                    </b-collapse>
                 </div>
             </div>
         </div>
-
     </div>
 </template>
 
@@ -219,20 +246,12 @@ const rootUrl = process.env.MIX_APP_URL
                     },
                     {
                         'id': 2,
-                        'title': "Select Units",
-                    },
-                    {
-                        'id': 3,
-                        'title': "Convert data",
-                    },
-                    {
-                        'id': 4,
-                        'title': "Preview and Finish",
-                    },
+                        'title': "Check units and Store data",
+                    }
                 ],
                 unitTemp : [
-                    { value: 'C', text: 'Celsius (ºC)' },
-                    { value: 'F', text: 'Farhenheit (ºF)' }
+                    { value: 'ºC', text: 'Celsius (ºC)' },
+                    { value: 'ºF', text: 'Farhenheit (ºF)' }
                     ],
                 unitPres : [
                     { value: 'hpa', text: 'hPa' },
@@ -249,17 +268,34 @@ const rootUrl = process.env.MIX_APP_URL
                     { value: 'inch', text: 'inch' }
                 ],
                 stations : [],
-                selectedStation: [],
-                selectedUnitTemp: 'C',
+                selectedStation: null,
+                selectedUnitTemp: 'ºC',
                 selectedUnitPres: 'hpa',
                 selectedUnitWind: 'm/s',
                 selectedUnitRain: 'mm',
                 file: null,
-                items: null,
+                previewData: null,
                 total_rows: null,
-                busy: false,
+                busy_upload: false,
+                busy_store: false,
+                busy_clean: false,
+                error_data: null,
+                all_data: null,
+                success: null,
+                error: null,
+                error_temp:false,
+                error_press:false,
+                error_wind:false,
+                error_rain:false,
+                uploadError: null,
+                uploader_id: null,
 
-                
+            }
+        },
+        props:{
+            bgColor: {
+                type: String,
+                default: 'red'
             }
         },
         mounted () {
@@ -268,25 +304,44 @@ const rootUrl = process.env.MIX_APP_URL
                 this.stations = response.data;
             })
         },
+        computed:{
+            tempIntBackColor() {
+                return {
+                    "color": this.bgColor,
+                };
+            },
+            visible1: {
+                get: function() { return this.currentStep === 1 },
+                set: function(newValue) { if(newValue) this.currentStep = 1 }
+            },
+            visible2: {
+                get: function() { return this.currentStep === 2 },
+                set: function(newValue) { if(newValue) this.currentStep = 2 }
+            },
+            visible3: {
+                get: function() { return this.currentStep === 3 },
+                set: function(newValue) { if(newValue) this.currentStep = 3 }
+            },
+        },
 
-        
-       
 
         methods: {
-            nextToForm: function (message) {
-                if(message=='uploadfile') {
-                    this.currentStep = 2;
-                    $('#collapseOne').collapse('hide');
-                } else if(message=='units') {
-                    this.currentStep = 3;
-                    $('#collapseTwo').collapse('hide');
-                } else if(message=='convertUnits') {
-                    this.currentStep = 4;
-                    $('#collapseThree').collapse('hide');
-                }
-            },
             submit: function(event){
-                this.busy = true;
+
+                //check form for errors
+                this.uploadError = null;
+
+                if(!this.file) {
+                    this.uploadError = "Please choose a file to upload";
+                    return;
+                }
+
+                if(!this.selectedStation) {
+                    this.uploadError = "Please select the station this data came from";
+                    return;
+                }
+
+                this.busy_upload = true;
                 let formData = new FormData();
                 formData.append('data-file', this.file);
                 formData.append('selectedStation', this.selectedStation);
@@ -295,15 +350,74 @@ const rootUrl = process.env.MIX_APP_URL
                 formData.append('selectedUnitWind', this.selectedUnitWind);
                 formData.append('selectedUnitRain', this.selectedUnitRain);
 
-                axios.post(rootUrl+'/files', formData, {
-                  }).then((result) => {
-                    console.log(result.data);
-                    this.total_rows = result.data.total;
-                    this.items = result.data.data;
-                    this.busy= false;
-                  })
+                axios.post(rootUrl+'/files', formData, {}).then((result) => {
 
-            }
+                    this.total_rows = result.data.data_template.total;
+                    this.previewData = result.data.data_template;
+                    this.uploader_id = (this.previewData[0]['uploader_id']);
+
+
+                    this.error_data = result.data.error_data.original.error_data;
+                    this.error_temp = result.data.error_data.original.error_temp;
+                    this.error_press = result.data.error_data.original.error_press;
+                    this.error_wind = result.data.error_data.original.error_wind;
+                    this.error_rain = result.data.error_data.original.error_rain;
+
+                    this.currentStep = 2;
+                })
+                .catch((error) => {
+                    this.busy_upload = false;
+                    if(error.response && error.response.hasOwnProperty('data')) {
+                        this.uploadError = error.response.data.message;
+                    }
+                    else {
+                        this.uploadError = "The file could not be uploaded. Please check it is in the correct format, or contact the site administrator for more information";
+                    }
+                })
+                .then(() => {
+                    this.busy_upload = false;
+                })
+
+
+            },
+
+            storeFile: function(){
+                this.busy_store= true;
+                axios({
+                    method: 'post',
+                    url: "/storeFile/" + this.uploader_id,
+                })
+                .then((result) => {
+                    console.log(result.data.success);
+                    this.success = result.data.success
+                    this.error = result.data.error
+                    this.busy_store= false;
+
+                }, (error) => {
+                    console.log(error);
+                    this.error = error
+                    this.busy_store= false;
+                });
+
+            },
+
+            cleanTable: function(){
+                this.busy_clean= true;
+                axios({
+                    method: 'post',
+                    url: "/cleanTable/"+ this.uploader_id ,
+                })
+                .then((result) => {
+                    console.log(result);
+                    this.busy_clean= false;
+                    window.location.reload();
+
+                }, (error) => {
+                    console.log(error);
+                    this.busy_clean= false;
+                });
+
+            },
         }
     }
 

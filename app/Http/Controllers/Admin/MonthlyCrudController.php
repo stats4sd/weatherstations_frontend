@@ -57,13 +57,13 @@ class MonthlyCrudController extends CrudController
                 ],
                 [
                     'label' => 'Station',
-                    'type' => 'select', 
+                    'type' => 'select',
                     'name' => 'id_station',
                     'entity' => 'station',
                     'attribute' => 'label',
                     'model' => 'App\Models\Station',
                     'key' => 'updated_at'
-                ], 
+                ],
                 [
                     'label' => 'Max Temp Int',
                     'name' => 'max_temperatura_interna',
@@ -225,7 +225,7 @@ class MonthlyCrudController extends CrudController
             'type' => 'select2',
             'label' => 'Station',
         ],function(){
-           
+
             return Station::all()->pluck('label', 'id')->toArray();
 
         },function($value){
@@ -253,7 +253,7 @@ class MonthlyCrudController extends CrudController
             'type' => 'select2_multiple',
             'label' => 'Months',
         ],function(){
-           
+
             return [
                 '01' => 'January',
                 '02' => 'February',
@@ -272,7 +272,7 @@ class MonthlyCrudController extends CrudController
         },function($values){
 
             $this->crud->query = $this->crud->query->whereIn('month', json_decode($values));
-           
+
         });
 
           /**
@@ -308,17 +308,17 @@ class MonthlyCrudController extends CrudController
 
         //python script accepts 4 arguments in this order: base_path(), query, params and file name
         Log::info($query);
-      
-        $process = new Process("python3 {$scriptPath} {$base_path} {$query} {$params} {$file_name}");
+
+        $process = new Process("pipenv python3 {$scriptPath} {$base_path} {$query} {$params} {$file_name}");
 
         $process->run();
-        
+
         if(!$process->isSuccessful()) {
-            
+
            throw new ProcessFailedException($process);
-        
+
         } else {
-            
+
             $process->getOutput();
         }
         Log::info("python done.");
@@ -328,5 +328,5 @@ class MonthlyCrudController extends CrudController
         return response()->json(['path' => $path_download]);
     }
 
-   
+
 }

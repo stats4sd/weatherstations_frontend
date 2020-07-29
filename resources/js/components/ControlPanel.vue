@@ -63,6 +63,7 @@
                 plagas_y_enfermedades: [],
                 produccion: [],
                 fenologia: [],
+                parcelasData:[],
            
             }
 
@@ -118,6 +119,9 @@
             },
             fenologia(){
                 this.$emit('update:fenologia', this.fenologia);
+            },
+            parcelasData(){
+                this.$emit('update:parcelasData', this.parcelasData);
             }
 
         },
@@ -141,7 +145,7 @@
                 .then((result) => {
                     this.weather = result.data.weather;
                     this.pachagrama = result.data.pachagrama;
-                    this.parcelas = result.data.parcelas;
+                    this.parcelasData = result.data.parcelas;
                     this.suelos = result.data.suelos;
                     this.manejo_parcelas = result.data.manejo_parcelas;
                     this.plagas_y_enfermedades = result.data.plagas_y_enfermedades;
