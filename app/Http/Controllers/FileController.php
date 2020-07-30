@@ -79,7 +79,7 @@ class FileController extends Controller
             }
 
             $data_template = DataTemplate::paginate(10)->where('uploader_id', '=', $uploader_id);
-
+            
             $error_data = $this->checkValues($uploader_id);
 
             return response()->json([
@@ -149,7 +149,7 @@ class FileController extends Controller
         $error_wind = false;
         $error_rain = false;
 
-        // $daily_preview = DailyDataPreview::all()->where('uploader_id', '=', $uploader_id);
+       
         $daily_preview = DB::table('daily_data_preview')->where('uploader_id', '=', $uploader_id)->get();
         
         foreach ($daily_preview as $key => $value) {
