@@ -4,8 +4,7 @@ list_columns_davis_to_drop = [
                               'hi_temp', 'low_temp','wind_run', 'hi_speed', 'hi_dir',
                               'wind_chill', 'index_heat', 'index_thw', 'index_thsw',
                               'presion_relativa', 'rain', 'lluvia_hora', 'solar_rad',
-                              'solar_energy', 'radsolar_max', 'uv_index', 'uv_dose',
-                              'uv_max', 'heat_days_d', 'cool_days_d', 'in_dew', 'in_heat',
+                              'solar_energy', 'radsolar_max', 'heat_days_d', 'cool_days_d', 'in_dew', 'in_heat',
                               'in_emc', 'in_air_density', 'evapotran', 'wind_samp', 'wind_tx', 'iss_recept','intervalo'
 
                               ]
