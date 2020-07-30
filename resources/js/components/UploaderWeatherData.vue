@@ -367,6 +367,7 @@ const rootUrl = process.env.MIX_APP_URL
                 })
                 .catch((error) => {
                     this.busy_upload = false;
+                    console.log(error);
                     if(error.response && error.response.hasOwnProperty('data')) {
                         this.uploadError = error.response.data.message;
                     }
