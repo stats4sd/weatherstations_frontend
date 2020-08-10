@@ -186,11 +186,11 @@ class FileController extends Controller
             }
         }
 
-        // $error_data = DataTemplate::whereIn('fecha_hora',$error_date)->where('uploader_id', '=', $uploader_id)->get();
+        $error_data = DataTemplate::whereIn('fecha_hora',$error_date)->where('uploader_id', '=', $uploader_id)->get();
 
         return response([
 
-            'error_data' => null,
+            'error_data' => $error_data ,
             'error_temp' => $error_temp,
             'error_press' => $error_press,
             'error_wind' => $error_wind,
