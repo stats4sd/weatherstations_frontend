@@ -64,7 +64,7 @@ class FileController extends Controller
             $scriptPath = base_path() . '/scripts/' . $scriptName;
             $path_name = Storage::path("/").$path;
             $uploader_id = $this->generateRandomString();
-
+            
             //python script accepts 3 arguments in this order: scriptPath, path_name, station_id
 
             $process = new Process("pipenv run python3 {$scriptPath} {$path_name} {$station} {$request->selectedUnitTemp} {$request->selectedUnitPres} {$request->selectedUnitWind} {$request->selectedUnitRain} {$uploader_id}");
@@ -149,47 +149,47 @@ class FileController extends Controller
         $error_rain = false;
 
        
-        // $daily_preview = DB::table('daily_data_preview')->where('uploader_id', '=', $uploader_id)->get();
+        $daily_preview = DB::table('daily_data_preview')->where('uploader_id', '=', $uploader_id)->get();
         
-        // foreach ($daily_preview as $key => $value) {
+        foreach ($daily_preview as $key => $value) {
 
-        //     $daily_temp_int = Daily::select('max_temperatura_interna')->whereMonth('fecha',  substr($value->fecha, -5, -3))->whereDay('fecha', substr($value->fecha, -2))->get();
+            $daily_temp_int = Daily::select('max_temperatura_interna')->whereMonth('fecha',  substr($value->fecha, -5, -3))->whereDay('fecha', substr($value->fecha, -2))->take(10)->get();
 
-        //     $daily_temp_ext = Daily::select('max_temperatura_interna')->whereMonth('fecha',  substr($value->fecha, -5, -3))->whereDay('fecha', substr($value->fecha, -2))->get();
+            $daily_temp_ext = Daily::select('max_temperatura_interna')->whereMonth('fecha',  substr($value->fecha, -5, -3))->whereDay('fecha', substr($value->fecha, -2))->take(10)->get();
 
-        //      $daily_velocidad_viento = Daily::select('max_velocidad_viento')->whereMonth('fecha',  substr($value->fecha, -5, -3))->whereDay('fecha', substr($value->fecha, -2))->get();
-
-
-        //     if(!$daily_temp_int->isEmpty()){
-
-        //         $checkTempInt = abs($daily_temp_int[0]['max_temperatura_interna'] - $value->max_temperatura_interna) > 15;
-
-        //         $checkTempExt = abs($daily_temp_ext[0]['max_temperatura_externa'] - $value->max_temperatura_externa) > 15;
-
-        //         $checkPresRel = $value->max_presion_relativa < 500;
-
-        //         $checkViento = $value->max_velocidad_viento > 100 || $value->max_velocidad_viento > 2*$daily_velocidad_viento[0]['max_velocidad_viento'] ;
+             $daily_velocidad_viento = Daily::select('max_velocidad_viento')->whereMonth('fecha',  substr($value->fecha, -5, -3))->whereDay('fecha', substr($value->fecha, -2))->take(10)->get();
 
 
-        //         if($checkTempInt || $checkTempExt){
-        //             $error_temp = true;
-        //             array_push($error_date, $value->fecha);
-        //         }if($checkPresRel){
-        //             $error_press = true;
-        //             array_push($error_date, $value->fecha);
+            if(!$daily_temp_int->isEmpty()){
 
-        //         }if($checkViento){
-        //             $error_wind = true;
-        //             array_push($error_date, $value->fecha);
-        //         }
-        //     }
-        // }
+                $checkTempInt = abs($daily_temp_int[0]['max_temperatura_interna'] - $value->max_temperatura_interna) > 20;
 
-        // $error_data = DataTemplate::whereIn('fecha_hora',$error_date)->where('uploader_id', '=', $uploader_id)->get();
+                $checkTempExt = abs($daily_temp_ext[0]['max_temperatura_externa'] - $value->max_temperatura_externa) > 20;
+
+                $checkPresRel = $value->max_presion_relativa < 500;
+
+                $checkViento = $value->max_velocidad_viento > 100 || $value->max_velocidad_viento > 2*$daily_velocidad_viento[0]['max_velocidad_viento'] ;
+
+
+                if($checkTempInt || $checkTempExt){
+                    $error_temp = true;
+                    array_push($error_date, $value->fecha);
+                }if($checkPresRel){
+                    $error_press = true;
+                    array_push($error_date, $value->fecha);
+
+                }if($checkViento){
+                    $error_wind = true;
+                    array_push($error_date, $value->fecha);
+                }
+            }
+        }
+
+        $error_data = DataTemplate::whereIn('fecha_hora',$error_date)->where('uploader_id', '=', $uploader_id)->get();
 
         return response([
 
-            'error_data' => null,
+            'error_data' => $error_data,
             'error_temp' => $error_temp,
             'error_press' => $error_press,
             'error_wind' => $error_wind,
