@@ -357,11 +357,13 @@ const rootUrl = process.env.MIX_APP_URL
                     this.uploader_id = (this.previewData[0]['uploader_id']);
 
 
-                    this.error_data = result.data.error_data.original.error_data;
-                    this.error_temp = result.data.error_data.original.error_temp;
-                    this.error_press = result.data.error_data.original.error_press;
-                    this.error_wind = result.data.error_data.original.error_wind;
-                    this.error_rain = result.data.error_data.original.error_rain;
+                    // this.error_data = result.data.error_data.original.error_data;
+                    // this.error_temp = result.data.error_data.original.error_temp;
+                    // this.error_press = result.data.error_data.original.error_press;
+                    // this.error_wind = result.data.error_data.original.error_wind;
+                    // this.error_rain = result.data.error_data.original.error_rain;
+                     
+
 
                     this.currentStep = 2;
                 })
