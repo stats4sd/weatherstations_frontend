@@ -41,12 +41,14 @@
                         <li class="nav-item">
                           <a class="nav-link @if(Route::current()->uri==='home') active @endif" href="home">Home</a>
                         </li>
+                        @if(backpack_user()->type=='admin')
                         <li class="nav-item">
                           <a class="nav-link @if(Route::current()->uri==='weatherstations') active @endif" href="weatherstations">Upload Weather Data</a>
                         </li>
                         <li class="nav-item">
                           <a class="nav-link @if(Route::current()->uri==='admin') active @endif" href="admin">Admin</a>
                         </li>
+                        @endif
                     </ul>
 
                     <!-- Right Side Of Navbar -->
