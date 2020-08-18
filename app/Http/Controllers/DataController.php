@@ -185,8 +185,12 @@ class DataController extends Controller
 
         foreach ($request->modulesSelected as $module) {
             if($module=='daily_data'){
+                if($request->aggregationSelected=='tendays_data'){
+                    $query = "select * from ". $request->aggregationSelected . " where max_fecha >= '".$request->startDate."' and max_fecha <= '".$request->endDate."' and id_station in (". implode(",",$request->stationsSelected).");";
+                }else{
 
-                $query = "select * from ". $module . " where fecha >= '".$request->startDate."' and fecha <= '".$request->endDate."' and id_station in (". implode(",",$request->stationsSelected).");";
+                    $query = "select * from ". $request->aggregationSelected . " where fecha >= '".$request->startDate."' and fecha <= '".$request->endDate."' and id_station in (". implode(",",$request->stationsSelected).");";
+                }
 
                 $queries = $queries.$query;
                 $sheet_names = $sheet_names.'weatherstations, ';

@@ -15,6 +15,7 @@
                         :endDate.sync="endDate" 
                         :modules.sync="modules" 
                         :aggregations.sync="aggregations"
+                        :aggregationSelected.sync="aggregationSelected"
                         :parcelasModules.sync="parcelasModules"
                         :cultivosModules.sync="cultivosModules"
                         :modulesSelected.sync="modulesSelected"
@@ -173,6 +174,7 @@ export default {
                     data: {
                         comunidadsSelected: this.comunidadsSelected,
                         modulesSelected: this.modulesSelected,
+                        aggregationSelected: this.aggregationSelected,
                         startDate: this.startDate,
                         endDate: this.endDate,
                         stationsSelected: this.stationsSelected,
@@ -182,7 +184,7 @@ export default {
                 })
                 .then((result) => {
                     
-                    window.location.href = result.data['path'];
+                    // window.location.href = result.data['path'];
                 }, (error) => {
                     console.log(error);
                 });          
