@@ -14,6 +14,7 @@
                         :startDate.sync="startDate" 
                         :endDate.sync="endDate" 
                         :modules.sync="modules" 
+                        :aggregations.sync="aggregations"
                         :parcelasModules.sync="parcelasModules"
                         :cultivosModules.sync="cultivosModules"
                         :modulesSelected.sync="modulesSelected"
@@ -28,7 +29,8 @@
                         :produccion.sync="produccion"
                         :fenologia.sync="fenologia"
                         :stations="stations" 
-                        :stationsSelected.sync="stationsSelected" >
+                        :stationsSelected.sync="stationsSelected"
+                        :showTable.sync="showTable" >
                     </control-panel>
                 </div>
             </div>
@@ -41,7 +43,7 @@
 
             ></bolivia-map>
             <div class="mt-5">
-                <b-card no-body style="height: 500px;">
+                <b-card no-body v-if="showTable">
                     <b-tabs pills card>
                         <b-tab v-if="weather.length!==0" title="Información meteorológica" active>
                             <b-card-text>
@@ -91,7 +93,7 @@
                                 <tables :data="produccion.data"></tables>
                             </b-card-text>
                         </b-tab>
-                        <button class="site-btn mt-5" v-on:click="download">Download</button>
+                        <button class="site-btn mt-5 mb-2 mx-2" v-on:click="download" style="float: right;">Download</button>
                     </b-tabs>
               </b-card>
             </div>
@@ -111,6 +113,8 @@ export default {
         data(){
             return{
                 modules: [{label:'Información meteorológica', value:'daily_data'},{label:'Información de Pachagrama (agroclimático)', value:'pachagrama'}, {label:'Parcelas', value:'parcelas'}, {label:'Cultivos', value:'cultivos'} ],
+
+                aggregations: [{label: 'Daily', value:'daily_data'}, {label: 'Ten days', value:'tendays_data'}, {label: 'Monthly', value:'monthly_data'}, {label: 'yearly', value:'yearly_data'}],
 
                 parcelasModules: [{label:'Suelos', value:'suelos'},{label:'Manejo de la parcela', value:'manejo_parcelas'}, {label:'Plagas y enfermedades', value:'plagas_y_enfermedades'}, {label:'Produccion', value:'produccion'} ],
 
@@ -135,8 +139,10 @@ export default {
                 parcelasModulesSelected:[],
                 cultivosModulesSelected:[],
                 stationsSelected:[],
+                aggregationSelected:[],
                 cultivos:[],
                 produccion:[],
+                showTable:false,
 
             }
 
