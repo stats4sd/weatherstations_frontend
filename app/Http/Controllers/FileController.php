@@ -64,6 +64,7 @@ class FileController extends Controller
             $scriptPath = base_path() . '/scripts/' . $scriptName;
             $path_name = Storage::path("/").$path;
             $uploader_id = $this->generateRandomString();
+            $uploader_id = '9XmlgeyUL5';
             
             //python script accepts 3 arguments in this order: scriptPath, path_name, station_id
 
@@ -79,11 +80,11 @@ class FileController extends Controller
 
             $data_template = DataTemplate::paginate(10)->where('uploader_id', '=', $uploader_id);
             
-            $error_data = $this->checkValues($uploader_id);
+            // $error_data = $this->checkValues($uploader_id);
 
             return response()->json([
                 'data_template' => $data_template,
-                'error_data' => $error_data
+                'error_data' => null
 
             ]);
         }
