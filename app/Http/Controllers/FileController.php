@@ -64,7 +64,6 @@ class FileController extends Controller
             $scriptPath = base_path() . '/scripts/' . $scriptName;
             $path_name = Storage::path("/").$path;
             $uploader_id = $this->generateRandomString();
-            $uploader_id = '9XmlgeyUL5';
             
             //python script accepts 3 arguments in this order: scriptPath, path_name, station_id
 
