@@ -2,18 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Xlsform;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model;
 
-class User extends Authenticatable
+class DataMap extends Model
 {
     use CrudTrait;
-    const ADMIN_TYPE = 'admin';
-    const DEFAULT_TYPE = 'default';
-    use Notifiable;
 
     /*
     |--------------------------------------------------------------------------
@@ -21,16 +16,15 @@ class User extends Authenticatable
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'users';
-    // protected $primaryKey = 'id';
-    // public $timestamps = false;
-    protected $guarded = ['id'];
-    // protected $fillable = ['type'];
-    // protected $dates = [];
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
+    protected $table = 'data_maps';
+    protected $primaryKey = 'id';
+    public $incrementing = false;
 
+    protected $guarded = [];
+
+    protected $casts = [
+        'variables' => 'array',
+    ];
 
     /*
     |--------------------------------------------------------------------------
@@ -38,14 +32,15 @@ class User extends Authenticatable
     |--------------------------------------------------------------------------
     */
 
-    public function isAdmin() {
-        return $this->type === self::ADMIN_TYPE;
-    }
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+    public function xls_forms ()
+    {
+       return $this->hasMany(Xlsform::class);
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -55,7 +50,7 @@ class User extends Authenticatable
 
     /*
     |--------------------------------------------------------------------------
-    | ACCESORS
+    | ACCESSORS
     |--------------------------------------------------------------------------
     */
 

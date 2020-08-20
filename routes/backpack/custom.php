@@ -50,4 +50,10 @@ Route::group([
     Route::crud('produccion', 'ProduccionCrudController');
     Route::crud('submission', 'SubmissionCrudController');
     Route::crud('dailydatapreview', 'DailyDataPreviewCrudController');
+    Route::crud('xlsform', 'XlsformCrudController');
+    Route::crud('datamap', 'DataMapCrudController');
+    Route::post('xlsform/{xlsform}/deploytokobo', 'XlsformCrudController@deployToKobo');
+    Route::post('xlsform/{xlsform}/syncdata', 'XlsformCrudController@syncData');
+    Route::post('xlsform/{xlsform}/archive', 'XlsformCrudController@archiveOnKobo');
+
 }); // this should be the absolute last line of this file
