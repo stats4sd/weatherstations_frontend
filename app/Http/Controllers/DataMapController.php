@@ -10,7 +10,7 @@ class DataMapController extends Controller
     public static function newRecord(DataMap $dataMap, Array $data)
     {
         
-       dd($data);
+       
 
     }
 }

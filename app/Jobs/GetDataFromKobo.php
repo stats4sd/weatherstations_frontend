@@ -61,12 +61,19 @@ class GetDataFromKobo implements ShouldQueue
                     'content' => json_encode($newSubmission),
                     'fecha_hora' => $newSubmission['_submission_time'],
                 ]);
-               
                 $modules = explode(' ', $newSubmission['modulos']);
 
-                foreach ($modules as $module) {
 
-                    $dataMap = DataMap::findorfail($module);
+                foreach ($modules as $module) {
+                    foreach($newSubmission as $key => $value) {
+                        if(Str::contains($key,'/')){    
+                        // e.g. replace $newSubmission['groupname/subgroup/name'] with $newSubmission['name']
+                            unset($newSubmission[$key]);
+                            $key = explode('/', $key);
+                            $key = end($key);
+                            $newSubmission[$key] = $value;
+                        }
+                    }
                     
                     // go through submission variables and remove any group names
                   
@@ -75,31 +82,103 @@ class GetDataFromKobo implements ShouldQueue
                         // Keep this as it forms part of the media download url
                         if($key == 'formhub/uuid') continue;
 
-                        //creating new parcela
-                        if($newSubmission['informacion_basica/registrar_parcela']){
-                            $key = explode('/', $key);
-                            $key = end($key);
-                            array_keys($newSubmission, 'nueva_parcela');
-                            $newParcela = array_keys($newSubmission, 'nueva_parcela');
-                            dd($newParcela);
+                        // Create the data for the Suelo Module
+                        if ($module == 'A'){
+                            $dataMap = DataMap::findorfail($module);
 
-                        
-
+                           
+                            $suelo = [
+                                'parcela_id' => $newSubmission['parcela_id'],
+                                'pH' => $newSubmission['modulo_loop'][0]['modulo_loop/suelo/pH'],
+                                'textura' => $newSubmission['modulo_loop'][0]['modulo_loop/suelo/textura'],
+                                'materia_organica' => $newSubmission['modulo_loop'][0]['modulo_loop/suelo/materia_organica'],
+                                'comunidad' => $newSubmission['comunidad']
+                            ];
+                          
+                            DataMapController::newRecord($dataMap, $suelo);
+                           
                         }
-                        if(Str::contains($key,'/')){
-                            // e.g. replace $newSubmission['groupname/subgroup/name'] with $newSubmission['name']
-                            unset($newSubmission[$key]);
-                            $key = explode('/', $key);
-                            $key = end($key);
+                        // Create the data for the Cultivo Module
+                        if ($module == 'B'){
+                            $dataMap = DataMap::findorfail($module);
+                            //change 1 with a variable 
+                            $cultivo_loop = $newSubmission['modulo_loop'][1]['modulo_loop/cultivo_formulario/cultivo_loop'];
+                            foreach ($cultivo_loop as $cultivo_loop_key => $value) {
+                                  
+                                $cultivo_element = $cultivo_loop[$cultivo_loop_key];
+                                foreach ($cultivo_element as $cultivo_element_key => $value) {
+                                    if(Str::contains($cultivo_element_key,'/')){    
+                                    // e.g. replace $newSubmission['groupname/subgroup/name'] with $newSubmission['name']
+                                        unset($cultivo_element[$cultivo_element_key]);
+                                        $cultivo_element_key = explode('/', $cultivo_element_key);
+                                        $cultivo_element_key = end($cultivo_element_key);
+                                        $cultivo_element[$cultivo_element_key] = $value;
+                                    }
+                                }
 
-                            $newSubmission[$key] = $value;
+
+                                $cultivo_loop[$cultivo_loop_key] = $cultivo_element;
+                            
+                            }
+
+                               
+                                unset($newSubmission['modulo_loop'][1]['modulo_loop/cultivo_formulario/cultivo_loop']);
+                                $newSubmission['modulo_loop'][1]['cultivo_loop'] = $cultivo_loop;
+
+                                //modulo_cultivo_loop
+                                $modulo_cultivo_loop =  $newSubmission['modulo_loop'][1]['cultivo_loop'];
+                                foreach ($modulo_cultivo_loop as $modulo_cultivo_loop_key => $value) {
+                                    foreach ($modulo_cultivo_loop[$modulo_cultivo_loop_key] as $array_key => $value) {
+                                        if($array_key == 'modulo_cultivo_loop'){
+                                            foreach ($modulo_cultivo_loop[$modulo_cultivo_loop_key][$array_key] as $module_key => $value) {
+                                          
+                                                foreach ($modulo_cultivo_loop[$modulo_cultivo_loop_key][$array_key][$module_key] as $key => $value) {
+                                             
+                                                    unset($modulo_cultivo_loop[$modulo_cultivo_loop_key][$array_key][$module_key][$key]);
+                                                    $key = explode('/', $key);
+                                                    $key = end($key);
+                                                    $modulo_cultivo_loop[$modulo_cultivo_loop_key][$array_key][$module_key][$key] = $value;
+                                                    if($key == 'begin_repeat_OgRUOpAOf'){
+                                                        foreach ($modulo_cultivo_loop[$modulo_cultivo_loop_key][$array_key][$module_key][$key] as $repeat_key => $value) {
+                                                            foreach ($modulo_cultivo_loop[$modulo_cultivo_loop_key][$array_key][$module_key][$key][$repeat_key] as $repeat_array_key => $value) {
+                                                                unset($modulo_cultivo_loop[$modulo_cultivo_loop_key][$array_key][$module_key][$key][$repeat_key][$repeat_array_key]);
+                                                                $new_key = explode('/', $repeat_array_key);
+                                                                $new_key = end($new_key);
+                                                                $modulo_cultivo_loop[$modulo_cultivo_loop_key][$array_key][$module_key][$key][$repeat_key][$new_key] = $value;
+                                                        
+                                                            }
+                                                        }
+                                                                
+                                                    }
+
+                                                }
+                
+                                            }
+                                            
+                                        }
+
+                                    
+                                    }
+
+                                            
+                                }
+                                unset($newSubmission['modulo_loop'][1]['cultivo_loop']);
+                                $newSubmission['modulo_loop'][1]['cultivo_loop'] = $modulo_cultivo_loop;
+
+                                dd($newSubmission);
+
+                            
+                            DataMapController::newRecord($dataMap, $cultivo_info);
+                           
+                            
                         }
+
+
                     }
+                    
 
                 }
-                 \Log::info("Mapping data to correct model / tables...");
-                DataMapController::newRecord($dataMap, $newSubmission);
-  
+                
             }
         }
 
