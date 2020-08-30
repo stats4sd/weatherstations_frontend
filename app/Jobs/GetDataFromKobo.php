@@ -39,148 +39,89 @@ class GetDataFromKobo implements ShouldQueue
      */
     public function handle()
     {
-        $response = Http::withBasicAuth(config('services.kobo.username'), config('services.kobo.password'))
-        ->withHeaders(['Accept' => 'application/json'])
-        ->get(config('services.kobo.endpoint_v2').'/assets/'.$this->form->kobo_id.'/data/')
-        ->throw()
-        ->json();
+        // $response = Http::withBasicAuth(config('services.kobo.username'), config('services.kobo.password'))
+        // ->withHeaders(['Accept' => 'application/json'])
+        // ->get(config('services.kobo.endpoint_v2').'/assets/'.$this->form->kobo_id.'/data/')
+        // ->throw()
+        // ->json();
 
-        \Log::info($response);
+        // \Log::info($response);
 
-        $data = $response['results'];
+        // $data = $response['results'];
+        $data = Submission::select('content')->where('id', '=', '64012805' )->get(); 
+        $data = $data[0]['content'];
+       
+        $newSubmission = json_decode($data, true);
 
         //compare
         $submissions = Submission::where('xlsform_id', '=', $this->form->id)->get();
 
-        foreach($data as $newSubmission) {
-            if(!in_array($newSubmission['_id'], $submissions->pluck('id')->toArray())) {
-                Submission::create([
-                    'id' => $newSubmission['_id'],
-                    'uuid' => $newSubmission['_uuid'],
-                    'xlsform_id' => $this->form->id,
-                    'content' => json_encode($newSubmission),
-                    'fecha_hora' => $newSubmission['_submission_time'],
-                ]);
-                $modules = explode(' ', $newSubmission['modulos']);
+        // foreach($data as $newSubmission) {
+               
+            // if(!in_array($newSubmission['_id'], $submissions->pluck('id')->toArray())) {
 
+                // Submission::create([
+                //     'id' => $newSubmission['_id'],
+                //     'uuid' => $newSubmission['_uuid'],
+                //     'xlsform_id' => $this->form->id,
+                //     'content' => json_encode($newSubmission),
+                //     'fecha_hora' => $newSubmission['_submission_time'],
+                // ]);
 
-                foreach ($modules as $module) {
-                    foreach($newSubmission as $key => $value) {
-                        if(Str::contains($key,'/')){    
-                        // e.g. replace $newSubmission['groupname/subgroup/name'] with $newSubmission['name']
-                            unset($newSubmission[$key]);
-                            $key = explode('/', $key);
-                            $key = end($key);
-                            $newSubmission[$key] = $value;
-                        }
-                    }
-                    
-                    // go through submission variables and remove any group names
-                  
-                    foreach($newSubmission as $key => $value) {
-
-                        // Keep this as it forms part of the media download url
-                        if($key == 'formhub/uuid') continue;
-
-                        // Create the data for the Suelo Module
-                        if ($module == 'A'){
-                            $dataMap = DataMap::findorfail($module);
-
-                           
-                            $suelo = [
-                                'parcela_id' => $newSubmission['parcela_id'],
-                                'pH' => $newSubmission['modulo_loop'][0]['modulo_loop/suelo/pH'],
-                                'textura' => $newSubmission['modulo_loop'][0]['modulo_loop/suelo/textura'],
-                                'materia_organica' => $newSubmission['modulo_loop'][0]['modulo_loop/suelo/materia_organica'],
-                                'comunidad' => $newSubmission['comunidad']
-                            ];
-                          
-                            DataMapController::newRecord($dataMap, $suelo);
-                           
-                        }
-                        // Create the data for the Cultivo Module
-                        if ($module == 'B'){
-                            $dataMap = DataMap::findorfail($module);
-                            //change 1 with a variable 
-                            $cultivo_loop = $newSubmission['modulo_loop'][1]['modulo_loop/cultivo_formulario/cultivo_loop'];
-                            foreach ($cultivo_loop as $cultivo_loop_key => $value) {
-                                  
-                                $cultivo_element = $cultivo_loop[$cultivo_loop_key];
-                                foreach ($cultivo_element as $cultivo_element_key => $value) {
-                                    if(Str::contains($cultivo_element_key,'/')){    
-                                    // e.g. replace $newSubmission['groupname/subgroup/name'] with $newSubmission['name']
-                                        unset($cultivo_element[$cultivo_element_key]);
-                                        $cultivo_element_key = explode('/', $cultivo_element_key);
-                                        $cultivo_element_key = end($cultivo_element_key);
-                                        $cultivo_element[$cultivo_element_key] = $value;
-                                    }
-                                }
-
-
-                                $cultivo_loop[$cultivo_loop_key] = $cultivo_element;
-                            
-                            }
-
-                               
-                                unset($newSubmission['modulo_loop'][1]['modulo_loop/cultivo_formulario/cultivo_loop']);
-                                $newSubmission['modulo_loop'][1]['cultivo_loop'] = $cultivo_loop;
-
-                                //modulo_cultivo_loop
-                                $modulo_cultivo_loop =  $newSubmission['modulo_loop'][1]['cultivo_loop'];
-                                foreach ($modulo_cultivo_loop as $modulo_cultivo_loop_key => $value) {
-                                    foreach ($modulo_cultivo_loop[$modulo_cultivo_loop_key] as $array_key => $value) {
-                                        if($array_key == 'modulo_cultivo_loop'){
-                                            foreach ($modulo_cultivo_loop[$modulo_cultivo_loop_key][$array_key] as $module_key => $value) {
-                                          
-                                                foreach ($modulo_cultivo_loop[$modulo_cultivo_loop_key][$array_key][$module_key] as $key => $value) {
-                                             
-                                                    unset($modulo_cultivo_loop[$modulo_cultivo_loop_key][$array_key][$module_key][$key]);
-                                                    $key = explode('/', $key);
-                                                    $key = end($key);
-                                                    $modulo_cultivo_loop[$modulo_cultivo_loop_key][$array_key][$module_key][$key] = $value;
-                                                    if($key == 'begin_repeat_OgRUOpAOf'){
-                                                        foreach ($modulo_cultivo_loop[$modulo_cultivo_loop_key][$array_key][$module_key][$key] as $repeat_key => $value) {
-                                                            foreach ($modulo_cultivo_loop[$modulo_cultivo_loop_key][$array_key][$module_key][$key][$repeat_key] as $repeat_array_key => $value) {
-                                                                unset($modulo_cultivo_loop[$modulo_cultivo_loop_key][$array_key][$module_key][$key][$repeat_key][$repeat_array_key]);
-                                                                $new_key = explode('/', $repeat_array_key);
-                                                                $new_key = end($new_key);
-                                                                $modulo_cultivo_loop[$modulo_cultivo_loop_key][$array_key][$module_key][$key][$repeat_key][$new_key] = $value;
-                                                        
-                                                            }
-                                                        }
-                                                                
-                                                    }
-
-                                                }
+                //merge all the modules
+                $newSubmission['modulos'] = $newSubmission['modulos'] . ' ' . $newSubmission['modulo_loop'][0]['modulo_loop/extra_modulo'];
                 
-                                            }
-                                            
-                                        }
 
-                                    
-                                    }
-
-                                            
-                                }
-                                unset($newSubmission['modulo_loop'][1]['cultivo_loop']);
-                                $newSubmission['modulo_loop'][1]['cultivo_loop'] = $modulo_cultivo_loop;
-
-                                dd($newSubmission);
-
-                            
-                            DataMapController::newRecord($dataMap, $cultivo_info);
-                           
-                            
-                        }
-
-
-                    }
+                $newSubmission = $this->deleteGroupName( $newSubmission);
                     
+
+                $modulo_loop = $newSubmission['modulo_loop'];
+
+                $newSubmission['modulo_loop'] = $newSubmission['modulo_loop'][0] + $newSubmission['modulo_loop'][1];
+
+                if($newSubmission['registrar_parcela'] == 0){
+                    $dataMap = DataMap::findorfail('A');
+                    DataMapController::newRecord($dataMap, $newSubmission);
+                } else {
+                    $dataMap = DataMap::findorfail('A');
+                    DataMapController::updateRecord($dataMap, $newSubmission, $newSubmission['parcela_id']);
+                }
+
+                if(Str::contains( $newSubmission['modulos'], 'B')){
+                    $dataMap = DataMap::findorfail('B');
+                    foreach ($newSubmission['modulo_loop']['cultivo_loop'] as $cultivo) {
+                        $cultivo['modulo_cultivo_loop'] = $cultivo['modulo_cultivo_loop'][0] + $cultivo['modulo_cultivo_loop'][1]; 
+                        $cultivo['parcela_id'] =  $newSubmission['parcela_id'];
+                        $cultivo['_id'] =  $newSubmission['_id'];
+
+                        DataMapController::newRecord($dataMap, $cultivo);
+                        $cultivo_modules = $cultivo['modulos_cultivo'] . ' '. $cultivo['modulo_cultivo_loop']['extra_modulo_cultivo'];
+                         $cultivo_modules = explode(' ', $cultivo_modules);
+                        
+                        foreach ($cultivo_modules as $cultivo_module) {
+                            $dataMap = DataMap::findorfail($cultivo_module);
+                            DataMapController::newRecord($dataMap, $cultivo);
+                        }
+                    }
 
                 }
-                
+
+    }
+
+    public function deleteGroupName(Array $array)
+    {
+        foreach($array as $key => $value) {
+            if(Str::contains($key,'/')){    
+            // e.g. replace $newSubmission['groupname/subgroup/name'] with $newSubmission['name']
+                unset($array[$key]);
+                $key = explode('/', $key);
+                $key = end($key);
+                $array[$key] = $value;
+            }
+            if(is_array($value)){
+                $array[$key] = $this->deleteGroupName($value);
             }
         }
-
+        return $array;
     }
 }

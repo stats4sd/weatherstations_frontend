@@ -74,8 +74,8 @@ class DataMapCrudController extends CrudController
                 'type' => 'select2_from_array',
                 'label' => 'What Data Table will this form populate?',
                 'options' => [
-                    'Sample' => 'Sample Data',
-                    'AnalysisAgg' => 'analysis_agg',
+                    'Parcela' => 'parcela',
+                    'Suelo' => 'suelo',
                     'AnalysisP' => 'analysis_p',
                     'AnalysisPh' => 'analysis_ph',
                     'AnalysisPom' => 'analysis_pom',
