@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateManejoParcela extends Migration
+class CreateNewManejoParcelaTable extends Migration
 {
     /**
      * Run the migrations.
@@ -16,7 +16,7 @@ class CreateManejoParcela extends Migration
         Schema::create('manejo_parcela', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('comunidad_id');
-            $table->integer('parcela_id');
+            $table->string('parcela_id');
             $table->string('tipo_fertilización_suelo');
             $table->string('sistema_riego');
             $table->string('metodo_preparacion_suelo');
@@ -36,8 +36,6 @@ class CreateManejoParcela extends Migration
      */
     public function down()
     {
-        Schema::table('manejo_parcela', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('manejo_parcela');
     }
 }

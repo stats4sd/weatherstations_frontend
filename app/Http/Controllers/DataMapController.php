@@ -17,7 +17,6 @@ class DataMapController extends Controller
 
 		$class = 'App\\Models\\'.$dataMap->model;
 	    $newItem = new $class();
-
 	    $newItem->fill($newModel);
 	    $newItem->save();
 
@@ -31,6 +30,7 @@ class DataMapController extends Controller
     	$class = 'App\\Models\\'.$dataMap->model;
 	    $class::where('id', $id)->update($model);
 
+
     }
 
     public static function createNewModel(DataMap $dataMap, Array $data)
@@ -39,6 +39,7 @@ class DataMapController extends Controller
 		$newModel = [
         "submission_id" => $data['_id']
     	];
+
 
     	// split the gps coordinates into longitude, latitude, altitude and accuracy 
     	if($dataMap->location && isset($data['gps']) && $data['gps']) {
@@ -54,7 +55,7 @@ class DataMapController extends Controller
             if($variable['in_db'] == 0) {
                 //don't actually process it (as the SQL Insert will fail)
                 //just tell the admin about it!
-                NewDataVariableSpotted::dispatch();
+                // NewDataVariableSpotted::dispatch();
                 continue;
             }
 
@@ -121,6 +122,7 @@ class DataMapController extends Controller
                 $newModel[$variable['label']] = $value;
             }
 		}
+
 		return $newModel;
 	
     }

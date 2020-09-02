@@ -79,16 +79,25 @@ class GetDataFromKobo implements ShouldQueue
 
                 $newSubmission['modulo_loop'] = $newSubmission['modulo_loop'][0] + $newSubmission['modulo_loop'][1];
 
-                if($newSubmission['registrar_parcela'] == 0){
-                    $dataMap = DataMap::findorfail('A');
+                    
+                if($newSubmission['registrar_parcela'] == 1){
+                    $dataMap = DataMap::findorfail('parcela');
+
                     DataMapController::newRecord($dataMap, $newSubmission);
                 } else {
-                    $dataMap = DataMap::findorfail('A');
+                    $dataMap = DataMap::findorfail('parcela');
                     DataMapController::updateRecord($dataMap, $newSubmission, $newSubmission['parcela_id']);
                 }
 
-                if(Str::contains( $newSubmission['modulos'], 'B')){
-                    $dataMap = DataMap::findorfail('B');
+                if(Str::contains( $newSubmission['modulos'], 'A')){
+                    $dataMap = DataMap::findorfail('A');
+
+                   
+                    DataMapController::newRecord($dataMap, $newSubmission);
+                }
+
+                if(Str::contains( $newSubmission['modulos'], 'C')){
+                    $dataMap = DataMap::findorfail('C');
                     foreach ($newSubmission['modulo_loop']['cultivo_loop'] as $cultivo) {
                         $cultivo['modulo_cultivo_loop'] = $cultivo['modulo_cultivo_loop'][0] + $cultivo['modulo_cultivo_loop'][1]; 
                         $cultivo['parcela_id'] =  $newSubmission['parcela_id'];

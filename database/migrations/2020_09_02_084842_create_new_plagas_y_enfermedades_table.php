@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreatePlagasYEnfermedades extends Migration
+class CreateNewPlagasYEnfermedadesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -16,8 +16,9 @@ class CreatePlagasYEnfermedades extends Migration
         Schema::create('plagas_y_enfermedades', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('comunidad_id');
+            $table->string('parcela_id');
             $table->integer('cultivo_id');
-            $table->integer('variedad_id');
+            $table->integer('variedad_id')->nullable();
             $table->string('plaga_incidencia');
             $table->decimal('plaga_severidad');
             $table->string('unidad');
@@ -36,8 +37,6 @@ class CreatePlagasYEnfermedades extends Migration
      */
     public function down()
     {
-        Schema::table('plagas_y_enfermedades', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('plagas_y_enfermedades');
     }
 }

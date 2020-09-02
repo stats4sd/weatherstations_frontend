@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ChangeIdTypeForParcelaTable extends Migration
+class CreateNewCultivosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class ChangeIdTypeForParcelaTable extends Migration
      */
     public function up()
     {
-        Schema::table('parcela', function (Blueprint $table) {
-            $table->string('id')->change();
-            $table->dropColumn('code');
+        Schema::create('cultivos', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('name');
+            $table->timestamps();
         });
     }
 
@@ -26,8 +27,6 @@ class ChangeIdTypeForParcelaTable extends Migration
      */
     public function down()
     {
-        Schema::table('parcela', function (Blueprint $table) {
-           
-        });
+        Schema::dropIfExists('cultivos');
     }
 }

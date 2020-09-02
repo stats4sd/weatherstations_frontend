@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateSuelo extends Migration
+class CreateNewSueloTable extends Migration
 {
     /**
      * Run the migrations.
@@ -16,7 +16,7 @@ class CreateSuelo extends Migration
         Schema::create('suelo', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('comunidad_id');
-            $table->integer('parcela_id');
+            $table->string('parcela_id');
             $table->string('materia_organica');
             $table->string('textura');
             $table->integer('pH');
@@ -32,8 +32,6 @@ class CreateSuelo extends Migration
      */
     public function down()
     {
-        Schema::table('suelo', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('suelo');
     }
 }

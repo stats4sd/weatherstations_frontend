@@ -76,10 +76,11 @@ class DataMapCrudController extends CrudController
                 'options' => [
                     'Parcela' => 'parcela',
                     'Suelo' => 'suelo',
-                    'AnalysisP' => 'analysis_p',
-                    'AnalysisPh' => 'analysis_ph',
-                    'AnalysisPom' => 'analysis_pom',
-                    'AnalysisPoxc' => 'analysis_poxc',
+                    'Fenologia' => 'fenologia',
+                    'Manejo parcela' => 'manejo_parcela',
+                    'Pachagrama' => 'pachagrama',
+                    'Plagas y Enfermedades' => 'plagas_y_enfermedades',
+                    'Produccion' => 'produccion',
                 ],
             ],
             [
@@ -129,7 +130,8 @@ class DataMapCrudController extends CrudController
                     ],
                     [
                         'name' => 'in_db',
-                        'type' => 'hidden',
+                        'label' => 'Check only if the variable is in the database.',
+                        'type' => 'checkbox',
                         'value' => 0,
                     ],
                 ],

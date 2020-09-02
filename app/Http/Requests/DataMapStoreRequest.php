@@ -26,7 +26,7 @@ class DataMapStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'required|min:3|max:255|unique:data_maps',
+            'id' => 'required|min:1|max:255|unique:data_maps',
             'title' => 'required|max:255',
             'variables' => 'required',
         ];
