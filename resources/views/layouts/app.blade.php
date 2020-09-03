@@ -50,6 +50,9 @@
                         <li class="nav-item">
                           <a class="nav-link @if(Route::current()->uri==='admin' && Auth::user()->type=="admin") active @endif" href="admin">Admin</a>
                         </li>
+                        <li class="nav-item">
+                          <a class="nav-link @if(Route::current()->uri==='qr-codes' && Auth::user()->type=="admin") active @endif" href="{{ url('qr-codes') }}">QR Codes</a>
+                        </li>
                          @endguest
                     </ul>
 
