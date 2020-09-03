@@ -39,7 +39,7 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
                         @guest
-                       
+
                         @elseif(Auth::user()->type=="admin")
                         <li class="nav-item">
                           <a class="nav-link @if(Route::current()->uri==='home') active @endif" href="home">Home</a>
@@ -49,7 +49,6 @@
                         </li>
                         <li class="nav-item">
                           <a class="nav-link @if(Route::current()->uri==='admin' && Auth::user()->type=="admin") active @endif" href="admin">Admin</a>
-                          <h1></h1>
                         </li>
                          @endguest
                     </ul>
