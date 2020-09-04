@@ -80,7 +80,7 @@ class GetDataFromKobo implements ShouldQueue
                 $newSubmission['modulo_loop'] = $newSubmission['modulo_loop'][0] + $newSubmission['modulo_loop'][1];
 
                     
-                if($newSubmission['registrar_parcela'] == 1){
+                if($newSubmission['registrar_parcela'] == 0){
                     $dataMap = DataMap::findorfail('parcela');
 
                     DataMapController::newRecord($dataMap, $newSubmission);
@@ -91,9 +91,11 @@ class GetDataFromKobo implements ShouldQueue
 
                 if(Str::contains( $newSubmission['modulos'], 'A')){
                     $dataMap = DataMap::findorfail('A');
-
-                   
-                    DataMapController::newRecord($dataMap, $newSubmission);
+                    $suelo = $newSubmission['modulo_loop'];
+                    $suelo['parcela_id'] =  $newSubmission['parcela_id'];
+                    $suelo['_id'] =  $newSubmission['_id'];
+                    
+                    DataMapController::newRecord($dataMap, $suelo);
                 }
 
                 if(Str::contains( $newSubmission['modulos'], 'C')){

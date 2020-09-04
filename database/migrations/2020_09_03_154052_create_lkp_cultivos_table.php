@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateNewVariedadesTable extends Migration
+class CreateLkpCultivosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class CreateNewVariedadesTable extends Migration
      */
     public function up()
     {
-        Schema::create('variedades', function (Blueprint $table) {
+        Schema::create('lkp_cultivos', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
-            $table->integer('cultivo_id');
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ class CreateNewVariedadesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('variedades');
+        Schema::dropIfExists('lkp_cultivos');
     }
 }

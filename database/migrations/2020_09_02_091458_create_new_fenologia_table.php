@@ -15,18 +15,23 @@ class CreateNewFenologiaTable extends Migration
     {
         Schema::create('fenologia', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('comunidad_id');
+            $table->unsignedBigInteger('comunidad_id');
             $table->string('parcela_id');
-            $table->integer('cultivo_id');
-            $table->integer('variedad_id')->nullable();
-            $table->date('fecha_siembra');
-            $table->date('fecha_emergencia');
-            $table->date('fecha_floracion');
-            $table->date('fecha_maduracion');
-            $table->string('floracion_cultivo_perenne');
-            $table->date('cuajado_fruto_perenne');
-            $table->date('fecha_cosecha');
-            $table->bigInteger('submission_id');
+            $table->unsignedBigInteger('cultivo_id');
+            $table->unsignedBigInteger('variedad_id')->nullable();
+            $table->integer('epoca_siembra')->nullable();
+            $table->date('fecha_siembra')->nullable();
+            $table->date('fecha_emergencia')->nullable();
+            $table->date('fecha_hojas')->nullable();
+            $table->date('fecha_floracion')->nullable();
+            $table->date('fecha_fructificacion')->nullable();
+            $table->date('fecha_maduracion')->nullable();
+            $table->date('fecha_cosecha')->nullable();
+            $table->integer('edad_plantacion')->nullable();
+            $table->date('fecha_dormida')->nullable();
+            $table->date('fecha_hinchada')->nullable();
+            $table->date('fecha_cuajado')->nullable();
+            $table->unsignedBigInteger('submission_id');
             $table->timestamps();
         });
     }

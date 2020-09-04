@@ -15,16 +15,38 @@ class CreateNewManejoParcelaTable extends Migration
     {
         Schema::create('manejo_parcela', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('comunidad_id');
+            $table->unsignedBigInteger('comunidad_id');
             $table->string('parcela_id');
-            $table->string('tipo_fertilización_suelo');
-            $table->string('sistema_riego');
-            $table->string('metodo_preparacion_suelo');
-            $table->integer('deshierbe');
-            $table->integer('aporque');
-            $table->integer('podas');
-            $table->string('tipo_fumigaciones_para_crecimiento');
-            $table->bigInteger('submission_id');
+            $table->unsignedBigInteger('cultivo_id');
+            $table->date('fecha_roturado_suelo')->nullable();
+            $table->string('tipo_preparacion_roturado')->nullable();
+            $table->date('fecha_rastrado_suelo')->nullable();
+            $table->string('tipo_preparacion_rastrado')->nullable();
+            $table->date('fecha_fertilizacion')->nullable();
+            $table->string('tipo_fertilizacion_suelo')->nullable();
+            $table->string('abono_organico')->nullable();
+            $table->decimal('abono_cantidad_kg')->nullable();
+            $table->string('fertilizante_quimico')->nullable();
+            $table->decimal('fertilizante_cantidad_kg')->nullable();
+            $table->string('foliar_producto')->nullable();
+            $table->string('tipo_riego')->nullable();
+            $table->string('fuente_agua')->nullable();
+            $table->string('tipo_deshierbe')->nullable();
+            $table->date('fecha_aporque')->nullable();
+            $table->string('tipo_aporque')->nullable();
+            $table->date('fecha_tazeo')->nullable();
+            $table->string('tipo_tazeo')->nullable();
+            $table->date('fecha_poda')->nullable();
+            $table->string('tipo_poda')->nullable();
+            $table->date('fecha_control_1')->nullable();
+            $table->string('tipo_control_1')->nullable();
+            $table->string('tipo_producto_1')->nullable();
+            $table->string('producto_1')->nullable();
+            $table->date('fecha_control_2')->nullable();
+            $table->string('tipo_control_2')->nullable();
+            $table->string('tipo_producto_2')->nullable();
+            $table->string('producto_2')->nullable();
+            $table->unsignedBigInteger('submission_id');
             $table->timestamps();
         });
     }

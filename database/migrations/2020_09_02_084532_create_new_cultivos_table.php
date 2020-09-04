@@ -15,7 +15,10 @@ class CreateNewCultivosTable extends Migration
     {
         Schema::create('cultivos', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
+            $table->unsignedBigInteger('cultivo_id');
+            $table->unsignedBigInteger('variedad_id')->nullable();
+            $table->string('propiedad_cultivo')->nullable();
+            $table->string('propiedad_variedad')->nullable();
             $table->timestamps();
         });
     }

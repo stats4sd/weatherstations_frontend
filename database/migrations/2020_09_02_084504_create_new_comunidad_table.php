@@ -17,10 +17,9 @@ class CreateNewComunidadTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('municipio_id');
             $table->string('name');
-            $table->decimal('latitude', 9,6);
-            $table->decimal('longitude', 9,6);
-            $table->decimal('altitude', 9,6);
-            $table->string('variable_name');
+            $table->decimal('latitude', 9,6)->nullable();
+            $table->decimal('longitude', 9,6)->nullable();
+            $table->decimal('altitude', 9,6)->nullable();
             $table->timestamps();
         });
     }

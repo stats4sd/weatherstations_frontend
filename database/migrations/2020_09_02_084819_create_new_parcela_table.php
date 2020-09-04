@@ -15,18 +15,19 @@ class CreateNewParcelaTable extends Migration
     {
         Schema::create('parcela', function (Blueprint $table) {
             $table->string('id')->primary();
-            $table->integer('comunidad_id');
-            $table->bigInteger('submission_id');
-            $table->decimal('area_m2');
-            $table->string('area_originale');
-            $table->string('image');
-            $table->string('pendiente');
-            $table->string('drenaje');
-            $table->string('salinidad');
+            $table->unsignedBigInteger('comunidad_id');
+            $table->date('fecha')->nullable();
+            $table->decimal('area_m2')->nullable();
+            $table->string('area_originale')->nullable();
+            $table->string('image')->nullable();
+            $table->decimal('pendiente')->nullable();
+            $table->integer('drenaje')->nullable();
+            $table->integer('salinidad')->nullable();
             $table->decimal('latitude', 9,6);
             $table->decimal('longitude', 9,6);
             $table->decimal('altitude', 9,2);
             $table->decimal('accuracy', 9,2);
+            $table->unsignedBigInteger('submission_id');
             $table->timestamps();  
         });
     }

@@ -15,17 +15,16 @@ class CreateNewPlagasYEnfermedadesTable extends Migration
     {
         Schema::create('plagas_y_enfermedades', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('comunidad_id');
+            $table->unsignedBigInteger('comunidad_id');
             $table->string('parcela_id');
-            $table->integer('cultivo_id');
-            $table->integer('variedad_id')->nullable();
-            $table->string('plaga_incidencia');
-            $table->decimal('plaga_severidad');
-            $table->string('unidad');
-            $table->string('enfermedad_incidencia');
-            $table->string('sitio_de_control');
-            $table->string('tipo_de_control');
-            $table->bigInteger('submission_id');
+            $table->unsignedBigInteger('cultivo_id');
+            $table->unsignedBigInteger('variedad_id')->nullable();
+            $table->string('problema')->nullable();
+            $table->string('plaga_nombre')->nullable();
+            $table->decimal('cantidad_insectos_m2')->nullable();
+            $table->date('plaga_fecha')->nullable();
+            $table->string('enfermedad_nombre')->nullable();
+            $table->unsignedBigInteger('submission_id');
             $table->timestamps();
         });
     }
