@@ -32,8 +32,12 @@
       <li class='nav-item'><a class='nav-link' href='{{ backpack_url('suelo') }}'><i class='nav-icon la la-question'></i> Suelos</a></li>
       <li class='nav-item'><a class='nav-link' href='{{ backpack_url('manejoparcela') }}'><i class='nav-icon la la-question'></i> ManejoParcelas</a></li>
       <li class='nav-item'><a class='nav-link' href='{{ backpack_url('plagasyenfermedades') }}'><i class='nav-icon la la-question'></i> PlagasYEnfermedades</a></li>
-      <li class='nav-item'><a class='nav-link' href='{{ backpack_url('produccion') }}'><i class='nav-icon la la-question'></i> Produccions</a></li>
+      <li class='nav-item'><a class='nav-link' href='{{ backpack_url('rendimento') }}'><i class='nav-icon la la-question'></i> Rendimentos</a></li>
       <li class='nav-item'><a class='nav-link' href='{{ backpack_url('submission') }}'><i class='nav-icon la la-question'></i> Submissions</a></li>
+      
+
+      <li class='nav-item'><a class='nav-link' href='{{ backpack_url('xlsform') }}'><i class='nav-icon la la-question'></i> Xlsforms</a></li>
+      <li class='nav-item'><a class='nav-link' href='{{ backpack_url('datamap') }}'><i class='nav-icon la la-question'></i> DataMaps</a></li>
     </ul>
 </li>
 
@@ -46,6 +50,3 @@
 <li class='nav-item'><a class='nav-link' href="{{ backpack_url('yearly') }}"><i class="nav-icon far fa-calendar"></i>Yearly</a></li>
 
 
-
-<li class='nav-item'><a class='nav-link' href='{{ backpack_url('xlsform') }}'><i class='nav-icon la la-question'></i> Xlsforms</a></li>
-<li class='nav-item'><a class='nav-link' href='{{ backpack_url('datamap') }}'><i class='nav-icon la la-question'></i> DataMaps</a></li>

@@ -1,10 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Migrations\Migration;
 
-class CreateNewProduccionTable extends Migration
+class CreateRendimentoTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +12,9 @@ class CreateNewProduccionTable extends Migration
      */
     public function up()
     {
-        Schema::create('rendimento', function (Blueprint $table) {
+        Schema::create('rendimentos', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('comunidad_id');
-            $table->string('parcela_id');
             $table->unsignedBigInteger('cultivo_id');
-            $table->unsignedBigInteger('variedad_id')->nullable();
             $table->decimal('cantidad_cosechada_kg')->nullable();
             $table->decimal('superficie_cosechada_m2')->nullable();
             $table->decimal('rendimiento_cultivo')->nullable();
@@ -37,6 +33,6 @@ class CreateNewProduccionTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('produccion');
+        Schema::dropIfExists('rendimento');
     }
 }

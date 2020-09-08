@@ -80,23 +80,23 @@ class GetDataFromKobo implements ShouldQueue
                 $newSubmission['modulo_loop'] = $newSubmission['modulo_loop'][0] + $newSubmission['modulo_loop'][1];
 
                     
-                if($newSubmission['registrar_parcela'] == 0){
-                    $dataMap = DataMap::findorfail('parcela');
+                // if($newSubmission['registrar_parcela'] == 0){
+                //     $dataMap = DataMap::findorfail('parcela');
 
-                    DataMapController::newRecord($dataMap, $newSubmission);
-                } else {
-                    $dataMap = DataMap::findorfail('parcela');
-                    DataMapController::updateRecord($dataMap, $newSubmission, $newSubmission['parcela_id']);
-                }
+                //     DataMapController::newRecord($dataMap, $newSubmission);
+                // } else {
+                //     $dataMap = DataMap::findorfail('parcela');
+                //     DataMapController::updateRecord($dataMap, $newSubmission, $newSubmission['parcela_id']);
+                // }
 
-                if(Str::contains( $newSubmission['modulos'], 'A')){
-                    $dataMap = DataMap::findorfail('A');
-                    $suelo = $newSubmission['modulo_loop'];
-                    $suelo['parcela_id'] =  $newSubmission['parcela_id'];
-                    $suelo['_id'] =  $newSubmission['_id'];
+                // if(Str::contains( $newSubmission['modulos'], 'A')){
+                //     $dataMap = DataMap::findorfail('A');
+                //     $suelo = $newSubmission['modulo_loop'];
+                //     $suelo['parcela_id'] =  $newSubmission['parcela_id'];
+                //     $suelo['_id'] =  $newSubmission['_id'];
                     
-                    DataMapController::newRecord($dataMap, $suelo);
-                }
+                //     DataMapController::newRecord($dataMap, $suelo);
+                // }
 
                 if(Str::contains( $newSubmission['modulos'], 'C')){
                     $dataMap = DataMap::findorfail('C');

@@ -76,11 +76,12 @@ class DataMapCrudController extends CrudController
                 'options' => [
                     'Parcela' => 'parcela',
                     'Suelo' => 'suelo',
+                    'Cultivo' => 'cultivo',
                     'Fenologia' => 'fenologia',
-                    'Manejo parcela' => 'manejo_parcela',
+                    'ManejoParcela' => 'manejo_parcela',
                     'Pachagrama' => 'pachagrama',
-                    'Plagas y Enfermedades' => 'plagas_y_enfermedades',
-                    'Produccion' => 'produccion',
+                    'PlagasYEnfermedades' => 'plagas_y_enfermedades',
+                    'Rendimento' => 'rendimento',
                 ],
             ],
             [

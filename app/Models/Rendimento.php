@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Illuminate\Database\Eloquent\Model;
 
-class Produccion extends Model
+class Rendimento extends Model
 {
     use CrudTrait;
 
@@ -15,7 +15,7 @@ class Produccion extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'produccion';
+    protected $table = 'rendimentos';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];

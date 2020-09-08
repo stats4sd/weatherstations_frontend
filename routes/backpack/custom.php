@@ -47,7 +47,7 @@ Route::group([
     Route::crud('suelo', 'SueloCrudController');
     Route::crud('manejoparcela', 'ManejoParcelaCrudController');
     Route::crud('plagasyenfermedades', 'PlagasYEnfermedadesCrudController');
-    Route::crud('produccion', 'ProduccionCrudController');
+    Route::crud('rendimento', 'RendimentoCrudController');
     Route::crud('submission', 'SubmissionCrudController');
     Route::crud('dailydatapreview', 'DailyDataPreviewCrudController');
     Route::crud('xlsform', 'XlsformCrudController');

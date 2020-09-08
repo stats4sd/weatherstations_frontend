@@ -12,9 +12,7 @@ class DataMapController extends Controller
     public static function newRecord(DataMap $dataMap, Array $data)
     {
 		
-		
     	$newModel = DataMapController::createNewModel($dataMap, $data);
-
 		$class = 'App\\Models\\'.$dataMap->model;
 	    $newItem = new $class();
 	    $newItem->fill($newModel);

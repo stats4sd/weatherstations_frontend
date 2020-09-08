@@ -10,7 +10,7 @@ use App\Models\ManejoParcela;
 use App\Models\Pachagrama;
 use App\Models\Parcela;
 use App\Models\PlagasYEnfermedades;
-use App\Models\Produccion;
+use App\Models\Rendimento;
 use App\Models\Suelo;
 use DB;
 use Illuminate\Http\Request;
@@ -65,7 +65,7 @@ class DataController extends Controller
         $suelos = [];
         $manejo_parcelas = [];
         $plagas_y_enfermedades = [];
-        $produccion = [];
+        $rendimentos = [];
         $fenologia = [];
 
         foreach ($request->modulesSelected as $module) {
@@ -95,8 +95,8 @@ class DataController extends Controller
                     if($parcelas_modules=='plagas_y_enfermedades'){
                         $plagas_y_enfermedades = PlagasYEnfermedades::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
                     }
-                    if($parcelas_modules=='produccion'){
-                        $produccion = Produccion::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
+                    if($parcelas_modules=='rendimentos'){
+                        $rendimentos = Rendimento::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
 
                     }
 
@@ -118,8 +118,8 @@ class DataController extends Controller
                         $plagas_y_enfermedades = PlagasYEnfermedades::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
 
                     }
-                    if($cultivo_modules=='produccion'){
-                        $produccion = Produccion::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
+                    if($cultivo_modules=='rendimentos'){
+                        $rendimentos = Rendimento::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
                     }
 
                 }
@@ -230,11 +230,11 @@ class DataController extends Controller
                         $queries = $queries.$query;
                         $sheet_names = $sheet_names.'plagas_y_enfermedades, ';
                     }
-                    if($parcelas_modules=='produccion'){
+                    if($parcelas_modules=='rendimentos'){
                         $query = "select * from ". $parcelas_modules . " where comunidad_id in (". implode(",",$request->comunidadsSelected).");";
 
                         $queries = $queries.$query;
-                        $sheet_names = $sheet_names.'produccion, ';
+                        $sheet_names = $sheet_names.'rendimentos, ';
 
                     }
 
@@ -265,11 +265,11 @@ class DataController extends Controller
                         $sheet_names = $sheet_names.'plagas_y_enfermedades, ';
 
                     }
-                    if($cultivo_modules=='produccion'){
+                    if($cultivo_modules=='rendimentos'){
                         $query = "select * from ". $cultivo_modules . " where comunidad_id in (". implode(",",$request->comunidadsSelected).");";
 
                         $queries = $queries.$query;
-                        $sheet_names = $sheet_names.'produccion, ';
+                        $sheet_names = $sheet_names.'rendimentos, ';
                     }
 
                 }
