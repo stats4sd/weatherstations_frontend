@@ -283,7 +283,7 @@ class DataController extends Controller
 
         //python script accepts 4 arguments in this order: base_path(), queries in string, file name and sheet names in string
 
-        $process = new Process("pipenv run python3 {$scriptPath} {$base_path} {$queries} {$file_name} {$sheet_names}");
+        $process = new Process(["pipenv", "run", "python3", $scriptPath, $base_path, $queries, $file_name, $sheet_names]);
 
         $process->run();
 

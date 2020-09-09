@@ -17,6 +17,7 @@ class DataMapController extends Controller
 	    $newItem = new $class();
 	    $newItem->fill($newModel);
 	    $newItem->save();
+        return $newItem;
 
     
     }
@@ -120,7 +121,7 @@ class DataMapController extends Controller
                 $newModel[$variable['label']] = $value;
             }
 		}
-
+       
 		return $newModel;
 	
     }
