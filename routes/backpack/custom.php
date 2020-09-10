@@ -41,7 +41,6 @@ Route::group([
     Route::crud('comunidad', 'ComunidadCrudController');
     Route::crud('cultivo', 'CultivoCrudController');
     Route::crud('variedad', 'VariedadCrudController');
-    Route::crud('pachagrama', 'PachagramaCrudController');
     Route::crud('fenologia', 'FenologiaCrudController');
     Route::crud('parcela', 'ParcelaCrudController');
     Route::crud('suelo', 'SueloCrudController');

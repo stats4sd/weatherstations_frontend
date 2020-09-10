@@ -134,7 +134,7 @@ class DataController extends Controller
             'suelos' => $suelos,
             'manejo_parcelas' => $manejo_parcelas,
             'plagas_y_enfermedades' => $plagas_y_enfermedades,
-            'produccion' => $produccion,
+            'rendimentos' => $rendimentos,
             'fenologia' => $fenologia,
         ]);
 
