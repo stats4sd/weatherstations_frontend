@@ -6,6 +6,7 @@ use App\Models\Comunidad;
 use App\Models\DataMap;
 use App\Models\Parcela;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class DataMapController extends Controller
 {
@@ -28,6 +29,8 @@ class DataMapController extends Controller
     	$model = DataMapController::createNewModel($dataMap, $data);
     	$class = 'App\\Models\\'.$dataMap->model;
 	    $class::where('id', $id)->update($model);
+        return $newItem;
+
 
 
     }
@@ -121,7 +124,7 @@ class DataMapController extends Controller
                 $newModel[$variable['label']] = $value;
             }
 		}
-       
+
 		return $newModel;
 	
     }

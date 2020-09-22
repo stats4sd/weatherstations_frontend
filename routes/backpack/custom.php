@@ -55,4 +55,5 @@ Route::group([
     Route::post('xlsform/{xlsform}/syncdata', 'XlsformCrudController@syncData');
     Route::post('xlsform/{xlsform}/archive', 'XlsformCrudController@archiveOnKobo');
 
+    Route::crud('region', 'RegionCrudController');
 }); // this should be the absolute last line of this file

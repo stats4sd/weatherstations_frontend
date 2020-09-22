@@ -3,7 +3,10 @@
 namespace App\Jobs;
 
 use App\Http\Controllers\DataMapController;
+use App\Models\Comunidad;
 use App\Models\DataMap;
+use App\Models\Departamento;
+use App\Models\Municipio;
 use App\Models\Submission;
 use App\Models\User;
 use App\Models\Xlsform;
@@ -70,24 +73,69 @@ class GetDataFromKobo implements ShouldQueue
 
                 //merge all the modules
                 $newSubmission['modulos'] = $newSubmission['modulos'] . ' ' . $newSubmission['modulo_loop'][0]['modulo_loop/extra_modulo'];
+
+                $newSubmission = $this->deleteGroupName($newSubmission);
                 
-
-                $newSubmission = $this->deleteGroupName( $newSubmission);
-                    
-
                 $modulo_loop = $newSubmission['modulo_loop'];
 
                 $newSubmission['modulo_loop'] = $newSubmission['modulo_loop'][0] + $newSubmission['modulo_loop'][1];
 
-                    
-                if($newSubmission['registrar_parcela'] == 1){
-                    $dataMap = DataMap::findorfail('parcela');
+                // if($newSubmission['region'] == 999){
 
-                    DataMapController::newRecord($dataMap, $newSubmission);
-                } else {
-                    $dataMap = DataMap::findorfail('parcela');
-                    DataMapController::updateRecord($dataMap, $newSubmission, $newSubmission['parcela_id']);
-                }
+                //     $region = Region::updateOrCreate([
+                //         'name' => $newSubmission['otra_region']
+                //     ]);
+                   
+                //     //update the region id value
+                //     $newSubmission['region'] = $departamento->id;
+                
+                // }
+                
+                // if($newSubmission['departamento'] == 999){
+
+                //     $departamento = Departamento::updateOrCreate([
+                //         'name' => $newSubmission['otro_departamento']
+                //     ]);
+                   
+                //     //update the departamento id value
+                //     $newSubmission['departamento'] = $departamento->id;
+                
+                // }
+                // if($newSubmission['municipio'] == 999){
+
+                //     $municipio = Municipio::updateOrCreate([
+                //         'departamento_id' => $newSubmission['departamento'],
+                //         'name' => $newSubmission['otro_municipio']   
+                //     ]);
+                   
+                //     //update the municipio id value
+                //     $newSubmission['municipio'] = $municipio->id;
+                // }
+                
+                // if($newSubmission['comunidad'] == 999){
+                //     $location = explode(" ", $newSubmission['gps']);
+                //     $comunidad = Comunidad::updateOrCreate(
+                //         [
+                //             'municipio_id' => $newSubmission['municipio'], 
+                //             'name' => $newSubmission['otra_comunidad']
+                //         ],
+                //         [   
+                //             'latitude' => isset($location[0]) ? $location[0] : null,
+                //             'longitude' => isset($location[1]) ? $location[1] : null,
+                //             'altitude' => isset($location[2]) ? $location[2] : null
+                //         ]
+                //     );
+                //     $newSubmission['comunidad'] = $comunidad->id;
+                // }
+              
+                // if($newSubmission['registrar_parcela'] == 1){
+                //     $dataMap = DataMap::findorfail('parcela');
+
+                //     DataMapController::newRecord($dataMap, $newSubmission);
+                // } else {
+                //     $dataMap = DataMap::findorfail('parcela');
+                //     DataMapController::updateRecord($dataMap, $newSubmission, $newSubmission['parcela_id']);
+                // }
 
                 if(Str::contains( $newSubmission['modulos'], 'A')){
                     $dataMap = DataMap::findorfail('A');
@@ -97,35 +145,35 @@ class GetDataFromKobo implements ShouldQueue
                     
                     DataMapController::newRecord($dataMap, $suelo);
                 }
-
+      
                 if(Str::contains( $newSubmission['modulos'], 'C')){
-                    $dataMap = DataMap::findorfail('C');
 
                     foreach ($newSubmission['modulo_loop']['cultivo_loop'] as $cultivo) {
-                    
+                        $dataMap = DataMap::findorfail('C');
+
                         $cultivo['modulo_cultivo_loop'] = $cultivo['modulo_cultivo_loop'][0] + $cultivo['modulo_cultivo_loop'][1]; 
                         $cultivo['parcela_id'] =  $newSubmission['parcela_id'];
                         $cultivo['_id'] =  $newSubmission['_id'];
+
                         // get the cultivo_id from the creation of thge cultivo
                         $new_cultivo = DataMapController::newRecord($dataMap, $cultivo);
                         $cultivo['cultivo_id'] =  $new_cultivo->id;
 
                         $cultivo_modules = $cultivo['modulos_cultivo'] . ' '. $cultivo['modulo_cultivo_loop']['extra_modulo_cultivo'];
                         $cultivo_modules = explode(' ', $cultivo_modules);
-
-
+                        $cultivo = $cultivo + $cultivo['modulo_cultivo_loop'];
+                        unset($cultivo['modulo_cultivo_loop']);
+                       
+                       
                         foreach ($cultivo_modules as $cultivo_module) {
-                            $dataMap = DataMap::findorfail($cultivo_module);
-          
-                            $new_module = DataMapController::newRecord($dataMap, $cultivo);
-                    
 
-                            
+                            $dataMap_cultivo_module = DataMap::findorfail($cultivo_module);
+                         
+                            $new_module = DataMapController::newRecord($dataMap_cultivo_module, $cultivo);    
                         }
                     }
 
                 }
-
     }
 
     public function deleteGroupName(Array $array)
