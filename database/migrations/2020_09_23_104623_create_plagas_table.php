@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateNewDepartamentoTable extends Migration
+class CreatePlagasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,13 @@ class CreateNewDepartamentoTable extends Migration
      */
     public function up()
     {
-        Schema::create('departamento', function (Blueprint $table) {
+        Schema::create('plagas', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('region_id');
-            $table->string('name');
+            $table->unsignedBigInteger('cultivo_id');
+            $table->string('plaga_nombre')->nullable();
+            $table->decimal('cantidad_insectos_m2')->nullable();
+            $table->date('plaga_fecha')->nullable();
+            $table->unsignedBigInteger('submission_id');
             $table->timestamps();
         });
     }
@@ -28,6 +31,6 @@ class CreateNewDepartamentoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('departamento');
+        Schema::dropIfExists('plagas');
     }
 }

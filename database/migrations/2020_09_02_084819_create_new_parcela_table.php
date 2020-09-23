@@ -17,13 +17,13 @@ class CreateNewParcelaTable extends Migration
             $table->string('id')->primary();
             $table->unsignedBigInteger('comunidad_id');
             $table->date('fecha')->nullable();
-            $table->decimal('area_m2')->nullable();
             $table->string('area_originale')->nullable();
-            $table->string('image')->nullable();
+            $table->decimal('area_m2')->nullable();
             $table->decimal('pendiente')->nullable();
             $table->integer('drenaje')->nullable();
             $table->integer('salinidad')->nullable();
             $table->decimal('latitude', 9,6);
+            $table->string('image')->nullable();
             $table->decimal('longitude', 9,6);
             $table->decimal('altitude', 9,2);
             $table->decimal('accuracy', 9,2);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewDataVariableSpotted;
 use App\Models\Comunidad;
 use App\Models\DataMap;
 use App\Models\Parcela;
@@ -57,7 +58,7 @@ class DataMapController extends Controller
             if($variable['in_db'] == 0) {
                 //don't actually process it (as the SQL Insert will fail)
                 //just tell the admin about it!
-                // NewDataVariableSpotted::dispatch();
+                NewDataVariableSpotted::dispatch();
                 continue;
             }
 

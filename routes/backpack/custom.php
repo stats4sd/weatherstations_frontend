@@ -56,4 +56,6 @@ Route::group([
     Route::post('xlsform/{xlsform}/archive', 'XlsformCrudController@archiveOnKobo');
 
     Route::crud('region', 'RegionCrudController');
+    Route::crud('plaga', 'PlagaCrudController');
+    Route::crud('enfermedade', 'EnfermedadeCrudController');
 }); // this should be the absolute last line of this file

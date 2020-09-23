@@ -42,34 +42,30 @@ class GetDataFromKobo implements ShouldQueue
      */
     public function handle()
     {
-        // $response = Http::withBasicAuth(config('services.kobo.username'), config('services.kobo.password'))
-        // ->withHeaders(['Accept' => 'application/json'])
-        // ->get(config('services.kobo.endpoint_v2').'/assets/'.$this->form->kobo_id.'/data/')
-        // ->throw()
-        // ->json();
+        $response = Http::withBasicAuth(config('services.kobo.username'), config('services.kobo.password'))
+        ->withHeaders(['Accept' => 'application/json'])
+        ->get(config('services.kobo.endpoint_v2').'/assets/'.$this->form->kobo_id.'/data/')
+        ->throw()
+        ->json();
 
-        // \Log::info($response);
+        \Log::info($response);
 
-        // $data = $response['results'];
-        $data = Submission::select('content')->where('id', '=', '64012805' )->get(); 
-        $data = $data[0]['content'];
-       
-        $newSubmission = json_decode($data, true);
+        $data = $response['results'];
 
         //compare
         $submissions = Submission::where('xlsform_id', '=', $this->form->id)->get();
 
-        // foreach($data as $newSubmission) {
+        foreach($data as $newSubmission) {
                
-            // if(!in_array($newSubmission['_id'], $submissions->pluck('id')->toArray())) {
+            if(!in_array($newSubmission['_id'], $submissions->pluck('id')->toArray())) {
 
-                // Submission::create([
-                //     'id' => $newSubmission['_id'],
-                //     'uuid' => $newSubmission['_uuid'],
-                //     'xlsform_id' => $this->form->id,
-                //     'content' => json_encode($newSubmission),
-                //     'fecha_hora' => $newSubmission['_submission_time'],
-                // ]);
+                Submission::create([
+                    'id' => $newSubmission['_id'],
+                    'uuid' => $newSubmission['_uuid'],
+                    'xlsform_id' => $this->form->id,
+                    'content' => json_encode($newSubmission),
+                    'fecha_hora' => $newSubmission['_submission_time'],
+                ]);
 
                 //merge all the modules
                 $newSubmission['modulos'] = $newSubmission['modulos'] . ' ' . $newSubmission['modulo_loop'][0]['modulo_loop/extra_modulo'];
@@ -80,62 +76,64 @@ class GetDataFromKobo implements ShouldQueue
 
                 $newSubmission['modulo_loop'] = $newSubmission['modulo_loop'][0] + $newSubmission['modulo_loop'][1];
 
-                // if($newSubmission['region'] == 999){
+                //Update or create the record for all the locations 
 
-                //     $region = Region::updateOrCreate([
-                //         'name' => $newSubmission['otra_region']
-                //     ]);
-                   
-                //     //update the region id value
-                //     $newSubmission['region'] = $departamento->id;
-                
-                // }
-                
-                // if($newSubmission['departamento'] == 999){
+                if($newSubmission['region'] == 999){
 
-                //     $departamento = Departamento::updateOrCreate([
-                //         'name' => $newSubmission['otro_departamento']
-                //     ]);
+                    $region = Region::updateOrCreate([
+                        'name' => $newSubmission['otra_region']
+                    ]);
                    
-                //     //update the departamento id value
-                //     $newSubmission['departamento'] = $departamento->id;
+                    //update the region id value
+                    $newSubmission['region'] = $departamento->id;
                 
-                // }
-                // if($newSubmission['municipio'] == 999){
+                }
+                
+                if($newSubmission['departamento'] == 999){
 
-                //     $municipio = Municipio::updateOrCreate([
-                //         'departamento_id' => $newSubmission['departamento'],
-                //         'name' => $newSubmission['otro_municipio']   
-                //     ]);
+                    $departamento = Departamento::updateOrCreate([
+                        'name' => $newSubmission['otro_departamento']
+                    ]);
                    
-                //     //update the municipio id value
-                //     $newSubmission['municipio'] = $municipio->id;
-                // }
+                    //update the departamento id value
+                    $newSubmission['departamento'] = $departamento->id;
                 
-                // if($newSubmission['comunidad'] == 999){
-                //     $location = explode(" ", $newSubmission['gps']);
-                //     $comunidad = Comunidad::updateOrCreate(
-                //         [
-                //             'municipio_id' => $newSubmission['municipio'], 
-                //             'name' => $newSubmission['otra_comunidad']
-                //         ],
-                //         [   
-                //             'latitude' => isset($location[0]) ? $location[0] : null,
-                //             'longitude' => isset($location[1]) ? $location[1] : null,
-                //             'altitude' => isset($location[2]) ? $location[2] : null
-                //         ]
-                //     );
-                //     $newSubmission['comunidad'] = $comunidad->id;
-                // }
+                }
+                if($newSubmission['municipio'] == 999){
+
+                    $municipio = Municipio::updateOrCreate([
+                        'departamento_id' => $newSubmission['departamento'],
+                        'name' => $newSubmission['otro_municipio']   
+                    ]);
+                   
+                    //update the municipio id value
+                    $newSubmission['municipio'] = $municipio->id;
+                }
+                
+                if($newSubmission['comunidad'] == 999){
+                    $location = explode(" ", $newSubmission['gps']);
+                    $comunidad = Comunidad::updateOrCreate(
+                        [
+                            'municipio_id' => $newSubmission['municipio'], 
+                            'name' => $newSubmission['otra_comunidad']
+                        ],
+                        [   
+                            'latitude' => isset($location[0]) ? $location[0] : null,
+                            'longitude' => isset($location[1]) ? $location[1] : null,
+                            'altitude' => isset($location[2]) ? $location[2] : null
+                        ]
+                    );
+                    $newSubmission['comunidad'] = $comunidad->id;
+                }
               
-                // if($newSubmission['registrar_parcela'] == 1){
-                //     $dataMap = DataMap::findorfail('parcela');
+                if($newSubmission['registrar_parcela'] == 1){
+                    $dataMap = DataMap::findorfail('parcela');
 
-                //     DataMapController::newRecord($dataMap, $newSubmission);
-                // } else {
-                //     $dataMap = DataMap::findorfail('parcela');
-                //     DataMapController::updateRecord($dataMap, $newSubmission, $newSubmission['parcela_id']);
-                // }
+                    DataMapController::newRecord($dataMap, $newSubmission);
+                } else {
+                    $dataMap = DataMap::findorfail('parcela');
+                    DataMapController::updateRecord($dataMap, $newSubmission, $newSubmission['parcela_id']);
+                }
 
                 if(Str::contains( $newSubmission['modulos'], 'A')){
                     $dataMap = DataMap::findorfail('A');
@@ -163,17 +161,27 @@ class GetDataFromKobo implements ShouldQueue
                         $cultivo_modules = explode(' ', $cultivo_modules);
                         $cultivo = $cultivo + $cultivo['modulo_cultivo_loop'];
                         unset($cultivo['modulo_cultivo_loop']);
-                       
-                       
+
                         foreach ($cultivo_modules as $cultivo_module) {
 
-                            $dataMap_cultivo_module = DataMap::findorfail($cultivo_module);
-                         
-                            $new_module = DataMapController::newRecord($dataMap_cultivo_module, $cultivo);    
+                            if($cultivo_module != 3){
+                                $dataMap_cultivo_module = DataMap::findorfail($cultivo_module);
+                                $new_module = DataMapController::newRecord($dataMap_cultivo_module, $cultivo);  
+
+                            } else {
+                                foreach ($cultivo['begin_repeat_OgRUOpAOf'] as $plaga) {
+                                    $dataMap_cultivo_module = DataMap::findorfail($cultivo_module);
+                                    $plaga['_id'] =  $newSubmission['_id'];
+                                    $plaga['cultivo_id'] =  $new_cultivo->id;
+                                    $new_module = DataMapController::newRecord($dataMap_cultivo_module, $plaga);
+                                }
+                                
+                            }  
                         }
                     }
-
                 }
+            }
+        }
     }
 
     public function deleteGroupName(Array $array)

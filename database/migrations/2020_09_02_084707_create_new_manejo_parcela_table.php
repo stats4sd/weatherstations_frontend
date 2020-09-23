@@ -15,8 +15,6 @@ class CreateNewManejoParcelaTable extends Migration
     {
         Schema::create('manejo_parcela', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('comunidad_id');
-            $table->string('parcela_id');
             $table->unsignedBigInteger('cultivo_id');
             $table->date('fecha_roturado_suelo')->nullable();
             $table->string('tipo_preparacion_roturado')->nullable();
@@ -38,14 +36,10 @@ class CreateNewManejoParcelaTable extends Migration
             $table->string('tipo_tazeo')->nullable();
             $table->date('fecha_poda')->nullable();
             $table->string('tipo_poda')->nullable();
-            $table->date('fecha_control_1')->nullable();
-            $table->string('tipo_control_1')->nullable();
-            $table->string('tipo_producto_1')->nullable();
-            $table->string('producto_1')->nullable();
-            $table->date('fecha_control_2')->nullable();
-            $table->string('tipo_control_2')->nullable();
-            $table->string('tipo_producto_2')->nullable();
-            $table->string('producto_2')->nullable();
+            $table->date('fecha_control_fitosanitario')->nullable();
+            $table->string('tipo_control_fitosanitario')->nullable();
+            $table->string('tipo_producto')->nullable();
+            $table->string('producto')->nullable();
             $table->unsignedBigInteger('submission_id');
             $table->timestamps();
         });

@@ -15,8 +15,6 @@ class CreateNewFenologiaTable extends Migration
     {
         Schema::create('fenologia', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('comunidad_id');
-            $table->string('parcela_id');
             $table->unsignedBigInteger('cultivo_id');
             $table->unsignedBigInteger('variedad_id')->nullable();
             $table->integer('epoca_siembra')->nullable();

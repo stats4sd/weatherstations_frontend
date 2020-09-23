@@ -15,6 +15,7 @@ class CreateLkpVariedadesTable extends Migration
     {
         Schema::create('lkp_variedades', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('lkp_cultivo_id');
             $table->string('name');
             $table->timestamps();
         });
