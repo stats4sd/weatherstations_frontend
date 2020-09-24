@@ -25,7 +25,8 @@
                         :parcelasData.sync="parcelasData"
                         :suelos.sync="suelos"
                         :manejo_parcelas.sync="manejo_parcelas"
-                        :plagas_y_enfermedades.sync="plagas_y_enfermedades"
+                        :plagas.sync="plagas"
+                        :enfermedades.sync="enfermedades"
                         :rendimentos.sync="rendimentos"
                         :fenologia.sync="fenologia"
                         :stations="stations" 
@@ -75,10 +76,16 @@
                                 <tables :data="manejo_parcelas.data"></tables>
                             </b-card-text>
                         </b-tab>
-                        <b-tab v-if="plagas_y_enfermedades.length!==0" title="Plagas y enfermedades">
+                        <b-tab v-if="plagas.length!==0" title="Plagas">
                             <b-card-text>
-                                <p v-if="plagas_y_enfermedades.length!==0">Showing {{plagas_y_enfermedades.to}} of {{plagas_y_enfermedades.total}} entries</p>
-                                <tables :data="plagas_y_enfermedades.data"></tables>
+                                <p v-if="plagas.length!==0">Showing {{plagas.to}} of {{plagas.total}} entries</p>
+                                <tables :data="plagas.data"></tables>
+                            </b-card-text>
+                        </b-tab>
+                        <b-tab v-if="enfermedades.length!==0" title="Enfermedades">
+                            <b-card-text>
+                                <p v-if="enfermedades.length!==0">Showing {{enfermedades.to}} of {{enfermedades.total}} entries</p>
+                                <tables :data="enfermedades.data"></tables>
                             </b-card-text>
                         </b-tab>
                         <b-tab v-if="rendimentos.length!==0" title="Rendimentos">
@@ -110,9 +117,9 @@ export default {
 
                 aggregations: [{label: 'Daily', value:'daily_data'}, {label: 'Ten days', value:'tendays_data'}, {label: 'Monthly', value:'monthly_data'}, {label: 'yearly', value:'yearly_data'}],
 
-                parcelasModules: [{label:'Suelos', value:'suelos'},{label:'Manejo de la parcela', value:'manejo_parcelas'}, {label:'Plagas y enfermedades', value:'plagas_y_enfermedades'}, {label:'Rendimentos', value:'rendimentos'} ],
+                parcelasModules: [{label:'Suelos', value:'suelos'},{label:'Manejo de la parcela', value:'manejo_parcelas'}, {label:'Plagas', value:'plagas'}, {label:'Enfermedades', value:'enfermedades'}, {label:'Rendimentos', value:'rendimentos'} ],
 
-                cultivosModules: [{label:'Fenologia', value:'fenologia'},{label:'Manejo de la parcela', value:'manejo_parcelas'}, {label:'Plagas y enfermedades', value:'plagas_y_enfermedades'}, {label:'Rendimentos', value:'rendimentos'} ],
+                cultivosModules: [{label:'Fenologia', value:'fenologia'},{label:'Manejo de la parcela', value:'manejo_parcelas'}, {label:'Plagas', value:'plagas'}, {label:'Enfermedades', value:'enfermedades'}, {label:'Rendimentos', value:'rendimentos'} ],
       
                 startDate:null,
                 endDate:null,
@@ -121,7 +128,8 @@ export default {
                 fenologia:[],
                 suelos:[],
                 manejo_parcelas:[],
-                plagas_y_enfermedades:[],
+                plagas:[],
+                enfermedades:[],
                 parcelas:[],
                 stations:[],
                 departamentos:[],

@@ -35,6 +35,11 @@ class Comunidad extends Model
     |--------------------------------------------------------------------------
     */
 
+    public function municipio()
+    {
+        return $this->belongsTo('App\Models\Municipio');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES

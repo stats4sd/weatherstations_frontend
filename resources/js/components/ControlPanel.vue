@@ -63,7 +63,8 @@
                 parcelas:[],
                 suelos: [],
                 manejo_parcelas: [],
-                plagas_y_enfermedades: [],
+                plagas: [],
+                enfermedades: [],
                 rendimentos: [],
                 fenologia: [],
                 parcelasData:[],
@@ -114,8 +115,11 @@
             manejo_parcelas(){
                 this.$emit('update:manejo_parcelas', this.manejo_parcelas);
             },
-            plagas_y_enfermedades(){
-                this.$emit('update:plagas_y_enfermedades', this.plagas_y_enfermedades);
+            plagas(){
+                this.$emit('update:plagas', this.plagas);
+            },
+            enfermedades(){
+                this.$emit('update:enfermedades', this.enfermedades);
             },
             rendimentos(){
                 this.$emit('update:rendimentos', this.rendimentos);
@@ -155,7 +159,8 @@
                     this.parcelasData = result.data.parcelas;
                     this.suelos = result.data.suelos;
                     this.manejo_parcelas = result.data.manejo_parcelas;
-                    this.plagas_y_enfermedades = result.data.plagas_y_enfermedades;
+                    this.plagas = result.data.plagas;
+                    this.enfermedades = result.data.enfermedades;
                     this.rendimentos = result.data.rendimentos;
                     this.fenologia = result.data.fenologia;
                 

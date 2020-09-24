@@ -85,7 +85,7 @@ class GetDataFromKobo implements ShouldQueue
                     ]);
                    
                     //update the region id value
-                    $newSubmission['region'] = $departamento->id;
+                    $newSubmission['region'] = $region->id;
                 
                 }
                 

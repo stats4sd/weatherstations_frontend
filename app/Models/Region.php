@@ -35,6 +35,11 @@ class Region extends Model
     |--------------------------------------------------------------------------
     */
 
+    public function departamentos()
+    {
+        return $this->hasMany('App\Models\Departamento');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES

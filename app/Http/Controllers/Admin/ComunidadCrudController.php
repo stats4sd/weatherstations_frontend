@@ -29,7 +29,19 @@ class ComunidadCrudController extends CrudController
     protected function setupListOperation()
     {
         // TODO: remove setFromDb() and manually define Columns, maybe Filters
+        $this->crud->setColumns([
+
+            [// 1-n relationship
+               'label'     => 'Municipio', // Table column heading
+               'type'      => 'select',
+               'name'      => 'municipio_id', // the column that contains the ID of that connected entity;
+               'entity'    => 'municipio', // the method that defines the relationship in your Model
+               'attribute' => 'name', // foreign key attribute that is shown to user
+               'model'     => "App\Models\Municipio", // foreign key model
+            ]
+        ]);
         $this->crud->setFromDb();
+           
     }
 
     protected function setupCreateOperation()
@@ -37,6 +49,19 @@ class ComunidadCrudController extends CrudController
         $this->crud->setValidation(ComunidadRequest::class);
 
         // TODO: remove setFromDb() and manually define Fields
+        $this->crud->addFields([
+            [  // Select2
+               'label'     => "Municipio",
+               'type'      => 'select2',
+               'name'      => 'municipio_id', // the db column for the foreign key
+               // optional
+               'entity'    => 'municipio', // the method that defines the relationship in your Model
+               'model'     => "App\Models\Municipio", // foreign key model
+               'attribute' => 'name', // foreign key attribute that is shown to user
+            ],
+
+
+        ]);
         $this->crud->setFromDb();
     }
 

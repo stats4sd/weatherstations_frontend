@@ -35,6 +35,16 @@ class Departamento extends Model
     |--------------------------------------------------------------------------
     */
 
+    public function region()
+    {
+        return $this->belongsTo('App\Models\Region');
+    }
+
+    public function municipios()
+    {
+        return $this->hasMany('App\Models\Municipio');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES
