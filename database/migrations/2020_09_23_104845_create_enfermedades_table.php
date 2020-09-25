@@ -16,7 +16,7 @@ class CreateEnfermedadesTable extends Migration
         Schema::create('enfermedades', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('cultivo_id');
-            $table->string('enfermedad_nombre')->nullable();
+            $table->string('name')->nullable();
             $table->unsignedBigInteger('submission_id');
             $table->timestamps();
         });

@@ -16,8 +16,13 @@ class CreatePlagasTable extends Migration
         Schema::create('plagas', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('cultivo_id');
-            $table->string('plaga_nombre')->nullable();
+            $table->string('name')->nullable();
             $table->decimal('cantidad_insectos_m2')->nullable();
+            $table->decimal('cantidad_larvas')->nullable();
+            $table->integer('mosca_numero')->nullable();
+            $table->integer('mosca_trampas')->nullable();
+            $table->integer('mosca_dias')->nullable();
+            $table->integer('presencia_mosca')->nullable();
             $table->date('plaga_fecha')->nullable();
             $table->unsignedBigInteger('submission_id');
             $table->timestamps();

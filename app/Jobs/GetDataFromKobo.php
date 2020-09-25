@@ -92,6 +92,7 @@ class GetDataFromKobo implements ShouldQueue
                 if($newSubmission['departamento'] == 999){
 
                     $departamento = Departamento::updateOrCreate([
+                        'region_id' => $newSubmission['region'],
                         'name' => $newSubmission['otro_departamento']
                     ]);
                    
@@ -169,7 +170,7 @@ class GetDataFromKobo implements ShouldQueue
                                 $new_module = DataMapController::newRecord($dataMap_cultivo_module, $cultivo);  
 
                             } else {
-                                foreach ($cultivo['begin_repeat_OgRUOpAOf'] as $plaga) {
+                                foreach ($cultivo['plaga_repeat'] as $plaga) {
                                     $dataMap_cultivo_module = DataMap::findorfail($cultivo_module);
                                     $plaga['_id'] =  $newSubmission['_id'];
                                     $plaga['cultivo_id'] =  $new_cultivo->id;
