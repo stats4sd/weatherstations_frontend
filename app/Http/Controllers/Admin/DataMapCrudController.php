@@ -44,8 +44,8 @@ class DataMapCrudController extends CrudController
                 'name' => 'variables',
                 'label' => 'Number of variables',
                 'type' => 'closure',
-                'function' => function($entity) {
-                    if(isset($entity->variables) && is_countable($entity->variables)) {
+                'function' => function ($entity) {
+                    if (isset($entity->variables) && is_countable($entity->variables)) {
                         return count($entity->variables);
                     }
                     return '';
@@ -56,23 +56,33 @@ class DataMapCrudController extends CrudController
 
     protected function setupCreateOperation()
     {
-       $this->crud->setValidation(DataMapStoreRequest::class);
+        $this->crud->setValidation(DataMapStoreRequest::class);
 
         $this->crud->addFields([
             [
+                'name' => 'intro',
+                'type' => 'custom_html',
+                'value' => '<h4>Data Mapping - Form Module to SQL Table</h4>
+                            <ul>
+                            <li>The data map here tells the platform how to store the data coming from ODK.
+                            <li>Each module of the ODK form must have a data map, which corresponds to a single MySQL table.</li>
+                            <li>All variables to be stored in the table should be listed below.</li>
+                            </ul>',
+            ],
+            [
                 'name' => 'id',
                 'type' => 'text',
-                'label' => 'value',
+                'label' => 'Give the ID of the datamap. This should be the same as the name of the module in the modules choice list for the "modulos" or "modulos_cultivo" questions in the ODK form',
             ],
             [
                 'name' => 'title',
                 'type' => 'text',
-                'label' => 'label',
+               'label' => 'Give the title / label for the data map',
             ],
             [
                 'name' => 'model',
                 'type' => 'select2_from_array',
-                'label' => 'What Data Table will this form populate?',
+                'label' => 'What SQL Table will this module populate?',
                 'options' => [
                     'Parcela' => 'parcela',
                     'Suelo' => 'suelo',
@@ -89,27 +99,23 @@ class DataMapCrudController extends CrudController
                 'name' => 'location',
                 'type' => 'boolean',
                 'hint' => 'The ODK variable name should be `location`',
-                'label' => 'Does this data map include a `location` field?',
+                'label' => 'Does this data map include a `location` field? (Note, this will probably be NO for every module except Parcela...)',
             ],
             [
                 'name' => 'variables',
                 'type' => 'repeatable',
                 'label' => 'Add the other variables the data map should look for in the ODK Form',
-                'hint' => 'Every Soils form will automatically look for the following variables:
-                    <ul>
-                        <li>sample_id</li>
-                        <li>no_bar_code (used as the sample_id if no bar code was scanned)</li>
-                    </ul>',
                 'fields' => [
                     [
                         'name' => 'name',
-                        'label' => 'Variable Name',
+                        'label' => 'ODK Variable Name',
+                        'hint' => 'This should be taken from the "name" column of the XLSForm',
                         'type' => 'text',
                         'wrapper' => ['class' => 'form-group col-md-4'],
                     ],
                     [
                         'name' => 'column_name',
-                        'label' => 'Column Name',
+                        'label' => 'MySQL Column Name',
                         'type' => 'text',
                         'wrapper' => ['class' => 'form-group col-md-4'],
                     ],
@@ -132,7 +138,8 @@ class DataMapCrudController extends CrudController
                     ],
                     [
                         'name' => 'in_db',
-                        'label' => 'Check only if the variable is in the database.',
+                        'label' => 'Check only if the variable is confirmed to be in the database.',
+                        'hint' => 'If this is checked and the variable is not found in MySQL, it will break the importer! So if in doubt, do not tick!',
                         'type' => 'checkbox',
                         'value' => 0,
                     ],
@@ -165,7 +172,7 @@ class DataMapCrudController extends CrudController
             [
                 'name' => 'model',
                 'type' => 'text',
-                'label' => 'What Data Table will this form populate?',
+                'label' => 'What SQL Table will this module populate?',
             ],
             [
                 'name' => 'location',
@@ -177,10 +184,11 @@ class DataMapCrudController extends CrudController
                 'label' => 'Variables',
                 'type' => 'table',
                 'columns' => [
-                    'name' => 'Name',
-                    'column_name' => 'Column Name',
-                    'type' => 'Type'
-                ]
+                    'name' => 'ODK Variable Name',
+                    'column_name' => 'MySQL Column Name',
+                    'type' => 'Type',
+                    'in_db' => 'Is the variable present in the database?',
+                ],
             ]
         ]);
     }
