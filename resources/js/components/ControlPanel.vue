@@ -58,14 +58,14 @@
                 weather:[],
                 stationsSelected:[],
                 aggregationSelected:[],
-                pachagrama:[],
                 municipiosFilter:[],
                 comunidadsFilter:[],
                 parcelas:[],
                 suelos: [],
                 manejo_parcelas: [],
-                plagas_y_enfermedades: [],
-                produccion: [],
+                plagas: [],
+                enfermedades: [],
+                rendimentos: [],
                 fenologia: [],
                 parcelasData:[],
            
@@ -101,9 +101,6 @@
             aggregationSelected() {
                 this.$emit('update:aggregationSelected', this.aggregationSelected)
             },
-            pachagrama() {
-                this.$emit('update:pachagrama', this.pachagrama)
-            },
             departamentosSelected() {
        
                 this.municipiosFilter = this.municipios.filter(municipio => this.departamentosSelected.includes(municipio.departamento_id));
@@ -118,11 +115,14 @@
             manejo_parcelas(){
                 this.$emit('update:manejo_parcelas', this.manejo_parcelas);
             },
-            plagas_y_enfermedades(){
-                this.$emit('update:plagas_y_enfermedades', this.plagas_y_enfermedades);
+            plagas(){
+                this.$emit('update:plagas', this.plagas);
             },
-            produccion(){
-                this.$emit('update:produccion', this.produccion);
+            enfermedades(){
+                this.$emit('update:enfermedades', this.enfermedades);
+            },
+            rendimentos(){
+                this.$emit('update:rendimentos', this.rendimentos);
             },
             fenologia(){
                 this.$emit('update:fenologia', this.fenologia);
@@ -156,12 +156,12 @@
                 })
                 .then((result) => {
                     this.weather = result.data.weather;
-                    this.pachagrama = result.data.pachagrama;
                     this.parcelasData = result.data.parcelas;
                     this.suelos = result.data.suelos;
                     this.manejo_parcelas = result.data.manejo_parcelas;
-                    this.plagas_y_enfermedades = result.data.plagas_y_enfermedades;
-                    this.produccion = result.data.produccion;
+                    this.plagas = result.data.plagas;
+                    this.enfermedades = result.data.enfermedades;
+                    this.rendimentos = result.data.rendimentos;
                     this.fenologia = result.data.fenologia;
                 
                 }, (error) => {

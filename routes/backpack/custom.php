@@ -36,18 +36,27 @@ Route::group([
     Route::crud('upload', 'UploadCrudController');
     Route::crud('dataTemplate', 'DataTemplateCrudController');
 
+    Route::crud('region', 'RegionCrudController');
     Route::crud('departamento', 'DepartamentoCrudController');
     Route::crud('municipio', 'MunicipioCrudController');
     Route::crud('comunidad', 'ComunidadCrudController');
+    
     Route::crud('cultivo', 'CultivoCrudController');
     Route::crud('variedad', 'VariedadCrudController');
-    Route::crud('pachagrama', 'PachagramaCrudController');
     Route::crud('fenologia', 'FenologiaCrudController');
     Route::crud('parcela', 'ParcelaCrudController');
     Route::crud('suelo', 'SueloCrudController');
     Route::crud('manejoparcela', 'ManejoParcelaCrudController');
-    Route::crud('plagasyenfermedades', 'PlagasYEnfermedadesCrudController');
-    Route::crud('produccion', 'ProduccionCrudController');
+    Route::crud('plaga', 'PlagaCrudController');
+    Route::crud('enfermedade', 'EnfermedadeCrudController');
+    Route::crud('rendimento', 'RendimentoCrudController');
     Route::crud('submission', 'SubmissionCrudController');
+
     Route::crud('dailydatapreview', 'DailyDataPreviewCrudController');
+    Route::crud('xlsform', 'XlsformCrudController');
+    Route::crud('datamap', 'DataMapCrudController');
+    Route::post('xlsform/{xlsform}/deploytokobo', 'XlsformCrudController@deployToKobo');
+    Route::post('xlsform/{xlsform}/syncdata', 'XlsformCrudController@syncData');
+    Route::post('xlsform/{xlsform}/archive', 'XlsformCrudController@archiveOnKobo');
+
 }); // this should be the absolute last line of this file

@@ -46,6 +46,8 @@ Route::post('files.store', 'FileController@store');
 Route::get('admin/dashboard', 'DashboardController@index');
 Route::post('admin/dashboard/charts', 'DashboardController@charts');
 
+Route::get('xlsforms/{xlsform}/downloadsubmissions', 'SubmissionController@download')->name('xlsforms.downloadsubmissions');
+
 Route::view('qr-codes', 'qr_code')->name('qr-codes');
 
 Route::post('qr-newcodes', 'QrController@newCodes')->name('qr-newcodes');

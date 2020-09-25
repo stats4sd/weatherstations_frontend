@@ -34,7 +34,17 @@ class Municipio extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+    public function departamento()
+    {
+        return $this->belongsTo('App\Models\Departamento');
+    }
 
+    public function comunidades()
+    {
+        return $this->hasMany('App\Models\Comunidad');
+    }
+
+    
     /*
     |--------------------------------------------------------------------------
     | SCOPES

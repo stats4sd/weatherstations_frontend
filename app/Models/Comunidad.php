@@ -18,7 +18,7 @@ class Comunidad extends Model
     protected $table = 'comunidad';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
-    protected $guarded = ['id'];
+    protected $guarded = [];
     // protected $fillable = [];
     // protected $hidden = [];
     // protected $dates = [];
@@ -34,6 +34,11 @@ class Comunidad extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+
+    public function municipio()
+    {
+        return $this->belongsTo('App\Models\Municipio');
+    }
 
     /*
     |--------------------------------------------------------------------------
