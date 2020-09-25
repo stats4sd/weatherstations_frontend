@@ -121,8 +121,8 @@ class DataMapController extends Controller
             }
 
             if(!is_null($value)) {
-            	//look the label name that matches to column name 
-                $newModel[$variable['label']] = $value;
+            	//look the column name that matches to the variable name from the survey 
+                $newModel[$variable['column_name']] = $value;
             }
 		}
 

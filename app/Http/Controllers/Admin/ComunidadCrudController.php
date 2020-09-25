@@ -40,6 +40,7 @@ class ComunidadCrudController extends CrudController
                'model'     => "App\Models\Municipio", // foreign key model
             ]
         ]);
+
         $this->crud->setFromDb();
            
     }
@@ -58,8 +59,7 @@ class ComunidadCrudController extends CrudController
                'entity'    => 'municipio', // the method that defines the relationship in your Model
                'model'     => "App\Models\Municipio", // foreign key model
                'attribute' => 'name', // foreign key attribute that is shown to user
-            ],
-
+            ]
 
         ]);
         $this->crud->setFromDb();

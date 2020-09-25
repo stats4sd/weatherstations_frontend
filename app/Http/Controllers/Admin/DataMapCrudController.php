@@ -108,8 +108,8 @@ class DataMapCrudController extends CrudController
                         'wrapper' => ['class' => 'form-group col-md-4'],
                     ],
                     [
-                        'name' => 'label',
-                        'label' => 'Label',
+                        'name' => 'column_name',
+                        'label' => 'Column Name',
                         'type' => 'text',
                         'wrapper' => ['class' => 'form-group col-md-4'],
                     ],
@@ -178,7 +178,7 @@ class DataMapCrudController extends CrudController
                 'type' => 'table',
                 'columns' => [
                     'name' => 'Name',
-                    'label' => 'Label',
+                    'column_name' => 'Column Name',
                     'type' => 'Type'
                 ]
             ]

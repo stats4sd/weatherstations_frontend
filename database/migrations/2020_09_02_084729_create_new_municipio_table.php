@@ -28,6 +28,6 @@ class CreateNewMunicipioTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('new_municipio');
+        Schema::dropIfExists('municipio');
     }
 }
