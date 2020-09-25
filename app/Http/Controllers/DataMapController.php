@@ -20,8 +20,6 @@ class DataMapController extends Controller
 	    $newItem->fill($newModel);
 	    $newItem->save();
         return $newItem;
-
-    
     }
 
     //update exists plot
@@ -31,9 +29,6 @@ class DataMapController extends Controller
     	$class = 'App\\Models\\'.$dataMap->model;
 	    $class::where('id', $id)->update($model);
         return $newItem;
-
-
-
     }
 
     public static function createNewModel(DataMap $dataMap, Array $data)

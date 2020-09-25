@@ -165,17 +165,27 @@ class GetDataFromKobo implements ShouldQueue
 
                         foreach ($cultivo_modules as $cultivo_module) {
 
-                            if($cultivo_module != 3){
-                                $dataMap_cultivo_module = DataMap::findorfail($cultivo_module);
-                                $new_module = DataMapController::newRecord($dataMap_cultivo_module, $cultivo);  
+                            if($cultivo_module == 3){
+                                if($cultivo['problema'] == 'plagas' || $cultivo['problema'] == 'ambas') {
+                                    $cultivo_module = 'plagas';
+                                    
+                                    foreach ($cultivo['plaga_repeat'] as $plaga) {
+                                        $dataMap_cultivo_module = DataMap::findorfail($cultivo_module);
+                                        $plaga['_id'] =  $newSubmission['_id'];
+                                        $plaga['cultivo_id'] =  $new_cultivo->id;
+                                        $new_module = DataMapController::newRecord($dataMap_cultivo_module, $plaga);
+                                    }
+                                }
+                                if($cultivo['problema'] == 'plagas' || $cultivo['enfermedades'] == 'ambas') {
+                                    $cultivo_module = 'enfermedades';
+                                    $dataMap_cultivo_module = DataMap::findorfail($cultivo_module);
+                                    $new_module = DataMapController::newRecord($dataMap_cultivo_module, $cultivo);  
+
+                                }
 
                             } else {
-                                foreach ($cultivo['plaga_repeat'] as $plaga) {
-                                    $dataMap_cultivo_module = DataMap::findorfail($cultivo_module);
-                                    $plaga['_id'] =  $newSubmission['_id'];
-                                    $plaga['cultivo_id'] =  $new_cultivo->id;
-                                    $new_module = DataMapController::newRecord($dataMap_cultivo_module, $plaga);
-                                }
+                                $dataMap_cultivo_module = DataMap::findorfail($cultivo_module);
+                                $new_module = DataMapController::newRecord($dataMap_cultivo_module, $cultivo);  
                                 
                             }  
                         }

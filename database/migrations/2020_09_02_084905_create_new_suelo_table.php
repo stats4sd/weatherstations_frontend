@@ -18,7 +18,7 @@ class CreateNewSueloTable extends Migration
             $table->string('parcela_id');
             $table->string('materia_organica');
             $table->string('textura');
-            $table->integer('pH');
+            $table->decimal('pH');
             $table->unsignedBigInteger('submission_id');
             $table->timestamps();
         });
