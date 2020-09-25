@@ -40,13 +40,6 @@ class Xlsform extends Model
         return $this->hasMany(Submission::class);
     }
 
-    public function data_map ()
-    {
-       return $this->belongsTo(DataMap::class);
-    }
-
-
-
     public function setXlsfileAttribute($value)
     {
         $attribute_name = "xlsfile";

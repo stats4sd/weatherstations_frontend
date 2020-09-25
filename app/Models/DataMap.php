@@ -37,11 +37,7 @@ class DataMap extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-    public function xls_forms ()
-    {
-       return $this->hasMany(Xlsform::class);
-    }
-
+    
     /*
     |--------------------------------------------------------------------------
     | SCOPES

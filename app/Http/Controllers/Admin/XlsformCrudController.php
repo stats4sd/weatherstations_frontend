@@ -56,11 +56,6 @@ class XlsformCrudController extends CrudController
                 'type' => 'date',
             ],
             [
-                'name' => 'data_map_id',
-                'type' => 'text',
-                'label' => 'Data Map',
-            ],
-            [
                 'name' => 'kobo_id',
                 'label' => 'View on Kobotools',
                 'type' => 'closure',
@@ -110,13 +105,6 @@ class XlsformCrudController extends CrudController
                 'upload' => true,
                 'disk' => 'public' ,
                 'label' => 'Upload the XLS Form file',
-            ],
-            [
-                'name' => 'data_map_id',
-                'type' => 'relationship',
-                'label' => 'Which data table does this form link to?',
-                'hint' => 'This determines how the variables from the XLS form are matched to the database `sample` and `analysis` tables',
-                'default' => 'none',
             ],
             [
                 'name' => 'live',

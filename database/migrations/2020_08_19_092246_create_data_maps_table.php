@@ -20,9 +20,6 @@ class CreateDataMapsTable extends Migration
             $table->boolean('location')->default(0);
             $table->timestamps();
         });
-        Schema::table('xls_forms', function (Blueprint $table) {
-            $table->string('data_map_id');
-        });
     }
 
     /**
