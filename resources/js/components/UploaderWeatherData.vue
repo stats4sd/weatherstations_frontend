@@ -280,7 +280,6 @@ const rootUrl = process.env.MIX_APP_URL
                 busy_store: false,
                 busy_clean: false,
                 error_data: null,
-                all_data: null,
                 success: null,
                 error: null,
                 error_temp:false,
