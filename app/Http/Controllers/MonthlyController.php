@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Monthly;
 use Illuminate\Http\Request;
 
 class MonthlyController extends Controller

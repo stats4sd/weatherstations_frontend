@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\NewDataVariableSpotted;
-use App\Models\Comunidad;
 use App\Models\DataMap;
 use App\Models\Parcela;
+use App\Models\Comunidad;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use App\Events\NewDataVariableSpotted;
+use App\Jobs\ImportAttachmentFromKobo;
 
 class DataMapController extends Controller
 {
@@ -28,7 +29,7 @@ class DataMapController extends Controller
     	$model = DataMapController::createNewModel($dataMap, $data);
     	$class = 'App\\Models\\'.$dataMap->model;
 	    $class::where('id', $id)->update($model);
-        return $newItem;
+        return $model;
     }
 
     public static function createNewModel(DataMap $dataMap, Array $data)
