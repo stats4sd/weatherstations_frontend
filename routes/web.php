@@ -31,7 +31,6 @@ Route::post('files', 'FileController@store');
 Route::resource('stations', 'StationController');
 
 Route::post('show', 'DataController@show');
-Route::post('all_data', 'DataController@allData');
 
 Route::post('storeFile/{uploader_id}', 'FileController@storeFile');
 Route::post('cleanTable/{uploader_id}', 'FileController@cleanTable');

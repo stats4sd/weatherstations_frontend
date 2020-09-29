@@ -67,7 +67,7 @@ class FileController extends Controller
             
             //python script accepts 3 arguments in this order: scriptPath, path_name, station_id
 
-            $process = new Process("pipenv run python3 {$scriptPath} {$path_name} {$station} {$request->selectedUnitTemp} {$request->selectedUnitPres} {$request->selectedUnitWind} {$request->selectedUnitRain} {$uploader_id}");
+            $process = new Process(['pipenv', 'run', 'python3', $scriptPath, $path_name, $station, $request->selectedUnitTemp, $request->selectedUnitPres, $request->selectedUnitWind, $request->selectedUnitRain, $uploader_id]);
 
             $process->setTimeout(500);
 
@@ -218,7 +218,7 @@ class FileController extends Controller
 
         $scriptPath = base_path() . '/scripts/storeData.py';
 
-        $process = new Process("pipenv run python3 {$scriptPath} {$uploader_id}");
+        $process = new Process(['pipenv', 'run', 'python3', $scriptPath, $uploader_id]);
 
         $process->run();
 

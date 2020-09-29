@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comunidad;
 use App\Models\Daily;
 use App\Models\Data;
 use App\Models\DataTemplate;
@@ -89,11 +90,11 @@ class DataController extends Controller
                         $manejo_parcelas = ManejoParcela::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
 
                     }
-                    if($cultivo_modules=='plagas'){
+                    if($parcelas_modules=='plagas'){
                         $plagas = Plaga::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
 
                     }
-                    if($cultivo_modules=='enfermedades'){
+                    if($parcelas_modules=='enfermedades'){
                         $enfermedades = Enfermedade::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
 
 
@@ -312,15 +313,6 @@ class DataController extends Controller
 
         $path_download =  Storage::url('/data/'.$file_name);
         return response()->json(['path' => $path_download]);
-    }
-
-    public function allData()
-    {
-
-        $all_data = DataTemplate::paginate(100);
-
-        return $all_data->toJson();
-
     }
 
 }
