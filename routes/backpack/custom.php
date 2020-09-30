@@ -17,7 +17,7 @@ Route::group([
     'middleware' => ['web', config('backpack.base.middleware_key', 'admin')],
     'namespace'  => 'App\Http\Controllers\Admin',
 ], function () { // custom admin routes
-    Route::crud('user','UserCrudController');
+    Route::crud('user', 'UserCrudController');
     Route::crud('data', 'DataCrudController');
 
     Route::post('data/deleteByFilters', 'DataCrudController@deleteByFilters');
@@ -27,7 +27,7 @@ Route::group([
     Route::post('monthly/download', 'MonthlyCrudController@download');
     Route::post('yearly/download', 'YearlyCrudController@download');
 
-    
+
     Route::crud('monthly', 'MonthlyCrudController');
     Route::crud('station', 'StationCrudController');
     Route::crud('yearly', 'YearlyCrudController');
@@ -40,9 +40,8 @@ Route::group([
     Route::crud('departamento', 'DepartamentoCrudController');
     Route::crud('municipio', 'MunicipioCrudController');
     Route::crud('comunidad', 'ComunidadCrudController');
-    
+
     Route::crud('cultivo', 'CultivoCrudController');
-    Route::crud('variedad', 'VariedadCrudController');
     Route::crud('fenologia', 'FenologiaCrudController');
     Route::crud('parcela', 'ParcelaCrudController');
     Route::crud('suelo', 'SueloCrudController');
@@ -59,4 +58,7 @@ Route::group([
     Route::post('xlsform/{xlsform}/syncdata', 'XlsformCrudController@syncData');
     Route::post('xlsform/{xlsform}/archive', 'XlsformCrudController@archiveOnKobo');
 
+    Route::crud('lkpcultivo', 'LkpCultivoCrudController');
+    Route::crud('lkpvariedad', 'LkpVariedadCrudController');
+    Route::crud('muestrasuelo', 'MuestraSueloCrudController');
 }); // this should be the absolute last line of this file

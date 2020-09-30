@@ -4,8 +4,9 @@ namespace App\Models;
 
 use App\Models\DataMap;
 use App\Models\Submission;
-use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Model;
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 
 class Xlsform extends Model
 {
@@ -18,12 +19,8 @@ class Xlsform extends Model
     */
 
     protected $table = 'xls_forms';
-    // protected $primaryKey = 'id';
-    // public $timestamps = false;
     protected $guarded = ['id'];
-    // protected $fillable = [];
-    // protected $hidden = [];
-    // protected $dates = [];
+
 
     protected $casts = [
         'media' => 'array'
@@ -35,7 +32,7 @@ class Xlsform extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
-    public function submissions ()
+    public function submissions()
     {
         return $this->hasMany(Submission::class);
     }
@@ -79,7 +76,6 @@ class Xlsform extends Model
 
             // 3. Save the complete path to the database
             $this->attributes[$attribute_name] = $file_path;
-
         }
     }
 
@@ -94,7 +90,7 @@ class Xlsform extends Model
         $this->uploadMultipleFilesToDisk($value, $attribute_name, $disk, $destination_path);
     }
 
-     public function uploadMultipleFilesToDisk($value, $attribute_name, $disk, $destination_path)
+    public function uploadMultipleFilesToDisk($value, $attribute_name, $disk, $destination_path)
     {
         $request = \Request::instance();
         if (! is_array($this->{$attribute_name})) {
@@ -109,7 +105,7 @@ class Xlsform extends Model
         if ($files_to_clear) {
             foreach ($files_to_clear as $key => $filename) {
                 \Storage::disk($disk)->delete($filename);
-                $attribute_value = array_where($attribute_value, function ($value, $key) use ($filename) {
+                $attribute_value = Arr::where($attribute_value, function ($value, $key) use ($filename) {
                     return $value != $filename;
                 });
             }
@@ -121,7 +117,7 @@ class Xlsform extends Model
                 if ($file->isValid()) {
 
                     // 1. Move the new file to the correct path with the original name
-                    $file_path = $file->storeAs($destination_path,$file->getClientOriginalName(), $disk);
+                    $file_path = $file->storeAs($destination_path, $file->getClientOriginalName(), $disk);
 
                     // 2. Add the public path to the database
                     $attribute_value[] = $file_path;
@@ -137,24 +133,6 @@ class Xlsform extends Model
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
-    |--------------------------------------------------------------------------
-    */
-
-    /*
-    |--------------------------------------------------------------------------
-    | SCOPES
-    |--------------------------------------------------------------------------
-    */
-
-    /*
-    |--------------------------------------------------------------------------
-    | ACCESSORS
-    |--------------------------------------------------------------------------
-    */
-
-    /*
-    |--------------------------------------------------------------------------
-    | MUTATORS
     |--------------------------------------------------------------------------
     */
 }

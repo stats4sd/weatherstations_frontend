@@ -5,7 +5,7 @@ namespace App\Models;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 
-class Rendimento extends Model
+class LkpCultivo extends Model
 {
     use CrudTrait;
 
@@ -15,10 +15,8 @@ class Rendimento extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'rendimentos';
-
+    protected $table = 'lkp_cultivos';
     protected $guarded = ['id'];
-
 
     /*
     |--------------------------------------------------------------------------
@@ -26,8 +24,13 @@ class Rendimento extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function cultivo()
+    public function cultivos()
     {
-        return $this->belongsTo(Cultivo::class);
+        return $this->hasMany(Cultivos::class);
+    }
+
+    public function variedad()
+    {
+        return $this->hasMany(VariedadList::class);
     }
 }

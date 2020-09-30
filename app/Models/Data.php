@@ -17,27 +17,20 @@ class Data extends Model
     |--------------------------------------------------------------
     */
 
-   # use HasCompositePrimaryKey;
+    # use HasCompositePrimaryKey;
     protected $primaryKey = 'id';
     protected $table = 'data';
     protected $guarded = ['id'];
-    //protected $fillable = ['id_station'];
 
-    
-    /*
-    |--------------------------------------------------------------------------
-    | FUNCTIONS
-    |--------------------------------------------------------------------------
-    */
 
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-    public function station ()
+    public function station()
     {
-        return $this->belongsTo(Station::class,'id_station');
+        return $this->belongsTo(Station::class, 'id_station');
     }
 
     /*

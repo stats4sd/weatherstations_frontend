@@ -17,18 +17,8 @@ class Monthly extends Model
     */
 
     protected $table = 'monthly_data';
-    // protected $primaryKey = 'id';
-    // public $timestamps = false;
-    // protected $guarded = ['id'];
     protected $fillable = [];
-    // protected $hidden = [];
-    // protected $dates = [];
 
-    /*
-    |--------------------------------------------------------------------------
-    | FUNCTIONS
-    |--------------------------------------------------------------------------
-    */
 
     /*
     |--------------------------------------------------------------------------
