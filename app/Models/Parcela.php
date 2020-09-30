@@ -17,19 +17,10 @@ class Parcela extends Model
     */
 
     protected $table = 'parcela';
-    // protected $primaryKey = 'id';
-    // public $timestamps = false;
+    public $incrementing = false;
     protected $guarded = [];
-    // protected $fillable = [];
-    // protected $hidden = [];
-    // protected $dates = [];
-    protected $casts = ['poligono_gps' => 'array'];
 
-    /*
-    |--------------------------------------------------------------------------
-    | FUNCTIONS
-    |--------------------------------------------------------------------------
-    */
+    protected $casts = ['poligono_gps' => 'array'];
 
     /*
     |--------------------------------------------------------------------------
@@ -40,24 +31,9 @@ class Parcela extends Model
     {
         return $this->belongsTo(Submission::class, 'submission_id');
     }
-   
 
-    /*
-    |--------------------------------------------------------------------------
-    | SCOPES
-    |--------------------------------------------------------------------------
-    */
-
-    /*
-    |--------------------------------------------------------------------------
-    | ACCESSORS
-    |--------------------------------------------------------------------------
-    */
-
-    /*
-    |--------------------------------------------------------------------------
-    | MUTATORS
-    |--------------------------------------------------------------------------
-    */
-
+    public function cultivos()
+    {
+        return $this->hasMany(Cultivo::class);
+    }
 }

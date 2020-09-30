@@ -15,7 +15,7 @@ namespace App{
  * App\Daily
  *
  * @property int|null $id
- * @property string|null $fecha
+ * @property string $fecha
  * @property int|null $id_station
  * @property string|null $max_temperatura_interna
  * @property string|null $min_temperatura_interna
@@ -140,6 +140,7 @@ namespace App\Models{
  * @property string|null $propiedad_variedad
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Parcela $parcela
  * @method static \Illuminate\Database\Eloquent\Builder|Cultivo newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Cultivo newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Cultivo query()
@@ -160,7 +161,7 @@ namespace App\Models{
  * App\Models\Daily
  *
  * @property int|null $id
- * @property string|null $fecha
+ * @property string $fecha
  * @property int|null $id_station
  * @property string|null $max_temperatura_interna
  * @property string|null $min_temperatura_interna
@@ -475,7 +476,7 @@ namespace App\Models{
 /**
  * App\Models\DataTemplate
  *
- * @property string|null $fecha_hora
+ * @property string $fecha_hora
  * @property int $id
  * @property int|null $intervalo
  * @property string|null $temperatura_interna
@@ -784,9 +785,9 @@ namespace App\Models{
  * App\Models\Monthly
  *
  * @property int|null $id
- * @property string|null $fecha
- * @property string|null $year
- * @property string|null $month
+ * @property string $fecha
+ * @property string $year
+ * @property string $month
  * @property int|null $id_station
  * @property string|null $max_temperatura_interna
  * @property string|null $min_temperatura_interna
@@ -879,7 +880,7 @@ namespace App\Models{
 /**
  * App\Models\Parcela
  *
- * @property int $id
+ * @property string $id
  * @property int $comunidad_id
  * @property string|null $fecha
  * @property string|null $area_originale
@@ -944,6 +945,27 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Plaga whereUpdatedAt($value)
  */
 	class Plaga extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\QrCode
+ *
+ * @property int $id
+ * @property string $prefix
+ * @property string $code
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|QrCode newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|QrCode newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|QrCode query()
+ * @method static \Illuminate\Database\Eloquent\Builder|QrCode whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|QrCode whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|QrCode whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|QrCode wherePrefix($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|QrCode whereUpdatedAt($value)
+ */
+	class QrCode extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -1265,7 +1287,7 @@ namespace App\Models{
  * App\Models\Yearly
  *
  * @property int|null $id
- * @property string|null $fecha
+ * @property string $fecha
  * @property int|null $id_station
  * @property string|null $max_temperatura_interna
  * @property string|null $min_temperatura_interna
@@ -1333,9 +1355,9 @@ namespace App{
  * App\Monthly
  *
  * @property int|null $id
- * @property string|null $fecha
- * @property string|null $year
- * @property string|null $month
+ * @property string $fecha
+ * @property string $year
+ * @property string $month
  * @property int|null $id_station
  * @property string|null $max_temperatura_interna
  * @property string|null $min_temperatura_interna
@@ -1537,7 +1559,7 @@ namespace App{
  * App\Yearly
  *
  * @property int|null $id
- * @property string|null $fecha
+ * @property string $fecha
  * @property int|null $id_station
  * @property string|null $max_temperatura_interna
  * @property string|null $min_temperatura_interna

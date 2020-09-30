@@ -53,3 +53,6 @@
 
 
 
+
+<li class='nav-item'><a class='nav-link' href='{{ backpack_url('cultivoslist') }}'><i class='nav-icon la la-question'></i> CultivosLists</a></li>
+<li class='nav-item'><a class='nav-link' href='{{ backpack_url('variedadlist') }}'><i class='nav-icon la la-question'></i> VariedadLists</a></li>
