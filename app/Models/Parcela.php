@@ -36,4 +36,14 @@ class Parcela extends Model
     {
         return $this->hasMany(Cultivo::class);
     }
+
+    public function muestra_suelos()
+    {
+        return $this->hasMany(MuestraSuelo::class);
+    }
+
+    public function suelos()
+    {
+        return $this->hasMany(Suelo::class);
+    }
 }

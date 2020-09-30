@@ -60,4 +60,5 @@ Route::group([
 
     Route::crud('lkpcultivo', 'LkpCultivoCrudController');
     Route::crud('lkpvariedad', 'LkpVariedadCrudController');
+    Route::crud('muestrasuelo', 'MuestraSueloCrudController');
 }); // this should be the absolute last line of this file

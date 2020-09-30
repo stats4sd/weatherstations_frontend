@@ -28,6 +28,7 @@
     <ul class="nav-dropdown-items">
         <li class='nav-item'><a class='nav-link' href='{{ backpack_url('parcela') }}'><i class='nav-icon la la-question'></i> Parcelas</a></li>
         <li class='nav-item'><a class='nav-link' href='{{ backpack_url('suelo') }}'><i class='nav-icon la la-question'></i> Suelos</a></li>
+        <li class='nav-item'><a class='nav-link' href='{{ backpack_url('muestrasuelo') }}'><i class='nav-icon la la-question'></i> Muestras Suelo</a></li>
     </ul>
 </li>
 
