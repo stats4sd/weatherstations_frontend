@@ -74,7 +74,11 @@ class GetDataFromKobo implements ShouldQueue
                 $newSubmission = $this->deleteGroupName($newSubmission);
 
                 //There are only ever 2 iterations of the modulo_loop, so flatten it.
-                $newSubmission['modulo_loop'] = $newSubmission['modulo_loop'][0] + $newSubmission['modulo_loop'][1];
+                if (count($newSubmission['modulo_loop']==2)) {
+                    $newSubmission['modulo_loop'] = $newSubmission['modulo_loop'][0] + $newSubmission['modulo_loop'][1];
+                } else {
+                    $newSubmission['modulo_loop'] = $newSubmission['modulo_loop'][0];
+                }
 
                 //Update or create the record for all the locations
                 if ($newSubmission['region'] == 999) {
@@ -154,7 +158,11 @@ class GetDataFromKobo implements ShouldQueue
         foreach ($newSubmission['modulo_loop']['cultivo_loop'] as $cultivo) {
             $dataMap = DataMap::findorfail('C');
 
-            $cultivo['modulo_cultivo_loop'] = $cultivo['modulo_cultivo_loop'][0] + $cultivo['modulo_cultivo_loop'][1];
+            if (count($cultivo['modulo_cultivo_loop'])==2) {
+                $cultivo['modulo_cultivo_loop'] = $cultivo['modulo_cultivo_loop'][0] + $cultivo['modulo_cultivo_loop'][1];
+            } else {
+                $cultivo['modulo_cultivo_loop'] = $cultivo['modulo_cultivo_loop'][0];
+            }
             $cultivo['parcela_id'] =  $newSubmission['parcela_id'];
             $cultivo['_id'] =  $newSubmission['_id'];
 
