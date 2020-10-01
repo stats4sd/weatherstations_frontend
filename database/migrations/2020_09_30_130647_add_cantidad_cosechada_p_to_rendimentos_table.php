@@ -14,7 +14,7 @@ class AddCantidadCosechadaPToRendimentosTable extends Migration
     public function up()
     {
         Schema::table('rendimentos', function (Blueprint $table) {
-            $table->decimal('cantidad_cosechada_p', 8, 2);
+            $table->decimal('cantidad_cosechada_p', 8, 2)->nullable();
         });
     }
 

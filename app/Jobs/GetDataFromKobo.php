@@ -177,7 +177,7 @@ class GetDataFromKobo implements ShouldQueue
                             DataMapController::newRecord($dataMap_cultivo_module, $plaga);
                         }
                     }
-                    if ($cultivo['problema'] == 'enfermedades' || $cultivo['enfermedades'] == 'ambas') {
+                    if ($cultivo['problema'] == 'enfermedades' || $cultivo['problema'] == 'ambas') {
                         $dataMap_cultivo_module = DataMap::findorfail('enfermedades');
                         DataMapController::newRecord($dataMap_cultivo_module, $cultivo);
                     }
