@@ -54,7 +54,7 @@ class DataMapController extends Controller
             if($variable['in_db'] == 0) {
                 //don't actually process it (as the SQL Insert will fail)
                 //just tell the admin about it!
-                NewDataVariableSpotted::dispatch();
+                NewDataVariableSpotted::dispatch($variable['name']);
                 continue;
             }
 
