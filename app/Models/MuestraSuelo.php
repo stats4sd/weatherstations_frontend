@@ -15,7 +15,7 @@ class MuestraSuelo extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'muestra_suelos';
+    protected $table = 'muestras_suelo';
     protected $guarded = ['id'];
 
     /*
