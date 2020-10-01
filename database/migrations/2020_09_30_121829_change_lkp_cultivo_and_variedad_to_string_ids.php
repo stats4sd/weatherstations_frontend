@@ -18,10 +18,6 @@ class ChangeLkpCultivoAndVariedadToStringIds extends Migration
             $table->string('lkp_variedad_id')->change();
         });
 
-        Schema::table('fenologia', function (Blueprint $table) {
-            $table->dropColumn('variedad_id');
-        });
-
         Schema::table('lkp_cultivos', function (Blueprint $table) {
             $table->string('id')->change();
         });
@@ -41,10 +37,6 @@ class ChangeLkpCultivoAndVariedadToStringIds extends Migration
         Schema::table('cultivos', function (Blueprint $table) {
             $table->unsignedBigInteger('lkp_cultivo_id')->change();
             $table->unsignedBigInteger('lkp_variedad_id')->change();
-        });
-
-        Schema::table('fenologia', function (Blueprint $table) {
-            $table->unsignedBigInteger('variedad_id');
         });
 
         Schema::table('lkp_cultivos', function (Blueprint $table) {
