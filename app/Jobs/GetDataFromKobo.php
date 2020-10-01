@@ -169,8 +169,13 @@ class GetDataFromKobo implements ShouldQueue
             // get the cultivo_id from the creation of the cultivo
             $new_cultivo = DataMapController::newRecord($dataMap, $cultivo);
             $cultivo['cultivo_id'] =  $new_cultivo->id;
+            if (property_exists($cultivo['modulo_cultivo_loop'], 'extra_modulo_cultivo')) {
+                
+                $cultivo_modules = $cultivo['modulos_cultivo'] . ' '. $cultivo['modulo_cultivo_loop']['extra_modulo_cultivo'];
+            } else {
+                $cultivo_modules = $cultivo['modulos_cultivo'];
+            }
 
-            $cultivo_modules = $cultivo['modulos_cultivo'] . ' '. $cultivo['modulo_cultivo_loop']['extra_modulo_cultivo'];
             $cultivo_modules = explode(' ', $cultivo_modules);
             $cultivo = $cultivo + $cultivo['modulo_cultivo_loop'];
             unset($cultivo['modulo_cultivo_loop']);
