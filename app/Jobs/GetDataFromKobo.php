@@ -74,7 +74,7 @@ class GetDataFromKobo implements ShouldQueue
                 $newSubmission = $this->deleteGroupName($newSubmission);
 
                 //There are only ever 2 iterations of the modulo_loop, so flatten it.
-                if (count($newSubmission['modulo_loop']==2)) {
+                if (count($newSubmission['modulo_loop'])==2) {
                     $newSubmission['modulo_loop'] = $newSubmission['modulo_loop'][0] + $newSubmission['modulo_loop'][1];
                 } else {
                     $newSubmission['modulo_loop'] = $newSubmission['modulo_loop'][0];
