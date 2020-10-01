@@ -93,7 +93,7 @@ class DataMapCrudController extends CrudController
                     'Plaga' => 'plagas',
                     'Enfermedade' => 'enfermedades',
                     'Rendimento' => 'rendimento',
-                    'Muestras Suelo' => 'muestras_suelo',
+                    'MuestraSuelo' => 'muestras_suelo',
                 ],
             ],
             [
