@@ -40,7 +40,7 @@ class ImportAttachmentFromKobo implements ShouldQueue
     {
         // As of June 11 2020, downloadable filename is in the format:
         // kobo_username/attachments/submission['formhub/uuid']/submission['_uuid']/submission['photo_variable']
-
+       
         $filename = 'ccrp_soils_platform/attachments/'. $this->submission['formhub/uuid'].'/'.$this->submission['_uuid'].'/'.$this->name;
 
         $downloadUrl = 'https://kc.kobotoolbox.org/media/original?media_file='.$filename;

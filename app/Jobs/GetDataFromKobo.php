@@ -67,7 +67,12 @@ class GetDataFromKobo implements ShouldQueue
                 ]);
 
                 //merge all the modules
-                $newSubmission['modulos'] = $newSubmission['modulos'] . ' ' . $newSubmission['modulo_loop'][0]['modulo_loop/extra_modulo'];
+                if (array_key_exists('modulo_loop/extra_modulo', $newSubmission['modulo_loop'][0] )) {
+                   
+                    $newSubmission['modulos'] = $newSubmission['modulos'] . ' ' . $newSubmission['modulo_loop'][0]['modulo_loop/extra_modulo'];
+                } else {
+                    $newSubmission['modulos'] = $newSubmission['modulos'];
+                }
                 $newSubmission['modulos'] = explode(' ', $newSubmission['modulos']);
 
 
@@ -80,62 +85,61 @@ class GetDataFromKobo implements ShouldQueue
                     $newSubmission['modulo_loop'] = $newSubmission['modulo_loop'][0];
                 }
 
-                //Update or create the record for all the locations
-                if ($newSubmission['region'] == 999) {
-                    $region = Region::updateOrCreate([
-                        'name' => $newSubmission['otra_region']
-                    ]);
-
-                    //update the region id value
-                    $newSubmission['region'] = $region->id;
-                }
-
-                if ($newSubmission['departamento'] == 999) {
-                    $departamento = Departamento::updateOrCreate([
-                        'region_id' => $newSubmission['region'],
-                        'name' => $newSubmission['otro_departamento']
-                    ]);
-
-                    //update the departamento id value
-                    $newSubmission['departamento'] = $departamento->id;
-                }
-
-                if ($newSubmission['municipio'] == 999) {
-                    $municipio = Municipio::updateOrCreate([
-                        'departamento_id' => $newSubmission['departamento'],
-                        'name' => $newSubmission['otro_municipio']
-                    ]);
-
-                    //update the municipio id value
-                    $newSubmission['municipio'] = $municipio->id;
-                }
-
-                if ($newSubmission['comunidad'] == 999) {
-                    $location = explode(" ", $newSubmission['gps']);
-                    $comunidad = Comunidad::updateOrCreate(
-                        [
-                            'municipio_id' => $newSubmission['municipio'],
-                            'name' => $newSubmission['otra_comunidad']
-                        ],
-                        [
-                            'latitude' => isset($location[0]) ? $location[0] : null,
-                            'longitude' => isset($location[1]) ? $location[1] : null,
-                            'altitude' => isset($location[2]) ? $location[2] : null
-                        ]
-                    );
-                    $newSubmission['comunidad'] = $comunidad->id;
-                }
-
+                
                 // Create new parcela record if needed
                 if ($newSubmission['registrar_parcela'] == 1) {
-                    $dataMap = DataMap::findorfail('parcela');
-
-                    DataMapController::newRecord($dataMap, $newSubmission);
-                } else {
-                    $dataMap = DataMap::findorfail('parcela');
-                    DataMapController::updateRecord($dataMap, $newSubmission, $newSubmission['parcela_id']);
-                }
-
+                    //Update or create the record for all the locations
+                    if ($newSubmission['region'] == 999) {
+                        $region = Region::updateOrCreate([
+                            'name' => $newSubmission['otra_region']
+                            ]);
+                            
+                            //update the region id value
+                            $newSubmission['region'] = $region->id;
+                        }
+                        
+                        if ($newSubmission['departamento'] == 999) {
+                            $departamento = Departamento::updateOrCreate([
+                                'region_id' => $newSubmission['region'],
+                                'name' => $newSubmission['otro_departamento']
+                                ]);
+                                
+                                //update the departamento id value
+                                $newSubmission['departamento'] = $departamento->id;
+                            }
+                            
+                            if ($newSubmission['municipio'] == 999) {
+                                $municipio = Municipio::updateOrCreate([
+                                    'departamento_id' => $newSubmission['departamento'],
+                                    'name' => $newSubmission['otro_municipio']
+                                    ]);
+                                    
+                                    //update the municipio id value
+                                    $newSubmission['municipio'] = $municipio->id;
+                                }
+                                
+                                if ($newSubmission['comunidad'] == 999) {
+                                    $location = explode(" ", $newSubmission['gps']);
+                                    $comunidad = Comunidad::updateOrCreate(
+                                        [
+                                            'municipio_id' => $newSubmission['municipio'],
+                                            'name' => $newSubmission['otra_comunidad']
+                                        ],
+                                        [
+                                            'latitude' => isset($location[0]) ? $location[0] : null,
+                                            'longitude' => isset($location[1]) ? $location[1] : null,
+                                            'altitude' => isset($location[2]) ? $location[2] : null
+                                        ]
+                                        );
+                                        $newSubmission['comunidad'] = $comunidad->id;
+                                    }
+                                    $dataMap = DataMap::findorfail('parcela');
+                                    DataMapController::newRecord($dataMap, $newSubmission);
+                                } else {
+                                    $dataMap = DataMap::findorfail('parcela');
+                                    DataMapController::updateRecord($dataMap, $newSubmission, $newSubmission['parcela_id']);
+                                }
+                                
                 // Iterate through the other parcela-level modules.
                 foreach ($newSubmission['modulos'] as $parcelaModule) {
                     if ($parcelaModule === 'C') {
@@ -155,9 +159,13 @@ class GetDataFromKobo implements ShouldQueue
 
     public function processCultivoData($newSubmission)
     {
-        foreach ($newSubmission['modulo_loop']['cultivo_loop'] as $cultivo) {
-            $dataMap = DataMap::findorfail('C');
 
+        foreach ($newSubmission['modulo_loop']['cultivo_loop'] as $cultivo) {
+
+            $cultivo['modulos_cultivo'] = $newSubmission['modulo_loop']['cultivo_loop'][0]['modulos_cultivo'];
+            
+            $dataMap = DataMap::findorfail('C');
+            
             if (count($cultivo['modulo_cultivo_loop'])==2) {
                 $cultivo['modulo_cultivo_loop'] = $cultivo['modulo_cultivo_loop'][0] + $cultivo['modulo_cultivo_loop'][1];
             } else {
@@ -165,13 +173,13 @@ class GetDataFromKobo implements ShouldQueue
             }
             $cultivo['parcela_id'] =  $newSubmission['parcela_id'];
             $cultivo['_id'] =  $newSubmission['_id'];
-
+            
             // get the cultivo_id from the creation of the cultivo
             $new_cultivo = DataMapController::newRecord($dataMap, $cultivo);
             $cultivo['cultivo_id'] =  $new_cultivo->id;
             if (array_key_exists('extra_modulo_cultivo', $cultivo['modulo_cultivo_loop'])) {
-                $cultivo_modules = $cultivo['modulos_cultivo'] . ' '. $cultivo['modulo_cultivo_loop']['extra_modulo_cultivo'];
-
+                $cultivo_modules = $cultivo['modulos_cultivo'] . ' '. $cultivo['modulo_cultivo_loop']['extra_modulo_cultivo'];           
+                
             } else {
                 $cultivo_modules = $cultivo['modulos_cultivo'];
             }
@@ -179,10 +187,12 @@ class GetDataFromKobo implements ShouldQueue
             $cultivo_modules = explode(' ', $cultivo_modules);
             $cultivo = $cultivo + $cultivo['modulo_cultivo_loop'];
             unset($cultivo['modulo_cultivo_loop']);
+           
 
             foreach ($cultivo_modules as $cultivo_module) {
                 if ($cultivo_module == 3) {
-                    if ($cultivo['problema'] == 'plagas' || $cultivo['problema'] == 'ambas') {
+                    
+                    if ( ($cultivo['problema'] == 'plagas' || $cultivo['problema'] == 'ambas') &&  $cultivo['plaga_current']!="otra") {
                         foreach ($cultivo['plaga_repeat'] as $plaga) {
                             $dataMap_cultivo_module = DataMap::findorfail('plagas');
                             $plaga['_id'] =  $newSubmission['_id'];
@@ -207,7 +217,7 @@ class GetDataFromKobo implements ShouldQueue
     public function deleteGroupName(array $array)
     {
         foreach ($array as $key => $value) {
-            if (Str::contains($key, '/')) {
+            if (Str::contains($key, '/') && $key!="formhub/uuid") {
                 // e.g. replace $newSubmission['groupname/subgroup/name'] with $newSubmission['name']
                 unset($array[$key]);
                 $key = explode('/', $key);
