@@ -216,9 +216,11 @@ class DataCrudController extends CrudController
 
         //python script accepts 4 arguments in this order: base_path(), query, params and file name
         Log::info($query);
-        $run_python = 'pipenv run python3';
+        $pipenv = 'pipenv';
+        $run = 'run';
+        $python = 'python';
 
-        $process = new Process([$run_python, $scriptPath, $base_path, $query, $params, $file_name]);
+        $process = new Process([$pipenv, $run, $python, $scriptPath, $base_path, $query, $params, $file_name]);
 
         $process->run();
 
