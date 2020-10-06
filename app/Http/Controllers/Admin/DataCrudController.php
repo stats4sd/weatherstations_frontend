@@ -219,8 +219,9 @@ class DataCrudController extends CrudController
         $pipenv = 'pipenv';
         $run = 'run';
         $python = 'python';
+        $command = $pipenv .' '. $run .' '. $python .' '. $scriptPath;
 
-        $process = new Process([$pipenv, $run, $python, $scriptPath, $base_path, $query, $params, $file_name]);
+        $process = new Process([$command, $base_path, $query, $params, $file_name]);
 
         $process->run();
 
