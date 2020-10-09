@@ -77,7 +77,7 @@ class DataMapCrudController extends CrudController
             [
                 'name' => 'title',
                 'type' => 'text',
-               'label' => 'Give the title / label for the data map',
+                'label' => 'Give the title / label for the data map',
             ],
             [
                 'name' => 'model',
@@ -101,6 +101,35 @@ class DataMapCrudController extends CrudController
                 'type' => 'boolean',
                 'hint' => 'The ODK variable name should be `location`',
                 'label' => 'Does this data map include a `location` field? (Note, this will probably be NO for every module except Parcela...)',
+            ],
+            [
+                'name' => 'levels_title',
+                'type' => 'custom_html',
+                'value' => '<h4>Data Levels / Repeat Group Options</h4><p>If this data map gets data from a select_multiple and associated repeat group, enter those details here. <b>NOTE: ALL the variables added to the "variables" section below MUST be within the repeat group in the ODK form.</b></p>'
+            ],
+            [
+                'name' => 'select_multiple',
+                'label' => 'Name of the select_multiple variable',
+            ],
+            [
+                'name' => 'select_multiple_other',
+                'label' => 'If the select_multiple question has an "other" option, enter the value used for "other" in the choice list.',
+            ],
+            [
+                'name' => 'select_multiple_other_label',
+                'label' => 'If the select_multiple question has a custom "enter other value" question, add the name of that question.',
+            ],
+            [
+                'name' => 'repeat_group',
+                'label' => 'Name of the repeat group',
+            ],
+            [
+                'name' => 'inner_name',
+                'label' => 'Which variable calculates the selected-at() to pull the selected item into the repeat group? (If no variable does this, leave it blank',
+            ],
+            [
+                'name' => 'inner_label',
+                'label' => 'Which variable calculates the jr:choice-name() to pull the selected item label into the repeat group? (If no variable does this, leave it blank',
             ],
             [
                 'name' => 'variables',
