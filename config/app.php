@@ -14,7 +14,7 @@ return [
     */
 
     'name' => env('APP_NAME', 'Laravel'),
-
+    'admin_email' => env('ADMIN_EMAIL', 'support@stats4sd.org'),
     /*
     |--------------------------------------------------------------------------
     | Application Environment
@@ -56,7 +56,7 @@ return [
 
     'asset_url' => env('ASSET_URL', null),
     'post_url' => env('POST_URL'),
-    
+
 
     /*
     |--------------------------------------------------------------------------

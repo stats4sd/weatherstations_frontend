@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\DataMap;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -10,7 +11,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class NewDataVariableSpotted implements ShouldBroadcast
+class NewDataVariableSpotted
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -21,19 +22,10 @@ class NewDataVariableSpotted implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct(String $variableName)
+    public function __construct(String $variableName, DataMap $dataMap)
     {
-        //
+        \Log::info("var spotted event constructed");
         $this->variableName = $variableName;
-    }
-
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return \Illuminate\Broadcasting\Channel|array
-     */
-    public function broadcastOn()
-    {
-        return new PrivateChannel("App.User.{$this->user->id}");
+        $this->dataMap = $dataMap;
     }
 }

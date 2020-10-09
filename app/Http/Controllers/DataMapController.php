@@ -12,49 +12,48 @@ use App\Jobs\ImportAttachmentFromKobo;
 
 class DataMapController extends Controller
 {
-    public static function newRecord(DataMap $dataMap, Array $data)
+    public static function newRecord(DataMap $dataMap, array $data)
     {
-		
-    	$newModel = DataMapController::createNewModel($dataMap, $data);
-		$class = 'App\\Models\\'.$dataMap->model;
-	    $newItem = new $class();
-	    $newItem->fill($newModel);
-	    $newItem->save();
+        $newModel = DataMapController::createNewModel($dataMap, $data);
+        $class = 'App\\Models\\'.$dataMap->model;
+        $newItem = new $class();
+        $newItem->fill($newModel);
+        $newItem->save();
         return $newItem;
     }
 
     //update exists plot
-    public static function updateRecord(DataMap $dataMap, Array $data, $id)
+    public static function updateRecord(DataMap $dataMap, array $data, $id)
     {
-    	$model = DataMapController::createNewModel($dataMap, $data);
-    	$class = 'App\\Models\\'.$dataMap->model;
-	    $class::where('id', $id)->update($model);
+        $model = DataMapController::createNewModel($dataMap, $data);
+        $class = 'App\\Models\\'.$dataMap->model;
+        $class::where('id', $id)->update($model);
         return $model;
     }
 
-    public static function createNewModel(DataMap $dataMap, Array $data)
+    public static function createNewModel(DataMap $dataMap, array $data)
     {
-    	//add the submission_id    		
-		$newModel = [
-        "submission_id" => $data['_id']
-    	];
+        //add the submission_id
+        $newModel = [
+            "submission_id" => $data['_id']
+        ];
 
 
-    	// split the gps coordinates into longitude, latitude, altitude and accuracy 
-    	if($dataMap->location && isset($data['gps']) && $data['gps']) {
+        // split the gps coordinates into longitude, latitude, altitude and accuracy
+        if ($dataMap->location && isset($data['gps']) && $data['gps']) {
             $location = explode(" ", $data['gps']);
             $newModel["longitude"] = isset($location[1]) ? $location[1] : null;
             $newModel["latitude"] = isset($location[0]) ? $location[0] : null;
             $newModel["altitude"] = isset($location[2]) ? $location[2] : null;
             $newModel["accuracy"] = isset($location[3]) ? $location[3] : null;
-    	}
-	
-		foreach($dataMap->variables as $variable) {
-			// if the variable is new (i.e. hasn't been manually added to the database)
-            if($variable['in_db'] == 0) {
+        }
+
+        foreach ($dataMap->variables as $variable) {
+            // if the variable is new (i.e. hasn't been manually added to the database)
+            if ($variable['in_db'] == 0) {
                 //don't actually process it (as the SQL Insert will fail)
                 //just tell the admin about it!
-                NewDataVariableSpotted::dispatch($variable['name']);
+                NewDataVariableSpotted::dispatch($variable['name'], $dataMap);
                 continue;
             }
 
@@ -86,7 +85,7 @@ class DataMapController extends Controller
                 break;
 
                 case 'photo':
-                    if(isset($data[$variableName]) && $data[$variableName]) {
+                    if (isset($data[$variableName]) && $data[$variableName]) {
                         $value = $data[$variableName];
                         // ImportAttachmentFromKobo::dispatch($value, $data);
                     }
@@ -116,14 +115,12 @@ class DataMapController extends Controller
                 break;
             }
 
-            if(!is_null($value)) {
-            	//look the column name that matches to the variable name from the survey 
+            if (!is_null($value)) {
+                //look the column name that matches to the variable name from the survey
                 $newModel[$variable['column_name']] = $value;
             }
-		}
+        }
 
-		return $newModel;
-	
+        return $newModel;
     }
-
 }
