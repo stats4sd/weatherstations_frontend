@@ -263,8 +263,6 @@ class YearlyCrudController extends CrudController
         $base_path = base_path();
         $query = Session('yearly_query');
         $params = join(",",Session('yearly_params'));
-        $query = '"'.$query.'"';
-        $params = '"'.$params.'"';
         $file_name = date('c')."yearly.csv";
         $query = str_replace('`',' ',$query);
 

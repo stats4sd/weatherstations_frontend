@@ -186,7 +186,7 @@ class DataController extends Controller
     {
         $scriptPath = base_path() . '/scripts/generate_xlsx_from_query.py';
         $base_path = base_path();
-        $file_name = date('c')."data.xlsx";
+        $file_name = date('c')."Agrometric.xlsx";
 
         $queries = '';
         $sheet_names = '';

@@ -209,7 +209,7 @@ class DataCrudController extends CrudController
         $date = str_replace(':', '', date('c'));
         $date = str_replace('-', '', $date);
         $date = str_replace('+', '', $date);
-        $file_name = "data.csv";
+        $file_name = date('c')."data.csv";
         $query = str_replace('`',' ',$query);
 
         //python script accepts 4 arguments in this order: base_path(), query, params and file name

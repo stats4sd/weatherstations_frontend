@@ -301,8 +301,6 @@ class MonthlyCrudController extends CrudController
         $base_path = base_path();
         $query = Session('monthly_query');
         $params = join(",",Session('monthly_params'));
-        $query = '"'.$query.'"';
-        $params = '"'.$params.'"';
         $file_name = date('c')."monthly.csv";
         $query = str_replace('`',' ',$query);
 
