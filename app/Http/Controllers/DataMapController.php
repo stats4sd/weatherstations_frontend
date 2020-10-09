@@ -88,7 +88,7 @@ class DataMapController extends Controller
                 case 'photo':
                     if(isset($data[$variableName]) && $data[$variableName]) {
                         $value = $data[$variableName];
-                        // ImportAttachmentFromKobo::dispatch($value, $data);
+                        ImportAttachmentFromKobo::dispatch($value, $data);
                     }
                 break;
 

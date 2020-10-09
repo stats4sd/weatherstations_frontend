@@ -41,17 +41,17 @@ class ImportAttachmentFromKobo implements ShouldQueue
         // As of June 11 2020, downloadable filename is in the format:
         // kobo_username/attachments/submission['formhub/uuid']/submission['_uuid']/submission['photo_variable']
        
-        $filename = 'ccrp_soils_platform/attachments/'. $this->submission['formhub/uuid'].'/'.$this->submission['_uuid'].'/'.$this->name;
+        $filename = 'bolivia_agromet/attachments/'. $this->submission['formhub/uuid'].'/'.$this->submission['_uuid'].'/'.$this->name;
 
         $downloadUrl = 'https://kc.kobotoolbox.org/media/original?media_file='.$filename;
-
-
+       
         $response = Http::withBasicAuth(config('services.kobo.username'),config('services.kobo.password'))
         ->get(urlencode($downloadUrl))
         ->throw();
 
         // store file in "attachments / _id / name"
-        Storage::disk('kobomedia')->put($this->submission['_id'].'/'.$this->name, $response);
+        $store_media = Storage::disk('media')->put($this->submission['_id'].'/'.$this->name, $response);
+
 
 
 

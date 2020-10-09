@@ -13,6 +13,7 @@ use Illuminate\Support\Str;
 use App\Models\Departamento;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -161,7 +162,7 @@ class GetDataFromKobo implements ShouldQueue
     {
 
         foreach ($newSubmission['modulo_loop']['cultivo_loop'] as $cultivo) {
-
+          
             $cultivo['modulos_cultivo'] = $newSubmission['modulo_loop']['cultivo_loop'][0]['modulos_cultivo'];
             
             $dataMap = DataMap::findorfail('C');
@@ -183,17 +184,17 @@ class GetDataFromKobo implements ShouldQueue
             } else {
                 $cultivo_modules = $cultivo['modulos_cultivo'];
             }
-
+            
             $cultivo_modules = explode(' ', $cultivo_modules);
             $cultivo = $cultivo + $cultivo['modulo_cultivo_loop'];
             unset($cultivo['modulo_cultivo_loop']);
-           
-
+            
+            
             foreach ($cultivo_modules as $cultivo_module) {
-                if ($cultivo_module == 3) {
-                    
+                if ($cultivo_module == 3 && array_key_exists('problema', $cultivo)) {
                     if ( ($cultivo['problema'] == 'plagas' || $cultivo['problema'] == 'ambas') &&  $cultivo['plaga_current']!="otra") {
                         foreach ($cultivo['plaga_repeat'] as $plaga) {
+                            
                             $dataMap_cultivo_module = DataMap::findorfail('plagas');
                             $plaga['_id'] =  $newSubmission['_id'];
                             $plaga['cultivo_id'] =  $new_cultivo->id;
@@ -204,7 +205,7 @@ class GetDataFromKobo implements ShouldQueue
                         $dataMap_cultivo_module = DataMap::findorfail('enfermedades');
                         DataMapController::newRecord($dataMap_cultivo_module, $cultivo);
                     }
-                } else {
+                } else if($cultivo_module != 3){
                     $dataMap_cultivo_module = DataMap::findorfail($cultivo_module);
                     DataMapController::newRecord($dataMap_cultivo_module, $cultivo);
                 }
