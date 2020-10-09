@@ -26,11 +26,11 @@ class LkpCultivo extends Model
 
     public function cultivos()
     {
-        return $this->hasMany(Cultivos::class);
+        return $this->hasMany(Cultivo::class);
     }
 
     public function variedad()
     {
-        return $this->hasMany(VariedadList::class);
+        return $this->hasMany(LkpVariedad::class);
     }
 }
