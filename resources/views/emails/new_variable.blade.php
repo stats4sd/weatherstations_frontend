@@ -3,7 +3,8 @@
 A new variable has been added to a datamap:
 
 Datamap: {{ $dataMap->id }}
-Variable Name: {{ $variableName }}
+ODK Variable Name: {{ $variable->name }}
+MySQL Field Name (to add to the database): {{ $variable->column_name }}
 
 Time to add this to the database!
 

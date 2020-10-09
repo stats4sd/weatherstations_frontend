@@ -29,7 +29,7 @@ class NotifyAdminAboutNewVariable
     {
         \Log::info("listener listening");
         \Mail::to(config('app.admin_email'))->send(
-            new NewVariableSpottedEmail($event->variableName, $event->dataMap)
+            new NewVariableSpottedEmail($event->variable, $event->dataMap)
         );
     }
 }

@@ -12,7 +12,7 @@ class NewVariableSpottedEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $variableName;
+    public $variable;
     public $dataMap;
 
     /**
@@ -20,10 +20,10 @@ class NewVariableSpottedEmail extends Mailable
      *
      * @return void
      */
-    public function __construct(String $variableName, DataMap $dataMap)
+    public function __construct(String $variable, DataMap $dataMap)
     {
         //
-        $this->variableName = $variableName;
+        $this->variable = $variable;
         $this->dataMap = $dataMap;
     }
 
