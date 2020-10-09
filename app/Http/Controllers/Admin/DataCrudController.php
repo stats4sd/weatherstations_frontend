@@ -206,8 +206,6 @@ class DataCrudController extends CrudController
         $base_path = base_path();
         $query = Session('query');
         $params = join(",",Session('params'));
-        $query = '"'.$query.'"';
-        $params = '"'.$params.'"';
         $date = str_replace(':', '', date('c'));
         $date = str_replace('-', '', $date);
         $date = str_replace('+', '', $date);
