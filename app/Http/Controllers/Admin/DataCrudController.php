@@ -217,7 +217,7 @@ class DataCrudController extends CrudController
         //python script accepts 4 arguments in this order: base_path(), query, params and file name
         Log::info($query);
 
-        $process = new Process("pipenv run python3 '/home/forge/staging-weatherstations.stats4sd.org/scripts/save_data_csv.py' '/home/forge/staging-weatherstations.stats4sd.org' '"select * from  data "' '""' 'data.csv'");
+        $process = new Process(['pipenv', 'run', 'python3', $scriptPath, $base_path, $query, $params, $file_name]);
 
         $process->run();
 
