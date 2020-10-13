@@ -133,14 +133,26 @@ namespace App\Models{
  * App\Models\Cultivo
  *
  * @property int $id
- * @property int $lkp_cultivo_id
- * @property int|null $lkp_variedad_id
- * @property int $parcela_id
+ * @property string $lkp_cultivo_id
+ * @property string|null $lkp_variedad_id
+ * @property string $parcela_id
  * @property string|null $propiedad_cultivo
  * @property string|null $propiedad_variedad
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Enfermedade[] $enfermedades
+ * @property-read int|null $enfermedades_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Fenologia[] $fenologias
+ * @property-read int|null $fenologias_count
+ * @property-read \App\Models\LkpCultivo $lkp_cultivos
+ * @property-read \App\Models\LkpVariedad|null $lkp_variedad
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ManejoParcela[] $manejo_parcelas
+ * @property-read int|null $manejo_parcelas_count
  * @property-read \App\Models\Parcela $parcela
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Plaga[] $plagas
+ * @property-read int|null $plagas_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Rendimento[] $rendimentos
+ * @property-read int|null $rendimentos_count
  * @method static \Illuminate\Database\Eloquent\Builder|Cultivo newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Cultivo newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Cultivo query()
@@ -458,13 +470,25 @@ namespace App\Models{
  * @property int $location
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $select_multiple if this is set, this data map is for data at a different level, based on a select_multiple and possibly a repeat group based on that select_multiple response.
+ * @property string|null $repeat_group the name of the repeat group to look inside to find the main variables for this data map
+ * @property string|null $select_multiple_other the name of the "enter other value" question linked to the select_multiple variable
+ * @property string|null $inner_name
+ * @property string|null $inner_label
+ * @property string|null $select_multiple_other_label the name of the "enter other value" question linked to the select_multiple variable
  * @method static \Illuminate\Database\Eloquent\Builder|DataMap newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|DataMap newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|DataMap query()
  * @method static \Illuminate\Database\Eloquent\Builder|DataMap whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DataMap whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DataMap whereInnerLabel($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DataMap whereInnerName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DataMap whereLocation($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DataMap whereModel($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DataMap whereRepeatGroup($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DataMap whereSelectMultiple($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DataMap whereSelectMultipleOther($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DataMap whereSelectMultipleOtherLabel($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DataMap whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DataMap whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DataMap whereVariables($value)
@@ -476,7 +500,7 @@ namespace App\Models{
 /**
  * App\Models\DataTemplate
  *
- * @property string $fecha_hora
+ * @property string|null $fecha_hora
  * @property int $id
  * @property int|null $intervalo
  * @property string|null $temperatura_interna
@@ -647,17 +671,18 @@ namespace App\Models{
  *
  * @property int $id
  * @property int $cultivo_id
- * @property string|null $enfermedad_nombre
+ * @property string|null $name
  * @property int $submission_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Cultivo $cultivo
  * @method static \Illuminate\Database\Eloquent\Builder|Enfermedade newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Enfermedade newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Enfermedade query()
  * @method static \Illuminate\Database\Eloquent\Builder|Enfermedade whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Enfermedade whereCultivoId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Enfermedade whereEnfermedadNombre($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Enfermedade whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Enfermedade whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Enfermedade whereSubmissionId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Enfermedade whereUpdatedAt($value)
  */
@@ -670,7 +695,6 @@ namespace App\Models{
  *
  * @property int $id
  * @property int $cultivo_id
- * @property int|null $variedad_id
  * @property int|null $epoca_siembra
  * @property string|null $fecha_siembra
  * @property string|null $fecha_emergencia
@@ -686,6 +710,7 @@ namespace App\Models{
  * @property int $submission_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Cultivo $cultivo
  * @method static \Illuminate\Database\Eloquent\Builder|Fenologia newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Fenologia newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Fenologia query()
@@ -706,9 +731,53 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Fenologia whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Fenologia whereSubmissionId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Fenologia whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Fenologia whereVariedadId($value)
  */
 	class Fenologia extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\LkpCultivo
+ *
+ * @property int $id
+ * @property string $name
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Cultivo[] $cultivos
+ * @property-read int|null $cultivos_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\LkpVariedad[] $variedad
+ * @property-read int|null $variedad_count
+ * @method static \Illuminate\Database\Eloquent\Builder|LkpCultivo newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|LkpCultivo newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|LkpCultivo query()
+ * @method static \Illuminate\Database\Eloquent\Builder|LkpCultivo whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|LkpCultivo whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|LkpCultivo whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|LkpCultivo whereUpdatedAt($value)
+ */
+	class LkpCultivo extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\LkpVariedad
+ *
+ * @property int $id
+ * @property int $lkp_cultivo_id
+ * @property string $name
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\LkpCultivo $lkp_cultivo
+ * @method static \Illuminate\Database\Eloquent\Builder|LkpVariedad newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|LkpVariedad newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|LkpVariedad query()
+ * @method static \Illuminate\Database\Eloquent\Builder|LkpVariedad whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|LkpVariedad whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|LkpVariedad whereLkpCultivoId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|LkpVariedad whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|LkpVariedad whereUpdatedAt($value)
+ */
+	class LkpVariedad extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -744,6 +813,7 @@ namespace App\Models{
  * @property int $submission_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Cultivo $cultivo
  * @method static \Illuminate\Database\Eloquent\Builder|ManejoParcela newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ManejoParcela newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ManejoParcela query()
@@ -854,6 +924,28 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\MuestraSuelo
+ *
+ * @property int $id
+ * @property string $parcela_id
+ * @property int $submission_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Parcela $parcela
+ * @method static \Illuminate\Database\Eloquent\Builder|MuestraSuelo newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|MuestraSuelo newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|MuestraSuelo query()
+ * @method static \Illuminate\Database\Eloquent\Builder|MuestraSuelo whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MuestraSuelo whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MuestraSuelo whereParcelaId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MuestraSuelo whereSubmissionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MuestraSuelo whereUpdatedAt($value)
+ */
+	class MuestraSuelo extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\Municipio
  *
  * @property int $id
@@ -896,7 +988,13 @@ namespace App\Models{
  * @property int $submission_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Cultivo[] $cultivos
+ * @property-read int|null $cultivos_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\MuestraSuelo[] $muestra_suelos
+ * @property-read int|null $muestra_suelos_count
  * @property-read \App\Models\Submission $submissions
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Suelo[] $suelos
+ * @property-read int|null $suelos_count
  * @method static \Illuminate\Database\Eloquent\Builder|Parcela newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Parcela newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Parcela query()
@@ -926,21 +1024,32 @@ namespace App\Models{
  *
  * @property int $id
  * @property int $cultivo_id
- * @property string|null $plaga_nombre
+ * @property string|null $name
  * @property string|null $cantidad_insectos_m2
+ * @property string|null $cantidad_larvas
+ * @property int|null $mosca_numero
+ * @property int|null $mosca_trampas
+ * @property int|null $mosca_dias
+ * @property int|null $presencia_mosca
  * @property string|null $plaga_fecha
  * @property int $submission_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Cultivo $cultivo
  * @method static \Illuminate\Database\Eloquent\Builder|Plaga newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Plaga newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Plaga query()
  * @method static \Illuminate\Database\Eloquent\Builder|Plaga whereCantidadInsectosM2($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Plaga whereCantidadLarvas($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Plaga whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Plaga whereCultivoId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Plaga whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Plaga whereMoscaDias($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Plaga whereMoscaNumero($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Plaga whereMoscaTrampas($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Plaga whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Plaga wherePlagaFecha($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Plaga wherePlagaNombre($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Plaga wherePresenciaMosca($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Plaga whereSubmissionId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Plaga whereUpdatedAt($value)
  */
@@ -997,7 +1106,6 @@ namespace App\Models{
  * @property int $cultivo_id
  * @property string|null $cantidad_cosechada_kg
  * @property string|null $superficie_cosechada_m2
- * @property string|null $plantas_cosechada
  * @property string|null $peso_muestra_tuberculos
  * @property string|null $peso_danados_tuberculos
  * @property string|null $peso_muestra_grano
@@ -1005,10 +1113,13 @@ namespace App\Models{
  * @property int $submission_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $cantidad_cosechada_p
+ * @property-read \App\Models\Cultivo $cultivo
  * @method static \Illuminate\Database\Eloquent\Builder|Rendimento newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Rendimento newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Rendimento query()
  * @method static \Illuminate\Database\Eloquent\Builder|Rendimento whereCantidadCosechadaKg($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Rendimento whereCantidadCosechadaP($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Rendimento whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Rendimento whereCultivoId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Rendimento whereId($value)
@@ -1016,7 +1127,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Rendimento wherePesoDanadosTuberculos($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Rendimento wherePesoMuestraGrano($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Rendimento wherePesoMuestraTuberculos($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Rendimento wherePlantasCosechada($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Rendimento whereSubmissionId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Rendimento whereSuperficieCosechadaM2($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Rendimento whereUpdatedAt($value)
@@ -1093,10 +1203,11 @@ namespace App\Models{
  * @property string $parcela_id
  * @property string $materia_organica
  * @property string $textura
- * @property int $pH
+ * @property string $pH
  * @property int $submission_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Parcela $parcela
  * @method static \Illuminate\Database\Eloquent\Builder|Suelo newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Suelo newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Suelo query()
@@ -1230,17 +1341,6 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\Variedad
- *
- * @method static \Illuminate\Database\Eloquent\Builder|Variedad newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Variedad newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Variedad query()
- */
-	class Variedad extends \Eloquent {}
-}
-
-namespace App\Models{
-/**
  * App\Models\Xlsform
  *
  * @property int $id
@@ -1257,7 +1357,6 @@ namespace App\Models{
  * @property int $live If true, this form is available to projects to use
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property string $data_map_id
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Submission[] $submissions
  * @property-read int|null $submissions_count
  * @method static \Illuminate\Database\Eloquent\Builder|Xlsform newModelQuery()
@@ -1265,7 +1364,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Xlsform query()
  * @method static \Illuminate\Database\Eloquent\Builder|Xlsform whereContent($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Xlsform whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Xlsform whereDataMapId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Xlsform whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Xlsform whereEnketoUrl($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Xlsform whereId($value)
