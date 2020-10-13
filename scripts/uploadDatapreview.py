@@ -14,6 +14,7 @@ selected_unit_wind = sys.argv[5]
 selected_unit_rain = sys.argv[6]
 uploader_id = sys.argv[7]
 
+
 def openFile():
 
     if(path[len(path)-3 : ] == "txt"):

@@ -9,6 +9,9 @@
             <h4  class="mt-3" v-if="modulesSelected.includes('daily_data')"><b>From which station do you want to have data?</b></h4>
             <v-select v-if="modulesSelected.includes('daily_data')" :options="stations" :reduce="label => label.id" v-model="stationsSelected" multiple style="width:100%"></v-select>
 
+            <h4  class="mt-3" v-if="modulesSelected.includes('daily_data')"><b>Select the aggregation for the weather data</b></h4>
+            <v-select v-if="modulesSelected.includes('daily_data')" :options="aggregations" :reduce="label => label.value" v-model="aggregationSelected" style="width:100%"></v-select>
+
             <h4  class="mt-3" v-if="modulesSelected.includes('parcelas')"><b>What are you interested about plots?</b></h4>
             <v-select v-if="modulesSelected.includes('parcelas')" :options="parcelasModules" :reduce="label => label.value" v-model="parcelasModulesSelected" multiple style="width:100%"></v-select>
 
@@ -54,6 +57,7 @@
                 cultivosModulesSelected:[],
                 weather:[],
                 stationsSelected:[],
+                aggregationSelected:[],
                 pachagrama:[],
                 municipiosFilter:[],
                 comunidadsFilter:[],
@@ -68,7 +72,7 @@
             }
 
         },
-        props: ['departamentos','municipios','comunidads', 'modules', 'parcelasModules','cultivosModules', 'stations'],
+        props: ['departamentos','municipios','comunidads', 'modules','aggregations', 'parcelasModules','cultivosModules', 'stations', 'showTable'],
         watch: {
             modulesSelected() {
                 this.$emit('update:modulesSelected', this.modulesSelected)
@@ -93,6 +97,9 @@
             },
             stationsSelected() {
                 this.$emit('update:stationsSelected', this.stationsSelected)
+            },
+            aggregationSelected() {
+                this.$emit('update:aggregationSelected', this.aggregationSelected)
             },
             pachagrama() {
                 this.$emit('update:pachagrama', this.pachagrama)
@@ -122,6 +129,9 @@
             },
             parcelasData(){
                 this.$emit('update:parcelasData', this.parcelasData);
+            },
+            showTable(){
+                this.$emit('update:showTable', this.showTable);
             }
 
         },
@@ -129,6 +139,7 @@
      
         methods: {
             submit: function (event) {
+                this.showTable=true
                 axios({
                     method: 'post',
                     url: "/show",
@@ -140,6 +151,7 @@
                         stationsSelected: this.stationsSelected,
                         parcelasModulesSelected: this.parcelasModulesSelected,
                         cultivosModulesSelected: this.cultivosModulesSelected,
+                        aggregationSelected: this.aggregationSelected,
                     }
                 })
                 .then((result) => {
@@ -158,9 +170,5 @@
             }
         } 
     }
-
-$(document).ready(function() {
-    $('.js-example-basic-multiple').select2();
-});
 
 </script>

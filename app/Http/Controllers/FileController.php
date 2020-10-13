@@ -64,13 +64,15 @@ class FileController extends Controller
             $scriptPath = base_path() . '/scripts/' . $scriptName;
             $path_name = Storage::path("/").$path;
             $uploader_id = $this->generateRandomString();
-
-
+            
             //python script accepts 3 arguments in this order: scriptPath, path_name, station_id
 
             $process = new Process("pipenv run python3 {$scriptPath} {$path_name} {$station} {$request->selectedUnitTemp} {$request->selectedUnitPres} {$request->selectedUnitWind} {$request->selectedUnitRain} {$uploader_id}");
 
-            // $process->setTimeout(500);
+
+
+//             $process->setTimeout(500);
+
 
             $process->run();
 
@@ -80,11 +82,11 @@ class FileController extends Controller
 
             $data_template = DataTemplate::paginate(10)->where('uploader_id', '=', $uploader_id);
             
-            $error_data = $this->checkValues($uploader_id);
+            // $error_data = $this->checkValues($uploader_id);
 
             return response()->json([
                 'data_template' => $data_template,
-                'error_data' => $error_data
+                'error_data' => null
 
             ]);
         }
@@ -154,18 +156,18 @@ class FileController extends Controller
         
         foreach ($daily_preview as $key => $value) {
 
-            $daily_temp_int = Daily::select('max_temperatura_interna')->whereMonth('fecha',  substr($value->fecha, -5, -3))->whereDay('fecha', substr($value->fecha, -2))->get();
+            $daily_temp_int = Daily::select('max_temperatura_interna')->whereMonth('fecha',  substr($value->fecha, -5, -3))->whereDay('fecha', substr($value->fecha, -2))->take(10)->get();
 
-            $daily_temp_ext = Daily::select('max_temperatura_interna')->whereMonth('fecha',  substr($value->fecha, -5, -3))->whereDay('fecha', substr($value->fecha, -2))->get();
+            $daily_temp_ext = Daily::select('max_temperatura_interna')->whereMonth('fecha',  substr($value->fecha, -5, -3))->whereDay('fecha', substr($value->fecha, -2))->take(10)->get();
 
-             $daily_velocidad_viento = Daily::select('max_velocidad_viento')->whereMonth('fecha',  substr($value->fecha, -5, -3))->whereDay('fecha', substr($value->fecha, -2))->get();
+             $daily_velocidad_viento = Daily::select('max_velocidad_viento')->whereMonth('fecha',  substr($value->fecha, -5, -3))->whereDay('fecha', substr($value->fecha, -2))->take(10)->get();
 
 
             if(!$daily_temp_int->isEmpty()){
 
-                $checkTempInt = abs($daily_temp_int[0]['max_temperatura_interna'] - $value->max_temperatura_interna) > 15;
+                $checkTempInt = abs($daily_temp_int[0]['max_temperatura_interna'] - $value->max_temperatura_interna) > 20;
 
-                $checkTempExt = abs($daily_temp_ext[0]['max_temperatura_externa'] - $value->max_temperatura_externa) > 15;
+                $checkTempExt = abs($daily_temp_ext[0]['max_temperatura_externa'] - $value->max_temperatura_externa) > 20;
 
                 $checkPresRel = $value->max_presion_relativa < 500;
 
