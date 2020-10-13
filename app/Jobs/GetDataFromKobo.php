@@ -191,14 +191,16 @@ class GetDataFromKobo implements ShouldQueue
                 if ($cultivo_module == 3) {
                     if ($cultivo['problema'] == 'plagas' || $cultivo['problema'] == 'ambas') {
                         $dataMap_cultivo_module = DataMap::findorfail('plagas');
+                        DataMapController::newRecord($dataMap_cultivo_module, $cultivo);
                     }
                     if ($cultivo['problema'] == 'enfermedades' || $cultivo['problema'] == 'ambas') {
                         $dataMap_cultivo_module = DataMap::findorfail('enfermedades');
+                        DataMapController::newRecord($dataMap_cultivo_module, $cultivo);
                     }
                 } else {
                     $dataMap_cultivo_module = DataMap::findorfail($cultivo_module);
+                    DataMapController::newRecord($dataMap_cultivo_module, $cultivo);
                 }
-                DataMapController::newRecord($dataMap_cultivo_module, $cultivo);
             }
         }
     }

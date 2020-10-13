@@ -16,6 +16,8 @@ class DataMapController extends Controller
     {
         // if the map references a select_multiple and repeat group, then we're creating data at a lower level
         if ($dataMap->select_multiple && $dataMap->select_multiple !== "") {
+            \Log::info("select_multiple and repeat group being handled");
+            \Log::info($data);
             foreach ($data[$dataMap->repeat_group] as $repeatData) {
                 // bring references to lower levels back into repeatData
                 // reference to submission
