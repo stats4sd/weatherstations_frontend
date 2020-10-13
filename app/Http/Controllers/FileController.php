@@ -69,11 +69,6 @@ class FileController extends Controller
 
             $process = new Process("pipenv run python3 {$scriptPath} {$path_name} {$station} {$request->selectedUnitTemp} {$request->selectedUnitPres} {$request->selectedUnitWind} {$request->selectedUnitRain} {$uploader_id}");
 
-
-
-//             $process->setTimeout(500);
-
-
             $process->run();
 
             Log::info($process->getOutput());
@@ -83,7 +78,7 @@ class FileController extends Controller
             }
 
             
-
+            
             $data_template = DataTemplate::where('uploader_id', '=', $uploader_id)->orderBy('id')->paginate(10);
             
             // $error_data = $this->checkValues($uploader_id);
