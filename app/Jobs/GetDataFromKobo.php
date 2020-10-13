@@ -160,10 +160,7 @@ class GetDataFromKobo implements ShouldQueue
     public function processCultivoData($newSubmission)
     {
         foreach ($newSubmission['modulo_loop']['cultivo_loop'] as $cultivo) {
-<<<<<<< HEAD
-=======
 
->>>>>>> dev
             $cultivo['modulos_cultivo'] = $newSubmission['modulo_loop']['cultivo_loop'][0]['modulos_cultivo'];
 
             $dataMap = DataMap::findorfail('C');
