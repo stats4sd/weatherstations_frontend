@@ -69,7 +69,10 @@ class FileController extends Controller
 
             $process = new Process("pipenv run python3 {$scriptPath} {$path_name} {$station} {$request->selectedUnitTemp} {$request->selectedUnitPres} {$request->selectedUnitWind} {$request->selectedUnitRain} {$uploader_id}");
 
-            $process->setTimeout(500);
+
+
+//             $process->setTimeout(500);
+
 
             $process->run();
 
