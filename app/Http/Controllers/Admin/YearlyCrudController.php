@@ -49,7 +49,7 @@ class YearlyCrudController extends CrudController
                 [
                     'label' => 'Fecha',
                     'name' => 'fecha',
-                    'type' => 'date',
+                    'type' => 'year',
                 ],
                 [
                     'label' => 'Station',
