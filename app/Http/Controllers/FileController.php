@@ -84,7 +84,7 @@ class FileController extends Controller
 
             
 
-            $data_template = DataTemplate::where('uploader_id', '=', $uploader_id)->paginate(10);
+            $data_template = DataTemplate::where('uploader_id', '=', $uploader_id)->orderBy('id')->paginate(10);
             
             // $error_data = $this->checkValues($uploader_id);
 
