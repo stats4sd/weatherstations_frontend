@@ -352,8 +352,9 @@ const rootUrl = process.env.MIX_APP_URL
 
                 axios.post(rootUrl+'/files', formData, {}).then((result) => {
 
+                    console.log(result)
                     this.total_rows = result.data.data_template.total;
-                    this.previewData = result.data.data_template;
+                    this.previewData = result.data.data_template.data;
                     this.uploader_id = (this.previewData[0]['uploader_id']);
 
 
