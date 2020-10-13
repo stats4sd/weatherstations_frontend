@@ -279,8 +279,6 @@ class TenDaysCrudController extends CrudController
         $base_path = base_path();
         $query = Session('tendays_query');
         $params = join(",",Session('tendays_params'));
-        $query = '"'.$query.'"';
-        $params = '"'.$params.'"';
         $file_name = date('c')."tendays.csv";
         $query = str_replace('`',' ',$query);
 

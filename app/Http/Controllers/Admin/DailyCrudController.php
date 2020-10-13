@@ -273,8 +273,6 @@ class DailyCrudController extends CrudController
         $base_path = base_path();
         $query = Session('daily_query');
         $params = join(",",Session('daily_params'));
-        $query = '"'.$query.'"';
-        $params = '"'.$params.'"';
         $file_name = date('c')."daily.csv";
         $query = str_replace('`',' ',$query);
 
