@@ -28,7 +28,7 @@ class NotifyAdminAboutNewVariable
     public function handle(NewDataVariableSpotted $event)
     {
         \Mail::to(config('app.admin_email'))->send(
-            new NewVariableSpottedEmail($event->variableName, $event->dataMap)
+            new NewVariableSpottedEmail($event->variable, $event->datamap)
         );
     }
 }

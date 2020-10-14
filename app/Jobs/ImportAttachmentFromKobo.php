@@ -43,10 +43,10 @@ class ImportAttachmentFromKobo implements ShouldQueue
        
         $filename = 'bolivia_agromet/attachments/'. $this->submission['formhub/uuid'].'/'.$this->submission['_uuid'].'/'.$this->name;
 
-        $downloadUrl = 'https://kc.kobotoolbox.org/media/original?media_file='.$filename;
-       
+        $downloadUrl = 'https://kc.kobotoolbox.org/media/original?media_file='.urlencode($filename);
+    
         $response = Http::withBasicAuth(config('services.kobo.username'),config('services.kobo.password'))
-        ->get(urlencode($downloadUrl))
+        ->get($downloadUrl)
         ->throw();
 
         // store file in "attachments / _id / name"

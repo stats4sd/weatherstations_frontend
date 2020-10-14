@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Events\NewDataVariableSpotted;
+use App\Listeners\NotifyAdminAboutNewVariable;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -18,6 +20,11 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        NewDataVariableSpotted::class =>
+        [
+            NotifyAdminAboutNewVariable::class,
+        ],
+
     ];
 
     /**

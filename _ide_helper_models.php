@@ -15,7 +15,7 @@ namespace App{
  * App\Daily
  *
  * @property int|null $id
- * @property string $fecha
+ * @property string|null $fecha
  * @property int|null $id_station
  * @property string|null $max_temperatura_interna
  * @property string|null $min_temperatura_interna
@@ -173,7 +173,7 @@ namespace App\Models{
  * App\Models\Daily
  *
  * @property int|null $id
- * @property string $fecha
+ * @property string|null $fecha
  * @property int|null $id_station
  * @property string|null $max_temperatura_interna
  * @property string|null $min_temperatura_interna
@@ -470,25 +470,13 @@ namespace App\Models{
  * @property int $location
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property string|null $select_multiple if this is set, this data map is for data at a different level, based on a select_multiple and possibly a repeat group based on that select_multiple response.
- * @property string|null $repeat_group the name of the repeat group to look inside to find the main variables for this data map
- * @property string|null $select_multiple_other the name of the "enter other value" question linked to the select_multiple variable
- * @property string|null $inner_name
- * @property string|null $inner_label
- * @property string|null $select_multiple_other_label the name of the "enter other value" question linked to the select_multiple variable
  * @method static \Illuminate\Database\Eloquent\Builder|DataMap newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|DataMap newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|DataMap query()
  * @method static \Illuminate\Database\Eloquent\Builder|DataMap whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DataMap whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DataMap whereInnerLabel($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DataMap whereInnerName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DataMap whereLocation($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DataMap whereModel($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DataMap whereRepeatGroup($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DataMap whereSelectMultiple($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DataMap whereSelectMultipleOther($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DataMap whereSelectMultipleOtherLabel($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DataMap whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DataMap whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DataMap whereVariables($value)
@@ -671,7 +659,7 @@ namespace App\Models{
  *
  * @property int $id
  * @property int $cultivo_id
- * @property string|null $name
+ * @property string|null $enfermedad_nombre
  * @property int $submission_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -681,8 +669,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Enfermedade query()
  * @method static \Illuminate\Database\Eloquent\Builder|Enfermedade whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Enfermedade whereCultivoId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Enfermedade whereEnfermedadNombre($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Enfermedade whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Enfermedade whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Enfermedade whereSubmissionId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Enfermedade whereUpdatedAt($value)
  */
@@ -855,9 +843,9 @@ namespace App\Models{
  * App\Models\Monthly
  *
  * @property int|null $id
- * @property string $fecha
- * @property string $year
- * @property string $month
+ * @property string|null $fecha
+ * @property string|null $year
+ * @property string|null $month
  * @property int|null $id_station
  * @property string|null $max_temperatura_interna
  * @property string|null $min_temperatura_interna
@@ -1024,13 +1012,8 @@ namespace App\Models{
  *
  * @property int $id
  * @property int $cultivo_id
- * @property string|null $name
+ * @property string|null $plaga_nombre
  * @property string|null $cantidad_insectos_m2
- * @property string|null $cantidad_larvas
- * @property int|null $mosca_numero
- * @property int|null $mosca_trampas
- * @property int|null $mosca_dias
- * @property int|null $presencia_mosca
  * @property string|null $plaga_fecha
  * @property int $submission_id
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -1040,16 +1023,11 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Plaga newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Plaga query()
  * @method static \Illuminate\Database\Eloquent\Builder|Plaga whereCantidadInsectosM2($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Plaga whereCantidadLarvas($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Plaga whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Plaga whereCultivoId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Plaga whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Plaga whereMoscaDias($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Plaga whereMoscaNumero($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Plaga whereMoscaTrampas($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Plaga whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Plaga wherePlagaFecha($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Plaga wherePresenciaMosca($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Plaga wherePlagaNombre($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Plaga whereSubmissionId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Plaga whereUpdatedAt($value)
  */
@@ -1106,6 +1084,7 @@ namespace App\Models{
  * @property int $cultivo_id
  * @property string|null $cantidad_cosechada_kg
  * @property string|null $superficie_cosechada_m2
+ * @property string|null $plantas_cosechada
  * @property string|null $peso_muestra_tuberculos
  * @property string|null $peso_danados_tuberculos
  * @property string|null $peso_muestra_grano
@@ -1127,6 +1106,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Rendimento wherePesoDanadosTuberculos($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Rendimento wherePesoMuestraGrano($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Rendimento wherePesoMuestraTuberculos($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Rendimento wherePlantasCosechada($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Rendimento whereSubmissionId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Rendimento whereSuperficieCosechadaM2($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Rendimento whereUpdatedAt($value)
@@ -1203,7 +1183,7 @@ namespace App\Models{
  * @property string $parcela_id
  * @property string $materia_organica
  * @property string $textura
- * @property string $pH
+ * @property int $pH
  * @property int $submission_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -1357,6 +1337,7 @@ namespace App\Models{
  * @property int $live If true, this form is available to projects to use
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string $data_map_id
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Submission[] $submissions
  * @property-read int|null $submissions_count
  * @method static \Illuminate\Database\Eloquent\Builder|Xlsform newModelQuery()
@@ -1364,6 +1345,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Xlsform query()
  * @method static \Illuminate\Database\Eloquent\Builder|Xlsform whereContent($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Xlsform whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Xlsform whereDataMapId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Xlsform whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Xlsform whereEnketoUrl($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Xlsform whereId($value)
@@ -1385,7 +1367,7 @@ namespace App\Models{
  * App\Models\Yearly
  *
  * @property int|null $id
- * @property string $fecha
+ * @property string|null $fecha
  * @property int|null $id_station
  * @property string|null $max_temperatura_interna
  * @property string|null $min_temperatura_interna
@@ -1453,9 +1435,9 @@ namespace App{
  * App\Monthly
  *
  * @property int|null $id
- * @property string $fecha
- * @property string $year
- * @property string $month
+ * @property string|null $fecha
+ * @property string|null $year
+ * @property string|null $month
  * @property int|null $id_station
  * @property string|null $max_temperatura_interna
  * @property string|null $min_temperatura_interna
@@ -1657,7 +1639,7 @@ namespace App{
  * App\Yearly
  *
  * @property int|null $id
- * @property string $fecha
+ * @property string|null $fecha
  * @property int|null $id_station
  * @property string|null $max_temperatura_interna
  * @property string|null $min_temperatura_interna
