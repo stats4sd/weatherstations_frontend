@@ -19,7 +19,7 @@ def openFile():
 
     if(path[len(path)-3 : ] == "txt"):
 
-        df = pd.read_csv(path, na_values=['--.-', '--', '---'], sep="\t", header=[0,1])
+        df = pd.read_csv(path, na_values=['--.-', '--', '---', '------'], sep="\t", header=[0,1])
 
         new_columns_names = []
         for i in df.columns:
