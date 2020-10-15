@@ -21,7 +21,7 @@ except mysql.Error as err:
 
 else:
     sql = f"DELETE FROM `data_template` WHERE `uploader_id`='{uploader_id}';"
-    cursor.executemany(sql)
+    cursor.execute(sql)
     conn.commit()
     print('data inserted')
     conn.close

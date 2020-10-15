@@ -52,8 +52,8 @@ def openFile():
 
         #pass the right datestamp into fecha_hora
         df.fecha_hora = date_time
-        #drop columns not necessary
-        df = df.drop(['time'], axis=1)
+        #drop columns that are not into the database
+        df = df[df.columns.intersection(columns_name.list_columns_name)]
 
         # drop rows with missing value / NaN in any column
         df = df.dropna(how='all', subset=columns_name.list_columns_davis_to_drop)
