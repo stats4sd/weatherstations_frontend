@@ -100,12 +100,17 @@ class StationCrudController extends CrudController
             [
                 'name' => 'latitude',
                 'label' => 'latitude',
-                'type' => 'text',
+                'type' => 'number',
             ],
             [
                 'name' => 'longitude',
                 'label' => 'longitude',
-                'type' => 'text',
+                'type' => 'number',
+            ],
+            [
+                'name' => 'altitude',
+                'label' => 'altitude',
+                'type' => 'number',
             ],
         ]);
         // add asterisk for fields that are required in StationRequest
