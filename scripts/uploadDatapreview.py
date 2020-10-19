@@ -83,7 +83,7 @@ def openFile():
 
     else:
 
-        data = pd.read_csv(path, encoding="utf-8", na_values=['--.-', '--', '---'], low_memory=False)
+        data = pd.read_csv(path, encoding="utf-8", na_values=['--.-', '--', '---', '------'], low_memory=False)
         df = pd.DataFrame(data)
 
         # remove extra space in columns name

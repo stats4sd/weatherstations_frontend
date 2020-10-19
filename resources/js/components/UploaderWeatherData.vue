@@ -144,7 +144,7 @@
                             <div class="row py-4 mx-4 justify-content-center" v-if="error_data!=null">
                                 <b-alert show variant="danger" v-if="error_temp || error_press || error_wind||error_rain ">There are some values with the wrong units please check the following table and proceed with <b>Cancel</b> for uploading a new file or press <b>Store Data in DB</b> if the values are correct.</b-alert>
 
-                                <b-table sticky-header="600px" striped hover responsive striped :items="error_data">
+                                <b-table sticky-header="600px" striped hover responsive :items="error_data">
                                     <template v-if="error_temp" v-slot:cell(temperatura_interna)="data">
                                         <b :style="tempIntBackColor">{{ data.value }}</b>
                                     </template>
@@ -161,9 +161,6 @@
                                         <b :style="tempIntBackColor">{{ data.value }}</b>
                                     </template>
                                     <template v-if="error_temp" v-slot:cell(hi_temp)="data">
-                                        <b :style="tempIntBackColor">{{ data.value }}</b>
-                                    </template>
-                                    <template v-if="error_temp" v-slot:cell(low_temp)="data">
                                         <b :style="tempIntBackColor">{{ data.value }}</b>
                                     </template>
                                     <template v-if="error_temp" v-slot:cell(low_temp)="data">
@@ -280,7 +277,6 @@ const rootUrl = process.env.MIX_APP_URL
                 busy_store: false,
                 busy_clean: false,
                 error_data: null,
-                all_data: null,
                 success: null,
                 error: null,
                 error_temp:false,

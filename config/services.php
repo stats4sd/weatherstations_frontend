@@ -31,13 +31,22 @@ return [
     ],
 
     'stripe' => [
-        'model' => App\User::class,
+        'model' => App\Models\User::class,
         'key' => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
         'webhook' => [
             'secret' => env('STRIPE_WEBHOOK_SECRET'),
             'tolerance' => env('STRIPE_WEBHOOK_TOLERANCE', 300),
         ],
+    ],
+    
+    'kobo' => [
+        'endpoint' => env('KOBO_ENDPOINT', 'https://kf.kobotoolbox.org'),
+        'endpoint_v2' => env('KOBO_ENDPOINT').'/api/v2', 'https://kf.kobotoolbox.org/api/v2',
+        'old_endpoint' => env('KOBO_OLD_ENDPOINT', 'https://kc.kobotoolbox.org'),
+        'token' => env('KOBO_TOKEN', ''),
+        'username' => env('KOBO_USERNAME', ''),
+        'password' => env('KOBO_PASSWORD', ''),
     ],
 
 ];

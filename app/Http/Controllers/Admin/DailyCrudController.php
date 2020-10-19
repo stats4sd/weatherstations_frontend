@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\DailyRequest as StoreRequest;
 use App\Http\Requests\DailyRequest as UpdateRequest;
-use App\Jobs\ProcessDataExport;
 use App\Models\Station;
 use Backpack\CRUD\CrudPanel;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
@@ -274,15 +273,13 @@ class DailyCrudController extends CrudController
         $base_path = base_path();
         $query = Session('daily_query');
         $params = join(",",Session('daily_params'));
-        $query = '"'.$query.'"';
-        $params = '"'.$params.'"';
         $file_name = date('c')."daily.csv";
         $query = str_replace('`',' ',$query);
 
 
         //python script accepts 7 arguments in this order: db_user db_password db_name base_path() query params
 
-        $process = new Process("pipenv python3 {$scriptPath} {$base_path} {$query} {$params} {$file_name}");
+        $process = new Process(["pipenv", "run", "python3", $scriptPath, $base_path, $query, $params, $file_name]);
 
         $process->run();
 

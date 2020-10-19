@@ -301,15 +301,13 @@ class MonthlyCrudController extends CrudController
         $base_path = base_path();
         $query = Session('monthly_query');
         $params = join(",",Session('monthly_params'));
-        $query = '"'.$query.'"';
-        $params = '"'.$params.'"';
         $file_name = date('c')."monthly.csv";
         $query = str_replace('`',' ',$query);
 
         //python script accepts 4 arguments in this order: base_path(), query, params and file name
         Log::info($query);
 
-        $process = new Process("pipenv python3 {$scriptPath} {$base_path} {$query} {$params} {$file_name}");
+        $process = new Process(["pipenv", "run", "python3", $scriptPath, $base_path, $query, $params, $file_name]);
 
         $process->run();
 
