@@ -22,12 +22,12 @@
                         :parcelasModulesSelected.sync="parcelasModulesSelected"
                         :cultivosModulesSelected.sync="cultivosModulesSelected" 
                         :weather.sync="weather" 
-                        :pachagrama.sync="pachagrama" 
                         :parcelasData.sync="parcelasData"
                         :suelos.sync="suelos"
                         :manejo_parcelas.sync="manejo_parcelas"
-                        :plagas_y_enfermedades.sync="plagas_y_enfermedades"
-                        :produccion.sync="produccion"
+                        :plagas.sync="plagas"
+                        :enfermedades.sync="enfermedades"
+                        :rendimentos.sync="rendimentos"
                         :fenologia.sync="fenologia"
                         :stations="stations" 
                         :stationsSelected.sync="stationsSelected"
@@ -50,12 +50,6 @@
                             <b-card-text>
                                 <p v-if="weather.length!==0">Showing {{weather.to}} of {{weather.total}} entries</p> 
                                 <tables :data="weather.data"></tables>
-                            </b-card-text>
-                        </b-tab>
-                        <b-tab v-if="pachagrama.length!==0" title="Información de Pachagrama">
-                            <b-card-text>
-                                <p v-if="pachagrama.length!==0">Showing {{pachagrama.to}} of {{pachagrama.total}} entries</p>
-                                <tables :data="pachagrama.data"></tables>
                             </b-card-text>
                         </b-tab>
                         <b-tab v-if="parcelasData.length!==0" title="Parcelas">
@@ -82,16 +76,22 @@
                                 <tables :data="manejo_parcelas.data"></tables>
                             </b-card-text>
                         </b-tab>
-                        <b-tab v-if="plagas_y_enfermedades.length!==0" title="Plagas y enfermedades">
+                        <b-tab v-if="plagas.length!==0" title="Plagas">
                             <b-card-text>
-                                <p v-if="plagas_y_enfermedades.length!==0">Showing {{plagas_y_enfermedades.to}} of {{plagas_y_enfermedades.total}} entries</p>
-                                <tables :data="plagas_y_enfermedades.data"></tables>
+                                <p v-if="plagas.length!==0">Showing {{plagas.to}} of {{plagas.total}} entries</p>
+                                <tables :data="plagas.data"></tables>
                             </b-card-text>
                         </b-tab>
-                        <b-tab v-if="produccion.length!==0" title="Produccion">
+                        <b-tab v-if="enfermedades.length!==0" title="Enfermedades">
                             <b-card-text>
-                                <p v-if="produccion.length!==0">Showing {{produccion.to}} of {{produccion.total}} entries</p>
-                                <tables :data="produccion.data"></tables>
+                                <p v-if="enfermedades.length!==0">Showing {{enfermedades.to}} of {{enfermedades.total}} entries</p>
+                                <tables :data="enfermedades.data"></tables>
+                            </b-card-text>
+                        </b-tab>
+                        <b-tab v-if="rendimentos.length!==0" title="Rendimentos">
+                            <b-card-text>
+                                <p v-if="rendimentos.length!==0">Showing {{rendimentos.to}} of {{rendimentos.total}} entries</p>
+                                <tables :data="rendimentos.data"></tables>
                             </b-card-text>
                         </b-tab>
                         <button class="site-btn mt-5 mb-2 mx-2" v-on:click="download" style="float: right;">Download</button>
@@ -113,23 +113,23 @@
 export default {
         data(){
             return{
-                modules: [{label:'Información meteorológica', value:'daily_data'},{label:'Información de Pachagrama (agroclimático)', value:'pachagrama'}, {label:'Parcelas', value:'parcelas'}, {label:'Cultivos', value:'cultivos'} ],
+                modules: [{label:'Información meteorológica', value:'daily_data'},{label:'Parcelas', value:'parcelas'}, {label:'Cultivos', value:'cultivos'} ],
 
                 aggregations: [{label: 'Daily', value:'daily_data'}, {label: 'Ten days', value:'tendays_data'}, {label: 'Monthly', value:'monthly_data'}, {label: 'yearly', value:'yearly_data'}],
 
-                parcelasModules: [{label:'Suelos', value:'suelos'},{label:'Manejo de la parcela', value:'manejo_parcelas'}, {label:'Plagas y enfermedades', value:'plagas_y_enfermedades'}, {label:'Produccion', value:'produccion'} ],
+                parcelasModules: [{label:'Suelos', value:'suelos'},{label:'Manejo de la parcela', value:'manejo_parcelas'}, {label:'Plagas', value:'plagas'}, {label:'Enfermedades', value:'enfermedades'}, {label:'Rendimentos', value:'rendimentos'} ],
 
-                cultivosModules: [{label:'Fenologia', value:'fenologia'},{label:'Manejo de la parcela', value:'manejo_parcelas'}, {label:'Plagas y enfermedades', value:'plagas_y_enfermedades'}, {label:'Produccion', value:'produccion'} ],
+                cultivosModules: [{label:'Fenologia', value:'fenologia'},{label:'Manejo de la parcela', value:'manejo_parcelas'}, {label:'Plagas', value:'plagas'}, {label:'Enfermedades', value:'enfermedades'}, {label:'Rendimentos', value:'rendimentos'} ],
       
                 startDate:null,
                 endDate:null,
                 weather:[],
-                pachagrama:[],
                 parcelasData:[],
                 fenologia:[],
                 suelos:[],
                 manejo_parcelas:[],
-                plagas_y_enfermedades:[],
+                plagas:[],
+                enfermedades:[],
                 parcelas:[],
                 stations:[],
                 departamentos:[],
@@ -142,7 +142,7 @@ export default {
                 stationsSelected:[],
                 aggregationSelected:[],
                 cultivos:[],
-                produccion:[],
+                rendimentos:[],
                 showTable:false,
 
             }
