@@ -227,7 +227,7 @@ class XlsformCrudController extends CrudController
 
        return response()->json([
            'title' => $xlsform->title,
-           'user' => abackpack_auth()->user()->email,
+           'user' => backpack_auth()->user()->email,
        ]);
 
     }

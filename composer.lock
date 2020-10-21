@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "98c8e32fe2c7f6f464d9b0591e4ba68c",
+    "content-hash": "ae80735c797d69d221f72c7147a7fd86",
     "packages": [
         {
             "name": "backpack/crud",
@@ -4311,6 +4311,64 @@
             "time": "2020-10-03T11:00:18+00:00"
         },
         {
+            "name": "stats4sd/laravel-sql-views",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/stats4sd/laravel-sql-views.git",
+                "reference": "95e1391ee28f15b894cee56fddc104cbac0cde64"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/stats4sd/laravel-sql-views/zipball/95e1391ee28f15b894cee56fddc104cbac0cde64",
+                "reference": "95e1391ee28f15b894cee56fddc104cbac0cde64",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "~5|~6|~7"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.1",
+                "orchestra/testbench": "~3|~4",
+                "phpunit/phpunit": "^8.0",
+                "sempro/phpunit-pretty-print": "^1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Stats4SD\\SqlViews\\SqlViewsServiceProvider"
+                    ],
+                    "aliases": {
+                        "SqlViews": "Stats4SD\\SqlViews\\Facades\\SqlViews"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Stats4SD\\SqlViews\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Stats4SD",
+                    "email": "support@stats4sd.org",
+                    "homepage": "https://stats4sd.org"
+                }
+            ],
+            "description": "A small package to help automate the creation and updating of MySQL views within a Laravel project.",
+            "homepage": "https://github.com/stats4sd/laravel-sql-views",
+            "keywords": [
+                "laravel",
+                "sql"
+            ],
+            "time": "2020-08-21T11:18:26+00:00"
+        },
+        {
             "name": "studio-42/elfinder",
             "version": "2.1.57",
             "source": {
@@ -5309,6 +5367,10 @@
                 {
                     "name": "Nicolas Grekas",
                     "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Trevor Rowbotham",
+                    "email": "trevor.rowbotham@pm.me"
                 },
                 {
                     "name": "Symfony Community",

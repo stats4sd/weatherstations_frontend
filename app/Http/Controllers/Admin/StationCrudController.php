@@ -64,17 +64,17 @@ class StationCrudController extends CrudController
             [
                 'name' => 'latitude',
                 'label' => 'latitude',
-                'type' => 'text',
+                'type' => 'decimal',
             ],
             [
                 'name' => 'longitude',
                 'label' => 'longitude',
-                'type' => 'text',
+                'type' => 'decimal',
             ],
             [
                 'name' => 'altitude',
                 'label' => 'altitude',
-                'type' => 'text',
+                'type' => 'decimal',
             ],
         ]);
 
@@ -100,12 +100,22 @@ class StationCrudController extends CrudController
             [
                 'name' => 'latitude',
                 'label' => 'latitude',
-                'type' => 'text',
+                'type' => 'number',
+                  // optionals
+                'attributes' => ["step" => "any"], // allow decimals
+               
             ],
             [
                 'name' => 'longitude',
                 'label' => 'longitude',
-                'type' => 'text',
+                'type' => 'number',
+                'attributes' => ["step" => "any"], // allow decimals
+            ],
+            [
+                'name' => 'altitude',
+                'label' => 'altitude',
+                'type' => 'number',
+                'attributes' => ["step" => "any"], // allow decimals
             ],
         ]);
         // add asterisk for fields that are required in StationRequest

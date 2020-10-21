@@ -13,7 +13,7 @@ queries = query.split(';')
 sheet_names = sys.argv[4]
 sheet_names = sheet_names.split(',')
 
-print(queries);
+print(queries)
 try:
 	con = MySQLConnection(**config.dbConfig)
 	cursor = con.cursor()

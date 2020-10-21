@@ -19,7 +19,7 @@ def openFile():
 
     if(path[len(path)-3 : ] == "txt"):
 
-        df = pd.read_csv(path, na_values=['--.-', '--', '---'], sep="\t", header=[0,1])
+        df = pd.read_csv(path, na_values=['--.-', '--', '---', '------'], sep="\t", header=[0,1])
 
         new_columns_names = []
         for i in df.columns:
@@ -52,8 +52,8 @@ def openFile():
 
         #pass the right datestamp into fecha_hora
         df.fecha_hora = date_time
-        #drop columns not necessary
-        df = df.drop(['time'], axis=1)
+        #drop columns that are not into the database
+        df = df[df.columns.intersection(columns_name.list_columns_name)]
 
         # drop rows with missing value / NaN in any column
         df = df.dropna(how='all', subset=columns_name.list_columns_davis_to_drop)
@@ -83,7 +83,7 @@ def openFile():
 
     else:
 
-        data = pd.read_csv(path, encoding="utf-8", na_values=['--.-', '--', '---'], low_memory=False)
+        data = pd.read_csv(path, encoding="utf-8", na_values=['--.-', '--', '---', '------'], low_memory=False)
         df = pd.DataFrame(data)
 
         # remove extra space in columns name
@@ -148,10 +148,12 @@ try:
     cols = '`,`'.join(cols)
 
     print('data is uploading')
-    
+    data_value = []
     for i, row in data.iterrows():
         sql = f"INSERT INTO `data_template` (`{cols}`) VALUES (" + "%s,"*(len(row)-1) + "%s)"
-        cursor.execute(sql, tuple(row))
+        data_value.append(tuple(row))
+
+    cursor.executemany(sql, data_value)
     conn.commit()
 
 except mysql.Error as err:
