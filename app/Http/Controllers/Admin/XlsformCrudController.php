@@ -39,7 +39,6 @@ class XlsformCrudController extends CrudController
         CRUD::setModel('App\Models\Xlsform');
         CRUD::setRoute(config('backpack.base.route_prefix') . '/xlsform');
         CRUD::setEntityNameStrings('xlsform', 'xlsforms');
-
     }
 
     protected function setupListOperation()
@@ -59,8 +58,8 @@ class XlsformCrudController extends CrudController
                 'name' => 'kobo_id',
                 'label' => 'View on Kobotools',
                 'type' => 'closure',
-                'function' => function($entry) {
-                    if($entry->kobo_id) {
+                'function' => function ($entry) {
+                    if ($entry->kobo_id) {
                         return "<a target='_blank' href='https://kf.kobotoolbox.org/#/forms/".$entry->kobo_id."'>Kobotoolbox Link</a>";
                     }
                     return "<span class='text-secondary'>Not Deployed</span>";
@@ -75,7 +74,7 @@ class XlsformCrudController extends CrudController
                 'name' => 'link_page',
                 'label' => 'Associated Guide(s)',
                 'type' => "closure",
-                'function' => function($entry){
+                'function' => function ($entry) {
                     $page = $entry->link_page;
                     return '<a href="'.url(''.$page.'').'" target="_blank">'.$page.'</a>';
                 },
@@ -86,12 +85,15 @@ class XlsformCrudController extends CrudController
                 'label' => 'Attached Media Files',
                 'type' => 'text',
             ],
+            [
+                'name' => 'csv_lookups',
+                'label' => 'CSV Media From Database'
+            ]
         ]);
     }
 
     protected function setupCreateOperation()
     {
-
         $this->crud->addFields([
 
             [
@@ -124,9 +126,26 @@ class XlsformCrudController extends CrudController
             [
                 'name' => 'media',
                 'label' => 'Upload any csv or image files required by the ODK form',
+                'description' => 'These are the static files that should be uploaded as media file attachments for this ODK form',
                 'type' => 'upload_multiple',
                 'upload' => true,
                 'disk' => 'public',
+            ],
+            [
+                'name' => 'csv_lookup',
+                'label' => 'Add MySQL Views that should be converted to CSV files and added as media file attachments for this ODK form',
+                'description' => 'These are csv lookup files that need to be updated with new data as the database updates',
+                'type' => 'repeatable',
+                'fields' => [
+                    [
+                        'name' => 'mysql_view',
+                        'label' => 'Name of MySQL View',
+                    ],
+                    [
+                        'name' => 'csv_file',
+                        'label' => 'Name of CSV File (without .csv extension)',
+                    ],
+                ],
             ],
         ]);
     }
@@ -136,7 +155,7 @@ class XlsformCrudController extends CrudController
         $this->setupCreateOperation();
     }
 
-    public function setupShowOperation ()
+    public function setupShowOperation()
     {
         $this->crud->set('show.setFromDb', false);
 
@@ -171,7 +190,7 @@ class XlsformCrudController extends CrudController
                 'label' => 'Guide for this Form',
                 'type' => 'text',
                 'wrapper' => [
-                    'href' => function($crud, $column, $entry, $related_key) {
+                    'href' => function ($crud, $column, $entry, $related_key) {
                         return $entry->link_page;
                     },
                     'target' => "_blank",
@@ -212,7 +231,7 @@ class XlsformCrudController extends CrudController
         ]);
     }
 
-    public function syncData (Xlsform $xlsform)
+    public function syncData(Xlsform $xlsform)
     {
         GetDataFromKobo::dispatchNow(backpack_auth()->user(), $xlsform);
 
@@ -221,16 +240,13 @@ class XlsformCrudController extends CrudController
         return $submissions->toJson();
     }
 
-    public function archiveOnKobo (Xlsform $xlsform)
+    public function archiveOnKobo(Xlsform $xlsform)
     {
-       ArchiveKoboForm::dispatch(backpack_auth()->user(), $xlsform);
+        ArchiveKoboForm::dispatch(backpack_auth()->user(), $xlsform);
 
-       return response()->json([
-           'title' => $xlsform->title,
-           'user' => backpack_auth()->user()->email,
-       ]);
-
+        return response()->json([
+            'title' => $xlsform->title,
+            'user' => backpack_auth()->user()->email,
+        ]);
     }
-
-
 }
