@@ -7,7 +7,7 @@ use App\Http\Requests\XlsformRequest as StoreRequest;
 use App\Http\Requests\XlsformRequest as UpdateRequest;
 use App\Jobs\ArchiveKoboForm;
 use App\Jobs\DeployFormToKobo;
-use App\Jobs\GenerateCsvLookupFiles;
+use App\Jobs\MediaFiles\GenerateCsvLookupFiles;
 use App\Jobs\GetDataFromKobo;
 use App\Jobs\UploadCsvMediaFileAttachementsToKoboForm;
 use App\Models\ProjectXlsform;
@@ -258,12 +258,7 @@ class XlsformCrudController extends CrudController
 
     public function regenerateCsvFileAttachments(Xlsform $xlsform)
     {
-        GenerateCsvLookupFiles::withChain(
-            [
-                new UploadCsvMediaFileAttachementsToKoboForm($xlsform),
 
-            ]
-        )->dispatch($xlsform);
 
         return response('files generating; check the logs in a few minutes to confirm success');
     }

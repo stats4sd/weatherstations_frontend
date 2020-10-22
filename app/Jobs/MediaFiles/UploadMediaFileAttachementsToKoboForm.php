@@ -12,6 +12,12 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
+/**
+ * Job to handle replacing / uploading ALL media files for the passed xlsform.
+ *  - Deletes the old versions off Kobotoolbox
+ *  - Takes the media and csv_lookup properties of the passed xlsform, and passes each file to the uploader
+ * @param Xlsform $xlsform
+ */
 class UploadMediaFileAttachementsToKoboForm implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -58,6 +64,10 @@ class UploadMediaFileAttachementsToKoboForm implements ShouldQueue
 
         foreach ($this->form->media as $media) {
             UploadFileToKoboForm::dispatch($media, $koboform);
+        }
+
+        foreach ($this->form->csv_lookups as $csvMedia) {
+            UploadFileToKoboForm::dispatch($csvMedia['csv_file'].'.csv', $koboform);
         }
     }
 }
