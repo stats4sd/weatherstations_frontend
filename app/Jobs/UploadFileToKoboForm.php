@@ -1,0 +1,60 @@
+<?php
+
+namespace App\Jobs;
+
+use App\Models\Xlsform;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+use Illuminate\Bus\Queueable;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+
+class UploadFileToKoboForm implements ShouldQueue
+{
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    public $form;
+
+    /**
+     * Create a new job instance.
+     *
+     * @return void
+     */
+    public function __construct(String $media, String $koboform)
+    {
+        $this->media = $media;
+        $this->koboform = $koboform;
+    }
+
+    /**
+     * Execute the job.
+     *
+     * @return void
+     */
+    public function handle()
+    {
+        $filename = Arr::last(explode('/', $this->media));
+
+        $upload = Http::withBasicAuth(config('services.kobo.username'), config('services.kobo.password'))
+            ->withHeaders(['Accept' => 'application/json'])
+            ->attach(
+                'data_file',
+                Storage::get($this->media),
+                $filename
+            )
+            ->post(config('services.kobo.old_endpoint') . '/api/v1/metadata', [
+                'xform' => $this->koboform['formid'],
+                'data_type' => 'media',
+                'data_value' => $filename,
+            ])
+            ->throw()
+            ->json();
+
+        \Log::info('media file uploaded');
+        \Log::info($upload);
+    }
+}

@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\Xlsform;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Queue\SerializesModels;
@@ -12,7 +13,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
-class UploadMediaFileAttachementsToKoboForm implements ShouldQueue
+class UploadCsvMediaFileAttachementsToKoboForm implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -25,7 +26,6 @@ class UploadMediaFileAttachementsToKoboForm implements ShouldQueue
      */
     public function __construct(Xlsform $form)
     {
-        //
         $this->form = $form;
     }
 
@@ -49,7 +49,7 @@ class UploadMediaFileAttachementsToKoboForm implements ShouldQueue
 
         // delete any existing media from form to make way for fresh upload:
         foreach ($koboform['metadata'] as $metadata) {
-            if ($metadata['data_type'] === "media") {
+            if ($metadata['data_type'] === "media" && $metadata['data_file_type'] === "text/csv") {
                 Http::withBasicAuth(config('services.kobo.username'), config('services.kobo.password'))
                 ->delete(config('services.kobo.old_endpoint').'/api/v1/metadata/'.$metadata['id'])
                 ->throw();
@@ -57,6 +57,16 @@ class UploadMediaFileAttachementsToKoboForm implements ShouldQueue
         }
 
         foreach ($this->form->media as $media) {
+
+            // if the file is not a csv, ignore it
+            if (!Str::endsWith($media, 'csv')) {
+                continue;
+            }
+
+            UploadFileToKoboForm::dispatch($media, $koboform);
+        }
+
+        foreach ($this->form->csv_lookups as $csvMedia) {
             UploadFileToKoboForm::dispatch($media, $koboform);
         }
     }
