@@ -67,7 +67,7 @@ class UploadCsvMediaFileAttachementsToKoboForm implements ShouldQueue
         }
 
         foreach ($this->form->csv_lookups as $csvMedia) {
-            UploadFileToKoboForm::dispatch($media, $koboform);
+            UploadFileToKoboForm::dispatch($csvMedia['csv_file'].'.csv', $koboform);
         }
     }
 }

@@ -9,6 +9,7 @@ use App\Jobs\ArchiveKoboForm;
 use App\Jobs\DeployFormToKobo;
 use App\Jobs\GenerateCsvLookupFiles;
 use App\Jobs\GetDataFromKobo;
+use App\Jobs\UploadCsvMediaFileAttachementsToKoboForm;
 use App\Models\ProjectXlsform;
 use App\Models\Xlsform;
 use Backpack\CRUD\CrudPanel;
@@ -133,7 +134,7 @@ class XlsformCrudController extends CrudController
                 'disk' => 'public',
             ],
             [
-                'name' => 'csv_lookup',
+                'name' => 'csv_lookups',
                 'label' => 'Add MySQL Views that should be converted to CSV files and added as media file attachments for this ODK form',
                 'description' => 'These are csv lookup files that need to be updated with new data as the database updates',
                 'type' => 'repeatable',
@@ -257,7 +258,12 @@ class XlsformCrudController extends CrudController
 
     public function regenerateCsvFileAttachments(Xlsform $xlsform)
     {
-        GenerateCsvLookupFiles::dispatch($xlsform);
+        GenerateCsvLookupFiles::withChain(
+            [
+                new UploadCsvMediaFileAttachementsToKoboForm($xlsform),
+
+            ]
+        )->dispatch($xlsform);
 
         return response('files generating; check the logs in a few minutes to confirm success');
     }

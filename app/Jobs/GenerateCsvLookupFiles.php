@@ -38,7 +38,7 @@ class GenerateCsvLookupFiles implements ShouldQueue
         $mediaToGenerate = $this->xlsform->csv_lookups;
 
         foreach ($mediaToGenerate as $media) {
-            $scriptPath = base_path().'/scripts';
+            $scriptPath = base_path().'/scripts/save_table.py';
 
             $process = new Process(['pipenv', 'run', 'python3', $scriptPath, $media['mysql_view'],  $media['csv_file']]);
 

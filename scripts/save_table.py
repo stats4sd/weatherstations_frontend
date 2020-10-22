@@ -21,7 +21,7 @@ filename = sys.argv[2]  # the name of the file to create
 
 filename = "%s.csv" % filename
 # hard coded to match the "media" driver in config/filesystems.php
-csv_path = base_path / "storage" / "app" / "media" / filename
+csv_path = base_path / "storage" / "app" / "public" / "media" / filename
 
 ## check the folders exist
 if not os.path.exists(os.path.dirname(csv_path)):

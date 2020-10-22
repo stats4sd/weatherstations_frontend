@@ -17,14 +17,15 @@ class UploadFileToKoboForm implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $form;
+    public $media;
+    public $koboform;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(String $media, String $koboform)
+    public function __construct(String $media, array $koboform)
     {
         $this->media = $media;
         $this->koboform = $koboform;
@@ -43,7 +44,7 @@ class UploadFileToKoboForm implements ShouldQueue
             ->withHeaders(['Accept' => 'application/json'])
             ->attach(
                 'data_file',
-                Storage::get($this->media),
+                Storage::disk('media')->get($this->media),
                 $filename
             )
             ->post(config('services.kobo.old_endpoint') . '/api/v1/metadata', [
