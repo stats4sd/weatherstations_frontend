@@ -82,7 +82,7 @@ class CheckKoboUpload implements ShouldQueue
             $this->delete();
         }
 
-        if($importStatus == "complete") {
+        if ($importStatus == "complete") {
             event(new KoboUploadReturnedSuccess(
                 $this->user,
                 $this->form
@@ -90,11 +90,11 @@ class CheckKoboUpload implements ShouldQueue
 
             // run other actions on Kobo that required a succesfully imported form:
             SetKoboFormToActive::withChain([
+                new GenerateCsvLookupFiles($this->form),
                 new UploadMediaFileAttachementsToKoboForm($this->form),
                 new ShareFormWithAdmins($this->form),
                 new DeploymentSuccessMessage($this->user, $this->form),
             ])->dispatch($this->user, $this->form);
         }
-
     }
 }

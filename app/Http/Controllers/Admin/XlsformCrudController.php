@@ -7,6 +7,7 @@ use App\Http\Requests\XlsformRequest as StoreRequest;
 use App\Http\Requests\XlsformRequest as UpdateRequest;
 use App\Jobs\ArchiveKoboForm;
 use App\Jobs\DeployFormToKobo;
+use App\Jobs\GenerateCsvLookupFiles;
 use App\Jobs\GetDataFromKobo;
 use App\Models\ProjectXlsform;
 use App\Models\Xlsform;
@@ -171,6 +172,10 @@ class XlsformCrudController extends CrudController
         ->stack('line')
         ->view('crud::buttons.archive');
 
+        Crud::button('csv_generate')
+        ->stack('line')
+        ->view('crud::buttons.csv_generate');
+
         $form = $this->crud->getCurrentEntry();
 
         Widget::add([
@@ -248,5 +253,12 @@ class XlsformCrudController extends CrudController
             'title' => $xlsform->title,
             'user' => backpack_auth()->user()->email,
         ]);
+    }
+
+    public function regenerateCsvFileAttachments(Xlsform $xlsform)
+    {
+        GenerateCsvLookupFiles::dispatch($xlsform);
+
+        return response('files generating; check the logs in a few minutes to confirm success');
     }
 }
