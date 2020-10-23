@@ -23,7 +23,8 @@ class Xlsform extends Model
 
 
     protected $casts = [
-        'media' => 'array'
+        'media' => 'array',
+        'csv_lookups' => 'array',
     ];
 
 

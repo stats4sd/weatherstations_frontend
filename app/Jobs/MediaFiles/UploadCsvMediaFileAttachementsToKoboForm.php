@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\Xlsform;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Queue\SerializesModels;
@@ -12,7 +13,11 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
-class UploadMediaFileAttachementsToKoboForm implements ShouldQueue
+/**
+ * Version of the uploadMediaFileAttachments job that ONLY handles csv files. All non .csv files are ignored. Use this to avoid replacing lots of large image / multimedia files on Kobotools.
+ * @param Xlsform $xlsform
+ */
+class UploadCsvMediaFileAttachementsToKoboForm implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -25,7 +30,6 @@ class UploadMediaFileAttachementsToKoboForm implements ShouldQueue
      */
     public function __construct(Xlsform $form)
     {
-        //
         $this->form = $form;
     }
 
@@ -48,41 +52,26 @@ class UploadMediaFileAttachementsToKoboForm implements ShouldQueue
 
 
         // delete any existing media from form to make way for fresh upload:
-        foreach($koboform['metadata'] as $metadata) {
-            if($metadata['data_type'] === "media") {
-                Http::withBasicAuth(config('services.kobo.username'),config('services.kobo.password'))
+        foreach ($koboform['metadata'] as $metadata) {
+            if ($metadata['data_type'] === "media" && $metadata['data_file_type'] === "text/csv") {
+                Http::withBasicAuth(config('services.kobo.username'), config('services.kobo.password'))
                 ->delete(config('services.kobo.old_endpoint').'/api/v1/metadata/'.$metadata['id'])
                 ->throw();
             }
         }
 
-        foreach($this->form->media as $media) {
+        foreach ($this->form->media as $media) {
 
-            $filename = Arr::last(explode('/',$media));
+            // if the file is not a csv, ignore it
+            if (!Str::endsWith($media, 'csv')) {
+                continue;
+            }
 
-            $upload = Http::withBasicAuth(config('services.kobo.username'), config('services.kobo.password'))
-            ->withHeaders(['Accept' => 'application/json'])
-            ->attach(
-                'data_file',
-                Storage::get($media),
-                $filename
-            )
-            ->post(config('services.kobo.old_endpoint') . '/api/v1/metadata', [
-                'xform' => $koboform['formid'],
-                'data_type' => 'media',
-                'data_value' => $filename,
-            ])
-            ->throw()
-            ->json();
-
-            \Log::info('media file uploaded');
-            \Log::info($upload);
+            UploadFileToKoboForm::dispatch($media, $koboform);
         }
 
-
-
-
-
-
+        foreach ($this->form->csv_lookups as $csvMedia) {
+            UploadFileToKoboForm::dispatch($csvMedia['csv_file'].'.csv', $koboform);
+        }
     }
 }
