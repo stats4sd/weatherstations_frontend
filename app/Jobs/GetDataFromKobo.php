@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use Exception;
 use App\Models\User;
 use App\Models\Region;
 use App\Models\DataMap;
@@ -68,12 +69,18 @@ class GetDataFromKobo implements ShouldQueue
                 ]);
 
                 //merge all the modules
-                if (array_key_exists('modulo_loop/extra_modulo', $newSubmission['modulo_loop'][0])) {
-                    $newSubmission['modulos'] = $newSubmission['modulos'] . ' ' . $newSubmission['modulo_loop'][0]['modulo_loop/extra_modulo'];
+                if (!array_key_exists('modulo_loop', $newSubmission)  || !array_key_exists('modulos', $newSubmission)) {
+                    throw new Exception('You are trying get data to wrong form');  
+
                 } else {
-                    $newSubmission['modulos'] = $newSubmission['modulos'];
+
+                    if (array_key_exists('modulo_loop/extra_modulo', $newSubmission['modulo_loop'][0])) {
+                        $newSubmission['modulos'] = $newSubmission['modulos'] . ' ' . $newSubmission['modulo_loop'][0]['modulo_loop/extra_modulo'];
+                    } else {
+                        $newSubmission['modulos'] = $newSubmission['modulos'];
+                    }
+                    $newSubmission['modulos'] = explode(' ', $newSubmission['modulos']);
                 }
-                $newSubmission['modulos'] = explode(' ', $newSubmission['modulos']);
 
 
                 $newSubmission = $this->deleteGroupName($newSubmission);
