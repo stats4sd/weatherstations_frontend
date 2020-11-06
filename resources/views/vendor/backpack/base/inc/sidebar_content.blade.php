@@ -47,8 +47,8 @@
 <li class='nav-item nav-dropdown'>
     <a class='nav-link nav-dropdown-toggle' href="#"><i class="nav-icon fa fa-newspaper-o"></i>Crop Lists</a>
     <ul class="nav-dropdown-items">
-        <li class='nav-item'><a class='nav-link' href='{{ backpack_url('cultivoslist') }}'><i class='nav-icon la la-question'></i> Cultivos</a></li>
-        <li class='nav-item'><a class='nav-link' href='{{ backpack_url('variedadlist') }}'><i class='nav-icon la la-question'></i> Variedades</a></li>
+        <li class='nav-item'><a class='nav-link' href='{{ backpack_url('lkpcultivo') }}'><i class='nav-icon la la-question'></i> Cultivos</a></li>
+        <li class='nav-item'><a class='nav-link' href='{{ backpack_url('lkpvariedad') }}'><i class='nav-icon la la-question'></i> Variedades</a></li>
     </ul>
 </li>
 

@@ -166,33 +166,36 @@ class GetDataFromKobo implements ShouldQueue
 
     public function processCultivoData($newSubmission)
     {
-        foreach ($newSubmission['modulo_loop']['cultivo_loop'] as $cultivo) {
-
+        foreach ($newSubmission['modulo_loop']['cultivo_loop'][0] as $cultivo) {
+            
+            dd($newSubmission['modulo_loop']['cultivo_loop']);
             $cultivo['modulos_cultivo'] = $newSubmission['modulo_loop']['cultivo_loop'][0]['modulos_cultivo'];
-
             $dataMap = DataMap::findorfail('C');
-
-            if (count($cultivo['modulo_cultivo_loop'])==2) {
-                $cultivo['modulo_cultivo_loop'] = $cultivo['modulo_cultivo_loop'][0] + $cultivo['modulo_cultivo_loop'][1];
-            } else {
-                $cultivo['modulo_cultivo_loop'] = $cultivo['modulo_cultivo_loop'][0];
-            }
             $cultivo['parcela_id'] =  $newSubmission['parcela_id'];
             $cultivo['_id'] =  $newSubmission['_id'];
-
-            // get the cultivo_id from the creation of the cultivo
-            $new_cultivo = DataMapController::newRecord($dataMap, $cultivo);
-            $cultivo['cultivo_id'] =  $new_cultivo->id;
+            if (array_key_exists('modulo_cultivo_loop', $cultivo)) {
+                if (count($cultivo['modulo_cultivo_loop'])==2) {
+                    $cultivo['modulo_cultivo_loop'] = $cultivo['modulo_cultivo_loop'][0] + $cultivo['modulo_cultivo_loop'][1];
+                } else {
+                    $cultivo['modulo_cultivo_loop'] = $cultivo['modulo_cultivo_loop'][0];
+                    
+                }
+            }
+               
+                // get the cultivo_id from the creation of the cultivo
+                $new_cultivo = DataMapController::newRecord($dataMap, $cultivo);
+                $cultivo['cultivo_id'] =  $new_cultivo->id;
             if (array_key_exists('extra_modulo_cultivo', $cultivo['modulo_cultivo_loop'])) {
                 $cultivo_modules = $cultivo['modulos_cultivo'] . ' '. $cultivo['modulo_cultivo_loop']['extra_modulo_cultivo'];
             } else {
                 $cultivo_modules = $cultivo['modulos_cultivo'];
             }
-
+        
             $cultivo_modules = explode(' ', $cultivo_modules);
             $cultivo = $cultivo + $cultivo['modulo_cultivo_loop'];
             unset($cultivo['modulo_cultivo_loop']);
 
+           
 
             foreach ($cultivo_modules as $cultivo_module) {
                 //eventually we should get to a place where we don't need to manually map module '3' to either plagas or engermedades...

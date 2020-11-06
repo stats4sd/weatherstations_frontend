@@ -16,7 +16,9 @@ class LkpCultivo extends Model
     */
 
     protected $table = 'lkp_cultivos';
-    protected $guarded = ['id'];
+    protected $guarded = ['created_at'];
+    public $incrementing = false;
+   
 
     /*
     |--------------------------------------------------------------------------

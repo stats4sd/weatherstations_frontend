@@ -66,11 +66,12 @@ class DataMapController extends Controller
 
     public static function createNewModel(DataMap $dataMap, array $data)
     {
+
         //add the submission_id
+       
         $newModel = [
             "submission_id" => $data['_id']
         ];
-
 
         // split the gps coordinates into longitude, latitude, altitude and accuracy
         if ($dataMap->location && isset($data['gps']) && $data['gps']) {
