@@ -28,7 +28,7 @@ class Kernel extends ConsoleKernel
     {
         foreach (Xlsform::all() as $xlsform) {
             $schedule->job(new UpdateFormCsvFiles($xlsform))
-            ->everyMinute();
+            ->daily();
         }
     }
 
