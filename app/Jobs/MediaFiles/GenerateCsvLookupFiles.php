@@ -45,7 +45,7 @@ class GenerateCsvLookupFiles implements ShouldQueue
             $scriptPath = base_path().'/scripts/save_table.py';
 
             $process = new Process(['pipenv', 'run', 'python3', $scriptPath, $media['mysql_view'],  $media['csv_file']]);
-            $process->setWorkingDirectory(base_path());
+            $process = $process->setWorkingDirectory(base_path());
 
             $process->run();
             Log::info('generating file: '.$media['csv_file'].' from mysql view: '.$media['mysql_view']);
