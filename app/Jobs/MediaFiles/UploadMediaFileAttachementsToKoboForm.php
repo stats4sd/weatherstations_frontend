@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\MediaFiles;
 
 use App\Models\Xlsform;
 use Illuminate\Support\Arr;

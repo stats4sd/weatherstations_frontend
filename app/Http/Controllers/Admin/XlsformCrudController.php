@@ -9,7 +9,7 @@ use App\Jobs\ArchiveKoboForm;
 use App\Jobs\DeployFormToKobo;
 use App\Jobs\MediaFiles\GenerateCsvLookupFiles;
 use App\Jobs\GetDataFromKobo;
-use App\Jobs\UploadCsvMediaFileAttachementsToKoboForm;
+use App\Jobs\MediaFiles\UpsloadCsvMediaFileAttachementsToKoboForm;
 use App\Models\ProjectXlsform;
 use App\Models\Xlsform;
 use Backpack\CRUD\CrudPanel;

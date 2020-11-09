@@ -188,6 +188,7 @@ class GetDataFromKobo implements ShouldQueue
             if (array_key_exists('extra_modulo_cultivo', $cultivo['modulo_cultivo_loop'])) {
                 $cultivo_modules = $cultivo['modulos_cultivo'] . ' '. $cultivo['modulo_cultivo_loop']['extra_modulo_cultivo'];
             } else {
+                
                 $cultivo_modules = $cultivo['modulos_cultivo'];
             }
         

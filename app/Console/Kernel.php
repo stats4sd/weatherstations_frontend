@@ -3,7 +3,7 @@
 namespace App\Console;
 
 use App\Models\Xlsform;
-use App\Jobs\UpdateFormCsvFiles;
+use App\Jobs\MediaFiles\UpdateFormCsvFiles;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -28,7 +28,7 @@ class Kernel extends ConsoleKernel
     {
         foreach (Xlsform::all() as $xlsform) {
             $schedule->job(new UpdateFormCsvFiles($xlsform))
-            ->daily();
+            ->everyMinute();
         }
     }
 
