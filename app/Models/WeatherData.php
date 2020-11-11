@@ -16,12 +16,8 @@ class WeatherData extends Model
     */
 
     protected $table = 'weather_data';
-    // protected $primaryKey = 'id';
-    // public $timestamps = false;
-    protected $guarded = ['id'];
-    // protected $fillable = [];
-    // protected $hidden = [];
-    // protected $dates = [];
+    protected $fillable = [];
+
 
     /*
     |--------------------------------------------------------------------------
