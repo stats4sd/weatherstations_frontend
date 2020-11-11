@@ -5,7 +5,7 @@ namespace App\Models;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 
-class Weather_data extends Model
+class WeatherData extends Model
 {
     use CrudTrait;
 

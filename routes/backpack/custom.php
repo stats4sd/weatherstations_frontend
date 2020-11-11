@@ -19,11 +19,11 @@ Route::group([
 ], function () { // custom admin routes
     Route::crud('user', 'UserCrudController');
     Route::crud('data', 'DataCrudController');
-    Route::crud('weather_data', 'Weather_dataCrudController');
+    Route::crud('weather_data', 'WeatherDataCrudController');
 
     Route::post('data/deleteByFilters', 'DataCrudController@deleteByFilters');
     Route::post('data/download', 'DataCrudController@download');
-    Route::post('weather_data/download', 'Weather_dataCrudController@download');
+    Route::post('weather_data/download', 'WeatherDataCrudController@download');
     Route::post('daily/download', 'DailyCrudController@download');
     Route::post('tenDays/download', 'TenDaysCrudController@download');
     Route::post('monthly/download', 'MonthlyCrudController@download');
