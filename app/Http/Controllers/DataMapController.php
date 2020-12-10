@@ -15,10 +15,12 @@ class DataMapController extends Controller
     public static function newRecord(DataMap $dataMap, array $data)
     {
         // if the map references a select_multiple and repeat group, then we're creating data at a lower level
-        if ($dataMap->select_multiple && $dataMap->select_multiple !== "") {
+       
+        if ($dataMap->repeat_group && $dataMap->select_multiple !== "") {
             \Log::info("select_multiple and repeat group being handled");
             \Log::info($data);
-            foreach ($data[$dataMap->repeat_group] as $repeatData) {
+           
+            foreach ($data[$dataMap['repeat_group']] as $repeatData) {
                 // bring references to lower levels back into repeatData
                 // reference to submission
                 $repeatData['_id'] =  $data['_id'];
@@ -27,6 +29,7 @@ class DataMapController extends Controller
 
                 // if there is an 'other' option, deal with it
                 if ($dataMap->select_multiple_other) {
+
 
                     // check if the current repeat is for the 'other' option:
                     if ($repeatData[$dataMap->inner_name] === $dataMap->select_multiple_other) {
@@ -38,7 +41,11 @@ class DataMapController extends Controller
 
                 $newItem = DataMapController::makeNewRecord($dataMap, $repeatData);
             }
-        } else {
+        } else if($dataMap->select_multiple && $dataMap->select_multiple !== ""){
+           
+            
+            
+        }else {
             $newItem = DataMapController::makeNewRecord($dataMap, $data);
         }
 

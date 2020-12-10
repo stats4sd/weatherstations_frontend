@@ -207,11 +207,12 @@ class GetDataFromKobo implements ShouldQueue
                 foreach ($cultivo_modules as $cultivo_module) {
                     //eventually we should get to a place where we don't need to manually map module '3' to either plagas or engermedades...
                     // but for now this will have to do...
-            
+                    
                     if ($cultivo_module == 3 && array_key_exists('problema', $cultivo)) {
                         if ($cultivo['problema'] == 'plagas' || $cultivo['problema'] == 'ambas') {
                             $dataMap_cultivo_module = DataMap::findorfail('plagas');
                             DataMapController::newRecord($dataMap_cultivo_module, $cultivo);
+                           
                         }
                         if ($cultivo['problema'] == 'enfermedades' || $cultivo['problema'] == 'ambas') {
                             
@@ -222,7 +223,7 @@ class GetDataFromKobo implements ShouldQueue
                     }else if($cultivo_module != 3){
                             $dataMap_cultivo_module = DataMap::findorfail($cultivo_module);
                             DataMapController::newRecord($dataMap_cultivo_module, $cultivo);
-                        }
+                    }
                     
                 }
             }

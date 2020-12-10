@@ -35,7 +35,6 @@ Route::group([
     Route::crud('yearly', 'YearlyCrudController');
     Route::crud('daily', 'DailyCrudController');
     Route::crud('tenDays', 'TenDaysCrudController');
-    Route::crud('upload', 'UploadCrudController');
     Route::crud('dataTemplate', 'DataTemplateCrudController');
 
     Route::crud('region', 'RegionCrudController');
