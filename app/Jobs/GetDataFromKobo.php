@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use Exception;
 use App\Models\User;
 use App\Models\Region;
 use App\Models\DataMap;
@@ -68,12 +69,18 @@ class GetDataFromKobo implements ShouldQueue
                 ]);
 
                 //merge all the modules
-                if (array_key_exists('modulo_loop/extra_modulo', $newSubmission['modulo_loop'][0])) {
-                    $newSubmission['modulos'] = $newSubmission['modulos'] . ' ' . $newSubmission['modulo_loop'][0]['modulo_loop/extra_modulo'];
+                if (!array_key_exists('modulo_loop', $newSubmission)  || !array_key_exists('modulos', $newSubmission)) {
+                    throw new Exception('You are trying get data to wrong form');  
+
                 } else {
-                    $newSubmission['modulos'] = $newSubmission['modulos'];
+
+                    if (array_key_exists('modulo_loop/extra_modulo', $newSubmission['modulo_loop'][0])) {
+                        $newSubmission['modulos'] = $newSubmission['modulos'] . ' ' . $newSubmission['modulo_loop'][0]['modulo_loop/extra_modulo'];
+                    } else {
+                        $newSubmission['modulos'] = $newSubmission['modulos'];
+                    }
+                    $newSubmission['modulos'] = explode(' ', $newSubmission['modulos']);
                 }
-                $newSubmission['modulos'] = explode(' ', $newSubmission['modulos']);
 
 
                 $newSubmission = $this->deleteGroupName($newSubmission);
@@ -160,48 +167,64 @@ class GetDataFromKobo implements ShouldQueue
     public function processCultivoData($newSubmission)
     {
         foreach ($newSubmission['modulo_loop']['cultivo_loop'] as $cultivo) {
-
-            $cultivo['modulos_cultivo'] = $newSubmission['modulo_loop']['cultivo_loop'][0]['modulos_cultivo'];
-
-            $dataMap = DataMap::findorfail('C');
-
-            if (count($cultivo['modulo_cultivo_loop'])==2) {
-                $cultivo['modulo_cultivo_loop'] = $cultivo['modulo_cultivo_loop'][0] + $cultivo['modulo_cultivo_loop'][1];
-            } else {
-                $cultivo['modulo_cultivo_loop'] = $cultivo['modulo_cultivo_loop'][0];
-            }
+         
+            // add parcela_id and submission_id to the current cultivo
+        
             $cultivo['parcela_id'] =  $newSubmission['parcela_id'];
             $cultivo['_id'] =  $newSubmission['_id'];
-
+           
             // get the cultivo_id from the creation of the cultivo
+            $dataMap = DataMap::findorfail('C');
             $new_cultivo = DataMapController::newRecord($dataMap, $cultivo);
             $cultivo['cultivo_id'] =  $new_cultivo->id;
-            if (array_key_exists('extra_modulo_cultivo', $cultivo['modulo_cultivo_loop'])) {
-                $cultivo_modules = $cultivo['modulos_cultivo'] . ' '. $cultivo['modulo_cultivo_loop']['extra_modulo_cultivo'];
-            } else {
-                $cultivo_modules = $cultivo['modulos_cultivo'];
-            }
-
-            $cultivo_modules = explode(' ', $cultivo_modules);
-            $cultivo = $cultivo + $cultivo['modulo_cultivo_loop'];
-            unset($cultivo['modulo_cultivo_loop']);
-
-
-            foreach ($cultivo_modules as $cultivo_module) {
-                //eventually we should get to a place where we don't need to manually map module '3' to either plagas or engermedades...
-                // but for now this will have to do...
-                if ($cultivo_module == 3 && array_key_exists('problema', $cultivo)) {
-                    if ($cultivo['problema'] == 'plagas' || $cultivo['problema'] == 'ambas') {
-                        $dataMap_cultivo_module = DataMap::findorfail('plagas');
-                        DataMapController::newRecord($dataMap_cultivo_module, $cultivo);
+            
+            // check if there is the modulo_cultivo_loop and merge the array in one 
+            
+            if (array_key_exists('modulo_cultivo_loop', $cultivo)) {
+                
+                if (count($cultivo['modulo_cultivo_loop'])==2) {
+                    $cultivo['modulo_cultivo_loop'] = $cultivo['modulo_cultivo_loop'][0] + $cultivo['modulo_cultivo_loop'][1];
+                } else {
+                    $cultivo['modulo_cultivo_loop'] = $cultivo['modulo_cultivo_loop'][0];
+                    
+                }
+                
+                //check if there is an extra_modulo_cultivo and create the cultivo_modules
+                
+                if (array_key_exists('extra_modulo_cultivo', $cultivo['modulo_cultivo_loop'])) {
+                    $cultivo_modules = $cultivo['modulos_cultivo'] . ' '. $cultivo['modulo_cultivo_loop']['extra_modulo_cultivo'];
+                } else {
+                    $cultivo_modules = $cultivo['modulos_cultivo'];
+                }
+                
+                $cultivo_modules = explode(' ', $cultivo_modules);
+                $cultivo = $cultivo + $cultivo['modulo_cultivo_loop'];
+                unset($cultivo['modulo_cultivo_loop']);
+                
+                
+                
+                
+                foreach ($cultivo_modules as $cultivo_module) {
+                    //eventually we should get to a place where we don't need to manually map module '3' to either plagas or engermedades...
+                    // but for now this will have to do...
+                    
+                    if ($cultivo_module == 3 && array_key_exists('problema', $cultivo)) {
+                        if ($cultivo['problema'] == 'plagas' || $cultivo['problema'] == 'ambas') {
+                            $dataMap_cultivo_module = DataMap::findorfail('plagas');
+                            DataMapController::newRecord($dataMap_cultivo_module, $cultivo);
+                           
+                        }
+                        if ($cultivo['problema'] == 'enfermedades' || $cultivo['problema'] == 'ambas') {
+                            
+                            $dataMap_cultivo_module = DataMap::findorfail('enfermedades');
+                            DataMapController::newRecord($dataMap_cultivo_module, $cultivo);
+                            
+                        } 
+                    }else if($cultivo_module != 3){
+                            $dataMap_cultivo_module = DataMap::findorfail($cultivo_module);
+                            DataMapController::newRecord($dataMap_cultivo_module, $cultivo);
                     }
-                    if ($cultivo['problema'] == 'enfermedades' || $cultivo['problema'] == 'ambas') {
-                        $dataMap_cultivo_module = DataMap::findorfail('enfermedades');
-                        DataMapController::newRecord($dataMap_cultivo_module, $cultivo);
-                    }
-                } else if($cultivo_module != 3){
-                    $dataMap_cultivo_module = DataMap::findorfail($cultivo_module);
-                    DataMapController::newRecord($dataMap_cultivo_module, $cultivo);
+                    
                 }
             }
         }

@@ -4,9 +4,7 @@
 
 <h4 class='nav-item nav-link text-white mt-3'>Met Data</h4>
 <li class='nav-item'><a class='nav-link' href="{{ backpack_url('station') }}"><i class="nav-icon ffas fa-broadcast-tower"></i> Met Stations</a></li>
-<li class='nav-item'><a class='nav-link' href="{{ backpack_url('data') }}"><i class="nav-icon fas fa-list"></i> Data</a></li>
-<li class='nav-item'><a class='nav-link' href="{{ backpack_url('upload') }}"><i class="nav-icon fa fa-cloud-upload"></i> Data Uploader</a></li>
-<li class='nav-item'><a class='nav-link' href="{{ backpack_url('dataTemplate') }}"><i class="nav-icon far fa-window-maximize"></i> Data Preview</a></li>
+<li class='nav-item'><a class='nav-link' href='{{ backpack_url('weather_data') }}'><i class='nav-icon la la-question'></i> Weather Data</a></li>
 
 <li class='nav-item nav-dropdown'>
     <a class='nav-link nav-dropdown-toggle' href="#"><i class="nav-icon fa fa-newspaper-o"></i>Data Summaries</a>
@@ -47,8 +45,8 @@
 <li class='nav-item nav-dropdown'>
     <a class='nav-link nav-dropdown-toggle' href="#"><i class="nav-icon fa fa-newspaper-o"></i>Crop Lists</a>
     <ul class="nav-dropdown-items">
-        <li class='nav-item'><a class='nav-link' href='{{ backpack_url('cultivoslist') }}'><i class='nav-icon la la-question'></i> Cultivos</a></li>
-        <li class='nav-item'><a class='nav-link' href='{{ backpack_url('variedadlist') }}'><i class='nav-icon la la-question'></i> Variedades</a></li>
+        <li class='nav-item'><a class='nav-link' href='{{ backpack_url('lkpcultivo') }}'><i class='nav-icon la la-question'></i> Cultivos</a></li>
+        <li class='nav-item'><a class='nav-link' href='{{ backpack_url('lkpvariedad') }}'><i class='nav-icon la la-question'></i> Variedades</a></li>
     </ul>
 </li>
 
@@ -64,6 +62,7 @@
         <li class='nav-item'><a class='nav-link' href='{{ backpack_url('comunidad') }}'><i class='nav-icon la la-question'></i> Comunidads</a></li>
     </ul>
 </li>
+
 
 
 
