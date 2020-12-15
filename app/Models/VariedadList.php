@@ -16,7 +16,8 @@ class LkpVariedad extends Model
     */
 
     protected $table = 'lkp_variedades';
-    protected $guarded = ['id'];
+    protected $guarded = ['created_at'];
+    public $incrementing = false;
 
     /*
     |--------------------------------------------------------------------------

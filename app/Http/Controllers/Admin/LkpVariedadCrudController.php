@@ -39,6 +39,7 @@ class LkpVariedadCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        CRUD::column('id')->type('text');
         CRUD::setFromDb(); // columns
 
         /**
@@ -58,6 +59,7 @@ class LkpVariedadCrudController extends CrudController
     {
         CRUD::setValidation(LkpVariedadRequest::class);
 
+        CRUD::field('id')->type('text');
         CRUD::setFromDb(); // fields
 
         /**

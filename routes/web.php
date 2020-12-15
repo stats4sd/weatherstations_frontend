@@ -27,15 +27,15 @@ Route::post('download', 'DataController@download');
 Route::get('weatherstations', function () {
     return view('weatherstations');
 })->middleware('auth');
-Route::post('files', 'FileController@store');
 Route::resource('stations', 'StationController');
 
 Route::post('show', 'DataController@show');
 
-Route::post('storeFile/{uploader_id}', 'FileController@storeFile');
-Route::post('cleanTable/{uploader_id}', 'FileController@cleanTable');
 
 //NEW Upload page
+Route::post('files', 'FileController@store');
+Route::post('storeFile/{uploader_id}', 'FileController@storeFile');
+Route::post('cleanTable/{uploader_id}', 'FileController@cleanTable');
 
 Route::get('admin/upload', 'UploadController@index');
 Route::get('data/{id}/delete', 'DataCrudController@destroy');

@@ -19,9 +19,11 @@ Route::group([
 ], function () { // custom admin routes
     Route::crud('user', 'UserCrudController');
     Route::crud('data', 'DataCrudController');
+    Route::crud('weather_data', 'WeatherDataCrudController');
 
     Route::post('data/deleteByFilters', 'DataCrudController@deleteByFilters');
     Route::post('data/download', 'DataCrudController@download');
+    Route::post('weather_data/download', 'WeatherDataCrudController@download');
     Route::post('daily/download', 'DailyCrudController@download');
     Route::post('tenDays/download', 'TenDaysCrudController@download');
     Route::post('monthly/download', 'MonthlyCrudController@download');
@@ -33,8 +35,6 @@ Route::group([
     Route::crud('yearly', 'YearlyCrudController');
     Route::crud('daily', 'DailyCrudController');
     Route::crud('tenDays', 'TenDaysCrudController');
-    Route::crud('upload', 'UploadCrudController');
-    Route::crud('dataTemplate', 'DataTemplateCrudController');
 
     Route::crud('region', 'RegionCrudController');
     Route::crud('departamento', 'DepartamentoCrudController');
@@ -57,8 +57,12 @@ Route::group([
     Route::post('xlsform/{xlsform}/deploytokobo', 'XlsformCrudController@deployToKobo');
     Route::post('xlsform/{xlsform}/syncdata', 'XlsformCrudController@syncData');
     Route::post('xlsform/{xlsform}/archive', 'XlsformCrudController@archiveOnKobo');
+    Route::post('xlsform/{xlsform}/csvgenerate', 'XlsformCrudController@regenerateCsvFileAttachments');
+
 
     Route::crud('lkpcultivo', 'LkpCultivoCrudController');
     Route::crud('lkpvariedad', 'LkpVariedadCrudController');
     Route::crud('muestrasuelo', 'MuestraSueloCrudController');
+
+
 }); // this should be the absolute last line of this file

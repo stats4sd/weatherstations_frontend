@@ -39,6 +39,7 @@ class LkpCultivoCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        CRUD::column('id')->type('text');
         CRUD::setFromDb(); // columns
 
         /**
@@ -57,7 +58,7 @@ class LkpCultivoCrudController extends CrudController
     protected function setupCreateOperation()
     {
         CRUD::setValidation(LkpCultivoRequest::class);
-
+        CRUD::field('id')->type('text');
         CRUD::setFromDb(); // fields
 
         /**
