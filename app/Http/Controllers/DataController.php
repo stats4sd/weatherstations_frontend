@@ -135,16 +135,7 @@ class DataController extends Controller
             }
         }
 
-        return response()->json([
-            'weather' => $weather,
-            'parcelas' => $parcelas,
-            'suelos' => $suelos,
-            'manejo_parcelas' => $manejo_parcelas,
-            'plagas' => $plagas,
-            'enfermedades' => $enfermedades,
-            'rendimentos' => $rendimentos,
-            'fenologia' => $fenologia,
-        ]);
+       
 
     }
 
