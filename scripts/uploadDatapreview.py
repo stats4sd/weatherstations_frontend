@@ -85,7 +85,7 @@ def openFile():
 
         data = pd.read_csv(path, encoding="utf-8", na_values=['--.-', '--', '---', '------'], low_memory=False)
         df = pd.DataFrame(data)
-
+   
         # remove extra space in columns name
         df.columns = df.columns.str.rstrip()
 
@@ -94,13 +94,13 @@ def openFile():
 
         #add the uploader_id column
         df['uploader_id'] = uploader_id
-
+    
         #drop columns not necessary
         df = df.drop(['No.'], axis=1)
 
         # replace columns name
         df = df.rename(columns=columns_name.list_columns_chinas_csv)
-
+ 
         #create the timestamp for uploading into database
         date_time = []
         for fecha_hora in df.fecha_hora:
@@ -134,6 +134,7 @@ def openFile():
             df = convertor.convertDataFtoC(df, selected_unit_temp, 0)
 
         df = df.where((pd.notnull(df)), None)
+        
 
     return df
 
