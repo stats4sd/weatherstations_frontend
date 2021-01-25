@@ -13,10 +13,9 @@ use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 use \GuzzleHttp\Client;
-use App\Models\DataTemplate;
 use App\Models\DailyDataPreview;
 use App\Models\Daily;
-
+use App\Models\WeatherDataPreview;
 
 class FileController extends Controller
 {
@@ -76,10 +75,8 @@ class FileController extends Controller
             if(!$process->isSuccessful()) {
                 throw new ProcessFailedException($process);
             }
-
             
-            
-            $data_template = DataTemplate::where('uploader_id', '=', $uploader_id)->orderBy('id')->paginate(10);
+            $data_template = WeatherDataPreview::where('uploader_id', '=', $uploader_id)->orderBy('id')->paginate(10);
             
             // $error_data = $this->checkValues($uploader_id);
 
@@ -187,7 +184,7 @@ class FileController extends Controller
             }
         }
 
-        $error_data = DataTemplate::whereIn('fecha_hora',$error_date)->where('uploader_id', '=', $uploader_id)->get();
+        $error_data = WeatherDataPreview::whereIn('fecha_hora',$error_date)->where('uploader_id', '=', $uploader_id)->get();
 
         return response([
 
