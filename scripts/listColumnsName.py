@@ -85,13 +85,25 @@ list_columns_davis_text = {
 
 #dictionary of columns name for converting the chinas csv file columns name into database columns name 
 list_columns_chinas_csv = {
-                            'id_station':'id_station', 'Intervalo':'intervalo', 'Fecha/Hora':'fecha_hora', 
-                            'Temperatura Interna(°C)':'temperatura_interna', 'Humedad Interna(%)':'humedad_interna', 
-                            'Temperatura Externa(°C)':'temperatura_externa', 'Humedad Externa(%)':'humedad_externa',
-                            'Presión Relativa(hpa)':'presion_relativa', 'Presión Absoluta(hpa)':'presion_absoluta', 
-                            'Velocidad del viento(m/s)':'velocidad_viento', 'Sensación Térmica(°C)':'sensacion_termica', 
-                            'Ráfaga(m/s)':'rafaga', 'Dirección del viento':'direccion_del_viento', 'Punto de Rocío(°C)':'punto_rocio', 
-                            'Lluvia hora(mm)':'lluvia_hora', 'Lluvia 24 horas(mm)':'lluvia_24_horas', 'Lluvia semana(mm)':'lluvia_semana', 
-                            'Lluvia mes(mm)':'lluvia_mes', 'Lluvia Total(mm)':'lluvia_total'
+                            'id_station':'id_station', 'Intervalo':'intervalo', 
+                            'Fecha/Hora':'fecha_hora', 
+                            'Temperatura Interna(°C)':'temperatura_interna', 
+                            'Humedad Interna(%)':'humedad_interna', 
+                            'Temperatura Externa(°C)':'temperatura_externa', 
+                            'Humedad Externa(%)':'humedad_externa',
+                            'Presión Relativa(hpa)':'presion_relativa', 
+                            'Presión Absoluta(hpa)':'presion_absoluta', 
+                            'Velocidad del viento(m/s)':'velocidad_viento', 
+                            'Velocidad del viento(km/h)':'velocidad_viento',
+                            'Sensación Térmica(°C)':'sensacion_termica', 
+                            'Ráfaga(m/s)':'rafaga',
+                            'Ráfaga(km/h)':'rafaga',
+                            'Dirección del viento':'direccion_del_viento', 
+                            'Punto de Rocío(°C)':'punto_rocio', 
+                            'Lluvia hora(mm)':'lluvia_hora', 
+                            'Lluvia 24 horas(mm)':'lluvia_24_horas', 
+                            'Lluvia semana(mm)':'lluvia_semana', 
+                            'Lluvia mes(mm)':'lluvia_mes', 
+                            'Lluvia Total(mm)':'lluvia_total'
                           }
 
