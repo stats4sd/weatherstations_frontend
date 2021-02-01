@@ -102,11 +102,14 @@ def openFile():
         df = df.rename(columns=columns_name.list_columns_chinas_csv)
  
         #create the timestamp for uploading into database
+        #Chinas has the time in 12 hours (am, pm)
         date_time = []
         for fecha_hora in df.fecha_hora:
             date = fecha_hora.strip()
             date = date.split(' ')
-            hours = date[1].split(':')
+            hours = date[1]+" "+date[2]
+            hours = convertor.convert24(hours) 
+            hours = hours.split(':')
             date_splited = date[0].split('/')
             date_time.append(str(datetime(int(date_splited[2]), int(date_splited[1]), int(date_splited[0]), int(hours[0]), int(hours[1]), int(hours[2]))))
 
@@ -137,7 +140,6 @@ def openFile():
         
 
     return df
-
 
 # connects to database
 conn = mysql.connect(**config.dbConfig)
