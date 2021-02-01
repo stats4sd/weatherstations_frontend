@@ -1,3 +1,28 @@
+
+# Python program to convert time 
+# from 12 hour to 24 hour format 
+  
+# Function to convert the date format 
+def convert24(str1): 
+    # Checking if last two elements of time 
+    # is AM and first two elements are 12 
+    if str1[-4:] == "a.m." and str1[:2] == "12": 
+        return "00" + str1[2:-5] 
+          
+    # remove the AM     
+    elif str1[-4:] == "a.m.": 
+        return str1[:-5] 
+      
+    # Checking if last two elements of time 
+    # is PM and first two elements are 12    
+    elif str1[-4:] == "p.m." and str1[:2] == "12": 
+        return str1[:-5] 
+          
+    else: 
+        # add 12 to hours and remove PM 
+        return str(int(str1[:2]) + 12) + str1[2:8] 
+
+
 def convertFahrenheitToCelsius(value):
 	
 	temp_celsius = ((value-32)*5/9)
