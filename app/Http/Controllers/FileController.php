@@ -214,7 +214,7 @@ class FileController extends Controller
 
     public function storeFile($uploader_id)
     {
-     $uploader_id="7P0SUubi3I";   
+
         $scriptPath = base_path() . '/scripts/storeData.py';
 
         $process = new Process(['pipenv', 'run', 'python3', $scriptPath, $uploader_id]);
