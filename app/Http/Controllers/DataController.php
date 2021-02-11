@@ -68,6 +68,8 @@ class DataController extends Controller
         $enfermedades = [];
         $rendimentos = [];
         $fenologia = [];
+        $senamhi = [];
+      
 
         foreach ($request->modulesSelected as $module) {
             if($module=='daily_data'){
@@ -75,9 +77,16 @@ class DataController extends Controller
                 if($request->aggregationSelected=='tendays_data'){
                     $weather = DB::table($request->aggregationSelected)->select()->where('max_fecha','>=',$request->startDate)->where('max_fecha','<=',$request->endDate)->whereIn('id_station', $request->stationsSelected)->paginate(5);
 
-                }else{
+                }else if($request->aggregationSelected=="yearly_data"){
                     $weather = DB::table($request->aggregationSelected)->select()->where('fecha','>=',$request->startDate)->where('fecha','<=',$request->endDate)->whereIn('id_station', $request->stationsSelected)->paginate(5);
-               } 
+                
+                }else if($request->aggregationSelected=="senamhi_daily"){
+                  
+                    $senamhi = DB::table('daily_data')->whereYear('fecha',$request->yearSelected)->select(DB::raw('MONTH(fecha) month, DAY(fecha) day'),$request->meteoParameterSelected)->where('id_station', $request->stationsSelected)->get();
+             
+                } else {
+                    $senamhi = DB::table('daily_data')->select($request->meteoParameterSelected)->whereYear('fecha','=',$request->yearSeleted)->where('id_station', $request->stationsSelected)->paginate(5);
+                } 
 
             } if($module=='parcelas') {
                 $parcelas = Parcela::select()->whereIn('comunidad_id', $request->comunidadsSelected)->paginate(5);
@@ -134,8 +143,18 @@ class DataController extends Controller
 
             }
         }
-
-       
+     
+        return response()->json([
+            'weather' => $weather,
+            'senamhi' => $senamhi,
+            'parcelas' => $parcelas,
+            'suelos' => $suelos,
+            'manejo_parcelas' => $manejo_parcelas,
+            'plagas' => $plagas,
+            'enfermedades' => $enfermedades,
+            'rendimentos' => $rendimentos,
+            'fenologia' => $fenologia,
+        ]);
 
     }
 

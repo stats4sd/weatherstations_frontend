@@ -5,7 +5,6 @@
             <div class="card">
                 <div class="container mt-5">
               
-              
                 	<control-panel 
                         :departamentos="departamentos"
                         :municipios="municipios"
@@ -16,12 +15,17 @@
                         :modules.sync="modules" 
                         :aggregations.sync="aggregations"
                         :aggregationSelected.sync="aggregationSelected"
+                        :meteoParameters.sync="meteoParameters"
+                        :meteoParameterSelected.sync="meteoParameterSelected"
+                        :years.sync="years"
+                        :yearSelected.sync="yearSelected"
                         :parcelasModules.sync="parcelasModules"
                         :cultivosModules.sync="cultivosModules"
                         :modulesSelected.sync="modulesSelected"
                         :parcelasModulesSelected.sync="parcelasModulesSelected"
                         :cultivosModulesSelected.sync="cultivosModulesSelected" 
                         :weather.sync="weather" 
+                        :senamhi.sync="senamhi"
                         :parcelasData.sync="parcelasData"
                         :suelos.sync="suelos"
                         :manejo_parcelas.sync="manejo_parcelas"
@@ -50,6 +54,12 @@
                             <b-card-text>
                                 <p v-if="weather.length!==0">Showing {{weather.to}} of {{weather.total}} entries</p> 
                                 <tables :data="weather.data"></tables>
+                            </b-card-text>
+                        </b-tab>
+                        <b-tab v-if="senamhi.length!==0" title="Senamhi data" active>
+                            <b-card-text>
+                                <p v-if="senamhi.length!==0">Showing {{senamhi.to}} of {{senamhi.total}} entries</p> 
+                                <tables :data="senamhi.data"></tables>
                             </b-card-text>
                         </b-tab>
                         <b-tab v-if="parcelasData.length!==0" title="Parcelas">
@@ -101,12 +111,7 @@
         </div>
     </div>
                       
-
-           
-
-		
-
-        </div>
+    </div>
     
 </template>
 <script type="text/javascript">
@@ -115,7 +120,19 @@ export default {
             return{
                 modules: [{label:'Información meteorológica', value:'daily_data'},{label:'Parcelas', value:'parcelas'}, {label:'Cultivos', value:'cultivos'} ],
 
-                aggregations: [{label: 'Daily', value:'daily_data'}, {label: 'Ten days', value:'tendays_data'}, {label: 'Monthly', value:'monthly_data'}, {label: 'yearly', value:'yearly_data'}],
+                aggregations: [{label: 'Senamhi daily', value:'senamhi_daily'}, {label: 'Senamhi monthly', value:'senamhi_monthly'}, {label: 'Daily', value:'daily_data'}, {label: 'Ten days', value:'tendays_data'}, {label: 'Monthly', value:'monthly_data'}, {label: 'yearly', value:'yearly_data'}],
+
+                meteoParameters: [
+                    {label: 'Temperatura Máxima Interna (°C)', value:'max_temperatura_interna'}, {label: 'Temperatura Mínima Interna (°C)', value:'min_temperatura_interna'}, {label: 'Temperatura Media Interna (°C)', value:'avg_temperatura_interna'},
+                    {label: 'Temperatura Máxima Externa (°C)', value:'max_temperatura_externa'}, {label: 'Temperatura Mínima Externa (°C)', value:'min_temperatura_externa'}, {label: 'Temperatura Media Externa (°C)', value:'avg_temperatura_externa'}, 
+                    {label: 'Humedad Máxima Interna %', value:'max_humedad_interna'}, {label: 'Humedad Mínima Interna %', value:'min_humedad_interna'}, {label: 'Humedad Media Interna %', value:'avg_humedad_interna'},
+                    {label: 'Humedad Máxima Externa %', value:'max_humedad_externa'}, {label: 'Humedad Mínima Externa %', value:'min_humedad_externa'}, {label: 'Humedad Media Externa %', value:'avg_humedad_externa'}, 
+                    {label: 'Presion Relativa Máxima (hPa)', value:'max_presion_relativa'}, {label: 'Presion Relativa Mínima (hPa)', value:'min_presion_relativa'}, {label: 'Presion Relativa Media (hPa)', value:'avg_presion_relativa'}, 
+                    {label: 'Presion absoluta Máxima (hPa)', value:'max_presion_absoluta'}, {label: 'Presion absoluta Mínima (hPa)', value:'min_presion_absoluta'}, {label: 'Presion absoluta Media (hPa)', value:'avg_presion_absoluta'},
+                    {label: 'Velocidad Viento Máxima (m/s)', value:'max_velocidad_viento'}, {label: 'Velocidad Viento Mínima (m/s)', value:'min_velocidad_viento'}, {label: 'Velocidad Viento Media (m/s)', value:'avg_velocidad_viento'},
+                    {label: 'Sensacion Termica Máxima (°C)', value:'max_sensacion_termica'}, {label: 'Sensacion Termica Mínima (°C)', value:'min_sensacion_termica'}, {label: 'Sensacion Termica Media (°C)', value:'avg_sensacion_termica'}, 
+                    {label: 'Precipitación Diaria (mm)', value:'lluvia_24_hors_total'} 
+                ],
 
                 parcelasModules: [{label:'Suelos', value:'suelos'},{label:'Manejo de la parcela', value:'manejo_parcelas'}, {label:'Plagas', value:'plagas'}, {label:'Enfermedades', value:'enfermedades'}, {label:'Rendimentos', value:'rendimentos'} ],
 
@@ -124,6 +141,7 @@ export default {
                 startDate:null,
                 endDate:null,
                 weather:[],
+                senamhi:[],
                 parcelasData:[],
                 fenologia:[],
                 suelos:[],
@@ -137,6 +155,8 @@ export default {
                 comunidads:[],
                 comunidadsSelected:[],
                 modulesSelected:[],
+                meteoParameterSelected:[],
+                yearSelected:[],
                 parcelasModulesSelected:[],
                 cultivosModulesSelected:[],
                 stationsSelected:[],
@@ -144,6 +164,7 @@ export default {
                 cultivos:[],
                 rendimentos:[],
                 showTable:false,
+                years:[],
 
             }
 
@@ -164,6 +185,9 @@ export default {
             }),
             axios.get('api/parcelas').then((response) => {
                 this.parcelas = response.data;
+            }),
+            axios.get('api/years').then((response) => {
+                this.years = response.data;
             })
         },
         methods: {

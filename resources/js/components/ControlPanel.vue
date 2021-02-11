@@ -8,33 +8,41 @@
 
             <h4  class="mt-3" v-if="modulesSelected.includes('daily_data')"><b>From which station do you want to have data?</b></h4>
             <v-select v-if="modulesSelected.includes('daily_data')" :options="stations" :reduce="label => label.id" v-model="stationsSelected" multiple style="width:100%"></v-select>
-
+            
             <h4  class="mt-3" v-if="modulesSelected.includes('daily_data')"><b>Select the aggregation for the weather data</b></h4>
             <v-select v-if="modulesSelected.includes('daily_data')" :options="aggregations" :reduce="label => label.value" v-model="aggregationSelected" style="width:100%"></v-select>
+
+            <h4  class="mt-3" v-if="aggregationSelected.includes('senamhi_daily') || aggregationSelected.includes('senamhi_monthly')"><b>Parámetros meteorológicos</b></h4>
+            <v-select v-if="aggregationSelected.includes('senamhi_daily') || aggregationSelected.includes('senamhi_monthly')" :options="meteoParameters" :reduce="label => label.value" v-model="meteoParameterSelected" style="width:100%"></v-select>
+
+            <h4  class="mt-3" v-if="aggregationSelected.includes('senamhi_daily') || aggregationSelected.includes('senamhi_monthly')"><b>Año</b></h4>
+            <v-select v-if="aggregationSelected.includes('senamhi_daily') || aggregationSelected.includes('senamhi_monthly')" label="fecha" :options="yearsFilter" :reduce="fecha => fecha.fecha" v-model="yearSelected" style="width:100%"></v-select>
 
             <h4  class="mt-3" v-if="modulesSelected.includes('parcelas')"><b>What are you interested about plots?</b></h4>
             <v-select v-if="modulesSelected.includes('parcelas')" :options="parcelasModules" :reduce="label => label.value" v-model="parcelasModulesSelected" multiple style="width:100%"></v-select>
 
             <h4  class="mt-3" v-if="modulesSelected.includes('cultivos')"><b>What are you interested about crops?</b></h4>
             <v-select v-if="modulesSelected.includes('cultivos')" :options="cultivosModules" :reduce="label => label.value" v-model="cultivosModulesSelected" multiple style="width:100%"></v-select>
-              
-            <h4 class="mt-3 row"><b>Start date</b></h4>
-    
-                <input class="form-control" type="date" v-model="startDate" style="width:100%">
             
-            <h4 class="mt-3"><b>End date</b></h4>
+            <div v-if="modulesSelected.includes('parcelas') || modulesSelected.includes('cultivos')">
+                <h4 class="mt-3 row"><b>Start date</b></h4>
+        
+                    <input class="form-control" type="date" v-model="startDate" style="width:100%">
+                
+                <h4 class="mt-3"><b>End date</b></h4>
 
-                <input class="form-control" type="date" v-model="endDate" style="width:100%">
+                    <input class="form-control" type="date" v-model="endDate" style="width:100%">
 
-            <h4 class="mt-3"><b>Departamento</b></h4>
-                <v-select label="name" :options="departamentos" :reduce="name => name.id" v-model="departamentosSelected" multiple style="width:100%"></v-select>
+                <h4 class="mt-3"><b>Departamento</b></h4>
+                    <v-select label="name" :options="departamentos" :reduce="name => name.id" v-model="departamentosSelected" multiple style="width:100%"></v-select>
 
-            <h4 class="mt-3"><b>Municipio</b></h4>
-                <v-select label="name" :options="municipiosFilter" :reduce="name => name.id" v-model="municipiosSelected" multiple style="width:100%"></v-select>
+                <h4 class="mt-3"><b>Municipio</b></h4>
+                    <v-select label="name" :options="municipiosFilter" :reduce="name => name.id" v-model="municipiosSelected" multiple style="width:100%"></v-select>
 
-            <h4 class="mt-3"><b>Comunidad</b></h4>
-                <v-select label="name" :options="comunidadsFilter" :reduce="name => name.id" v-model="comunidadsSelected" multiple style="width:100%"></v-select>
-            <button class="site-btn mt-5" v-on:click="submit" style="width:100%">Submit</button>
+                <h4 class="mt-3"><b>Comunidad</b></h4>
+                    <v-select label="name" :options="comunidadsFilter" :reduce="name => name.id" v-model="comunidadsSelected" multiple style="width:100%"></v-select>
+            </div>
+            <button class="site-btn mt-5" v-on:click="submit" style="width:100%">Visualizar</button>
         
         </div>
     </div>
@@ -56,10 +64,14 @@
                 parcelasModulesSelected:[],
                 cultivosModulesSelected:[],
                 weather:[],
+                senamhi:[],
                 stationsSelected:[],
                 aggregationSelected:[],
+                meteoParameterSelected:[],
+                yearSelected:[],
                 municipiosFilter:[],
                 comunidadsFilter:[],
+                yearsFilter:[],
                 parcelas:[],
                 suelos: [],
                 manejo_parcelas: [],
@@ -72,7 +84,7 @@
             }
 
         },
-        props: ['departamentos','municipios','comunidads', 'modules','aggregations', 'parcelasModules','cultivosModules', 'stations', 'showTable'],
+        props: ['departamentos','municipios','comunidads', 'modules', 'aggregations', 'meteoParameters', 'years', 'parcelasModules','cultivosModules', 'stations', 'showTable'],
         watch: {
             modulesSelected() {
                 this.$emit('update:modulesSelected', this.modulesSelected)
@@ -95,11 +107,21 @@
             weather() {
                 this.$emit('update:weather', this.weather)
             },
+            senamhi() {
+                this.$emit('update:senamhi', this.senamhi)
+            },
             stationsSelected() {
                 this.$emit('update:stationsSelected', this.stationsSelected)
+                this.yearsFilter = this.years.filter(year => this.stationsSelected.includes(year.id_station));
             },
             aggregationSelected() {
                 this.$emit('update:aggregationSelected', this.aggregationSelected)
+            },
+            meteoParameterSelected() {
+                this.$emit('update:meteoParameterSelected', this.meteoParameterSelected)
+            },
+            yearSelected() {
+                this.$emit('update:yearSelected', this.yearSelected)
             },
             departamentosSelected() {
        
@@ -152,6 +174,8 @@
                         parcelasModulesSelected: this.parcelasModulesSelected,
                         cultivosModulesSelected: this.cultivosModulesSelected,
                         aggregationSelected: this.aggregationSelected,
+                        meteoParameterSelected: this.meteoParameterSelected,
+                        yearSelected: this.yearSelected,
                     }
                 })
                 .then((result) => {
@@ -163,6 +187,7 @@
                     this.enfermedades = result.data.enfermedades;
                     this.rendimentos = result.data.rendimentos;
                     this.fenologia = result.data.fenologia;
+                    this.senamhi = result.data.senamhi;
                 
                 }, (error) => {
                     console.log(error);
