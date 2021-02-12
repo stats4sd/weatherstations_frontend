@@ -3,7 +3,7 @@
         <div class="justify-content-center">
             <div class="mt-5"> 
  
-                <b-table striped hover responsive :items="data" ></b-table>
+                <b-table striped hover responsive :items="data" :fields="fields" :sort-by.sync="sortBy"></b-table>
 
             </div>   
     	</div>
@@ -12,7 +12,7 @@
 
 <script>
 export default {
-        props: ['data']
+        props: ['data', 'fields', 'sortBy']
         }
 
 </script>

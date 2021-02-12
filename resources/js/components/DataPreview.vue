@@ -17,8 +17,14 @@
                         :aggregationSelected.sync="aggregationSelected"
                         :meteoParameters.sync="meteoParameters"
                         :meteoParameterSelected.sync="meteoParameterSelected"
+                        :meteoParameterLabel.sync="meteoParameterLabel"
                         :years.sync="years"
                         :yearSelected.sync="yearSelected"
+                        :months.sync="months"
+                        :monthInitialSelected.sync="monthInitialSelected"
+                        :monthFinalSelected.sync="monthFinalSelected"
+                        :yearInitialSelected.sync="yearInitialSelected"
+                        :yearFinalSelected.sync="yearFinalSelected"
                         :parcelasModules.sync="parcelasModules"
                         :cultivosModules.sync="cultivosModules"
                         :modulesSelected.sync="modulesSelected"
@@ -58,8 +64,24 @@
                         </b-tab>
                         <b-tab v-if="senamhi.length!==0" title="Senamhi data" active>
                             <b-card-text>
-                                <p v-if="senamhi.length!==0">Showing {{senamhi.to}} of {{senamhi.total}} entries</p> 
-                                <tables :data="senamhi.data"></tables>
+                                <b-row>
+                                    <b-col cols="auto" class="mr-auto p-3">
+                                        <p><b>Station :</b> {{ stations[stationsSelected -1].label }}</p>
+                                        <p v-if="aggregationSelected=='senamhi_daily'"><b>Year :</b> {{ yearSelected }}</p>
+                                        <p v-if="aggregationSelected=='senamhi_monthly'"><b>Month Initial :</b> {{ monthInitialSelected }}</p>
+                                        <p v-if="aggregationSelected=='senamhi_monthly'"><b>Month Final :</b> {{ monthFinalSelected }}</p>
+                                        <p v-if="aggregationSelected=='senamhi_monthly'"><b>Year Initial :</b> {{ yearInitialSelected }}</p>
+                                        <p v-if="aggregationSelected=='senamhi_monthly'"><b>Year Final :</b> {{ yearFinalSelected }}</p>
+                                    </b-col>
+                                    <b-col cols="auto" class="p-3">
+                                        <p><b>Latitude :</b> {{ stations[stationsSelected -1].latitude }}</p>
+                                        <p><b>Longitude :</b> {{ stations[stationsSelected -1].longitude }}</p>
+                                        <p><b>altitude :</b> {{ stations[stationsSelected -1].altitude }}</p>
+                                    </b-col>
+                                </b-row>
+                                <h4 class="text-center"><b>{{ meteoParameterLabel }}</b></h4>
+                                <tables v-if="aggregationSelected=='senamhi_daily'" :data="senamhi" :fields="senamhiDailyFields" :sortBy="day"></tables>
+                                <tables v-if="aggregationSelected=='senamhi_monthly'" :data="senamhi" :fields="senamhiMonthlyFields" :sortBy="day"></tables>
                             </b-card-text>
                         </b-tab>
                         <b-tab v-if="parcelasData.length!==0" title="Parcelas">
@@ -142,6 +164,36 @@ export default {
                 endDate:null,
                 weather:[],
                 senamhi:[],
+                senamhiDailyFields: [
+                    { key: 'day', sortable: true, label: 'DAY' },
+                    'JAN',
+                    'FEB',
+                    'MAR',
+                    'APR',
+                    'MAY',
+                    'JUN',
+                    'JUL',
+                    'AUG',
+                    'SEP',
+                    'OCT',
+                    'NOV',
+                    'DEC'
+                ],
+                senamhiMonthlyFields: [
+                    { key: 'year', sortable: true, label: 'YEAR'},
+                    'JAN',
+                    'FEB',
+                    'MAR',
+                    'APR',
+                    'MAY',
+                    'JUN',
+                    'JUL',
+                    'AUG',
+                    'SEP',
+                    'OCT',
+                    'NOV',
+                    'DEC'
+                ],
                 parcelasData:[],
                 fenologia:[],
                 suelos:[],
@@ -156,7 +208,12 @@ export default {
                 comunidadsSelected:[],
                 modulesSelected:[],
                 meteoParameterSelected:[],
+                meteoParameterLabel:null,
                 yearSelected:[],
+                yearInitialSelected:[],
+                yearFinalSelected:[],
+                monthInitialSelected:[],
+                monthFinalSelected:[],
                 parcelasModulesSelected:[],
                 cultivosModulesSelected:[],
                 stationsSelected:[],
@@ -165,6 +222,20 @@ export default {
                 rendimentos:[],
                 showTable:false,
                 years:[],
+                months:[
+                    {label:'January', value:'01'},
+                    {label:'February', value:'02'},
+                    {label:'March', value:'03'},
+                    {label:'April', value:'04'},
+                    {label:'May', value:'05'},
+                    {label:'June', value:'06'},
+                    {label:'July', value:'07'},
+                    {label:'August', value:'08'},
+                    {label:'September', value:'09'},
+                    {label:'October', value:'10'}, 
+                    {label:'November', value:'11'},
+                    {label:'December', value:'12'},  
+                ]
 
             }
 

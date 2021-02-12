@@ -69,7 +69,6 @@ class DataController extends Controller
         $rendimentos = [];
         $fenologia = [];
         $senamhi = [];
-      
 
         foreach ($request->modulesSelected as $module) {
             if($module=='daily_data'){
@@ -81,11 +80,24 @@ class DataController extends Controller
                     $weather = DB::table($request->aggregationSelected)->select()->where('fecha','>=',$request->startDate)->where('fecha','<=',$request->endDate)->whereIn('id_station', $request->stationsSelected)->paginate(5);
                 
                 }else if($request->aggregationSelected=="senamhi_daily"){
-                  
-                    $senamhi = DB::table('daily_data')->whereYear('fecha',$request->yearSelected)->select(DB::raw('MONTH(fecha) month, DAY(fecha) day'),$request->meteoParameterSelected)->where('id_station', $request->stationsSelected)->get();
-             
+                    $senamhi = DB::table('daily_data')->whereYear('fecha',$request->yearSelected)->select(DB::raw('MONTH(fecha) month, DAY(fecha) day'),$request->meteoParameterSelected)->where('id_station', $request->stationsSelected)->orderBy('fecha', 'asc')->get();
+                 
+                    foreach ($senamhi as $month) {
+                        $month_name = date('F', mktime(0, 0, 0, $month->month, 10));
+                        $short_name = strtoupper(substr($month_name, 0, 3));
+                        $parameter = array_keys((array)$month)[2];
+                        $month->$short_name = $month->$parameter;
+                    }
+
                 } else {
-                    $senamhi = DB::table('daily_data')->select($request->meteoParameterSelected)->whereYear('fecha','=',$request->yearSeleted)->where('id_station', $request->stationsSelected)->paginate(5);
+                    $senamhi = DB::table('monthly_data')->where('id_station', $request->stationsSelected)->whereBetween('year',[$request->yearInitialSelected, $request->yearFinalSelected])->whereBetween('month',[$request->monthInitialSelected, $request->monthFinalSelected])->select('year', 'month', $request->meteoParameterSelected)->orderBy('year', 'asc')->get();
+                    
+                    foreach ($senamhi as $month) {
+                        $month_name = date('F', mktime(0, 0, 0, $month->month, 10));
+                        $short_name = strtoupper(substr($month_name, 0, 3));
+                        $parameter = array_keys((array)$month)[2];
+                        $month->$short_name = $month->$parameter;
+                    }
                 } 
 
             } if($module=='parcelas') {

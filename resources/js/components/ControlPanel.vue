@@ -15,8 +15,20 @@
             <h4  class="mt-3" v-if="aggregationSelected.includes('senamhi_daily') || aggregationSelected.includes('senamhi_monthly')"><b>Parámetros meteorológicos</b></h4>
             <v-select v-if="aggregationSelected.includes('senamhi_daily') || aggregationSelected.includes('senamhi_monthly')" :options="meteoParameters" :reduce="label => label.value" v-model="meteoParameterSelected" style="width:100%"></v-select>
 
-            <h4  class="mt-3" v-if="aggregationSelected.includes('senamhi_daily') || aggregationSelected.includes('senamhi_monthly')"><b>Año</b></h4>
-            <v-select v-if="aggregationSelected.includes('senamhi_daily') || aggregationSelected.includes('senamhi_monthly')" label="fecha" :options="yearsFilter" :reduce="fecha => fecha.fecha" v-model="yearSelected" style="width:100%"></v-select>
+            <h4  class="mt-3" v-if="aggregationSelected.includes('senamhi_daily')"><b>Año</b></h4>
+            <v-select v-if="aggregationSelected.includes('senamhi_daily')" label="fecha" :options="yearsFilter" :reduce="fecha => fecha.fecha" v-model="yearSelected" style="width:100%"></v-select>
+             
+            <h4  class="mt-3" v-if="aggregationSelected.includes('senamhi_monthly')"><b>Año Inicial</b></h4>
+            <v-select v-if="aggregationSelected.includes('senamhi_monthly')" label="fecha" :options="yearsFilter" :reduce="fecha => fecha.fecha" v-model="yearInitialSelected" style="width:100%"></v-select>
+
+            <h4  class="mt-3" v-if="aggregationSelected.includes('senamhi_monthly')"><b>Año Final</b></h4>
+            <v-select v-if="aggregationSelected.includes('senamhi_monthly')" label="fecha" :options="yearsFilter" :reduce="fecha => fecha.fecha" v-model="yearFinalSelected" style="width:100%"></v-select>
+           
+            <h4  class="mt-3" v-if="aggregationSelected.includes('senamhi_monthly')"><b>Mes Initial</b></h4>
+            <v-select v-if="aggregationSelected.includes('senamhi_monthly')" :options="months" :reduce="label => label.value" v-model="monthInitialSelected" style="width:100%"></v-select>
+
+            <h4  class="mt-3" v-if="aggregationSelected.includes('senamhi_monthly')"><b>Mes Final</b></h4>
+            <v-select v-if="aggregationSelected.includes('senamhi_monthly')" :options="months" :reduce="label => label.value" v-model="monthFinalSelected" style="width:100%"></v-select>
 
             <h4  class="mt-3" v-if="modulesSelected.includes('parcelas')"><b>What are you interested about plots?</b></h4>
             <v-select v-if="modulesSelected.includes('parcelas')" :options="parcelasModules" :reduce="label => label.value" v-model="parcelasModulesSelected" multiple style="width:100%"></v-select>
@@ -68,7 +80,12 @@
                 stationsSelected:[],
                 aggregationSelected:[],
                 meteoParameterSelected:[],
+                meteoParameterLabel:null,
                 yearSelected:[],
+                monthInitialSelected:[],
+                monthFinalSelected:[],
+                yearInitialSelected:[],
+                yearFinalSelected:[],
                 municipiosFilter:[],
                 comunidadsFilter:[],
                 yearsFilter:[],
@@ -84,7 +101,7 @@
             }
 
         },
-        props: ['departamentos','municipios','comunidads', 'modules', 'aggregations', 'meteoParameters', 'years', 'parcelasModules','cultivosModules', 'stations', 'showTable'],
+        props: ['departamentos', 'municipios', 'comunidads', 'modules', 'aggregations', 'meteoParameters', 'years', 'months', 'parcelasModules', 'cultivosModules', 'stations', 'showTable'],
         watch: {
             modulesSelected() {
                 this.$emit('update:modulesSelected', this.modulesSelected)
@@ -119,9 +136,25 @@
             },
             meteoParameterSelected() {
                 this.$emit('update:meteoParameterSelected', this.meteoParameterSelected)
+                this.meteoParameterLabel = this.meteoParameters.find(meteoParameters => meteoParameters.value === this.meteoParameterSelected).label;
+            },
+            meteoParameterLabel() {
+                this.$emit('update:meteoParameterLabel', this.meteoParameterLabel)
             },
             yearSelected() {
                 this.$emit('update:yearSelected', this.yearSelected)
+            },
+            monthInitialSelected() {
+                this.$emit('update:monthInitialSelected', this.monthInitialSelected)
+            },
+            monthFinalSelected() {
+                this.$emit('update:monthFinalSelected', this.monthFinalSelected)
+            },
+            yearInitialSelected() {
+                this.$emit('update:yearInitialSelected', this.yearInitialSelected)
+            },
+            yearFinalSelected() {
+                this.$emit('update:yearFinalSelected', this.yearFinalSelected)
             },
             departamentosSelected() {
        
@@ -176,6 +209,11 @@
                         aggregationSelected: this.aggregationSelected,
                         meteoParameterSelected: this.meteoParameterSelected,
                         yearSelected: this.yearSelected,
+                        monthInitialSelected: this.monthInitialSelected,
+                        monthFinalSelected: this.monthFinalSelected,
+                        yearInitialSelected: this.yearInitialSelected,
+                        yearFinalSelected: this.yearFinalSelected,
+
                     }
                 })
                 .then((result) => {
@@ -188,7 +226,7 @@
                     this.rendimentos = result.data.rendimentos;
                     this.fenologia = result.data.fenologia;
                     this.senamhi = result.data.senamhi;
-                
+                   
                 }, (error) => {
                     console.log(error);
                 });          
