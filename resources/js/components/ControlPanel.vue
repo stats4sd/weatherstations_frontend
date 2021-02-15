@@ -1,49 +1,107 @@
 <template>
     <div class="container">
-        <div class="row justify-content-center">
+         <h4  class="mt-3"><b>Select the modules</b></h4>
             
-            <h4><b>Select the modules</b></h4>
-              
-            <v-select  label="label" :options="modules" item-value="modules.value" :reduce="label => label.value" v-model="modulesSelected" multiple style="width:100%"></v-select>
+                <b-form-checkbox-group
+                    v-model="modulesSelected"
+                    :options="modules"
+                    value-field="value"
+                    text-field="label"
+                   
+                    :aria-describedby="selectModuleLabel"
+                    stacked
+                ></b-form-checkbox-group>
+           
+        <div class="justify-content-center">
 
             <h4  class="mt-3" v-if="modulesSelected.includes('daily_data')"><b>From which station do you want to have data?</b></h4>
-            <v-select v-if="modulesSelected.includes('daily_data')" :options="stations" :reduce="label => label.id" v-model="stationsSelected" multiple style="width:100%"></v-select>
+            <v-select v-if="modulesSelected.includes('daily_data')" :options="stations" :reduce="label => label.id" v-model="stationsSelected" multiple></v-select>
             
             <h4  class="mt-3" v-if="modulesSelected.includes('daily_data')"><b>Select the aggregation for the weather data</b></h4>
-            <v-select v-if="modulesSelected.includes('daily_data')" :options="aggregations" :reduce="label => label.value" v-model="aggregationSelected" style="width:100%"></v-select>
+            <v-select v-if="modulesSelected.includes('daily_data')" :options="aggregations" :reduce="label => label.value" v-model="aggregationSelected"></v-select>
 
             <h4  class="mt-3" v-if="aggregationSelected.includes('senamhi_daily') || aggregationSelected.includes('senamhi_monthly')"><b>Parámetros meteorológicos</b></h4>
-            <v-select v-if="aggregationSelected.includes('senamhi_daily') || aggregationSelected.includes('senamhi_monthly')" :options="meteoParameters" :reduce="label => label.value" v-model="meteoParameterSelected" style="width:100%"></v-select>
+            <v-select v-if="aggregationSelected.includes('senamhi_daily') || aggregationSelected.includes('senamhi_monthly')" :options="meteoParameters" :reduce="label => label.value" v-model="meteoParameterSelected"></v-select>
 
             <h4  class="mt-3" v-if="aggregationSelected.includes('senamhi_daily')"><b>Año</b></h4>
-            <v-select v-if="aggregationSelected.includes('senamhi_daily')" label="fecha" :options="yearsFilter" :reduce="fecha => fecha.fecha" v-model="yearSelected" style="width:100%"></v-select>
-             
-            <h4  class="mt-3" v-if="aggregationSelected.includes('senamhi_monthly')"><b>Año Inicial</b></h4>
-            <v-select v-if="aggregationSelected.includes('senamhi_monthly')" label="fecha" :options="yearsFilter" :reduce="fecha => fecha.fecha" v-model="yearInitialSelected" style="width:100%"></v-select>
+            <v-select v-if="aggregationSelected.includes('senamhi_daily')" label="fecha" :options="yearsFilter" :reduce="fecha => fecha.fecha" v-model="yearSelected"></v-select>
+            <div class="row">
+                <div class="col">
+                    <h4  class="mt-3" v-if="aggregationSelected.includes('senamhi_monthly')"><b>Mes Initial</b></h4>
+                    <v-select v-if="aggregationSelected.includes('senamhi_monthly')" :options="months" :reduce="label => label.value" v-model="monthInitialSelected"></v-select>
 
-            <h4  class="mt-3" v-if="aggregationSelected.includes('senamhi_monthly')"><b>Año Final</b></h4>
-            <v-select v-if="aggregationSelected.includes('senamhi_monthly')" label="fecha" :options="yearsFilter" :reduce="fecha => fecha.fecha" v-model="yearFinalSelected" style="width:100%"></v-select>
-           
-            <h4  class="mt-3" v-if="aggregationSelected.includes('senamhi_monthly')"><b>Mes Initial</b></h4>
-            <v-select v-if="aggregationSelected.includes('senamhi_monthly')" :options="months" :reduce="label => label.value" v-model="monthInitialSelected" style="width:100%"></v-select>
-
-            <h4  class="mt-3" v-if="aggregationSelected.includes('senamhi_monthly')"><b>Mes Final</b></h4>
-            <v-select v-if="aggregationSelected.includes('senamhi_monthly')" :options="months" :reduce="label => label.value" v-model="monthFinalSelected" style="width:100%"></v-select>
-
-            <h4  class="mt-3" v-if="modulesSelected.includes('parcelas')"><b>What are you interested about plots?</b></h4>
-            <v-select v-if="modulesSelected.includes('parcelas')" :options="parcelasModules" :reduce="label => label.value" v-model="parcelasModulesSelected" multiple style="width:100%"></v-select>
-
-            <h4  class="mt-3" v-if="modulesSelected.includes('cultivos')"><b>What are you interested about crops?</b></h4>
-            <v-select v-if="modulesSelected.includes('cultivos')" :options="cultivosModules" :reduce="label => label.value" v-model="cultivosModulesSelected" multiple style="width:100%"></v-select>
-            
-            <div v-if="modulesSelected.includes('parcelas') || modulesSelected.includes('cultivos')">
-                <h4 class="mt-3 row"><b>Start date</b></h4>
+                </div>
+                <div class="col">
+                    <h4  class="mt-3" v-if="aggregationSelected.includes('senamhi_monthly')"><b>Mes Final</b></h4>
+                    <v-select v-if="aggregationSelected.includes('senamhi_monthly')" :options="months" :reduce="label => label.value" v-model="monthFinalSelected"></v-select>
         
-                    <input class="form-control" type="date" v-model="startDate" style="width:100%">
-                
-                <h4 class="mt-3"><b>End date</b></h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <h4  class="mt-3" v-if="aggregationSelected.includes('senamhi_monthly')"><b>Año Inicial</b></h4>
+                    <v-select v-if="aggregationSelected.includes('senamhi_monthly')" label="fecha" :options="yearsFilter" :reduce="fecha => fecha.fecha" v-model="yearInitialSelected"></v-select>
 
-                    <input class="form-control" type="date" v-model="endDate" style="width:100%">
+                </div>
+                <div class="col">
+                
+                    <h4  class="mt-3" v-if="aggregationSelected.includes('senamhi_monthly')"><b>Año Final</b></h4>
+                    <v-select v-if="aggregationSelected.includes('senamhi_monthly')" label="fecha" :options="yearsFilter" :reduce="fecha => fecha.fecha" v-model="yearFinalSelected"></v-select>
+                
+
+                </div>
+            </div> 
+            
+           
+        </div>
+       
+            <b-form-group
+            v-if="modulesSelected.includes('parcelas')"
+            label="What are you interested about plots?"
+            class="mt-3"
+            v-slot="{ selectPlotLabel }"
+            >
+                <b-form-checkbox-group
+                    v-if="modulesSelected.includes('parcelas')"
+                    v-model="parcelasModulesSelected"
+                    :options="parcelasModules"
+                    value-field="value"
+                    text-field="label"
+                    :aria-describedby="selectPlotLabel"
+                    stacked
+                ></b-form-checkbox-group>
+            </b-form-group>
+   
+            <b-form-group
+            v-if="modulesSelected.includes('cultivos')"
+            label="What are you interested about crops?"
+            class="mt-3"
+            v-slot="{ selectCultivoLabel }"
+            >
+                <b-form-checkbox-group
+                    v-if="modulesSelected.includes('cultivos')"
+                    v-model="cultivosModulesSelected"
+                    :options="cultivosModules"
+                    value-field="value"
+                    text-field="label"
+                    :aria-describedby="selectCultivoLabel"
+                    stacked
+                ></b-form-checkbox-group>
+            </b-form-group>
+         <div>
+            <div v-if="modulesSelected.includes('parcelas') || modulesSelected.includes('cultivos')">
+                <div class="row">
+                    <div class="col">
+                        <h4 class="mt-3"><b>Start date</b></h4>
+                        <input class="form-control" type="date" v-model="startDate">
+                    </div>
+                    <div class="col">
+                        <h4 class="mt-3"><b>End date</b></h4>
+                        <input class="form-control" type="date" v-model="endDate">
+                    </div>
+
+                </div>
+                
 
                 <h4 class="mt-3"><b>Departamento</b></h4>
                     <v-select label="name" :options="departamentos" :reduce="name => name.id" v-model="departamentosSelected" multiple style="width:100%"></v-select>
@@ -54,14 +112,13 @@
                 <h4 class="mt-3"><b>Comunidad</b></h4>
                     <v-select label="name" :options="comunidadsFilter" :reduce="name => name.id" v-model="comunidadsSelected" multiple style="width:100%"></v-select>
             </div>
-            <button class="site-btn mt-5" v-on:click="submit" style="width:100%">Visualizar</button>
+            <button class="site-btn mt-3 mb-3 float-right" v-on:click="submit">Visualizar</button>
         
         </div>
     </div>
 </template>
 
 <script>
-
 
     export default {
         data: function(){

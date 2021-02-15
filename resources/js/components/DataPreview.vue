@@ -66,17 +66,17 @@
                             <b-card-text>
                                 <b-row>
                                     <b-col cols="auto" class="mr-auto p-3">
-                                        <p><b>Station :</b> {{ stations[stationsSelected -1].label }}</p>
+                                        <p><b>Station :</b> {{ stations[stationsSelected-1].label }}</p>
                                         <p v-if="aggregationSelected=='senamhi_daily'"><b>Year :</b> {{ yearSelected }}</p>
-                                        <p v-if="aggregationSelected=='senamhi_monthly'"><b>Month Initial :</b> {{ monthInitialSelected }}</p>
-                                        <p v-if="aggregationSelected=='senamhi_monthly'"><b>Month Final :</b> {{ monthFinalSelected }}</p>
+                                        <p v-if="aggregationSelected=='senamhi_monthly'"><b>Month Initial :</b> {{ months[monthInitialSelected-1].label }}</p>
+                                        <p v-if="aggregationSelected=='senamhi_monthly'"><b>Month Final :</b> {{ months[monthFinalSelected-1].label }}</p>
                                         <p v-if="aggregationSelected=='senamhi_monthly'"><b>Year Initial :</b> {{ yearInitialSelected }}</p>
                                         <p v-if="aggregationSelected=='senamhi_monthly'"><b>Year Final :</b> {{ yearFinalSelected }}</p>
                                     </b-col>
                                     <b-col cols="auto" class="p-3">
                                         <p><b>Latitude :</b> {{ stations[stationsSelected -1].latitude }}</p>
                                         <p><b>Longitude :</b> {{ stations[stationsSelected -1].longitude }}</p>
-                                        <p><b>altitude :</b> {{ stations[stationsSelected -1].altitude }}</p>
+                                        <p><b>Altitude :</b> {{ stations[stationsSelected -1].altitude }}</p>
                                     </b-col>
                                 </b-row>
                                 <h4 class="text-center"><b>{{ meteoParameterLabel }}</b></h4>
