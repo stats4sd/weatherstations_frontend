@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ae80735c797d69d221f72c7147a7fd86",
+    "content-hash": "5b984315291764b81c9106b74481f367",
     "packages": [
         {
             "name": "backpack/crud",
@@ -4312,20 +4312,20 @@
         },
         {
             "name": "stats4sd/laravel-sql-views",
-            "version": "v1.0.1",
+            "version": "1.02",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stats4sd/laravel-sql-views.git",
-                "reference": "95e1391ee28f15b894cee56fddc104cbac0cde64"
+                "reference": "c0f7ea5f5a126ff37f065a250dfe7ece68eb1604"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stats4sd/laravel-sql-views/zipball/95e1391ee28f15b894cee56fddc104cbac0cde64",
-                "reference": "95e1391ee28f15b894cee56fddc104cbac0cde64",
+                "url": "https://api.github.com/repos/stats4sd/laravel-sql-views/zipball/c0f7ea5f5a126ff37f065a250dfe7ece68eb1604",
+                "reference": "c0f7ea5f5a126ff37f065a250dfe7ece68eb1604",
                 "shasum": ""
             },
             "require": {
-                "illuminate/support": "~5|~6|~7"
+                "illuminate/support": "~5|~6|~7|~8"
             },
             "require-dev": {
                 "mockery/mockery": "^1.1",
@@ -4366,7 +4366,11 @@
                 "laravel",
                 "sql"
             ],
-            "time": "2020-08-21T11:18:26+00:00"
+            "support": {
+                "issues": "https://github.com/stats4sd/laravel-sql-views/issues",
+                "source": "https://github.com/stats4sd/laravel-sql-views/tree/v1.0.2"
+            },
+            "time": "2020-11-10T13:15:34+00:00"
         },
         {
             "name": "studio-42/elfinder",
@@ -9595,5 +9599,6 @@
     "platform": {
         "php": "^7.2"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "2.0.0"
 }

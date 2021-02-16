@@ -22,3 +22,4 @@ Route::apiResource('stations', 'Api\\StationController');
 Route::apiResource('parcelas', 'Api\\ParcelaController');
 Route::apiResource('departamentos', 'Api\\DepartamentoController');
 Route::apiResource('municipios', 'Api\\MunicipioController');
+Route::apiResource('years', 'Api\\YearController');
