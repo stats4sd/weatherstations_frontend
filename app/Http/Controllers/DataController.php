@@ -16,6 +16,7 @@ use App\Models\Suelo;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use PhpParser\Node\Expr\AssignOp\Concat;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
@@ -68,6 +69,7 @@ class DataController extends Controller
         $enfermedades = [];
         $rendimentos = [];
         $fenologia = [];
+        $senamhi_data = [];
 
         foreach ($request->modulesSelected as $module) {
             if($module=='daily_data'){
@@ -75,9 +77,64 @@ class DataController extends Controller
                 if($request->aggregationSelected=='tendays_data'){
                     $weather = DB::table($request->aggregationSelected)->select()->where('max_fecha','>=',$request->startDate)->where('max_fecha','<=',$request->endDate)->whereIn('id_station', $request->stationsSelected)->paginate(5);
 
-                }else{
+                }else if($request->aggregationSelected=="yearly_data"){
                     $weather = DB::table($request->aggregationSelected)->select()->where('fecha','>=',$request->startDate)->where('fecha','<=',$request->endDate)->whereIn('id_station', $request->stationsSelected)->paginate(5);
-               } 
+                
+                }else if($request->aggregationSelected=="senamhi_daily"){
+                    $senamhi = DB::table('daily_data')->whereYear('fecha',$request->yearSelected)->select(DB::raw('MONTH(fecha) month, DAY(fecha) day'),$request->meteoParameterSelected)->where('id_station', $request->stationsSelected)->orderBy('day', 'asc')->get();
+                    
+                    foreach ($senamhi as $month) {
+                        $month_name = date('F', mktime(0, 0, 0, $month->month, 10));
+                        $short_name = strtoupper(substr($month_name, 0, 3));
+                        $parameter = array_keys((array)$month)[2];
+                        $month->$short_name = $month->$parameter;
+                    }
+                
+
+                    $senamhi = $senamhi->groupBy('day');
+                   
+                    $senamhi_data = [];
+                    $data = (object)[];
+                   
+                    foreach ($senamhi as $days) {
+                        foreach($days as $day) {
+                            
+                            $short_month = array_keys((array)$day)[3];
+                            $data->day = $day->day;
+                            $data->$short_month = $day->$short_month;
+                        }
+                        
+                        $senamhi_data[]=(array)$data;
+                         
+                    }
+               
+
+                } else {
+                    $senamhi = DB::table('monthly_data')->where('id_station', $request->stationsSelected)->whereBetween('year',[$request->yearInitialSelected, $request->yearFinalSelected])->whereBetween('month',[$request->monthInitialSelected, $request->monthFinalSelected])->select('year', 'month', $request->meteoParameterSelected)->orderBy('year', 'asc')->get();
+                    
+                    foreach ($senamhi as $month) {
+                        $month_name = date('F', mktime(0, 0, 0, $month->month, 10));
+                        $short_name = strtoupper(substr($month_name, 0, 3));
+                        $parameter = array_keys((array)$month)[2];
+                        $month->$short_name = $month->$parameter;
+                    }
+                    
+                    $senamhi = $senamhi->groupBy('year');
+                    $senamhi_data = [];
+                    $data = (object)[];
+                    foreach ($senamhi as $year) {
+                        foreach($year as $month) {
+                            
+                            $short_month = array_keys((array)$month)[3];
+                            $data->year = $month->year;
+                            $data->$short_month = $month->$short_month;
+                        }
+                        $senamhi_data[]=(array)$data;
+                    }
+                    
+
+             
+                } 
 
             } if($module=='parcelas') {
                 $parcelas = Parcela::select()->whereIn('comunidad_id', $request->comunidadsSelected)->paginate(5);
@@ -134,8 +191,18 @@ class DataController extends Controller
 
             }
         }
-
-       
+     
+        return response()->json([
+            'weather' => $weather,
+            'senamhi' => $senamhi_data,
+            'parcelas' => $parcelas,
+            'suelos' => $suelos,
+            'manejo_parcelas' => $manejo_parcelas,
+            'plagas' => $plagas,
+            'enfermedades' => $enfermedades,
+            'rendimentos' => $rendimentos,
+            'fenologia' => $fenologia,
+        ]);
 
     }
 
