@@ -83,9 +83,9 @@ def openFile():
 
     else:
 
-        data = pd.read_csv(path, encoding="utf-8", na_values=['--.-', '--', '---', '------'], low_memory=False)
+        data = pd.read_csv(path, na_values=['--.-',' --.-', '--',' --', '---',' ---', '------', ' ------'], sep=";", low_memory=False)
+
         df = pd.DataFrame(data)
-   
         # remove extra space in columns name
         df.columns = df.columns.str.rstrip()
 
@@ -102,13 +102,16 @@ def openFile():
         df = df.rename(columns=columns_name.list_columns_chinas_csv)
  
         #create the timestamp for uploading into database
-        #Chinas has the time in 12 hours (am, pm)
+        #Chinas can have the time in 12 hours (am, pm) or 24 hours
         date_time = []
         for fecha_hora in df.fecha_hora:
             date = fecha_hora.strip()
             date = date.split(' ')
-            hours = date[1]+" "+date[2]
-            hours = convertor.convert24(hours) 
+            if len(date)==3:
+                hours = date[1]+" "+date[2]
+                hours = convertor.convert24(hours) 
+            else:
+                hours = date[1]    
             hours = hours.split(':')
             date_splited = date[0].split('/')
             date_time.append(str(datetime(int(date_splited[2]), int(date_splited[1]), int(date_splited[0]), int(hours[0]), int(hours[1]), int(hours[2]))))
