@@ -83,8 +83,8 @@ def openFile():
 
     else:
 
-        data = pd.read_csv(path, na_values=['--.-',' --.-', '--',' --', '---',' ---', '------', ' ------'], sep=";", low_memory=False)
-
+        data = pd.read_csv(path, na_values=['--.-',' --.-', '--',' --', '---',' ---', '------', ' ------'], sep=",", low_memory=False)
+       
         df = pd.DataFrame(data)
         # remove extra space in columns name
         df.columns = df.columns.str.rstrip()
@@ -94,7 +94,7 @@ def openFile():
 
         #add the uploader_id column
         df['uploader_id'] = uploader_id
-    
+     
         #drop columns not necessary
         df = df.drop(['No.'], axis=1)
 
