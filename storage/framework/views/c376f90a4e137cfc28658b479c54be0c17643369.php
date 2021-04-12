@@ -1,1 +1,0 @@
-<a href="<?php echo e(url('dataTemplate/convertDatakmOrMToMs')); ?> " style="width:250px" class="btn btn-info mt-1"><i class="fas fa-wind"></i>  Convert km/h or mph to m/s</a><?php /**PATH /home/forge/weatherstations.stats4sd.org/resources/views/vendor/backpack/crud/buttons/convertDatakmOrMToMsButton.blade.php ENDPATH**/ ?>

@@ -1,1 +1,0 @@
-<a href="<?php echo e(url('dataTemplate/storeFile')); ?> " style="width:250px" class="btn btn-info mt-1"><i class="	fa fa-cloud-upload"></i> Store Data in DB</a><?php /**PATH /home/forge/weatherstations.stats4sd.org/resources/views/vendor/backpack/crud/buttons/storeFileButton.blade.php ENDPATH**/ ?>

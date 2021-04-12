@@ -1,1 +1,0 @@
-</<?php echo e($column['wrapper']['element'] ?? 'a'); ?>><?php /**PATH /home/forge/weatherstations.stats4sd.org/vendor/backpack/crud/src/resources/views/crud/columns/inc/wrapper_end.blade.php ENDPATH**/ ?>

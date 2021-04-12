@@ -1,2 +1,0 @@
-<a href="<?php echo e(url('dataTemplate/convertDataFtoC')); ?> "style="width:250px" class="btn btn-info mt-1"><i class="fas fa-temperature-high"></i> Convert °F to °C</a>
-<?php /**PATH /home/forge/weatherstations.stats4sd.org/resources/views/vendor/backpack/crud/buttons/convertDataFtoCButton.blade.php ENDPATH**/ ?>
