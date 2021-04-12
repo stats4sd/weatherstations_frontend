@@ -1,0 +1,1 @@
+<a href="<?php echo e(url('dataTemplate/cleanTable')); ?> "style="width:250px" class="btn btn-danger mt-1"><i class="fas fa-trash-alt"></i> Clean Table</a><?php /**PATH /home/forge/weatherstations.stats4sd.org/resources/views/vendor/backpack/crud/buttons/cleanTableButton.blade.php ENDPATH**/ ?>
