@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Events\NewDataVariableSpotted;
+use App\Events\SoilSampleSubmitted;
 use App\Listeners\NotifyAdminAboutNewVariable;
+use App\Listeners\SendMailToLab;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -17,12 +19,18 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
+       
+        
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
         NewDataVariableSpotted::class =>
         [
             NotifyAdminAboutNewVariable::class,
+        ],
+        SoilSampleSubmitted::class =>
+        [
+            SendMailToLab::class,
         ],
 
     ];

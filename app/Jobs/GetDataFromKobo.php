@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Events\SoilSampleSubmitted;
 use Exception;
 use App\Models\User;
 use App\Models\Region;
@@ -149,6 +150,11 @@ class GetDataFromKobo implements ShouldQueue
 
                 // Iterate through the other parcela-level modules.
                 foreach ($newSubmission['modulos'] as $parcelaModule) {
+                    if ($parcelaModule === 'B') {
+                        $soil = $newSubmission + $newSubmission['modulo_loop'];
+                     
+                        SoilSampleSubmitted::dispatch($soil);
+                    }
                     if ($parcelaModule === 'C') {
                         $this->processCultivoData($newSubmission);
                     } else {
