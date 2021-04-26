@@ -27,8 +27,14 @@ class SendMailToLab
      */
     public function handle(SoilSampleSubmitted $event)
     {
-        \Mail::to(config('app.admin_email'))->send(
+        //magalygc1@yahoo.es
+        //edwin.yucra@gmail.com
+        // $emails = ['edwin.yucra@gmail.com', 'magalygc1@yahoo.es'];
+       
+        \Mail::to(config('app.admin_email'))
+        ->send(
         new SoilSampleToLab($event->soil)
         );
+        
     }
 }

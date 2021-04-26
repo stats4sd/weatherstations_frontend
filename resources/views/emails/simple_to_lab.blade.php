@@ -34,7 +34,7 @@ MUESTRA DE SUELO PARA ANÁLISIS
         </tr>
       @else
         <tr>
-            <td>Codigo QR </td>
+            <td>Codigo QR Parcela</td>
             <td>{{ $soil['numero_id_n'] }}</td>
         </tr>
       @endif
