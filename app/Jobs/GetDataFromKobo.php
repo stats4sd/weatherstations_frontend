@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Events\ResultLabSubmitted;
 use App\Events\SoilSampleSubmitted;
 use Exception;
 use App\Models\User;
@@ -60,6 +61,7 @@ class GetDataFromKobo implements ShouldQueue
         $submissions = Submission::where('xlsform_id', '=', $this->form->id)->get();
 
         foreach ($data as $newSubmission) {
+
             if (!in_array($newSubmission['_id'], $submissions->pluck('id')->toArray())) {
                 Submission::create([
                     'id' => $newSubmission['_id'],
@@ -69,9 +71,13 @@ class GetDataFromKobo implements ShouldQueue
                     'fecha_hora' => $newSubmission['_submission_time'],
                 ]);
 
+                
                 //merge all the modules
                 if (!array_key_exists('modulo_loop', $newSubmission)  || !array_key_exists('modulos', $newSubmission)) {
-                    throw new Exception('You are trying get data to wrong form');  
+                    // throw new Exception('You are trying get data to wrong form');  
+                    $newSubmission = $this->deleteGroupName($newSubmission);
+                 
+                    ResultLabSubmitted::dispatch($newSubmission);
 
                 } else {
 

@@ -43,6 +43,6 @@ class SoilSampleToLab extends Mailable
     {
         return $this->from("no-reply@stats4sd.org")
             ->subject('CCRP Agrometric Platform: MUESTRA DE SUELO PARA ANÁLISIS')
-            ->markdown('emails.simple_to_lab');
+            ->markdown('emails.sample_to_lab');
     }
 }

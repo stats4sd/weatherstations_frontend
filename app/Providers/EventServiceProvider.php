@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Events\NewDataVariableSpotted;
+use App\Events\ResultLabSubmitted;
 use App\Events\SoilSampleSubmitted;
 use App\Listeners\NotifyAdminAboutNewVariable;
 use App\Listeners\SendMailToLab;
+use App\Listeners\SendResultMailToUser;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -32,6 +34,11 @@ class EventServiceProvider extends ServiceProvider
         [
             SendMailToLab::class,
         ],
+        ResultLabSubmitted::class =>
+        [
+            SendResultMailToUser::class,
+        ],
+
 
     ];
 
