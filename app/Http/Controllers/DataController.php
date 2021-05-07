@@ -70,15 +70,19 @@ class DataController extends Controller
         $rendimentos = [];
         $fenologia = [];
         $senamhi_data = [];
-
         foreach ($request->modulesSelected as $module) {
             if($module=='daily_data'){
-                   
-                if($request->aggregationSelected=='tendays_data'){
-                    $weather = DB::table($request->aggregationSelected)->select()->where('max_fecha','>=',$request->startDate)->where('max_fecha','<=',$request->endDate)->whereIn('id_station', $request->stationsSelected)->paginate(5);
+                if($request->aggregationSelected=='daily_data'){
+                    $weather = DB::table('daily_data')->where('fecha','>=',$request->startDate)->where('fecha','<=',$request->endDate)->whereIn('id_station', $request->stationsSelected)->paginate(100);
 
+                }else if($request->aggregationSelected=='tendays_data'){
+                    $weather = DB::table($request->aggregationSelected)->where('max_fecha','>=',$request->startDate)->where('min_fecha','<=',$request->endDate)->whereIn('id_station', $request->stationsSelected)->paginate(5);
+
+                }else if($request->aggregationSelected=="monthly_data"){
+                    $weather = DB::table($request->aggregationSelected)->where('fecha','>=',$request->startDate)->where('fecha','<=',$request->endDate)->whereIn('id_station', $request->stationsSelected)->paginate(5);
+                  
                 }else if($request->aggregationSelected=="yearly_data"){
-                    $weather = DB::table($request->aggregationSelected)->select()->where('fecha','>=',$request->startDate)->where('fecha','<=',$request->endDate)->whereIn('id_station', $request->stationsSelected)->paginate(5);
+                    $weather = DB::table($request->aggregationSelected)->where('fecha','>=',$request->startDate)->where('fecha','<=',$request->endDate)->whereIn('id_station', $request->stationsSelected)->paginate(5);
                 
                 }else if($request->aggregationSelected=="senamhi_daily"){
                     $senamhi = DB::table('daily_data')->whereYear('fecha',$request->yearSelected)->select(DB::raw('MONTH(fecha) month, DAY(fecha) day'),$request->meteoParameterSelected)->where('id_station', $request->stationsSelected)->orderBy('day', 'asc')->get();
@@ -136,62 +140,62 @@ class DataController extends Controller
              
                 } 
 
-            } if($module=='parcelas') {
-                $parcelas = Parcela::select()->whereIn('comunidad_id', $request->comunidadsSelected)->paginate(5);
-                foreach ($request->parcelasModulesSelected as $parcelas_modules){
-                    if($parcelas_modules=='suelos'){
-                        $suelos = Suelo::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
+            // } if($module=='parcelas') {
+            //     $parcelas = Parcela::select()->whereIn('comunidad_id', $request->comunidadsSelected)->paginate(5);
+            //     foreach ($request->parcelasModulesSelected as $parcelas_modules){
+            //         if($parcelas_modules=='suelos'){
+            //             $suelos = Suelo::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
 
-                    }
-                    if($parcelas_modules=='manejo_parcelas'){
-                        $manejo_parcelas = ManejoParcela::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
+            //         }
+            //         if($parcelas_modules=='manejo_parcelas'){
+            //             $manejo_parcelas = ManejoParcela::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
 
-                    }
-                    if($parcelas_modules=='plagas'){
-                        $plagas = Plaga::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
+            //         }
+            //         if($parcelas_modules=='plagas'){
+            //             $plagas = Plaga::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
 
-                    }
-                    if($parcelas_modules=='enfermedades'){
-                        $enfermedades = Enfermedade::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
-
-
-                    }
-                    if($parcelas_modules=='rendimentos'){
-                        $rendimentos = Rendimento::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
-
-                    }
-
-                }
+            //         }
+            //         if($parcelas_modules=='enfermedades'){
+            //             $enfermedades = Enfermedade::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
 
 
-            } if($module=='cultivos') {
+            //         }
+            //         if($parcelas_modules=='rendimentos'){
+            //             $rendimentos = Rendimento::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
 
-                foreach ($request->cultivosModulesSelected as $cultivo_modules){
-                    if($cultivo_modules=='fenologia'){
-                        $fenologia = Fenologia::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
+            //         }
 
-                    }
-                    if($cultivo_modules=='manejo_parcelas'){
-                        $manejo_parcelas = ManejoParcela::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
+            //     }
 
-                    }
-                    if($cultivo_modules=='plagas'){
-                        $plagas = Plaga::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
 
-                    }
-                    if($cultivo_modules=='enfermedades'){
-                        $enfermedades = Enfermedade::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
+            // } if($module=='cultivos') {
 
-                    }
-                    if($cultivo_modules=='rendimentos'){
-                        $rendimentos = Rendimento::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
-                    }
+            //     foreach ($request->cultivosModulesSelected as $cultivo_modules){
+            //         if($cultivo_modules=='fenologia'){
+            //             $fenologia = Fenologia::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
 
-                }
+            //         }
+            //         if($cultivo_modules=='manejo_parcelas'){
+            //             $manejo_parcelas = ManejoParcela::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
+
+            //         }
+            //         if($cultivo_modules=='plagas'){
+            //             $plagas = Plaga::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
+
+            //         }
+            //         if($cultivo_modules=='enfermedades'){
+            //             $enfermedades = Enfermedade::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
+
+            //         }
+            //         if($cultivo_modules=='rendimentos'){
+            //             $rendimentos = Rendimento::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
+            //         }
+
+            //     }
 
             }
         }
-     
+
         return response()->json([
             'weather' => $weather,
             'senamhi' => $senamhi_data,

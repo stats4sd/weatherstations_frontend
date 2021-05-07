@@ -48,11 +48,286 @@ class WeatherDataCrudController extends CrudController
                 'label' => 'Fecha',
                 'type' => 'date',
                 'format' => 'MM-DD-YYYY',
-            ]
+            ],
+            [
+                'name' => 'time',
+                'label' => 'Time',
+                'type' => 'date',
+                'format' => 'HH:MM:SS',
+            ],
+            [
+                'name' => 'temperatura_externa',
+                'label' => 'Temp Out',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'hi_temp',
+                'label' => 'Hi Temp',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'low_temp',
+                'label' => 'Low Temp',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'low_temp',
+                'label' => 'Low Temp',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'humedad_externa',
+                'label' => 'Out Hum',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'punto_rocio',
+                'label' => 'Dew Pt.',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'velocidad_viento',
+                'label' => 'Wind Speed',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'direccion_del_viento',
+                'label' => 'Wind Dir',
+                'type' => 'text',
+            ],
+            [
+                'name' => 'wind_run',
+                'label' => 'Wind Run',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'hi_speed',
+                'label' => 'Hi Speed',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'hi_dir',
+                'label' => 'Hi Dir',
+                'type' => 'text',
+            ],
+            [
+                'name' => 'wind_chill',
+                'label' => 'Wind Chill',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'index_heat',
+                'label' => 'Heat Index',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'index_thw',
+                'label' => 'THW Index',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'index_thsw',
+                'label' => 'THSW Index',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'presion_relativa',
+                'label' => 'Bar',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'rain',
+                'label' => 'Rain',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'lluvia_hora',
+                'label' => 'Rain_Rate',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'solar_rad',
+                'label' => 'Solar Rad.',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'solar_energy',
+                'label' => 'Solar Energy',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'radsolar_max',
+                'label' => 'Hi Solar Rad.',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'uv_index',
+                'label' => 'UV Index',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'uv_dose',
+                'label' => 'UV Dose',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'uv_max',
+                'label' => 'Hi UV',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'heat_days_d',
+                'label' => 'Heat D-D',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'cool_days_d',
+                'label' => 'Cool_D-D',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'temperatura_interna',
+                'label' => 'In Temp',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'humedad_interna',
+                'label' => 'In Hum',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'in_dew',
+                'label' => 'In Dew',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'in_heat',
+                'label' => 'In Heat',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'in_emc',
+                'label' => 'In EMC',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'in_air_density',
+                'label' => 'In Air Density',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'evapotran',
+                'label' => 'ET',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'soil_1_moist',
+                'label' => 'Soil 1 Moist.',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'soil_2_moist',
+                'label' => 'Soil_2_Moist.',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'soil_temp_1',
+                'label' => 'Soil_Temp_1.',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'soil temp 2',
+                'label' => 'Soil Temp 2.',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'soil_temp_3',
+                'label' => 'Soil_Temp_3.',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'leaf_wet1',
+                'label' => 'Leaf Wet 1',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'leaf_wet2',
+                'label' => 'Leaf Wet 2',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'leaf_wet3',
+                'label' => 'Leaf Wet 3',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'wind_samp',
+                'label' => 'Wind Samp',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'wind_tx',
+                'label' => 'Wind Tx',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'iss_recept',
+                'label' => 'ISS Recept',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+            [
+                'name' => 'intervalo',
+                'label' => 'Arc. Int.',
+                'type' => 'number',
+                'decimals'=> 2,
+            ],
+
 
 
         ]);
-        CRUD::setFromDb(); // columns
+        // CRUD::setFromDb(); // columns
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:

@@ -11,6 +11,7 @@ SELECT
     id as id,
     LEFT(fecha_hora,10) as fecha,
     id_station as id_station,
+    stations.label as station,
 
     -- #########################################
     -- #########################################
@@ -107,4 +108,5 @@ SELECT
 
 
     FROM data
+    LEFT JOIN stations ON stations.id = id_station,
     GROUP BY fecha, id_station;

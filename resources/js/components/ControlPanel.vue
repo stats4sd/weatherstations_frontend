@@ -89,7 +89,7 @@
                 ></b-form-checkbox-group>
             </b-form-group>
          <div>
-            <div v-if="modulesSelected.includes('parcelas') || modulesSelected.includes('cultivos')">
+            <div v-if="!aggregationSelected.includes('senamhi_monthly') || !aggregationSelected.includes('senamhi_daily')">
                 <div class="row">
                     <div class="col">
                         <h4 class="mt-3"><b>Start date</b></h4>

@@ -11,6 +11,7 @@ SELECT
 
     LEFT(fecha_hora,4) as fecha,
     id_station as id_station,
+    stations.label as station,
 
     -- #########################################
     -- #########################################
