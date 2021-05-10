@@ -1,21 +1,22 @@
 <?php
 namespace App\Http\Controllers;
 
-use Alert;
-use App\File;
 use DB;
+use Alert;
 use Excel;
+use App\File;
+use App\Models\Daily;
+use \GuzzleHttp\Client;
+use App\Models\Observation;
 use Illuminate\Http\Request;
+use App\Models\DailyDataPreview;
+use App\Models\WeatherDataPreview;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Redirect;
+use Symfony\Component\Process\Process;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Redirect;
 use Symfony\Component\Process\Exception\ProcessFailedException;
-use Symfony\Component\Process\Process;
-use \GuzzleHttp\Client;
-use App\Models\DailyDataPreview;
-use App\Models\Daily;
-use App\Models\WeatherDataPreview;
 
 class FileController extends Controller
 {
@@ -46,6 +47,16 @@ class FileController extends Controller
     {
 
         $station = $request->selectedStation;
+        if($request->hasFile('data-filesObservation')){
+            // handle file and store it for prosperity
+            $filesObservation = $request->file('data-filesObservation');
+            $filesObservation_name = str_replace(" ", "_", $filesObservation->getClientOriginalName());
+            $observation_name = time() . '_' . $filesObservation_name;
+            $path = $filesObservation->storeAs('observationFiles', $observation_name);
+            $newObservation = new Observation;
+            $newObservation->files = $path;
+            $newObservation->save();
+        }
 
 
         if($request->hasFile('data-file')){
@@ -65,8 +76,13 @@ class FileController extends Controller
             $uploader_id = $this->generateRandomString();
             
             //python script accepts 3 arguments in this order: scriptPath, path_name, station_id
+            if($request->hasFile('data-filesObservation')){
+                $newObservation_id = $newObservation->id;
+            }else {
+                $newObservation_id = "null";
+            }
 
-            $process = new Process(['pipenv', 'run', 'python3', $scriptPath, $path_name, $station, $request->selectedUnitTemp, $request->selectedUnitPres, $request->selectedUnitWind, $request->selectedUnitRain, $uploader_id]);
+            $process = new Process(['pipenv', 'run', 'python3', $scriptPath, $path_name, $station, $request->selectedUnitTemp, $request->selectedUnitPres, $request->selectedUnitWind, $request->selectedUnitRain, $uploader_id, $newObservation_id]);
 
             $process->run();
 
@@ -75,7 +91,7 @@ class FileController extends Controller
             if(!$process->isSuccessful()) {
                 throw new ProcessFailedException($process);
             }
-            
+    
             $data_template = WeatherDataPreview::where('uploader_id', '=', $uploader_id)->orderBy('id')->paginate(10);
             
             // $error_data = $this->checkValues($uploader_id);

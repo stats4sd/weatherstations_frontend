@@ -45,7 +45,7 @@ class WeatherDataCrudController extends CrudController
         CRUD::setColumns([
             [
                 'name' => 'fecha',
-                'label' => 'Fecha',
+                'label' => 'Date',
                 'type' => 'date',
                 'format' => 'MM-DD-YYYY',
             ],
@@ -64,12 +64,6 @@ class WeatherDataCrudController extends CrudController
             [
                 'name' => 'hi_temp',
                 'label' => 'Hi Temp',
-                'type' => 'number',
-                'decimals'=> 2,
-            ],
-            [
-                'name' => 'low_temp',
-                'label' => 'Low Temp',
                 'type' => 'number',
                 'decimals'=> 2,
             ],
@@ -157,7 +151,7 @@ class WeatherDataCrudController extends CrudController
             ],
             [
                 'name' => 'lluvia_hora',
-                'label' => 'Rain_Rate',
+                'label' => 'Rain Rate',
                 'type' => 'number',
                 'decimals'=> 2,
             ],
@@ -259,18 +253,18 @@ class WeatherDataCrudController extends CrudController
             ],
             [
                 'name' => 'soil_2_moist',
-                'label' => 'Soil_2_Moist.',
+                'label' => 'Soil 2 Moist.',
                 'type' => 'number',
                 'decimals'=> 2,
             ],
             [
                 'name' => 'soil_temp_1',
-                'label' => 'Soil_Temp_1.',
+                'label' => 'Soil Temp 1.',
                 'type' => 'number',
                 'decimals'=> 2,
             ],
             [
-                'name' => 'soil temp 2',
+                'name' => 'soil_temp_2',
                 'label' => 'Soil Temp 2.',
                 'type' => 'number',
                 'decimals'=> 2,

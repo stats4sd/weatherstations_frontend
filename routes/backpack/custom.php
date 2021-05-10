@@ -66,4 +66,5 @@ Route::group([
 
 
     Route::crud('weatherdatapreview', 'WeatherDataPreviewCrudController');
+    Route::crud('observation', 'ObservationCrudController');
 }); // this should be the absolute last line of this file

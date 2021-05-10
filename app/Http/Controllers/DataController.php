@@ -2,23 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Comunidad;
-use App\Models\Daily;
-use App\Models\Data;
-use App\Models\DataTemplate;
-use App\Models\Enfermedade;
-use App\Models\Fenologia;
-use App\Models\ManejoParcela;
-use App\Models\Parcela;
-use App\Models\Plaga;
-use App\Models\Rendimento;
-use App\Models\Suelo;
 use DB;
+use ZipArchive;
+use App\Models\Data;
+use App\Models\Daily;
+use App\Models\Plaga;
+use App\Models\Suelo;
+use App\Models\Parcela;
+use App\Models\Comunidad;
+use App\Models\Fenologia;
+use App\Models\Rendimento;
+use App\Models\Enfermedade;
+use App\Models\DataTemplate;
 use Illuminate\Http\Request;
+use App\Models\ManejoParcela;
+use Symfony\Component\Process\Process;
 use Illuminate\Support\Facades\Storage;
 use PhpParser\Node\Expr\AssignOp\Concat;
 use Symfony\Component\Process\Exception\ProcessFailedException;
-use Symfony\Component\Process\Process;
 
 class DataController extends Controller
 {
@@ -358,7 +359,7 @@ class DataController extends Controller
         $queries = '"'.$queries.'"';
         $sheet_names = '"'.$sheet_names.'"';
 
-        //python script accepts 4 arguments in this order: base_path(), queries in string, file name and sheet names in string
+        // python script accepts 4 arguments in this order: base_path(), queries in string, file name and sheet names in string
 
         $process = new Process(["pipenv", "run", "python3", $scriptPath, $base_path, $queries, $file_name, $sheet_names]);
 
@@ -372,6 +373,22 @@ class DataController extends Controller
 
             $process->getOutput();
         }
+        // $file_name = "Agrometric.xlsx";
+        // $public_dir=public_path();
+        // $zipFileName = 'WeatherStation.zip';
+        // $zip = new ZipArchive;
+        // if ($zip->open($public_dir . '/data/' . $zipFileName, ZipArchive::CREATE) === TRUE) {
+        //     // Add File in ZipArchive
+        //     $invoice_file = '/data/'.$file_name;
+        //     $zip->addFile($public_dir . '/'.$invoice_file,$invoice_file);
+        //     $zip->close();
+        // }
+        // // Set Header
+        // $headers = array(
+        //     'Content-Type' => 'application/octet-stream',
+        // );
+    
+
 
         $path_download =  Storage::url('/data/'.$file_name);
         return response()->json(['path' => $path_download]);
