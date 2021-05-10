@@ -62,3 +62,6 @@
         <li class='nav-item'><a class='nav-link' href='{{ backpack_url('comunidad') }}'><i class='nav-icon la la-question'></i> Comunidads</a></li>
     </ul>
 </li>
+
+<li class='nav-item'><a class='nav-link' href='{{ backpack_url('soilsample') }}'><i class='nav-icon la la-question'></i> SoilSamples</a></li>
+<li class='nav-item'><a class='nav-link' href='{{ backpack_url('labresult') }}'><i class='nav-icon la la-question'></i> LabResults</a></li>

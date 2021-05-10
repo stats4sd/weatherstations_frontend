@@ -93,85 +93,96 @@ class GetDataFromKobo implements ShouldQueue
                 $newSubmission = $this->deleteGroupName($newSubmission);
 
                 //There are only ever 2 iterations of the modulo_loop, so flatten it.
-                if (count($newSubmission['modulo_loop'])==2) {
-                    $newSubmission['modulo_loop'] = $newSubmission['modulo_loop'][0] + $newSubmission['modulo_loop'][1];
-                } else {
-                    $newSubmission['modulo_loop'] = $newSubmission['modulo_loop'][0];
+                if(array_key_exists('modulo_loop', $newSubmission)){
+                    if (count($newSubmission['modulo_loop'])==2) {
+                        $newSubmission['modulo_loop'] = $newSubmission['modulo_loop'][0] + $newSubmission['modulo_loop'][1];
+                    } else {
+                        $newSubmission['modulo_loop'] = $newSubmission['modulo_loop'][0];
+                    }
                 }
 
 
                 // Create new parcela record if needed
-                if ($newSubmission['registrar_parcela'] == 1) {
-                    //Update or create the record for all the locations
-                    if ($newSubmission['region'] == 999) {
-                        $region = Region::updateOrCreate([
-                            'name' => $newSubmission['otra_region']
-                        ]);
+                if(array_key_exists('registrar_parcela', $newSubmission)){
+                    if ($newSubmission['registrar_parcela'] == 1) {
+                        //Update or create the record for all the locations
+                        if ($newSubmission['region'] == 999) {
+                            $region = Region::updateOrCreate([
+                                'name' => $newSubmission['otra_region']
+                            ]);
 
-                        //update the region id value
-                        $newSubmission['region'] = $region->id;
+                            //update the region id value
+                            $newSubmission['region'] = $region->id;
+                        }
+
+                        if ($newSubmission['departamento'] == 999) {
+                            $departamento = Departamento::updateOrCreate([
+                                'region_id' => $newSubmission['region'],
+                                'name' => $newSubmission['otro_departamento']
+                            ]);
+
+                            //update the departamento id value
+                            $newSubmission['departamento'] = $departamento->id;
+                        }
+
+                        if ($newSubmission['municipio'] == 999) {
+                            $municipio = Municipio::updateOrCreate([
+                                'departamento_id' => $newSubmission['departamento'],
+                                'name' => $newSubmission['otro_municipio']
+                            ]);
+
+                            //update the municipio id value
+                            $newSubmission['municipio'] = $municipio->id;
+                        }
+
+                        if ($newSubmission['comunidad'] == 999) {
+                            $location = explode(" ", $newSubmission['gps']);
+                            $comunidad = Comunidad::updateOrCreate(
+                                [
+                                    'municipio_id' => $newSubmission['municipio'],
+                                    'name' => $newSubmission['otra_comunidad']
+                                ],
+                                [
+                                    'latitude' => isset($location[0]) ? $location[0] : null,
+                                    'longitude' => isset($location[1]) ? $location[1] : null,
+                                    'altitude' => isset($location[2]) ? $location[2] : null
+                                ]
+                            );
+                            $newSubmission['comunidad'] = $comunidad->id;
+                        }
+                        $dataMap = DataMap::findorfail('parcela');
+                        DataMapController::newRecord($dataMap, $newSubmission);
+                    } else {
+                        $dataMap = DataMap::findorfail('parcela');
+                        DataMapController::updateRecord($dataMap, $newSubmission, $newSubmission['parcela_id']);
                     }
-
-                    if ($newSubmission['departamento'] == 999) {
-                        $departamento = Departamento::updateOrCreate([
-                            'region_id' => $newSubmission['region'],
-                            'name' => $newSubmission['otro_departamento']
-                        ]);
-
-                        //update the departamento id value
-                        $newSubmission['departamento'] = $departamento->id;
-                    }
-
-                    if ($newSubmission['municipio'] == 999) {
-                        $municipio = Municipio::updateOrCreate([
-                            'departamento_id' => $newSubmission['departamento'],
-                            'name' => $newSubmission['otro_municipio']
-                        ]);
-
-                        //update the municipio id value
-                        $newSubmission['municipio'] = $municipio->id;
-                    }
-
-                    if ($newSubmission['comunidad'] == 999) {
-                        $location = explode(" ", $newSubmission['gps']);
-                        $comunidad = Comunidad::updateOrCreate(
-                            [
-                                'municipio_id' => $newSubmission['municipio'],
-                                'name' => $newSubmission['otra_comunidad']
-                            ],
-                            [
-                                'latitude' => isset($location[0]) ? $location[0] : null,
-                                'longitude' => isset($location[1]) ? $location[1] : null,
-                                'altitude' => isset($location[2]) ? $location[2] : null
-                            ]
-                        );
-                        $newSubmission['comunidad'] = $comunidad->id;
-                    }
-                    $dataMap = DataMap::findorfail('parcela');
-                    DataMapController::newRecord($dataMap, $newSubmission);
-                } else {
-                    $dataMap = DataMap::findorfail('parcela');
-                    DataMapController::updateRecord($dataMap, $newSubmission, $newSubmission['parcela_id']);
                 }
 
                 // Iterate through the other parcela-level modules.
-                foreach ($newSubmission['modulos'] as $parcelaModule) {
-                    if ($parcelaModule === 'B') {
-                        $soil = $newSubmission + $newSubmission['modulo_loop'];
-                     
-                        SoilSampleSubmitted::dispatch($soil);
-                    }
-                    if ($parcelaModule === 'C') {
-                        $this->processCultivoData($newSubmission);
-                    } else {
-                        $dataMap = DataMap::findOrFail($parcelaModule);
-                        $data = $newSubmission['modulo_loop'];
-                        $data['parcela_id'] = $newSubmission['parcela_id'];
-                        $data['_id'] = $newSubmission['_id'];
+                if(array_key_exists('modulos', $newSubmission)){
+                    foreach ($newSubmission['modulos'] as $parcelaModule) {
+                        
+                        if ($parcelaModule === 'C') {
+                            $this->processCultivoData($newSubmission);
+                        } else {
+                            $dataMap = DataMap::findOrFail($parcelaModule);
+                            $data = $newSubmission['modulo_loop'];
+                            $data['parcela_id'] = $newSubmission['parcela_id'];
+                            $data['_id'] = $newSubmission['_id'];
 
-                        DataMapController::newRecord($dataMap, $data);
-                    }
-                } // end foreach plot-level module
+                            DataMapController::newRecord($dataMap, $data);
+                            if($parcelaModule === 'B'){
+                                SoilSampleSubmitted::dispatch($data);
+                            }
+                        }
+                    } // end foreach plot-level module
+                }
+                if(array_key_exists('densidad_real', $newSubmission)){
+                    $dataMap = DataMap::findOrFail('lab');
+                    DataMapController::newRecord($dataMap, $newSubmission);
+                    ResultLabSubmitted::dispatch($newSubmission);
+                }
+               
             } // end if $submission does not exist
         } // end foreach record
     } // end handle method
