@@ -405,7 +405,6 @@ class DataController extends Controller
         $zip->addFile(public_path('/storage/data/'.$file_name), "{$file_name}");
         $zip->close();
  
-    
         $path_download =  Storage::url('/data/'.$zip_name.'_files.zip');
         return response()->json(['path' => $path_download]);
     }
