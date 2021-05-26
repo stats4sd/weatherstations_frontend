@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use DB;
 use ZipArchive;
+use Carbon\Carbon;
+use Pusher\Pusher;
 use App\Models\Data;
 use App\Models\Daily;
 use App\Models\Plaga;
@@ -13,6 +15,7 @@ use App\Models\Comunidad;
 use App\Models\Fenologia;
 use App\Models\Rendimento;
 use App\Models\Enfermedade;
+use Illuminate\Support\Str;
 use App\Models\DataTemplate;
 use Illuminate\Http\Request;
 use App\Models\ManejoParcela;
@@ -141,58 +144,58 @@ class DataController extends Controller
              
                 } 
 
-            // } if($module=='parcelas') {
-            //     $parcelas = Parcela::select()->whereIn('comunidad_id', $request->comunidadsSelected)->paginate(5);
-            //     foreach ($request->parcelasModulesSelected as $parcelas_modules){
-            //         if($parcelas_modules=='suelos'){
-            //             $suelos = Suelo::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
+            } if($module=='parcelas') {
+                $parcelas = Parcela::select()->whereIn('comunidad_id', $request->comunidadsSelected)->paginate(5);
+                foreach ($request->parcelasModulesSelected as $parcelas_modules){
+                    if($parcelas_modules=='suelos'){
+                        $suelos = Suelo::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
 
-            //         }
-            //         if($parcelas_modules=='manejo_parcelas'){
-            //             $manejo_parcelas = ManejoParcela::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
+                    }
+                    if($parcelas_modules=='manejo_parcelas'){
+                        $manejo_parcelas = ManejoParcela::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
 
-            //         }
-            //         if($parcelas_modules=='plagas'){
-            //             $plagas = Plaga::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
+                    }
+                    if($parcelas_modules=='plagas'){
+                        $plagas = Plaga::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
 
-            //         }
-            //         if($parcelas_modules=='enfermedades'){
-            //             $enfermedades = Enfermedade::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
-
-
-            //         }
-            //         if($parcelas_modules=='rendimentos'){
-            //             $rendimentos = Rendimento::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
-
-            //         }
-
-            //     }
+                    }
+                    if($parcelas_modules=='enfermedades'){
+                        $enfermedades = Enfermedade::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
 
 
-            // } if($module=='cultivos') {
+                    }
+                    if($parcelas_modules=='rendimentos'){
+                        $rendimentos = Rendimento::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
 
-            //     foreach ($request->cultivosModulesSelected as $cultivo_modules){
-            //         if($cultivo_modules=='fenologia'){
-            //             $fenologia = Fenologia::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
+                    }
 
-            //         }
-            //         if($cultivo_modules=='manejo_parcelas'){
-            //             $manejo_parcelas = ManejoParcela::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
+                }
 
-            //         }
-            //         if($cultivo_modules=='plagas'){
-            //             $plagas = Plaga::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
 
-            //         }
-            //         if($cultivo_modules=='enfermedades'){
-            //             $enfermedades = Enfermedade::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
+            } if($module=='cultivos') {
 
-            //         }
-            //         if($cultivo_modules=='rendimentos'){
-            //             $rendimentos = Rendimento::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
-            //         }
+                foreach ($request->cultivosModulesSelected as $cultivo_modules){
+                    if($cultivo_modules=='fenologia'){
+                        $fenologia = Fenologia::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
 
-            //     }
+                    }
+                    if($cultivo_modules=='manejo_parcelas'){
+                        $manejo_parcelas = ManejoParcela::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
+
+                    }
+                    if($cultivo_modules=='plagas'){
+                        $plagas = Plaga::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
+
+                    }
+                    if($cultivo_modules=='enfermedades'){
+                        $enfermedades = Enfermedade::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
+
+                    }
+                    if($cultivo_modules=='rendimentos'){
+                        $rendimentos = Rendimento::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
+                    }
+
+                }
 
             }
         }
@@ -359,7 +362,7 @@ class DataController extends Controller
         $queries = '"'.$queries.'"';
         $sheet_names = '"'.$sheet_names.'"';
 
-        // python script accepts 4 arguments in this order: base_path(), queries in string, file name and sheet names in string
+        #python script accepts 4 arguments in this order: base_path(), queries in string, file name and sheet names in string
 
         $process = new Process(["pipenv", "run", "python3", $scriptPath, $base_path, $queries, $file_name, $sheet_names]);
 
@@ -373,24 +376,37 @@ class DataController extends Controller
 
             $process->getOutput();
         }
-        // $file_name = "Agrometric.xlsx";
-        // $public_dir=public_path();
-        // $zipFileName = 'WeatherStation.zip';
-        // $zip = new ZipArchive;
-        // if ($zip->open($public_dir . '/data/' . $zipFileName, ZipArchive::CREATE) === TRUE) {
-        //     // Add File in ZipArchive
-        //     $invoice_file = '/data/'.$file_name;
-        //     $zip->addFile($public_dir . '/'.$invoice_file,$invoice_file);
-        //     $zip->close();
-        // }
-        // // Set Header
-        // $headers = array(
-        //     'Content-Type' => 'application/octet-stream',
-        // );
+
+        #Create Zip Archive for observation files.
+        $weather_observation = Data::whereHas('observation')->with('observation')->where('id_station', $request->stationsSelected)->whereBetween('fecha_hora',[$request->startDate, $request->endDate])->get();
+       
+        $list_files = array();
+        foreach ($weather_observation as $observation) {
+            if(!in_array($observation->observation->files, $list_files)){
+                array_push($list_files, $observation->observation->files);
+            }
+        }
+      
+        $zip = new ZipArchive();
+
+        $zip_name = Str::slug('Agronometric'.'_'.Carbon::now()->toDateTimeString());
+
+        $zip->open(storage_path("app/public/data/{$zip_name}_files.zip"), ZipArchive::CREATE);
+      
+        foreach ($list_files as $file) {
+            $split_filename = explode('/', $file);
+            $original_filename = $split_filename[1];
+         
+            $zip->addFile(public_path('/storage/'.$file), "Observation files/{$original_filename}");
+        }
+
+        #Add file with Agronometric Data
+        
+        $zip->addFile(public_path('/storage/data/'.$file_name), "{$file_name}");
+        $zip->close();
+ 
     
-
-
-        $path_download =  Storage::url('/data/'.$file_name);
+        $path_download =  Storage::url('/data/'.$zip_name.'_files.zip');
         return response()->json(['path' => $path_download]);
     }
 

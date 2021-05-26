@@ -24,4 +24,9 @@ class Station extends Model
     |--------------------------------------------------------------------------
     */
 
+    public function data()
+    {
+        return $this->hasMany(Data::class);
+    }
+
 }

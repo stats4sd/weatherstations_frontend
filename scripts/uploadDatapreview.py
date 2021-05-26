@@ -43,6 +43,7 @@ def openFile():
         #rename the column name for davis station into column name for the database
         df = df.rename(columns=columns_name.list_columns_davis_text)
        
+       
         #create the timestamp for uploading into database
         date_time = []
         for fecha_hora, time in zip(df.fecha_hora, df.time):

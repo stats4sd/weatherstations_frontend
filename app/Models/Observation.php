@@ -34,6 +34,11 @@ class Observation extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+    public function data()
+    {
+        return $this->hasMany(Data::class);
+    }
+
 
     /*
     |--------------------------------------------------------------------------

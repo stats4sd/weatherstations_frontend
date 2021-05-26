@@ -3,8 +3,9 @@
 namespace App\Models;
 
 use App\Models\Station;
-use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use App\Models\Observation;
 use Illuminate\Database\Eloquent\Model;
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use LaravelTreats\Model\Traits\HasCompositePrimaryKey;
 
 class Data extends Model
@@ -32,6 +33,12 @@ class Data extends Model
     {
         return $this->belongsTo(Station::class, 'id_station');
     }
+
+    public function observation()
+    {
+        return $this->belongsTo(Observation::class, 'observation_id');
+    }
+
 
     /*
     |--------------------------------------------------------------------------
