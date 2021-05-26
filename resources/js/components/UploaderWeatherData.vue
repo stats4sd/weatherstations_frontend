@@ -23,13 +23,32 @@
                             <h3>Upload data file</h3>
                             <p>Upload the .csv or .txt file you extracted from the weatherstation. Make sure you upload the original, un-edited data file.</p>
                             <div class="row mx-4 justify-content-center">
+                                <label class="control-label col-sm-6" style="color: black"><h5>Select the station</h5>
+                                    <v-select @change="modalShow = !modalShow" :options="stations" :reduce="label => label.id" v-model="selectedStation"></v-select>
+                                </label>
+                            </div>
+                            <div class="row mx-4 justify-content-center">
+                                <b-button @click="modalShow = !modalShow">Confirm Station</b-button>
+
+                                    <b-modal  v-model="modalShow" title="Station" v-if="selectedStation" @ok="handleOk">
+                                        <p class="my-4"><b>Station:</b> {{stations[selectedStation-1].label}}</p>
+                                        <p class="my-4"><b>Latitude:</b> {{stations[selectedStation-1].latitude}}</p>
+                                        <p class="my-4"><b>Longitude:</b> {{stations[selectedStation-1].longitude}}</p>
+                                        <p class="my-4"><b>Altitude:</b> {{stations[selectedStation-1].altitude}}</p>
+                                        <p class="my-4"><b>Type:</b> {{stations[selectedStation-1].type}}</p>
+                                        <p class="my-4"><b>Are you sure that {{stations[selectedStation-1].label}} is the right Station?</b></p>
+                                    </b-modal>
+                            </div>
+                                    
+                    
+                            <div class="row mx-4 justify-content-center" v-show="showUploadFile">
                                 <label class="control-label col-sm-6" style="color: black"><h5>Select the file</h5>
                                     <b-form-file  v-model="file" placeholder="Choose a file or drop it here..."></b-form-file>
                                 </label>
                             </div>
-                            <div class="row mx-4 justify-content-center">
-                                <label class="control-label col-sm-6" style="color: black"><h5>Select the station</h5>
-                                    <v-select :options="stations" :reduce="label => label.id" v-model="selectedStation"></v-select>
+                            <div class="row mx-4 justify-content-center" v-show="showUploadFile">
+                                <label class="control-label col-sm-6" style="color: black"><h5>Select the file Observations</h5>
+                                    <b-form-file  v-model="filesObservation" placeholder="Choose a file or drop it here..."></b-form-file>
                                 </label>
                             </div>
                             <h3>Select the units</h3>
@@ -81,7 +100,13 @@
                            
                             <div class="d-flex mx-4 justify-content-center">
 
-                                <b-table striped hover responsive :items="previewData" style="max-height: 600px;">
+                                <b-table head-variant="light" striped sticky-header="500px" hover responsive :items="previewData" :fields="fields" style="max-height: 600px;">
+                                    <template #cell(fecha)="data">
+                                        {{ data.item.fecha_hora.substring(0,10) }} 
+                                    </template>
+                                    <template #cell(time)="data">
+                                        {{ data.item.fecha_hora.substring(10) }} 
+                                    </template>
                                     <template v-slot:cell(temperatura_interna)="data">
                                         {{ data.value }} {{ data.value!='' ? 'ºC' : ''}}
                                     </template>
@@ -271,6 +296,7 @@ const rootUrl = process.env.MIX_APP_URL
                 selectedUnitWind: 'm/s',
                 selectedUnitRain: 'mm',
                 file: null,
+                filesObservation: null,
                 previewData: null,
                 total_rows: null,
                 busy_upload: false,
@@ -285,7 +311,55 @@ const rootUrl = process.env.MIX_APP_URL
                 error_rain:false,
                 uploadError: null,
                 uploader_id: null,
-
+                showUploadFile:false,
+                modalShow:false,
+                fields:[
+                {key: "fecha", stickyColumn: true, label:'Date', thStyle: { width: '200px'}},
+                {key: "time", label:'Time', thStyle: { width: '200px'}},
+                {key: "temperatura_externa", label:'Temp Out', thStyle: { width: '100px'}},
+                {key: "hi_temp", label:'Hi Temp', thStyle: { width: '200px'}},
+                {key: "low_temp", label:'Low Temp', thStyle: { width: '100px'}},
+                {key: "humedad_externa", label:'Out Hum', thStyle: { width: '200px'}},
+                {key: "punto_rocio", label:'Dew Pt.', thStyle: { width: '100px'}},
+                {key: "velocidad_viento", label:'Wind Speed', thStyle: { width: '200px'}},
+                {key: "direccion_del_viento", label:'Wind Dir', thStyle: { width: '100px'}},
+                {key: "wind_run", label:'Wind Run', thStyle: { width: '200px'}},
+                {key: "hi_speed", label:'Hi Speed', thStyle: { width: '100px'}},
+                {key: "wind_chill", label:'Wind Chill', thStyle: { width: '200px'}},
+                {key: "index_heat", label:'Heat Index', thStyle: { width: '100px'}},
+                {key: "index_thw", label:'THW Index', thStyle: { width: '100px'}},
+                {key: "index_thsw", label:'THSW Index', thStyle: { width: '100px'}},
+                {key: "presion_relativa", label:'Bar', thStyle: { width: '100px'}},
+                {key: "rain", label:'Rain', thStyle: { width: '100px'}},
+                {key: "lluvia_hora", label:'Rain Rate', thStyle: { width: '100px'}},
+                {key: "solar_rad", label:'Solar Rad.', thStyle: { width: '100px'}},
+                {key: "solar_energy", label:'Solar Energy', thStyle: { width: '100px'}},
+                {key: "radsolar_max", label:'Hi Solar Rad.', thStyle: { width: '100px'}},
+                {key: "uv_index", label:'UV Index', thStyle: { width: '100px'}},
+                {key: "uv_dose", label:'UV Dose', thStyle: { width: '100px'}},
+                {key: "uv_max", label:'Hi UV', thStyle: { width: '100px'}},
+                {key: "heat_days_d", label:'Heat D-D', thStyle: { width: '100px'}},
+                {key: "cool_days_d", label:'Cool_D-D', thStyle: { width: '100px'}},
+                {key: "temperatura_interna", label:'In Temp', thStyle: { width: '100px'}},
+                {key: "humedad_interna", label:'In Hum', thStyle: { width: '100px'}},
+                {key: "in_dew", label:'In Dew', thStyle: { width: '100px'}},
+                {key: "in_heat", label:'In Heat', thStyle: { width: '100px'}},
+                {key: "in_emc", label:'In EMC', thStyle: { width: '100px'}},
+                {key: "in_air_density", label:'In Air Density', thStyle: { width: '100px'}},
+                {key: "evapotran", label:'ET', thStyle: { width: '100px'}},
+                {key: "soil_1_moist", label:'Soil 1 Moist.', thStyle: { width: '100px'}},
+                {key: "soil_2_moist", label:'Soil 2 Moist.', thStyle: { width: '100px'}},
+                {key: "soil_temp_1", label:'Soil Temp 1.', thStyle: { width: '100px'}},
+                {key: "soil_temp_2", label:'Soil Temp 2.', thStyle: { width: '100px'}},
+                {key: "soil_temp_3", label:'Soil Temp 3.', thStyle: { width: '100px'}},
+                {key: "leaf_wet1", label:'Leaf Wet 1', thStyle: { width: '100px'}},
+                {key: "leaf_wet2", label:'Leaf Wet 2', thStyle: { width: '100px'}},
+                {key: "leaf_wet3", label:'Leaf Wet 3', thStyle: { width: '100px'}},
+                {key: "wind_samp", label:'Wind Samp', thStyle: { width: '100px'}},
+                {key: "wind_tx", label:'Wind Tx', thStyle: { width: '100px'}},
+                {key: "iss_recept", label:'ISS Recept', thStyle: { width: '100px'}},
+                {key: "intervalo", label:'Arc. Int.', thStyle: { width: '100px'}},
+                ]
             }
         },
         props:{
@@ -340,6 +414,7 @@ const rootUrl = process.env.MIX_APP_URL
                 this.busy_upload = true;
                 let formData = new FormData();
                 formData.append('data-file', this.file);
+                formData.append('data-filesObservation', this.filesObservation);
                 formData.append('selectedStation', this.selectedStation);
                 formData.append('selectedUnitTemp', this.selectedUnitTemp);
                 formData.append('selectedUnitPres', this.selectedUnitPres);
@@ -418,6 +493,9 @@ const rootUrl = process.env.MIX_APP_URL
                 });
 
             },
+            handleOk: function(){
+                 this.showUploadFile = true
+            }
         }
     }
 

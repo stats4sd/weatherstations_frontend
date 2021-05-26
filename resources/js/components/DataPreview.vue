@@ -1,9 +1,14 @@
 <template>
     <div>
+    <bolivia-map
+    :stations="stations"
+    :parcelas="parcelas"
+    :stationsSelected.sync="stationsSelected" 
+    ></bolivia-map>
 	<div class="row">
-        <div class="col-sm-4 mb-5">
+        <div class="col-sm-3 mt-2">
             <div class="card">
-                <div class="container mt-5">
+                <div class="mt-2">
               
                 	<control-panel 
                         :departamentos="departamentos"
@@ -46,20 +51,14 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-8 mb-5">
-            <bolivia-map
-            :stations="stations"
-            :parcelas="parcelas"
-            :stationsSelected.sync="stationsSelected" 
-
-            ></bolivia-map>
-            <div class="mt-5">
+        <div class="col-sm-9 mb-5">
+            <div class="mt-2">
                 <b-card no-body v-if="showTable">
                     <b-tabs pills card>
                         <b-tab v-if="weather.length!==0" title="Información meteorológica" active>
                             <b-card-text>
                                 <p v-if="weather.length!==0">Showing {{weather.to}} of {{weather.total}} entries</p> 
-                                <tables :data="weather.data"></tables>
+                                <tables :data="weather.data" :fields="weatherFields"></tables>
                             </b-card-text>
                         </b-tab>
                         <b-tab v-if="senamhi.length!==0" title="Senamhi data" active>
@@ -165,34 +164,10 @@ export default {
                 weather:[],
                 senamhi:[],
                 senamhiDailyFields: [
-                    { key: 'day', sortable: true, label: 'DAY' },
-                    'JAN',
-                    'FEB',
-                    'MAR',
-                    'APR',
-                    'MAY',
-                    'JUN',
-                    'JUL',
-                    'AUG',
-                    'SEP',
-                    'OCT',
-                    'NOV',
-                    'DEC'
+                    { key: 'day', sortable: true, label: 'DAY' },'JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'
                 ],
                 senamhiMonthlyFields: [
-                    { key: 'year', sortable: true, label: 'YEAR'},
-                    'JAN',
-                    'FEB',
-                    'MAR',
-                    'APR',
-                    'MAY',
-                    'JUN',
-                    'JUL',
-                    'AUG',
-                    'SEP',
-                    'OCT',
-                    'NOV',
-                    'DEC'
+                    { key: 'year', sortable: true, label: 'YEAR'},'JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'
                 ],
                 parcelasData:[],
                 fenologia:[],
@@ -223,19 +198,48 @@ export default {
                 showTable:false,
                 years:[],
                 months:[
-                    {label:'January', value:'01'},
-                    {label:'February', value:'02'},
-                    {label:'March', value:'03'},
-                    {label:'April', value:'04'},
-                    {label:'May', value:'05'},
-                    {label:'June', value:'06'},
-                    {label:'July', value:'07'},
-                    {label:'August', value:'08'},
-                    {label:'September', value:'09'},
-                    {label:'October', value:'10'}, 
-                    {label:'November', value:'11'},
-                    {label:'December', value:'12'},  
-                ]
+                    {label:'January', value:'01'}, {label:'February', value:'02'},{label:'March', value:'03'},{label:'April', value:'04'},{label:'May', value:'05'},{label:'June', value:'06'},{label:'July', value:'07'},{label:'August', value:'08'},{label:'September', value:'09'},{label:'October', value:'10'}, {label:'November', value:'11'},{label:'December', value:'12'},  
+                ],
+                weatherFields: [
+                {key: "fecha", stickyColumn: true, label:'Date', thStyle: { width: '200px'}},
+                {key: "station", stickyColumn: false, label:'Station', thStyle: { width: '100px'}},
+        
+                'max_temperatura_interna',
+                'min_temperatura_externa',
+                'avg_temperatura_interna',
+                'max_humedad_interna',
+                'min_humedad_interna',
+                'avg_humedad_interna',
+                'max_temperatura_externa',
+                'min_temperatura_externa',
+                'avg_temperatura_externa',
+                'max_humedad_externa',
+                'min_humedad_externa',
+                'avg_humedad_externa',
+                'max_presion_relativa',
+                'min_presion_relativa',
+                'avg_presion_relativa',
+                'max_presion_absoluta',
+                'min_presion_absoluta',
+                'avg_presion_absoluta',
+                'max_velocidad_viento',
+                'min_velocidad_viento',
+                'avg_velocidad_viento',
+                'max_sensacion_termica',
+                'min_sensacion_termica',
+                'avg_sensacion_termica',
+                'lluvia_24_horas_total',
+                {
+                    key: "min_fecha",
+                    stickyColumn: true,
+                    isRowHeader: false,
+                },
+                {
+                    key: "max_fecha",
+                    stickyColumn: true,
+                    isRowHeader: false,
+                },
+                ],
 
             }
 

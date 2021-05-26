@@ -35,7 +35,7 @@ columns_db = {
                 'ISS_Recept':'iss_recept', 'Arc._Int.':'intervalo', 'In_Temp':'temperatura_interna', 
                 'In_Hum':'humedad_interna', 'Wind_Dir':'direccion_del_viento', 'Wind_Speed':'velocidad_viento', 
                 'Dew_Pt.':'punto_rocio', 'Out_Hum':'humedad_externa', 'Temp_Out':'temperatura_externa', 
-                'id_station':'id_station', 'Intervalo':'intervalo', 'Fecha/Hora':'fecha_hora', 
+                'id_station':'id_station','observation_id':'observation_id', 'Intervalo':'intervalo', 'Fecha/Hora':'fecha_hora', 
                 'Temperatura Interna(°C)':'temperatura_interna', 'Humedad Interna(%)':'humedad_interna', 
                 'Temperatura Externa(°C)':'temperatura_externa', 'Humedad Externa(%)':'humedad_externa',
                 'Presión Relativa(hpa)':'presion_relativa', 'Presión Absoluta(hpa)':'presion_absoluta', 
@@ -55,7 +55,7 @@ list_columns_name = [
                       'soil_1_moist', 'soil_2_moist', 'soil_3_moist','soil_4_moist', 'leaf_wet1', 'leaf_wet2', 'leaf_wet3', 'leaf_wet4',
                       'wind_samp', 'wind_tx', 'iss_recept', 'intervalo', 
                       'temperatura_interna', 'humedad_interna', 'punto_rocio', 'humedad_externa', 'temperatura_externa', 
-                      'id_station', 'presion_absoluta', 'velocidad_viento', 'sensacion_termica', 'rafaga', 'direccion_del_viento', 
+                      'id_station', 'observation_id','presion_absoluta', 'velocidad_viento', 'sensacion_termica', 'rafaga', 'direccion_del_viento', 
                       'lluvia_hora', 'lluvia_24_horas', 'lluvia_semana', 'lluvia_mes', 'lluvia_total', 'leaf_temp_1', 
                       'leaf_temp_2', 'soil_temp_1', 'soil_temp_2', 'soil_temp_3', 'soil_temp_4'
                     ]

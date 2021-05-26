@@ -62,3 +62,5 @@
         <li class='nav-item'><a class='nav-link' href='{{ backpack_url('comunidad') }}'><i class='nav-icon la la-question'></i> Comunidads</a></li>
     </ul>
 </li>
+
+<li class='nav-item'><a class='nav-link' href='{{ backpack_url('observation') }}'><i class='nav-icon la la-question'></i> Observations</a></li>

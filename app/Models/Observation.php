@@ -2,41 +2,41 @@
 
 namespace App\Models;
 
-use App\Models\Station;
-use App\Models\Observation;
-use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
-use LaravelTreats\Model\Traits\HasCompositePrimaryKey;
+use Illuminate\Database\Eloquent\Model;
 
-class Data extends Model
+class Observation extends Model
 {
     use CrudTrait;
 
     /*
-    |--------------------------------------------------------------
+    |--------------------------------------------------------------------------
     | GLOBAL VARIABLES
-    |--------------------------------------------------------------
+    |--------------------------------------------------------------------------
     */
 
-    # use HasCompositePrimaryKey;
-    protected $primaryKey = 'id';
-    protected $table = 'data';
+    protected $table = 'observations';
+    // protected $primaryKey = 'id';
+    // public $timestamps = false;
     protected $guarded = ['id'];
+    // protected $fillable = [];
+    // protected $hidden = [];
+    // protected $dates = [];
 
+    /*
+    |--------------------------------------------------------------------------
+    | FUNCTIONS
+    |--------------------------------------------------------------------------
+    */
 
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-    public function station()
+    public function data()
     {
-        return $this->belongsTo(Station::class, 'id_station');
-    }
-
-    public function observation()
-    {
-        return $this->belongsTo(Observation::class, 'observation_id');
+        return $this->hasMany(Data::class);
     }
 
 
@@ -48,7 +48,7 @@ class Data extends Model
 
     /*
     |--------------------------------------------------------------------------
-    | ACCESORS
+    | ACCESSORS
     |--------------------------------------------------------------------------
     */
 

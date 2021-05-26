@@ -108,7 +108,8 @@ SELECT
     -- $table->decimal('wind_tx')->nullable();
     -- $table->decimal('iss_recept')->nullable();
     floor((to_days(`data`.`fecha_hora`) / 10))  as group_by,
-    id_station as id_station
+    id_station as id_station,
+    stations.label as station
 
 
     FROM data
