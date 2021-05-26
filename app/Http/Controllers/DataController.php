@@ -253,6 +253,7 @@ class DataController extends Controller
         $scriptPath = base_path() . '/scripts/generate_xlsx_from_query.py';
         $base_path = base_path();
         $file_name = date('c')."Agrometric.xlsx";
+        $file_name = "Agrometric.xlsx";
 
         $queries = '';
         $sheet_names = '';
@@ -367,7 +368,6 @@ class DataController extends Controller
         $process = new Process(["pipenv", "run", "python3", $scriptPath, $base_path, $queries, $file_name, $sheet_names]);
 
         $process->run();
-
         if(!$process->isSuccessful()) {
 
            throw new ProcessFailedException($process);
