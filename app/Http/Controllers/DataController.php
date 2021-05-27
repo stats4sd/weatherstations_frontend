@@ -321,7 +321,7 @@ class DataController extends Controller
 
         } else {
 
-            return $process->getOutput();
+            $process->getOutput();
             
         }
 
