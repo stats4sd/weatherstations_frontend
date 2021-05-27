@@ -15,8 +15,9 @@ if query_count == 1:
 	queries=[query]
 	print(queries)
 else:
+	query.replace('"', ' ')
 	queries = query.split(';')
-
+print(queries)
 sheet_names = sys.argv[4]
 sheet_names = sheet_names.split(',')
 
