@@ -15,7 +15,6 @@ if query_count == 1:
 	queries=[query]
 	print(queries)
 else:
-	query.replace('"', ' ')
 	queries = query.split(';')
 print(queries)
 sheet_names = sys.argv[4]
@@ -28,7 +27,7 @@ try:
 	dfs = {}
 	i = 0
 	for query in queries:
-		query.replace('"', ' ')
+		
 		print(query)
 		cursor.execute(query)
 		df = pd.DataFrame(cursor, columns=[i[0] for i in cursor.description])
