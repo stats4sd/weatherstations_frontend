@@ -12,6 +12,7 @@ name_file = sys.argv[3]
 query_count = query.count(';')
 print(query)
 if query_count == 1:
+	query.replace('"', '')
 	queries=[query]
 	print(queries)
 else:
