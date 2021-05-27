@@ -10,7 +10,7 @@ path = sys.argv[1] + '/storage/app/public/data/'
 query = sys.argv[2]
 name_file = sys.argv[3]
 query_count = query.count(';')
-
+print(query)
 if query_count == 1:
 	queries=[query]
 	print(queries)
