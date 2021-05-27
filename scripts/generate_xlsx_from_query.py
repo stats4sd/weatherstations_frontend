@@ -9,11 +9,17 @@ import pandas as pd
 path = sys.argv[1] + '/storage/app/public/data/'
 query = sys.argv[2]
 name_file = sys.argv[3]
-queries = query.split(';')
+query_count = query.count(';')
+
+if query_count == 1:
+	queries=[query]
+else:
+	queries = query.split(';')
+	
 sheet_names = sys.argv[4]
 sheet_names = sheet_names.split(',')
 
-print(queries)
+
 try:
 	con = MySQLConnection(**config.dbConfig)
 	cursor = con.cursor()

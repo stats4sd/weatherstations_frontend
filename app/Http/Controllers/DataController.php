@@ -144,59 +144,6 @@ class DataController extends Controller
              
                 } 
 
-            } if($module=='parcelas') {
-                $parcelas = Parcela::select()->whereIn('comunidad_id', $request->comunidadsSelected)->paginate(5);
-                foreach ($request->parcelasModulesSelected as $parcelas_modules){
-                    if($parcelas_modules=='suelos'){
-                        $suelos = Suelo::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
-
-                    }
-                    if($parcelas_modules=='manejo_parcelas'){
-                        $manejo_parcelas = ManejoParcela::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
-
-                    }
-                    if($parcelas_modules=='plagas'){
-                        $plagas = Plaga::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
-
-                    }
-                    if($parcelas_modules=='enfermedades'){
-                        $enfermedades = Enfermedade::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
-
-
-                    }
-                    if($parcelas_modules=='rendimentos'){
-                        $rendimentos = Rendimento::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
-
-                    }
-
-                }
-
-
-            } if($module=='cultivos') {
-
-                foreach ($request->cultivosModulesSelected as $cultivo_modules){
-                    if($cultivo_modules=='fenologia'){
-                        $fenologia = Fenologia::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
-
-                    }
-                    if($cultivo_modules=='manejo_parcelas'){
-                        $manejo_parcelas = ManejoParcela::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
-
-                    }
-                    if($cultivo_modules=='plagas'){
-                        $plagas = Plaga::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
-
-                    }
-                    if($cultivo_modules=='enfermedades'){
-                        $enfermedades = Enfermedade::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
-
-                    }
-                    if($cultivo_modules=='rendimentos'){
-                        $rendimentos = Rendimento::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
-                    }
-
-                }
-
             }
         }
 
@@ -253,7 +200,6 @@ class DataController extends Controller
         $scriptPath = base_path() . '/scripts/generate_xlsx_from_query.py';
         $base_path = base_path();
         $file_name = date('c')."Agrometric.xlsx";
-        $file_name = "Agrometric.xlsx";
 
         $queries = '';
         $sheet_names = '';
@@ -366,7 +312,7 @@ class DataController extends Controller
         #python script accepts 4 arguments in this order: base_path(), queries in string, file name and sheet names in string
 
         $process = new Process(["pipenv", "run", "python3", $scriptPath, $base_path, $queries, $file_name, $sheet_names]);
-
+      
         $process->run();
         if(!$process->isSuccessful()) {
 
