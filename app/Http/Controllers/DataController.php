@@ -212,9 +212,9 @@ class DataController extends Controller
 
                     $query = "select * from ". $request->aggregationSelected . " where fecha >= '".$request->startDate."' and fecha <= '".$request->endDate."' and id_station in (". implode(",",$request->stationsSelected).");";
                 }
-
                 $queries = $queries.$query;
                 $sheet_names = $sheet_names.'weatherstations, ';
+              
 
 
             } if($module=='parcelas') {
@@ -306,7 +306,7 @@ class DataController extends Controller
 
         $queries = rtrim($queries, ";");
         $sheet_names = rtrim($sheet_names, ", ");
-        $queries = '"'.$queries.'"';
+        $queries = '"'.$queries.';"';
         $sheet_names = '"'.$sheet_names.'"';
 
         #python script accepts 4 arguments in this order: base_path(), queries in string, file name and sheet names in string
