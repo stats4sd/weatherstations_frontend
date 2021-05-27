@@ -283,7 +283,7 @@ export default {
                 })
                 .then((result) => {
                     
-                    window.location.href = result.data['path'];
+                    // window.location.href = result.data['path'];
                 }, (error) => {
                     console.log(error);
                 });          
