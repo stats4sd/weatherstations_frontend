@@ -9,17 +9,26 @@ import pandas as pd
 path = sys.argv[1] + '/storage/app/public/data/'
 query = sys.argv[2]
 name_file = sys.argv[3]
-queries = query.split(';')
+query_count = query.count(';')
+print(query_count)
+if query_count == 1:
+	queries=[query]
+	print(queries)
+else:
+	queries = query.split(';')
+print(queries)
 sheet_names = sys.argv[4]
 sheet_names = sheet_names.split(',')
 
-print(queries)
+
 try:
 	con = MySQLConnection(**config.dbConfig)
 	cursor = con.cursor()
 	dfs = {}
 	i = 0
 	for query in queries:
+		
+		print(query)
 		cursor.execute(query)
 		df = pd.DataFrame(cursor, columns=[i[0] for i in cursor.description])
 		dfs[sheet_names[i]] = df

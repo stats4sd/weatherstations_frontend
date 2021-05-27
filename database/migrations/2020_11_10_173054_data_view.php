@@ -22,6 +22,7 @@ class DataView extends Migration
                 DATE(fecha_hora) as fecha,
                 TIME(fecha_hora) as hora,
                 stations.label as station,
+                id_station as station_id,
                 intervalo,
                 temperatura_interna,
                 humedad_interna,

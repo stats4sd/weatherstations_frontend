@@ -13,6 +13,7 @@ selected_unit_pres = sys.argv[4]
 selected_unit_wind = sys.argv[5]
 selected_unit_rain = sys.argv[6]
 uploader_id = sys.argv[7]
+newObservation_id = sys.argv[8]
 
 
 def openFile():
@@ -42,6 +43,7 @@ def openFile():
         #rename the column name for davis station into column name for the database
         df = df.rename(columns=columns_name.list_columns_davis_text)
        
+       
         #create the timestamp for uploading into database
         date_time = []
         for fecha_hora, time in zip(df.fecha_hora, df.time):
@@ -61,6 +63,11 @@ def openFile():
         df['id_station'] = station_id
         #add the uploader_id column
         df['uploader_id'] = uploader_id
+        #add the observation_id column
+        if newObservation_id=='null' :
+            df['observation_id'] = None
+        else:
+            df['observation_id'] = newObservation_id
 
         #convert data
         if selected_unit_pres != "hpa":
@@ -94,6 +101,12 @@ def openFile():
 
         #add the uploader_id column
         df['uploader_id'] = uploader_id
+
+        #add the observation_id column
+        if newObservation_id=='null' :
+            df['observation_id'] = None
+        else:
+            df['observation_id'] = newObservation_id
      
         #drop columns not necessary
         df = df.drop(['No.'], axis=1)

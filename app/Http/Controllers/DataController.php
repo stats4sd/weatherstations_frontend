@@ -2,23 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Comunidad;
-use App\Models\Daily;
-use App\Models\Data;
-use App\Models\DataTemplate;
-use App\Models\Enfermedade;
-use App\Models\Fenologia;
-use App\Models\ManejoParcela;
-use App\Models\Parcela;
-use App\Models\Plaga;
-use App\Models\Rendimento;
-use App\Models\Suelo;
 use DB;
+use ZipArchive;
+use Carbon\Carbon;
+use Pusher\Pusher;
+use App\Models\Data;
+use App\Models\Daily;
+use App\Models\Plaga;
+use App\Models\Suelo;
+use App\Models\Parcela;
+use App\Models\Comunidad;
+use App\Models\Fenologia;
+use App\Models\Rendimento;
+use App\Models\Enfermedade;
+use Illuminate\Support\Str;
+use App\Models\DataTemplate;
 use Illuminate\Http\Request;
+use App\Models\ManejoParcela;
+use Symfony\Component\Process\Process;
 use Illuminate\Support\Facades\Storage;
 use PhpParser\Node\Expr\AssignOp\Concat;
 use Symfony\Component\Process\Exception\ProcessFailedException;
-use Symfony\Component\Process\Process;
 
 class DataController extends Controller
 {
@@ -70,15 +74,19 @@ class DataController extends Controller
         $rendimentos = [];
         $fenologia = [];
         $senamhi_data = [];
-
         foreach ($request->modulesSelected as $module) {
             if($module=='daily_data'){
-                   
-                if($request->aggregationSelected=='tendays_data'){
-                    $weather = DB::table($request->aggregationSelected)->select()->where('max_fecha','>=',$request->startDate)->where('max_fecha','<=',$request->endDate)->whereIn('id_station', $request->stationsSelected)->paginate(5);
+                if($request->aggregationSelected=='daily_data'){
+                    $weather = DB::table('daily_data')->where('fecha','>=',$request->startDate)->where('fecha','<=',$request->endDate)->whereIn('id_station', $request->stationsSelected)->paginate(100);
 
+                }else if($request->aggregationSelected=='tendays_data'){
+                    $weather = DB::table($request->aggregationSelected)->where('max_fecha','>=',$request->startDate)->where('min_fecha','<=',$request->endDate)->whereIn('id_station', $request->stationsSelected)->paginate(5);
+
+                }else if($request->aggregationSelected=="monthly_data"){
+                    $weather = DB::table($request->aggregationSelected)->where('fecha','>=',$request->startDate)->where('fecha','<=',$request->endDate)->whereIn('id_station', $request->stationsSelected)->paginate(5);
+                  
                 }else if($request->aggregationSelected=="yearly_data"){
-                    $weather = DB::table($request->aggregationSelected)->select()->where('fecha','>=',$request->startDate)->where('fecha','<=',$request->endDate)->whereIn('id_station', $request->stationsSelected)->paginate(5);
+                    $weather = DB::table($request->aggregationSelected)->where('fecha','>=',$request->startDate)->where('fecha','<=',$request->endDate)->whereIn('id_station', $request->stationsSelected)->paginate(5);
                 
                 }else if($request->aggregationSelected=="senamhi_daily"){
                     $senamhi = DB::table('daily_data')->whereYear('fecha',$request->yearSelected)->select(DB::raw('MONTH(fecha) month, DAY(fecha) day'),$request->meteoParameterSelected)->where('id_station', $request->stationsSelected)->orderBy('day', 'asc')->get();
@@ -136,62 +144,9 @@ class DataController extends Controller
              
                 } 
 
-            } if($module=='parcelas') {
-                $parcelas = Parcela::select()->whereIn('comunidad_id', $request->comunidadsSelected)->paginate(5);
-                foreach ($request->parcelasModulesSelected as $parcelas_modules){
-                    if($parcelas_modules=='suelos'){
-                        $suelos = Suelo::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
-
-                    }
-                    if($parcelas_modules=='manejo_parcelas'){
-                        $manejo_parcelas = ManejoParcela::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
-
-                    }
-                    if($parcelas_modules=='plagas'){
-                        $plagas = Plaga::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
-
-                    }
-                    if($parcelas_modules=='enfermedades'){
-                        $enfermedades = Enfermedade::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
-
-
-                    }
-                    if($parcelas_modules=='rendimentos'){
-                        $rendimentos = Rendimento::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
-
-                    }
-
-                }
-
-
-            } if($module=='cultivos') {
-
-                foreach ($request->cultivosModulesSelected as $cultivo_modules){
-                    if($cultivo_modules=='fenologia'){
-                        $fenologia = Fenologia::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
-
-                    }
-                    if($cultivo_modules=='manejo_parcelas'){
-                        $manejo_parcelas = ManejoParcela::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
-
-                    }
-                    if($cultivo_modules=='plagas'){
-                        $plagas = Plaga::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
-
-                    }
-                    if($cultivo_modules=='enfermedades'){
-                        $enfermedades = Enfermedade::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
-
-                    }
-                    if($cultivo_modules=='rendimentos'){
-                        $rendimentos = Rendimento::select()->whereIn('comunidad_id',$request->comunidadsSelected)->paginate(5);
-                    }
-
-                }
-
             }
         }
-     
+
         return response()->json([
             'weather' => $weather,
             'senamhi' => $senamhi_data,
@@ -257,9 +212,9 @@ class DataController extends Controller
 
                     $query = "select * from ". $request->aggregationSelected . " where fecha >= '".$request->startDate."' and fecha <= '".$request->endDate."' and id_station in (". implode(",",$request->stationsSelected).");";
                 }
-
                 $queries = $queries.$query;
                 $sheet_names = $sheet_names.'weatherstations, ';
+              
 
 
             } if($module=='parcelas') {
@@ -351,10 +306,10 @@ class DataController extends Controller
 
         $queries = rtrim($queries, ";");
         $sheet_names = rtrim($sheet_names, ", ");
-        $queries = '"'.$queries.'"';
-        $sheet_names = '"'.$sheet_names.'"';
+        // $queries = '"'.$queries.'"';
+        // $sheet_names = '"'.$sheet_names.'"';
 
-        //python script accepts 4 arguments in this order: base_path(), queries in string, file name and sheet names in string
+        #python script accepts 4 arguments in this order: base_path(), queries in string, file name and sheet names in string
 
         $process = new Process(["pipenv", "run", "python3", $scriptPath, $base_path, $queries, $file_name, $sheet_names]);
 
@@ -367,9 +322,38 @@ class DataController extends Controller
         } else {
 
             $process->getOutput();
+            
         }
 
-        $path_download =  Storage::url('/data/'.$file_name);
+        #Create Zip Archive for observation files.
+        $weather_observation = Data::whereHas('observation')->with('observation')->where('id_station', $request->stationsSelected)->whereBetween('fecha_hora',[$request->startDate, $request->endDate])->get();
+       
+        $list_files = array();
+        foreach ($weather_observation as $observation) {
+            if(!in_array($observation->observation->files, $list_files)){
+                array_push($list_files, $observation->observation->files);
+            }
+        }
+      
+        $zip = new ZipArchive();
+
+        $zip_name = Str::slug('Agronometric'.'_'.Carbon::now()->toDateTimeString());
+
+        $zip->open(storage_path("app/public/data/{$zip_name}_files.zip"), ZipArchive::CREATE);
+      
+        foreach ($list_files as $file) {
+            $split_filename = explode('/', $file);
+            $original_filename = $split_filename[1];
+         
+            $zip->addFile(public_path('/storage/'.$file), "Observation files/{$original_filename}");
+        }
+
+        #Add file with Agronometric Data
+        
+        $zip->addFile(public_path('/storage/data/'.$file_name), "{$file_name}");
+        $zip->close();
+ 
+        $path_download =  Storage::url('/data/'.$zip_name.'_files.zip');
         return response()->json(['path' => $path_download]);
     }
 
