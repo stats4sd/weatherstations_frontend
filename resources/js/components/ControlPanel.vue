@@ -134,6 +134,7 @@
                 cultivosModulesSelected:[],
                 weather:[],
                 senamhi:[],
+                stationDetails:[],
                 stationsSelected:[],
                 aggregationSelected:[],
                 meteoParameterSelected:[],
@@ -183,6 +184,9 @@
             },
             senamhi() {
                 this.$emit('update:senamhi', this.senamhi)
+            },
+            stationDetails(){
+                 this.$emit('update:stationDetails', this.stationDetails)
             },
             stationsSelected() {
                 this.$emit('update:stationsSelected', this.stationsSelected)
@@ -283,6 +287,8 @@
                     this.rendimentos = result.data.rendimentos;
                     this.fenologia = result.data.fenologia;
                     this.senamhi = result.data.senamhi;
+                    this.stationDetails = result.data.station;
+                    console.log(result);
                    
                 }, (error) => {
                     console.log(error);

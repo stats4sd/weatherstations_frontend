@@ -19,6 +19,7 @@ use Illuminate\Support\Str;
 use App\Models\DataTemplate;
 use Illuminate\Http\Request;
 use App\Models\ManejoParcela;
+use App\Models\Station;
 use Symfony\Component\Process\Process;
 use Illuminate\Support\Facades\Storage;
 use PhpParser\Node\Expr\AssignOp\Concat;
@@ -74,6 +75,7 @@ class DataController extends Controller
         $rendimentos = [];
         $fenologia = [];
         $senamhi_data = [];
+        $station = Station::findOrFail($request->stationsSelected)->first();
         foreach ($request->modulesSelected as $module) {
             if($module=='daily_data'){
                 if($request->aggregationSelected=='daily_data'){
@@ -148,6 +150,7 @@ class DataController extends Controller
         }
 
         return response()->json([
+            'station'=> $station,
             'weather' => $weather,
             'senamhi' => $senamhi_data,
             'parcelas' => $parcelas,
@@ -213,7 +216,7 @@ class DataController extends Controller
                     $query = "select * from ". $request->aggregationSelected . " where fecha >= '".$request->startDate."' and fecha <= '".$request->endDate."' and id_station in (". implode(",",$request->stationsSelected).");";
                 }
                 $queries = $queries.$query;
-                $sheet_names = $sheet_names.'weatherstations, ';
+                $sheet_names = $sheet_names.$request->aggregationSelected.', ';
               
 
 
@@ -306,8 +309,6 @@ class DataController extends Controller
 
         $queries = rtrim($queries, ";");
         $sheet_names = rtrim($sheet_names, ", ");
-        // $queries = '"'.$queries.'"';
-        // $sheet_names = '"'.$sheet_names.'"';
 
         #python script accepts 4 arguments in this order: base_path(), queries in string, file name and sheet names in string
 
