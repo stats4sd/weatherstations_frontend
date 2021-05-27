@@ -314,7 +314,7 @@ class DataController extends Controller
         $process = new Process(["pipenv", "run", "python3", $scriptPath, $base_path, $queries, $file_name, $sheet_names]);
     
         $process->run();
-        dd($process);
+
         if(!$process->isSuccessful()) {
 
            throw new ProcessFailedException($process);
@@ -322,6 +322,7 @@ class DataController extends Controller
         } else {
 
             return $process->getOutput();
+            
         }
 
         #Create Zip Archive for observation files.
