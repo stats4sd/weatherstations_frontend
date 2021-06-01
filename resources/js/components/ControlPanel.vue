@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-         <h4  class="mt-3"><b>Select the modules</b></h4>
+         <h4  class="mt-3"><b>Módulos</b></h4>
             
                 <b-form-checkbox-group
                     v-model="modulesSelected"
@@ -12,17 +12,17 @@
                     stacked
                 ></b-form-checkbox-group>
            
-        <div class="justify-content-center">
+        <div class="justify-content-center" v-if="modulesSelected.includes('daily_data')">
 
-            <h4  class="mt-3" v-if="modulesSelected.includes('daily_data')"><b>From which station do you want to have data?</b></h4>
-            <v-select v-if="modulesSelected.includes('daily_data')" :options="stations" :reduce="label => label.id" v-model="stationsSelected" multiple></v-select>
+            <h4  class="mt-3"><b>Estación</b></h4>
+            <v-select :options="stations" :reduce="label => label.id" v-model="stationsSelected" multiple></v-select>
             
-            <h4  class="mt-3" v-if="modulesSelected.includes('daily_data')"><b>Select the aggregation for the weather data</b></h4>
-            <v-select v-if="modulesSelected.includes('daily_data')" :options="aggregations" :reduce="label => label.value" v-model="aggregationSelected"></v-select>
+            <h4  class="mt-3"><b>Agregación</b></h4>
+            <v-select :options="aggregations" :reduce="label => label.value" v-model="aggregationSelected"></v-select>
 
             <h4  class="mt-3" v-if="aggregationSelected.includes('senamhi_daily') || aggregationSelected.includes('senamhi_monthly')"><b>Parámetros meteorológicos</b></h4>
             <v-select v-if="aggregationSelected.includes('senamhi_daily') || aggregationSelected.includes('senamhi_monthly')" :options="meteoParameters" :reduce="label => label.value" v-model="meteoParameterSelected"></v-select>
-
+            
             <h4  class="mt-3" v-if="aggregationSelected.includes('senamhi_daily')"><b>Año</b></h4>
             <v-select v-if="aggregationSelected.includes('senamhi_daily')" label="fecha" :options="yearsFilter" :reduce="fecha => fecha.fecha" v-model="yearSelected"></v-select>
             <div class="row">
@@ -89,28 +89,29 @@
                 ></b-form-checkbox-group>
             </b-form-group>
          <div>
-            <div v-if="!aggregationSelected.includes('senamhi_monthly') || !aggregationSelected.includes('senamhi_daily')">
+            <div v-if="modulesSelected.includes('daily_data')">
                 <div class="row">
                     <div class="col">
-                        <h4 class="mt-3"><b>Start date</b></h4>
+                        <h4 class="mt-3"><b>Fecha de inicio</b></h4>
                         <input class="form-control" type="date" v-model="startDate">
                     </div>
                     <div class="col">
-                        <h4 class="mt-3"><b>End date</b></h4>
+                        <h4 class="mt-3"><b>Fecha final</b></h4>
                         <input class="form-control" type="date" v-model="endDate">
                     </div>
 
                 </div>
-                
+                <div v-if="modulesSelected.includes('parcelas') || modulesSelected.includes('cultivos')">
+                    <h4 class="mt-3"><b>Departamento</b></h4>
+                        <v-select label="name" :options="departamentos" :reduce="name => name.id" v-model="departamentosSelected" multiple style="width:100%"></v-select>
 
-                <h4 class="mt-3"><b>Departamento</b></h4>
-                    <v-select label="name" :options="departamentos" :reduce="name => name.id" v-model="departamentosSelected" multiple style="width:100%"></v-select>
+                    <h4 class="mt-3"><b>Municipio</b></h4>
+                        <v-select label="name" :options="municipiosFilter" :reduce="name => name.id" v-model="municipiosSelected" multiple style="width:100%"></v-select>
 
-                <h4 class="mt-3"><b>Municipio</b></h4>
-                    <v-select label="name" :options="municipiosFilter" :reduce="name => name.id" v-model="municipiosSelected" multiple style="width:100%"></v-select>
+                    <h4 class="mt-3"><b>Comunidad</b></h4>
+                        <v-select label="name" :options="comunidadsFilter" :reduce="name => name.id" v-model="comunidadsSelected" multiple style="width:100%"></v-select>
+                </div>
 
-                <h4 class="mt-3"><b>Comunidad</b></h4>
-                    <v-select label="name" :options="comunidadsFilter" :reduce="name => name.id" v-model="comunidadsSelected" multiple style="width:100%"></v-select>
             </div>
             <button class="site-btn mt-3 mb-3 float-right" v-on:click="submit">Visualizar</button>
         

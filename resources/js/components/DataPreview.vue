@@ -58,6 +58,19 @@
                     <b-tabs pills card>
                         <b-tab v-if="weather.length!==0" title="Información meteorológica" active>
                             <b-card-text>
+                              <b-row>
+                                    <b-col cols="auto" class="mr-auto p-3">
+                                        <p><b>Estación :</b> {{ stationDetails.label }}</p>
+                                        <p><b>Fecha de inicio :</b> {{ startDate }}</p>
+                                        <p><b>Fecha final :</b> {{ endDate }}</p>
+                                      
+                                    </b-col>
+                                    <b-col cols="auto" class="p-3">
+                                        <p><b>Latitude :</b> {{stationDetails.latitude }}</p>
+                                        <p><b>Longitude :</b> {{stationDetails.longitude }}</p>
+                                        <p><b>Altitude :</b> {{stationDetails.altitude }}</p>
+                                    </b-col>
+                                </b-row>
                                 <p v-if="weather.length!==0">Showing {{weather.to}} of {{weather.total}} entries</p> 
                                 <tables :data="weather.data" :fields="weatherFields"></tables>
                             </b-card-text>
@@ -66,7 +79,7 @@
                             <b-card-text>
                                 <b-row>
                                     <b-col cols="auto" class="mr-auto p-3">
-                                        <p><b>Station :</b> {{ stationDetails.label }}</p>
+                                        <p><b>Estación :</b> {{ stationDetails.label }}</p>
                                         <p v-if="aggregationSelected=='senamhi_daily'"><b>Year :</b> {{ yearSelected }}</p>
                                         <p v-if="aggregationSelected=='senamhi_monthly'"><b>Month Initial :</b> {{ months[monthInitialSelected-1].label }}</p>
                                         <p v-if="aggregationSelected=='senamhi_monthly'"><b>Month Final :</b> {{ months[monthFinalSelected-1].label }}</p>
