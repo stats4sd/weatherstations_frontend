@@ -6,6 +6,7 @@ SELECT
     `stations`.`label` AS `station`,
     `data`.`intervalo` AS `intervalo`,
     `data`.`temperatura_interna` AS `temperatura_interna`,
+    `data`.`temperatura_externa` AS `temperatura_externa`,
     `data`.`humedad_interna` AS `humedad_interna`,
     `data`.`humedad_externa` AS `humedad_externa`,
     `data`.`presion_relativa` AS `presion_relativa`,
