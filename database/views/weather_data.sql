@@ -54,6 +54,7 @@ SELECT
     `data`.`leaf_wet4` AS `leaf_wet4`,
     `data`.`wind_samp` AS `wind_samp`,
     `data`.`wind_tx` AS `wind_tx`,
-    `data`.`iss_recept` AS `iss_recept` 
+    `data`.`iss_recept` AS `iss_recept`,
+    `data`.`meteobridge` AS `meteobridge`
 
 FROM (`data` LEFT JOIN `stations` ON((`stations`.`id` = `data`.`id_station`)))
