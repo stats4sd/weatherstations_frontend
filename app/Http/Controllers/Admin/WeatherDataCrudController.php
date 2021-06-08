@@ -317,6 +317,11 @@ class WeatherDataCrudController extends CrudController
                 'type' => 'number',
                 'decimals'=> 2,
             ],
+            [
+                'name' => 'meteobridge',
+                'label' => 'Meteobridge',
+                'type' => 'boolean',
+            ],
 
 
 
@@ -351,9 +356,17 @@ class WeatherDataCrudController extends CrudController
             $dates = json_decode($value);
             $this->crud->addClause('where', 'fecha', '>=', $dates->from);
             $this->crud->addClause('where', 'fecha', '<=', $dates->to . ' 23:59:59');
-        }
-        );
+        });
 
+        $this->crud->addFilter([ 
+            'type'  => 'simple',
+            'name'  => 'meteobridge',
+            'label' => 'Meteobridge'
+          ],
+          false, // the simple filter has no values, just the "Draft" label specified above
+          function() { // if the filter is active (the GET parameter "draft" exits)
+            $this->crud->addClause('where', 'meteobridge', '1');
+        }); 
 
         $this->crud->addButtonFromView('top', 'download', 'download', 'end');
         $this->crud->setDefaultPageLength(50);
