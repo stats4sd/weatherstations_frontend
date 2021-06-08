@@ -211,10 +211,17 @@ class DataController extends Controller
             if($module=='daily_data'){
                 if($request->aggregationSelected=='tendays_data'){
                     $query = "select * from ". $request->aggregationSelected . " where max_fecha >= '".$request->startDate."' and max_fecha <= '".$request->endDate."' and id_station in (". implode(",",$request->stationsSelected).");";
-                }else{
+                }
+                
+                else{
 
                     $query = "select * from ". $request->aggregationSelected . " where fecha >= '".$request->startDate."' and fecha <= '".$request->endDate."' and id_station in (". implode(",",$request->stationsSelected).");";
                 }
+            
+                
+
+
+
                 $queries = $queries.$query;
                 $sheet_names = $sheet_names.$request->aggregationSelected.', ';
               
