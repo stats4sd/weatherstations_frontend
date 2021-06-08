@@ -50,7 +50,7 @@ class WeatherDataCrudController extends CrudController
                 'format' => 'MM-DD-YYYY',
             ],
             [
-                'name' => 'time',
+                'name' => 'hora',
                 'label' => 'Time',
                 'type' => 'date',
                 'format' => 'HH:MM:SS',
