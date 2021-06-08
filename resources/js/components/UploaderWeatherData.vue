@@ -24,19 +24,19 @@
                             <p>Upload the .csv or .txt file you extracted from the weatherstation. Make sure you upload the original, un-edited data file.</p>
                             <div class="row mx-4 justify-content-center">
                                 <label class="control-label col-sm-6" style="color: black"><h5>Select the station</h5>
-                                    <v-select @change="modalShow = !modalShow" :options="stations" :reduce="label => label.id" v-model="selectedStation"></v-select>
+                                    <v-select @change="modalShow = !modalShow" :options="stations" label="label" v-model="selectedStation"></v-select>
                                 </label>
                             </div>
                             <div class="row mx-4 justify-content-center">
                                 <b-button @click="modalShow = !modalShow">Confirm Station</b-button>
 
                                     <b-modal  v-model="modalShow" title="Station" v-if="selectedStation" @ok="handleOk">
-                                        <p class="my-4"><b>Station:</b> {{stations[selectedStation-1].label}}</p>
-                                        <p class="my-4"><b>Latitude:</b> {{stations[selectedStation-1].latitude}}</p>
-                                        <p class="my-4"><b>Longitude:</b> {{stations[selectedStation-1].longitude}}</p>
-                                        <p class="my-4"><b>Altitude:</b> {{stations[selectedStation-1].altitude}}</p>
-                                        <p class="my-4"><b>Type:</b> {{stations[selectedStation-1].type}}</p>
-                                        <p class="my-4"><b>Are you sure that {{stations[selectedStation-1].label}} is the right Station?</b></p>
+                                        <p class="my-4"><b>Station:</b> {{selectedStation.label}}</p>
+                                        <p class="my-4"><b>Latitude:</b> {{selectedStation.latitude}}</p>
+                                        <p class="my-4"><b>Longitude:</b> {{selectedStation.longitude}}</p>
+                                        <p class="my-4"><b>Altitude:</b> {{selectedStation.altitude}}</p>
+                                        <p class="my-4"><b>Type:</b> {{selectedStation.type}}</p>
+                                        <p class="my-4"><b>Are you sure that {{selectedStation.label}} is the right Station?</b></p>
                                     </b-modal>
                             </div>
                                     
@@ -415,7 +415,7 @@ const rootUrl = process.env.MIX_APP_URL
                 let formData = new FormData();
                 formData.append('data-file', this.file);
                 formData.append('data-filesObservation', this.filesObservation);
-                formData.append('selectedStation', this.selectedStation);
+                formData.append('selectedStation', this.selectedStation.id);
                 formData.append('selectedUnitTemp', this.selectedUnitTemp);
                 formData.append('selectedUnitPres', this.selectedUnitPres);
                 formData.append('selectedUnitWind', this.selectedUnitWind);
