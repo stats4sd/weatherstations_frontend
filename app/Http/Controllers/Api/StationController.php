@@ -17,7 +17,7 @@ class StationController extends Controller
 
     {
         //all data in this model
-        $stations = Station::whereHas('data')->withCount('data')->get();
+        $stations = Station::all();
 
         return $stations->toJson(); 
     }
