@@ -368,7 +368,6 @@ class WeatherDataCrudController extends CrudController
             $this->crud->addClause('where', 'meteobridge', '1');
         }); 
 
-        $this->crud->addButtonFromView('top', 'download', 'download', 'end');
         $this->crud->setDefaultPageLength(50);
 
         /**
@@ -418,35 +417,4 @@ class WeatherDataCrudController extends CrudController
         $this->setupCreateOperation();
     }
 
-    public function download()
-    {
-        $scriptName = 'save_data_csv.py';
-        $scriptPath = base_path() . '/scripts/' . $scriptName;
-        $base_path = base_path();
-        $query = Session('query');
-        $params = join(",", Session('params'));
-        $date = str_replace(':', '', date('c'));
-        $date = str_replace('-', '', $date);
-        $date = str_replace('+', '', $date);
-        $file_name = date('c')."data.csv";
-        $query = str_replace('`', ' ', $query);
-
-        //python script accepts 4 arguments in this order: base_path(), query, params and file name
-        Log::info($query);
-
-        $process = new Process(['pipenv', 'run', 'python3', $scriptPath, $base_path, $query, $params, $file_name]);
-
-        $process->run();
-
-        if (!$process->isSuccessful()) {
-            throw new ProcessFailedException($process);
-        } else {
-            $process->getOutput();
-        }
-        Log::info("python done.");
-        Log::info($process->getOutput());
-
-        $path_download =  Storage::url('/data/'.$file_name);
-        return response()->json(['path' => $path_download]);
-    }
 }
